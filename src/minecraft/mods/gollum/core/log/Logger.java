@@ -9,26 +9,30 @@ public class Logger {
 	public static final int LEVEL_SEVERE  = 2;
 	public static final int LEVEL_NONE    = 99;
 
-	java.util.logging.Logger log;
-	int level = LEVEL_INFO;
-	
-	public Logger(FMLPreInitializationEvent evt, int levelDisplay) {
-		this.log   = evt.getModLog();
-		this.level = levelDisplay;
-	}
-	
-	public Logger(FMLPreInitializationEvent evt, String levelDisplay) {
-		
-		this(evt, LEVEL_INFO);
-		
-		if (levelDisplay.equals("WARNING")) this.level = LEVEL_WARNING;
-		if (levelDisplay.equals("SEVERE"))  this.level = LEVEL_SEVERE;
-		if (levelDisplay.equals("NONE"))    this.level = LEVEL_NONE;
-		
-	}
+	private java.util.logging.Logger log;
+	private static int level = LEVEL_INFO;
 	
 	public Logger(FMLPreInitializationEvent evt) {
-		this(evt, LEVEL_WARNING);
+		this.log   = evt.getModLog();
+	}
+	
+	/**
+	 * Change le niveau d'affichage des logs
+	 * @param levelDisplay
+	 */
+	public static void setLevelDisplay (int levelDisplay) {
+		Logger.level = levelDisplay;
+	}
+	
+	/**
+	 * Change le niveau d'affichage des logs
+	 * @param levelDisplay
+	 */
+	public static void setLevelDisplay (String levelDisplay) {
+		Logger.level = LEVEL_INFO;
+		if (levelDisplay.equals("WARNING")) Logger.level = LEVEL_WARNING;
+		if (levelDisplay.equals("SEVERE"))  Logger.level = LEVEL_SEVERE;
+		if (levelDisplay.equals("NONE"))    Logger.level = LEVEL_NONE;
 	}
 	
 	public void info(String msg) {

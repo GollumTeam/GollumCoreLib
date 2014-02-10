@@ -86,11 +86,8 @@ public class VersionChecker extends Thread {
 	 * @param display Affiche ou non le message de version
 	 * @return VersionChecker
 	 */
-	public static VersionChecker getInstance (boolean display) {
-		
+	public static void setDisplay(boolean display) {
 		VersionChecker._display = display;
-		
-		return VersionChecker.getInstance ();
 	}
 	
 	protected VersionChecker () {}
