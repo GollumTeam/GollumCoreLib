@@ -21,7 +21,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 public class ModGollumCoreLib {
 	
 
-	@ConfigProp (info = "Log display level (INFO, WARNING, SEVERE, NONE)")
+	@ConfigProp (info = "Log display level (DEBUG, INFO, WARNING, SEVERE, NONE)")
 	public static String level = "WARNING";
 	
 	@ConfigProp (info = "Display version checker message")
