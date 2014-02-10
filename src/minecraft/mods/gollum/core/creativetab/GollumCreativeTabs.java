@@ -1,4 +1,4 @@
-package mods.gollum.core.tab;
+package mods.gollum.core.creativetab;
 
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
