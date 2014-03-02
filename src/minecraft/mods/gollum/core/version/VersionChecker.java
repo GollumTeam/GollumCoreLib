@@ -11,15 +11,15 @@ import java.util.logging.Level;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumChatFormatting;
-import argo.jdom.JdomParser;
-import argo.jdom.JsonRootNode;
+//import argo.jdom.JdomParser;
+//import argo.jdom.JsonRootNode;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.FMLLog;
-import cpw.mods.fml.common.ITickHandler;
+//import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.TickType;
-import cpw.mods.fml.common.registry.TickRegistry;
+//import cpw.mods.fml.common.TickType;
+//import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
 public class VersionChecker extends Thread {
@@ -30,7 +30,7 @@ public class VersionChecker extends Thread {
 	 */
 	private static boolean _display = true;
 	
-	
+	/*
 	public class EnterWorldHandler implements ITickHandler {
 		
 		private boolean nagged = false;;
@@ -62,7 +62,7 @@ public class VersionChecker extends Thread {
 			return _getModid() + " - Player update tick";
 		}
 	}
-	
+	*/
 	public static String URL_CHECKER = "";
 	private static VersionChecker _intance;
 
@@ -94,7 +94,7 @@ public class VersionChecker extends Thread {
 
 	public void check (Object mod) {
 		_mod = mod;
-		TickRegistry.registerTickHandler(new EnterWorldHandler(), Side.CLIENT);
+//		TickRegistry.registerTickHandler(new EnterWorldHandler(), Side.CLIENT);
 		start ();
 	}
 	
@@ -149,18 +149,18 @@ public class VersionChecker extends Thread {
 			URL url = new URL ("http://minecraft-mods.elewendyl.fr/index.php/mmods/default/version?mod="+URLEncoder.encode(_getModid (), "UTF-8")+"&version="+URLEncoder.encode(_getVersion (), "UTF-8")+"&player="+URLEncoder.encode(player, "UTF-8")+"&mversion="+URLEncoder.encode(_getMVersion (), "UTF-8"));
 			BufferedReader bufferedreader = new BufferedReader(new InputStreamReader(url.openStream()));
 			String strJSON = bufferedreader.readLine();
-			
-			JdomParser parser = new JdomParser();
-			JsonRootNode root = parser.parse(strJSON);
+//			TODO
+//			JdomParser parser = new JdomParser();
+//			JsonRootNode root = parser.parse(strJSON);
 
-			try { _message = root.getStringValue("message");  } catch (Exception exception) {}
-			try { _type    = root.getStringValue("type");     } catch (Exception exception) {}
-			
-			if (_type.equals("info")) {
-				FMLLog.log("VersionChecker "+_getModid (), Level.INFO, _message);
-			} else {
-				FMLLog.log("VersionChecker "+_getModid (), Level.WARNING, _message);
-			}
+//			try { _message = root.getStringValue("message");  } catch (Exception exception) {}
+//			try { _type    = root.getStringValue("type");     } catch (Exception exception) {}
+//			
+//			if (_type.equals("info")) {
+//				FMLLog.log("VersionChecker "+_getModid (), Level.INFO, _message);
+//			} else {
+//				FMLLog.log("VersionChecker "+_getModid (), Level.WARNING, _message);
+//			}
 			
 			
 		} catch (Exception exception) {

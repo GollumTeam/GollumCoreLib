@@ -13,7 +13,6 @@ import java.util.LinkedList;
 import java.util.HashSet;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.src.ModLoader;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 public class ConfigLoader {

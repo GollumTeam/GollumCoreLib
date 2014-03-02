@@ -10,11 +10,11 @@ public class Logger {
 	public static final int LEVEL_SEVERE  = 3;
 	public static final int LEVEL_NONE    = 99;
 
-	private java.util.logging.Logger log;
+	private org.apache.logging.log4j.Logger log;
 	private static int level = LEVEL_INFO;
 	
 	public Logger(FMLPreInitializationEvent evt) {
-		this.log   = evt.getModLog();
+		this.log = evt.getModLog();
 	}
 	
 	/**
@@ -39,7 +39,7 @@ public class Logger {
 
 	public void debug(String msg) {
 		if (this.level <= LEVEL_DEBUG) {
-			this.log.info(msg);
+			this.log.debug(msg);
 		}
 	}
 	
@@ -51,13 +51,13 @@ public class Logger {
 	
 	public void warning(String msg) {
 		if (this.level <= LEVEL_WARNING) {
-			this.log.warning(msg);
+			this.log.warn(msg);
 		}
 	}
 	
 	public void severe(String msg) {
 		if (this.level <= LEVEL_SEVERE) {
-			this.log.severe(msg);
+			this.log.error(msg);
 		}
 	}
 }
