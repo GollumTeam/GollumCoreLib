@@ -16,7 +16,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
 
-@Mod(modid = "GollumCoreLib", name = "Gollum Core Lib", version = "1.0.0", acceptedMinecraftVersions = "1.6.4")
+@Mod(modid = "GollumCoreLib", name = "Gollum Core Lib", version = "1.1.0", acceptedMinecraftVersions = "1.6.4")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false)
 public class ModGollumCoreLib {
 	
@@ -49,8 +49,12 @@ public class ModGollumCoreLib {
 
 		// Affecte la config
 		VersionChecker.setDisplay(versionChecker);
-		Logger.setLevelDisplay(level);;
 		
+		// Gestion de la nivaeu de log
+		Logger.setLevelDisplay(level);
+		
+		// Creation du checker de version
+		new VersionChecker().check(this);
 	}
 	
 	/** 2 **/

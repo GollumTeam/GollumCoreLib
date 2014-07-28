@@ -73,12 +73,11 @@ public class VersionChecker extends Thread {
 	/**
 	 * Recupère l'instance
 	 * @return VersionChecker
+	 * @deprecated
+	 * @see Replace by new VersionChecker
 	 */
 	public static VersionChecker getInstance () {
-		if (_intance == null) {
-			_intance = new VersionChecker();
-		}
-		return _intance;
+		return new VersionChecker();
 	}
 	
 	/**
@@ -90,7 +89,7 @@ public class VersionChecker extends Thread {
 		VersionChecker._display = display;
 	}
 	
-	protected VersionChecker () {}
+	public VersionChecker () {}
 
 	public void check (Object mod) {
 		_mod = mod;
