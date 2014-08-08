@@ -15,9 +15,14 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid = "GollumCoreLib", name = "Gollum Core Lib", version = "1.0.0", acceptedMinecraftVersions = "1.7.2")
+@Mod(modid = ModGollumCoreLib.MODID, name = ModGollumCoreLib.MODNAME, version = ModGollumCoreLib.VERSION, acceptedMinecraftVersions = ModGollumCoreLib.MINECRAFT_VERSION)
 public class ModGollumCoreLib {
 	
+
+	public final static String MODID = "GollumCoreLib";
+	public final static String MODNAME = "Gollum Core Lib";
+	public final static String VERSION = "1.1.0";
+	public final static String MINECRAFT_VERSION = "1.7.2";
 
 	@ConfigProp (info = "Log display level (DEBUG, INFO, WARNING, SEVERE, NONE)")
 	public static String level = "WARNING";
@@ -48,7 +53,7 @@ public class ModGollumCoreLib {
 	
 	/** 2 **/
 	@EventHandler
-	public void load(FMLInitializationEvent event) {
+	public void init(FMLInitializationEvent event) {
 		
 	}
 
