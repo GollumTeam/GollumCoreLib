@@ -2,25 +2,26 @@ package mods.gollum.core.version;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.lang.annotation.Annotation;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.EnumSet;
-import java.util.logging.Level;
+import java.util.Calendar;
 
+import mods.gollum.core.mod.ModMetaInfos;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ChatComponentStyle;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
-//import argo.jdom.JdomParser;
-//import argo.jdom.JsonRootNode;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import argo.jdom.JdomParser;
+import argo.jdom.JsonRootNode;
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.FMLLog;
-//import cpw.mods.fml.common.ITickHandler;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.Mod;
-//import cpw.mods.fml.common.TickType;
-//import cpw.mods.fml.common.registry.TickRegistry;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class VersionChecker extends Thread {
 	
@@ -28,58 +29,46 @@ public class VersionChecker extends Thread {
 	/**
 	 * Affiche le message de mise à jour
 	 */
-	private static boolean _display = true;
+	private static boolean display = true;
 	
-	/*
-	public class EnterWorldHandler implements ITickHandler {
+	
+	public class EnterWorldHandler {
 		
 		private boolean nagged = false;;
 		
-		@Override
-		public void tickStart(EnumSet<TickType> type, Object... tickData) {
-		}
-		
-		@Override
-		public void tickEnd(EnumSet<TickType> type, Object... tickData) {
+		@SideOnly(Side.CLIENT)
+		@SubscribeEvent
+		public void OnPlayerTickEvent(EntityJoinWorldEvent event) {
 			
-			if (nagged || !VersionChecker._display) {
+			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+			
+			if (
+				player == null ||
+				nagged ||
+				!VersionChecker.display
+			) {
 				return;
 			}
-			if (_message != null) {
-				EntityPlayer player = (EntityPlayer) tickData[0];
-				player.addChatMessage(EnumChatFormatting.YELLOW + _message);
+			
+			if (message != null) {
+				
+				String chat = "";
+				for (int i = 0; i < message.length(); i++) {
+					chat = chat + EnumChatFormatting.YELLOW + message.charAt(i);
+				}
+
+				player.addChatMessage(new ChatComponentText("-------------------------------"));
+				player.addChatMessage(new ChatComponentText(chat));
+				player.addChatMessage(new ChatComponentText("-------------------------------"));
+				nagged = true;
 			}
-			nagged = true;
 		}
-
-		@Override
-		public EnumSet<TickType> ticks() {
-			return EnumSet.of(TickType.PLAYER);
-		}
-
-		@Override
-		public String getLabel() {
-			return _getModid() + " - Player update tick";
-		}
+		
 	}
-	*/
-	public static String URL_CHECKER = "";
-	private static VersionChecker _intance;
-
-	private static Object _mod = null;
-	private static String _message = null;
-	private static String _type = "";
 	
-	/**
-	 * Recupère l'instance
-	 * @return VersionChecker
-	 */
-	public static VersionChecker getInstance () {
-		if (_intance == null) {
-			_intance = new VersionChecker();
-		}
-		return _intance;
-	}
+	private String message = null;
+	private String type = "";
+	private ModMetaInfos mod = null;
 	
 	/**
 	 * Recupère l'instance
@@ -87,80 +76,52 @@ public class VersionChecker extends Thread {
 	 * @return VersionChecker
 	 */
 	public static void setDisplay(boolean display) {
-		VersionChecker._display = display;
+		VersionChecker.display = display;
 	}
 	
-	protected VersionChecker () {}
-
-	public void check (Object mod) {
-		_mod = mod;
-//		TickRegistry.registerTickHandler(new EnterWorldHandler(), Side.CLIENT);
+	public VersionChecker (Object mod) {
+		this.mod = new ModMetaInfos (mod);
+		MinecraftForge.EVENT_BUS.register(new EnterWorldHandler ());
 		start ();
-	}
-	
-	/**
-	 * Renvoie la version du MOD
-	 * @return String
-	 */
-	private String _getVersion () {
-		String version = "0.0.0 [DEV]";
-		
-		for (Annotation annotation : this._mod.getClass().getAnnotations()) {
-			if (annotation instanceof Mod) {;
-				version = ((Mod)annotation).version();
-			}
-		}
-		
-		return version;
-	}
-	
-	/**
-	 * Renvoie le modID du MOD
-	 * @return String
-	 */
-	private String _getModid () {
-		String modid = "Error";
-		
-		for (Annotation annotation : this._mod.getClass().getAnnotations()) {
-			if (annotation instanceof Mod) {
-				modid = ((Mod)annotation).modid();
-			}
-		}
-		
-		return modid;
-	}
-	
-	/**
-	 * Renvoie la version de Minecraft
-	 * @return String
-	 */
-	private String _getMVersion () {
-		return Loader.instance().getMinecraftModContainer().getVersion();
 	}
 	
 	public void run () {
 		
 		String player = "MINECRAFT_SERVER";
-		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+		if (MinecraftServer.getServer() == null) {
 			player = Minecraft.getMinecraft().getSession().getUsername();
 		}
 		
 		try {
-			URL url = new URL ("http://minecraft-mods.elewendyl.fr/index.php/mmods/default/version?mod="+URLEncoder.encode(_getModid (), "UTF-8")+"&version="+URLEncoder.encode(_getVersion (), "UTF-8")+"&player="+URLEncoder.encode(player, "UTF-8")+"&mversion="+URLEncoder.encode(_getMVersion (), "UTF-8"));
+			
+			String modid = mod.getModid ();
+			String modidEnc = URLEncoder.encode(mod.getModid (), "UTF-8");
+			String versionEnc = URLEncoder.encode(mod.getVersion (), "UTF-8");
+			String playerEnc = URLEncoder.encode(player, "UTF-8");
+			String mcVersionEnc = URLEncoder.encode(mod.getMinecraftVersion (), "UTF-8");
+			
+			URL url = new URL ("http://minecraft-mods.elewendyl.fr/index.php/mmods/default/version?mod="+modidEnc+"&version="+versionEnc+"&player="+playerEnc+"&mversion="+mcVersionEnc);
 			BufferedReader bufferedreader = new BufferedReader(new InputStreamReader(url.openStream()));
 			String strJSON = bufferedreader.readLine();
-//			TODO
-//			JdomParser parser = new JdomParser();
-//			JsonRootNode root = parser.parse(strJSON);
 
-//			try { _message = root.getStringValue("message");  } catch (Exception exception) {}
-//			try { _type    = root.getStringValue("type");     } catch (Exception exception) {}
-//			
-//			if (_type.equals("info")) {
-//				FMLLog.log("VersionChecker "+_getModid (), Level.INFO, _message);
-//			} else {
-//				FMLLog.log("VersionChecker "+_getModid (), Level.WARNING, _message);
-//			}
+			JdomParser parser = new JdomParser();   
+			JsonRootNode root = parser.parse(strJSON);
+
+			try { message = root.getStringValue("message");  } catch (Exception exception) {}
+			try { type    = root.getStringValue("type");     } catch (Exception exception) {}
+			
+			Calendar calendar = Calendar.getInstance();
+			String h =  String.format("%02d", calendar.get(Calendar.HOUR_OF_DAY));
+			String m =  String.format("%02d", calendar.get(Calendar.MINUTE));
+			String s =  String.format("%02d", calendar.get(Calendar.SECOND));
+			
+			String log = "["+h+":"+m+":"+s+"] ["+(type.equals("info") ? "INFO" : "WARNING" )+"] ["+modid+"]: "+ message;
+						
+			if (type.equals("info")) {
+				System.out.println (log);
+			} else {
+				System.err.println (log);
+			}
 			
 			
 		} catch (Exception exception) {
