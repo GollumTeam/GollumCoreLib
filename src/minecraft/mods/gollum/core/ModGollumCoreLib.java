@@ -1,9 +1,11 @@
 
 package mods.gollum.core;
 
+import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.blocks.BlockSpawner;
 import mods.gollum.core.config.ConfigLoader;
 import mods.gollum.core.config.ConfigProp;
+import mods.gollum.core.facory.BlockFactory;
 import mods.gollum.core.log.Logger;
 import mods.gollum.core.tileentities.TileEntityBlockSpawner;
 import mods.gollum.core.version.VersionChecker;
@@ -16,11 +18,15 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
 
-@Mod(modid = "GollumCoreLib", name = "Gollum Core Lib", version = "1.1.0", acceptedMinecraftVersions = "1.6.4")
+@Mod(modid = ModGollumCoreLib.MODID, name = ModGollumCoreLib.MODNAME, version = ModGollumCoreLib.VERSION, acceptedMinecraftVersions = ModGollumCoreLib.MINECRAFT_VERSION)
 @NetworkMod(clientSideRequired = true, serverSideRequired = false)
 public class ModGollumCoreLib {
-	
 
+	public final static String MODID = "GollumCoreLib";
+	public final static String MODNAME = "Gollum Core Lib";
+	public final static String VERSION = "1.1.0";
+	public final static String MINECRAFT_VERSION = "1.6.4";
+	
 	@ConfigProp (info = "Log display level (DEBUG, INFO, WARNING, SEVERE, NONE)")
 	public static String level = "WARNING";
 	
@@ -54,12 +60,12 @@ public class ModGollumCoreLib {
 		Logger.setLevelDisplay(level);
 		
 		// Creation du checker de version
-		new VersionChecker().check(this);
+		new VersionChecker(this);
 	}
 	
 	/** 2 **/
 	@EventHandler
-	public void load(FMLInitializationEvent event) {
+	public void init(FMLInitializationEvent event) {
 
 		// Initialisation des blocks
 		this.initBlocks ();
@@ -85,10 +91,11 @@ public class ModGollumCoreLib {
 	 * Initialisation des blocks
 	 */
 	public void initBlocks () {
-
+		
+		BlockFactory factory = new BlockFactory ();
+		
 		// Création des blocks
-		this.blockSpawner = (new BlockSpawner(this.blockSpawnerID)).setUnlocalizedName("GCLBlockSpawner");
-		GameRegistry.registerBlock(this.blockSpawner, "GCLblockSpawner");
+		this.blockSpawner = factory.create (new BlockSpawner(this.blockSpawnerID), "GCLBlockSpawner");
 		
 	}
 	

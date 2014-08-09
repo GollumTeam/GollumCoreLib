@@ -24,6 +24,7 @@ public class TileEntityBlockSpawner extends TileEntity {
 	 * e.g. the mob spawner uses this to count ticks and creates a new spawn
 	 * inside its implementation.
 	 */
+	@Override
 	public void updateEntity() {
 		
 		if (this.mobID != null && !this.worldObj.isRemote) {

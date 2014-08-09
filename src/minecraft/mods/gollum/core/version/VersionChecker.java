@@ -11,6 +11,7 @@ import java.util.logging.Level;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraftforge.common.MinecraftForge;
 import argo.jdom.JdomParser;
 import argo.jdom.JsonRootNode;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -28,7 +29,7 @@ public class VersionChecker extends Thread {
 	/**
 	 * Affiche le message de mise à jour
 	 */
-	private static boolean _display = true;
+	private static boolean display = true;
 	
 	
 	public class EnterWorldHandler implements ITickHandler {
@@ -42,12 +43,14 @@ public class VersionChecker extends Thread {
 		@Override
 		public void tickEnd(EnumSet<TickType> type, Object... tickData) {
 			
-			if (nagged || !VersionChecker._display) {
+			if (nagged || !VersionChecker.display) {
 				return;
 			}
-			if (_message != null) {
+			if (message != null) {
 				EntityPlayer player = (EntityPlayer) tickData[0];
-				player.addChatMessage(EnumChatFormatting.YELLOW + _message);
+				player.addChatMessage("-------------------------------");
+				player.addChatMessage(EnumChatFormatting.YELLOW + message);
+				player.addChatMessage("-------------------------------");
 			}
 			nagged = true;
 		}
@@ -63,22 +66,9 @@ public class VersionChecker extends Thread {
 		}
 	}
 	
-	public static String URL_CHECKER = "";
-	private static VersionChecker _intance;
-
-	private static Object _mod = null;
-	private static String _message = null;
-	private static String _type = "";
-	
-	/**
-	 * Recupère l'instance
-	 * @return VersionChecker
-	 * @deprecated
-	 * @see Replace by new VersionChecker
-	 */
-	public static VersionChecker getInstance () {
-		return new VersionChecker();
-	}
+	private Object mod = null;
+	private String message = null;
+	private String type = "";
 	
 	/**
 	 * Recupère l'instance
@@ -86,13 +76,11 @@ public class VersionChecker extends Thread {
 	 * @return VersionChecker
 	 */
 	public static void setDisplay(boolean display) {
-		VersionChecker._display = display;
+		VersionChecker.display = display;
 	}
 	
-	public VersionChecker () {}
-
-	public void check (Object mod) {
-		_mod = mod;
+	public VersionChecker (Object mod) {
+		this.mod = mod;
 		TickRegistry.registerTickHandler(new EnterWorldHandler(), Side.CLIENT);
 		start ();
 	}
@@ -104,7 +92,7 @@ public class VersionChecker extends Thread {
 	private String _getVersion () {
 		String version = "0.0.0 [DEV]";
 		
-		for (Annotation annotation : this._mod.getClass().getAnnotations()) {
+		for (Annotation annotation : this.mod.getClass().getAnnotations()) {
 			if (annotation instanceof Mod) {;
 				version = ((Mod)annotation).version();
 			}
@@ -120,7 +108,7 @@ public class VersionChecker extends Thread {
 	private String _getModid () {
 		String modid = "Error";
 		
-		for (Annotation annotation : this._mod.getClass().getAnnotations()) {
+		for (Annotation annotation : this.mod.getClass().getAnnotations()) {
 			if (annotation instanceof Mod) {
 				modid = ((Mod)annotation).modid();
 			}
@@ -152,13 +140,13 @@ public class VersionChecker extends Thread {
 			JdomParser parser = new JdomParser();
 			JsonRootNode root = parser.parse(strJSON);
 
-			try { _message = root.getStringValue("message");  } catch (Exception exception) {}
-			try { _type    = root.getStringValue("type");     } catch (Exception exception) {}
+			try { message = root.getStringValue("message");  } catch (Exception exception) {}
+			try { type    = root.getStringValue("type");     } catch (Exception exception) {}
 			
-			if (_type.equals("info")) {
-				FMLLog.log("VersionChecker "+_getModid (), Level.INFO, _message);
+			if (type.equals("info")) {
+				FMLLog.log("VersionChecker "+_getModid (), Level.INFO, message);
 			} else {
-				FMLLog.log("VersionChecker "+_getModid (), Level.WARNING, _message);
+				FMLLog.log("VersionChecker "+_getModid (), Level.WARNING, message);
 			}
 			
 			
