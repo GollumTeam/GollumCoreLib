@@ -116,7 +116,7 @@ public class VersionChecker extends Thread {
 			String s =  String.format("%02d", calendar.get(Calendar.SECOND));
 			
 			String log = "["+h+":"+m+":"+s+"] ["+(type.equals("info") ? "INFO" : "WARNING" )+"] ["+modid+"]: "+ message;
-						
+			
 			if (type.equals("info")) {
 				System.out.println (log);
 			} else {
