@@ -6,14 +6,15 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.HashSet;
+import java.util.LinkedList;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.src.ModLoader;
+import mods.gollum.core.ModGollumCoreLib;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 public class ConfigLoader {
@@ -145,23 +146,53 @@ public class ConfigLoader {
 					
 				} else {
 					
-					String name = strLine.substring(0, index);
-					String prop = strLine.substring(index + 1);
+					String name = strLine.substring(0, index).trim();
+					String prop = strLine.substring(index + 1).trim();
 					
 					if (!types.containsKey(name)) {
 						this.updateFile = true;
 						
 					} else {
 						Object obj = null;
-						Class class2 = ((Field) types.get(name)).getType();
+						Class classType = ((Field) types.get(name)).getType();
 						
-						if (class2.isAssignableFrom(String.class)) { obj = prop;                                        } else
-						if (class2.isAssignableFrom(Integer.TYPE)) { obj = Integer.valueOf(Integer.parseInt(prop));     } else
-						if (class2.isAssignableFrom(Short.TYPE))   { obj = Short.valueOf(Short.parseShort(prop));       } else
-						if (class2.isAssignableFrom(Byte.TYPE))    { obj = Byte.valueOf(Byte.parseByte(prop));          } else
-						if (class2.isAssignableFrom(Boolean.TYPE)) { obj = Boolean.valueOf(Boolean.parseBoolean(prop)); } else
-						if (class2.isAssignableFrom(Float.TYPE))   { obj = Float.valueOf(Float.parseFloat(prop));       } else
-						if (class2.isAssignableFrom(Double.TYPE))  { obj = Double.valueOf(Double.parseDouble(prop));    }
+						if (classType.isAssignableFrom(String.class)) { obj = prop;                                        } else
+						if (classType.isAssignableFrom(Integer.TYPE)) { obj = Integer.valueOf(Integer.parseInt(prop));     } else
+						if (classType.isAssignableFrom(Short.TYPE))   { obj = Short.valueOf(Short.parseShort(prop));       } else
+						if (classType.isAssignableFrom(Byte.TYPE))    { obj = Byte.valueOf(Byte.parseByte(prop));          } else
+						if (classType.isAssignableFrom(Boolean.TYPE)) { obj = Boolean.valueOf(Boolean.parseBoolean(prop)); } else
+						if (classType.isAssignableFrom(Float.TYPE))   { obj = Float.valueOf(Float.parseFloat(prop));       } else
+						if (classType.isAssignableFrom(IConfigClass.class)) { 
+							try {
+								obj = classType.newInstance();
+								((IConfigClass)obj).readConfig(prop);
+							} catch (Exception e) {
+								obj = null;
+							}
+							
+						} else {
+							
+							if (classType.isAssignableFrom(IConfigClass[].class))  {
+								ArrayList<IConfigClass> tmp = new ArrayList<IConfigClass>();
+								String [] configs = prop.split(",");
+								try {
+									for (String value : configs) {
+										obj = classType.newInstance();
+										((IConfigClass)obj).readConfig(prop);
+										tmp.add ((IConfigClass) obj);
+									}
+									
+									ItemStackConfig[] table = new ItemStackConfig [tmp.size()];
+									for (int i = 0; i < tmp.size(); i++) {
+										table[i] = (ItemStackConfig) tmp.get(i);
+									}
+									obj = table;
+								} catch (Exception e) {
+									ModGollumCoreLib.log.severe ("Erreur read config : "+prop);
+									obj = null;
+								}
+							}
+						}
 						
 						if (obj != null) {
 							config.put(name, obj);
@@ -211,7 +242,18 @@ public class ConfigLoader {
 					
 					try {
 						
-						out.write(name + "=" + field.get(null).toString() + System.getProperty("line.separator"));
+						Object object = field.get(null);
+						String value = "";
+						if (object instanceof Object[]) {
+							ItemStackConfig[] itemStacks = (ItemStackConfig[]) object;
+							for (ItemStackConfig itemStack: itemStacks) {
+								value +=  itemStack.toString()+",";
+							}
+						} else {
+							value = object.toString();
+						}
+						
+						out.write(name + "=" + value + System.getProperty("line.separator"));
 						
 					} catch (IllegalArgumentException e) {
 						e.printStackTrace();

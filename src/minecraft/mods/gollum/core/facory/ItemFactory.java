@@ -14,12 +14,4 @@ public class ItemFactory {
 		return item;
 	}
 
-	public Item create(Item item, String name, String modId, String trans) {
-		
-		create (item, name, modId);
-		LanguageRegistry.addName(item, trans);
-		
-		return item;
-	}
-
 }

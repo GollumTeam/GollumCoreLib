@@ -1,9 +1,8 @@
 package mods.gollum.core.facory;
 
+import net.minecraft.block.Block;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
-import mods.morepistons.common.block.BlockMorePistonsGravitational;
-import net.minecraft.block.Block;
 
 public class BlockFactory {
 
@@ -11,14 +10,6 @@ public class BlockFactory {
 		
 		block.setUnlocalizedName(name);
 		GameRegistry.registerBlock(block, name);
-		
-		return block;
-	}
-
-	public Block create(Block block, String name, String trans) {
-		
-		create (block, name);
-		LanguageRegistry.addName(block, trans);
 		
 		return block;
 	}

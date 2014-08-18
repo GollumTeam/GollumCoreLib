@@ -2,34 +2,37 @@ package mods.gollum.core.version;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.lang.annotation.Annotation;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Calendar;
 import java.util.EnumSet;
 import java.util.logging.Level;
 
+import mods.gollum.core.ModGollumCoreLib;
+import mods.gollum.core.mod.ModMetaInfos;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraftforge.common.MinecraftForge;
 import argo.jdom.JdomParser;
 import argo.jdom.JsonRootNode;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
 public class VersionChecker extends Thread {
 	
-	
 	/**
 	 * Affiche le message de mise à jour
 	 */
 	private static boolean display = true;
+	
+	private ModMetaInfos mod = null;
+	private String message = null;
+	private String type = "";
 	
 	
 	public class EnterWorldHandler implements ITickHandler {
@@ -62,13 +65,9 @@ public class VersionChecker extends Thread {
 
 		@Override
 		public String getLabel() {
-			return _getModid() + " - Player update tick";
+			return mod.getModid() + " - Player update tick";
 		}
 	}
-	
-	private Object mod = null;
-	private String message = null;
-	private String type = "";
 	
 	/**
 	 * Recupère l'instance
@@ -80,49 +79,9 @@ public class VersionChecker extends Thread {
 	}
 	
 	public VersionChecker (Object mod) {
-		this.mod = mod;
+		this.mod = new ModMetaInfos(mod);
 		TickRegistry.registerTickHandler(new EnterWorldHandler(), Side.CLIENT);
 		start ();
-	}
-	
-	/**
-	 * Renvoie la version du MOD
-	 * @return String
-	 */
-	private String _getVersion () {
-		String version = "0.0.0 [DEV]";
-		
-		for (Annotation annotation : this.mod.getClass().getAnnotations()) {
-			if (annotation instanceof Mod) {;
-				version = ((Mod)annotation).version();
-			}
-		}
-		
-		return version;
-	}
-	
-	/**
-	 * Renvoie le modID du MOD
-	 * @return String
-	 */
-	private String _getModid () {
-		String modid = "Error";
-		
-		for (Annotation annotation : this.mod.getClass().getAnnotations()) {
-			if (annotation instanceof Mod) {
-				modid = ((Mod)annotation).modid();
-			}
-		}
-		
-		return modid;
-	}
-	
-	/**
-	 * Renvoie la version de Minecraft
-	 * @return String
-	 */
-	private String _getMVersion () {
-		return Loader.instance().getMinecraftModContainer().getVersion();
 	}
 	
 	public void run () {
@@ -133,22 +92,30 @@ public class VersionChecker extends Thread {
 		}
 		
 		try {
-			URL url = new URL ("http://minecraft-mods.elewendyl.fr/index.php/mmods/default/version?mod="+URLEncoder.encode(_getModid (), "UTF-8")+"&version="+URLEncoder.encode(_getVersion (), "UTF-8")+"&player="+URLEncoder.encode(player, "UTF-8")+"&mversion="+URLEncoder.encode(_getMVersion (), "UTF-8"));
+			
+			String modid = mod.getModid ();
+			String modidEnc = URLEncoder.encode(mod.getModid (), "UTF-8");
+			String versionEnc = URLEncoder.encode(mod.getVersion (), "UTF-8");
+			String playerEnc = URLEncoder.encode(player, "UTF-8");
+			String mcVersionEnc = URLEncoder.encode(mod.getMinecraftVersion (), "UTF-8");
+			
+			URL url = new URL ("http://minecraft-mods.elewendyl.fr/index.php/mmods/default/version?mod="+modidEnc+"&version="+versionEnc+"&player="+playerEnc+"&mversion="+mcVersionEnc);
+			ModGollumCoreLib.log.debug("URL Checker : "+url);
+			
 			BufferedReader bufferedreader = new BufferedReader(new InputStreamReader(url.openStream()));
 			String strJSON = bufferedreader.readLine();
 			
 			JdomParser parser = new JdomParser();
 			JsonRootNode root = parser.parse(strJSON);
-
+			
 			try { message = root.getStringValue("message");  } catch (Exception exception) {}
 			try { type    = root.getStringValue("type");     } catch (Exception exception) {}
 			
 			if (type.equals("info")) {
-				FMLLog.log("VersionChecker "+_getModid (), Level.INFO, message);
+				FMLLog.log("VersionChecker "+modid, Level.INFO, message);
 			} else {
-				FMLLog.log("VersionChecker "+_getModid (), Level.WARNING, message);
+				FMLLog.log("VersionChecker "+modid, Level.WARNING, message);
 			}
-			
 			
 		} catch (Exception exception) {
 			exception.printStackTrace();

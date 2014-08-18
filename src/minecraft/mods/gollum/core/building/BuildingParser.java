@@ -97,6 +97,8 @@ public class BuildingParser {
 				building.height = Integer.parseInt(json.getNumberValue("height"));
 			} catch (Exception e) {
 			}
+
+			ModGollumCoreLib.log.debug ("Color index  building '"+name+"' load...");
 			
 			//////////////////////////////////////////////////////////////
 			//                                                          //
@@ -252,6 +254,9 @@ public class BuildingParser {
 	 */
 	private Unity parseBlockDescription(JsonNode type) {
 		
+		
+		ModGollumCoreLib.log.debug ("parseBlockDescription");
+		
 		Unity unity = new Unity();
 		try {
 			// Découpe le type par ClassName|ObjetBlock ou ClassName|ObjetBlock:intMetadataOptional
@@ -265,16 +270,32 @@ public class BuildingParser {
 			Class classBlock;
 			Block block = null;
 			try {
+				
+				ModGollumCoreLib.log.debug ("parseBlockDescription Add block : "+explode[0]);
+				
 				classBlock = Class.forName(explode[0]);
 				Field f    = classBlock.getDeclaredField(explode[1]);
 				block      = (Block) f.get(null);
 				
+				ModGollumCoreLib.log.debug ("parseBlockDescription Added : "+explode[0]);
+				
 			} catch (Exception e) {
+				
 				// Si le code est reofusqué
-				explode    = this.reobfKey (blockStr).split(Pattern.quote("|"));
-				classBlock = Class.forName(explode[0]);
-				Field f    = classBlock.getDeclaredField(explode[1]);
-				block      = (Block) f.get(null);
+				try {
+					
+					ModGollumCoreLib.log.debug ("parseBlockDescription Test reofuscate  : "+explode[0]);
+					
+					explode    = this.reobfKey (blockStr).split(Pattern.quote("|"));
+					classBlock = Class.forName(explode[0]);
+					Field f    = classBlock.getDeclaredField(explode[1]);
+					block      = (Block) f.get(null);
+					
+					ModGollumCoreLib.log.debug ("parseBlockDescription Added : "+explode[0]);
+					
+				} catch (Exception e2) {
+					ModGollumCoreLib.log.severe ("parseBlockDescription Erreur load  : "+explode[0]);
+				}
 			}
 			
 			unity.block       = block;
