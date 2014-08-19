@@ -18,6 +18,13 @@ public class Logger {
 	}
 	
 	/**
+	 * Renvoi le level
+	 */
+	public static int getLevel () {
+		return Logger.level;
+	}
+	
+	/**
 	 * Change le niveau d'affichage des logs
 	 * @param levelDisplay
 	 */

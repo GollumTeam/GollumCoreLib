@@ -1,17 +1,21 @@
 
 package mods.gollum.core;
 
-import mods.gollum.core.ModGollumCoreLib;
+import mods.castledefenders.ModCastleDefenders;
 import mods.gollum.core.blocks.BlockSpawner;
 import mods.gollum.core.config.ConfigLoader;
 import mods.gollum.core.config.ConfigProp;
 import mods.gollum.core.facory.BlockFactory;
 import mods.gollum.core.log.Logger;
+import mods.gollum.core.sound.SoundRegistry;
 import mods.gollum.core.tileentities.TileEntityBlockSpawner;
 import mods.gollum.core.version.VersionChecker;
 import net.minecraft.block.Block;
+import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.Mod.Instance;
+import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -26,6 +30,12 @@ public class ModGollumCoreLib {
 	public final static String MODNAME = "Gollum Core Lib";
 	public final static String VERSION = "1.1.0";
 	public final static String MINECRAFT_VERSION = "1.6.4";
+
+	@Instance("ModGollumCoreLib")
+	public static ModCastleDefenders instance;
+	
+	@SidedProxy(clientSide = "mods.gollum.core.ClientProxyGolumCoreLib", serverSide = "mods.gollum.core.CommonProxyGolumCoreLib")
+	public static CommonProxyGolumCoreLib proxy;
 	
 	@ConfigProp (info = "Log display level (DEBUG, INFO, WARNING, SEVERE, NONE)")
 	public static String level = "WARNING";
@@ -66,7 +76,10 @@ public class ModGollumCoreLib {
 	/** 2 **/
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
-
+		
+		// Enregistre les events
+		this.proxy.registerEvents();
+		
 		// Initialisation des blocks
 		this.initBlocks ();
 

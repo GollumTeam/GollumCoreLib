@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,11 +14,19 @@ import java.util.HashSet;
 import java.util.LinkedList;
 
 import mods.gollum.core.ModGollumCoreLib;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import mods.gollum.core.log.Logger;
+import argo.format.CompactJsonFormatter;
+import argo.format.JsonFormatter;
+import argo.jdom.JdomParser;
+import argo.jdom.JsonNode;
+import argo.jdom.JsonNodeFactories;
+import argo.jdom.JsonRootNode;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 public class ConfigLoader {
+	
+	private static final JdomParser parser = new JdomParser();
+	private static final JsonFormatter formatter = new CompactJsonFormatter(); 
 	
 	private boolean updateFile = false;
 	private File dir;
@@ -48,6 +57,7 @@ public class ConfigLoader {
 		Field[] fields = this.configClass.getDeclaredFields();
 		for (Field field : fields) {
 			if (field.isAnnotationPresent(ConfigProp.class)) {
+				
 				this.configFields.add(field);
 				ConfigProp prop = (ConfigProp) field.getAnnotation(ConfigProp.class);
 				this.groupList.add(prop.group());
@@ -78,6 +88,8 @@ public class ConfigLoader {
 	 */
 	public void loadConfig() {
 		
+		ModGollumCoreLib.log.info("Read config : "+this.fileName);
+		
 		try {
 			
 			File configFile = new File(this.dir, this.fileName);
@@ -93,11 +105,24 @@ public class ConfigLoader {
 			if (configFile.exists()) {
 				
 				properties = parseConfig(configFile, types);
+				
 				for (String prop : properties.keySet()) {
-					Field field = (Field) types.get(prop);
-					Object obj = properties.get(prop);
-					if (!obj.equals(field.get(null))) {
-						field.set(null, obj);
+					
+
+					try {
+						
+						Field field = (Field) types.get(prop);
+						Object obj = properties.get(prop);
+						
+						field.setAccessible(true);
+						
+						if (!obj.equals(field.get(null))) {
+							
+							ModGollumCoreLib.log.debug("Set field : "+field.getName()+", obj="+obj+", objType="+obj.getClass().getName());
+							field.set(null, obj);
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
 					}
 				}
 				
@@ -113,12 +138,72 @@ public class ConfigLoader {
 			
 		} catch (Exception e) {
 			this.updateFile = true;
-			System.err.println(e.getMessage());
+			ModGollumCoreLib.log.severe (e.getMessage());
 		}
 		if (this.updateFile) {
 			updateConfig();
 		}
 		this.updateFile = false;
+	}
+
+	private Object parseConvert (Class classType, String prop) {
+		
+		String jsonStr = "{\"root\":"+prop+"}";
+		try {
+			JsonRootNode root = this.parser.parse(jsonStr);
+			return this.parseConvert(classType, root.getNode("root"));
+		} catch (Exception e) {
+			ModGollumCoreLib.log.severe("Erreur read config : file="+this.fileName+", prop="+prop+", json parsed="+jsonStr);
+			if (Logger.getLevel() <= Logger.LEVEL_DEBUG) {
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
+	
+	private Object parseConvert (Class classType, JsonNode json) throws Exception {
+		
+		Object value = null;
+		
+		if (classType.isAssignableFrom(String.class))       { value = json.getText();                            } else
+		if (classType.isAssignableFrom(Long.TYPE))          { value = Long.parseLong(json.getNumberValue());     } else
+		if (classType.isAssignableFrom(Integer.TYPE))       { value = Integer.parseInt(json.getNumberValue());   } else
+		if (classType.isAssignableFrom(Short.TYPE))         { value = Short.parseShort(json.getNumberValue());   } else
+		if (classType.isAssignableFrom(Byte.TYPE))          { value = Byte.parseByte(json.getNumberValue());     } else
+		if (classType.isAssignableFrom(Double.TYPE))        { value = Double.parseDouble(json.getNumberValue()); } else
+		if (classType.isAssignableFrom(Float.TYPE))         { value = Float.parseFloat(json.getNumberValue());   } else
+		if (classType.isAssignableFrom(Boolean.TYPE))       { value = json.getBooleanValue();                    } else
+		
+		if (IConfigJsonClass.class.isAssignableFrom(classType)) { 
+			value = classType.newInstance();
+			((IConfigJsonClass)value).readConfig(json);
+			
+		} else if (IConfigClass.class.isAssignableFrom(classType)) { 
+			value = classType.newInstance();
+			((IConfigClass)value).readConfig(json.getText());
+			
+		} else if (classType.isArray()) {
+			
+			ArrayList<Object> tmp = new ArrayList<Object>();
+			Class subClass = classType.getComponentType();
+			
+			for (JsonNode el : json.getElements()) {
+				Object subValue = this.parseConvert (subClass, el);
+				if (subValue != null) {
+					tmp.add(subValue);
+				}
+			}
+			
+			Object[] table = (Object[]) Array.newInstance(subClass, tmp.size());
+			for (int i = 0; i < tmp.size(); i++) {
+				table[i] = tmp.get(i);
+			}
+			
+			value = table;
+			
+		}
+		
+		return value;
 	}
 	
 	/**
@@ -153,49 +238,12 @@ public class ConfigLoader {
 						this.updateFile = true;
 						
 					} else {
-						Object obj = null;
 						Class classType = ((Field) types.get(name)).getType();
+						Object value = this.parseConvert(classType, prop);
 						
-						if (classType.isAssignableFrom(String.class)) { obj = prop;                                        } else
-						if (classType.isAssignableFrom(Integer.TYPE)) { obj = Integer.valueOf(Integer.parseInt(prop));     } else
-						if (classType.isAssignableFrom(Short.TYPE))   { obj = Short.valueOf(Short.parseShort(prop));       } else
-						if (classType.isAssignableFrom(Byte.TYPE))    { obj = Byte.valueOf(Byte.parseByte(prop));          } else
-						if (classType.isAssignableFrom(Boolean.TYPE)) { obj = Boolean.valueOf(Boolean.parseBoolean(prop)); } else
-						if (classType.isAssignableFrom(Float.TYPE))   { obj = Float.valueOf(Float.parseFloat(prop));       } else
-						if (classType.isAssignableFrom(IConfigClass.class)) { 
-							try {
-								obj = classType.newInstance();
-								((IConfigClass)obj).readConfig(prop);
-							} catch (Exception e) {
-								obj = null;
-							}
-							
-						} else {
-							
-							if (classType.isAssignableFrom(IConfigClass[].class))  {
-								ArrayList<IConfigClass> tmp = new ArrayList<IConfigClass>();
-								String [] configs = prop.split(",");
-								try {
-									for (String value : configs) {
-										obj = classType.newInstance();
-										((IConfigClass)obj).readConfig(prop);
-										tmp.add ((IConfigClass) obj);
-									}
-									
-									ItemStackConfig[] table = new ItemStackConfig [tmp.size()];
-									for (int i = 0; i < tmp.size(); i++) {
-										table[i] = (ItemStackConfig) tmp.get(i);
-									}
-									obj = table;
-								} catch (Exception e) {
-									ModGollumCoreLib.log.severe ("Erreur read config : "+prop);
-									obj = null;
-								}
-							}
-						}
-						
-						if (obj != null) {
-							config.put(name, obj);
+						if (value != null) {
+							ModGollumCoreLib.log.debug ("Read "+this.fileName+" : "+name+":"+value);
+							config.put(name, value);
 						}
 					}
 				}
@@ -206,6 +254,51 @@ public class ConfigLoader {
 		return config;
 	}
 	
+	private String toJsonValue (Field field) throws Exception {
+		
+		JsonRootNode json = JsonNodeFactories.object(
+			JsonNodeFactories.field("root", this.toJsonValue (field.get(null)))
+		);
+		
+		String out = this.formatter.format(json).substring("{\"root\":".length());
+		out = out.substring(0, out.length() - ("}".length()));
+		return out;
+	}
+	
+	private JsonNode toJsonValue(Object value) {
+		
+		JsonNode node = null;
+		
+		if (value instanceof String)       { node = JsonNodeFactories.string ((String)value);              } else
+		if (value instanceof Long)         { node = JsonNodeFactories.number ((Long)value);                } else
+		if (value instanceof Integer)      { node = JsonNodeFactories.number ((Integer)value);             } else
+		if (value instanceof Short)        { node = JsonNodeFactories.number ((Short)value);               } else
+		if (value instanceof Byte)         { node = JsonNodeFactories.number ((Byte)value);                } else
+		if (value instanceof Double)       { node = JsonNodeFactories.number (((Double)value).toString()); } else
+		if (value instanceof Float)        { node = JsonNodeFactories.number (((Float)value).toString());  } else
+		if (value instanceof Boolean)      { node = JsonNodeFactories.booleanNode((Boolean)value);         } else
+		
+		if (value instanceof IConfigJsonClass) { 
+			
+			node = ((IConfigJsonClass)value).writeConfig();
+			
+		} else if (value instanceof IConfigClass) { 
+			
+			String strValue = ((IConfigClass)value).writeConfig();
+			node = JsonNodeFactories.string(strValue);
+			
+		} else if (value instanceof Object[]) {
+			
+			ArrayList<JsonNode> childs = new ArrayList<JsonNode>();
+			for (Object subValue: (Object[])value) {
+				childs.add(this.toJsonValue (subValue));
+			}
+			node = JsonNodeFactories.lazyArray(childs);
+		}
+		
+		return node;
+	}
+
 	/**
 	 * Met à jour la config
 	 */
@@ -242,22 +335,10 @@ public class ConfigLoader {
 					
 					try {
 						
-						Object object = field.get(null);
-						String value = "";
-						if (object instanceof Object[]) {
-							ItemStackConfig[] itemStacks = (ItemStackConfig[]) object;
-							for (ItemStackConfig itemStack: itemStacks) {
-								value +=  itemStack.toString()+",";
-							}
-						} else {
-							value = object.toString();
-						}
-						
+						String value = this.toJsonValue(field);
 						out.write(name + "=" + value + System.getProperty("line.separator"));
 						
-					} catch (IllegalArgumentException e) {
-						e.printStackTrace();
-					} catch (IllegalAccessException e) {
+					} catch (Exception e) {
 						e.printStackTrace();
 					}
 				}
