@@ -4,11 +4,12 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.Calendar;
 import java.util.EnumSet;
 import java.util.logging.Level;
 
 import mods.gollum.core.ModGollumCoreLib;
+import mods.gollum.core.context.ModContext;
+import mods.gollum.core.log.Logger;
 import mods.gollum.core.mod.GollumMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,7 +19,6 @@ import argo.jdom.JsonRootNode;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.ITickHandler;
-import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -78,8 +78,8 @@ public class VersionChecker extends Thread {
 		VersionChecker.display = display;
 	}
 	
-	public VersionChecker (GollumMod mod) {
-		this.mod = mod;
+	public VersionChecker () {
+		this.mod = ModContext.instance().getCurrent();
 		TickRegistry.registerTickHandler(new EnterWorldHandler(), Side.CLIENT);
 		start ();
 	}
@@ -112,9 +112,9 @@ public class VersionChecker extends Thread {
 			try { type    = root.getStringValue("type");     } catch (Exception exception) {}
 			
 			if (type.equals("info")) {
-				FMLLog.log("VersionChecker "+modid, Level.INFO, message);
+				Logger.log("VersionChecker "+modid, Logger.LEVEL_INFO, message);
 			} else {
-				FMLLog.log("VersionChecker "+modid, Level.WARNING, message);
+				Logger.log("VersionChecker "+modid, Logger.LEVEL_WARNING, message);
 			}
 			
 		} catch (Exception exception) {

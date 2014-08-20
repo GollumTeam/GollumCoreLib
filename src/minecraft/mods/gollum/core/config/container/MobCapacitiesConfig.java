@@ -1,15 +1,10 @@
 package mods.gollum.core.config.container;
 
-import java.util.List;
-
+import mods.gollum.core.ModGollumCoreLib;
+import mods.gollum.core.config.IConfigJsonClass;
 import argo.jdom.JsonNode;
 import argo.jdom.JsonNodeFactories;
 import argo.jdom.JsonRootNode;
-import mods.castledefenders.ModCastleDefenders;
-import mods.gollum.core.ModGollumCoreLib;
-import mods.gollum.core.config.ConfigProp;
-import mods.gollum.core.config.IConfigJsonClass;
-import net.minecraft.item.ItemStack;
 
 public class MobCapacitiesConfig implements IConfigJsonClass {
 	

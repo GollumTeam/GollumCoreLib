@@ -1,19 +1,14 @@
 package mods.gollum.core.mod;
 
-import java.io.File;
 import java.lang.annotation.Annotation;
 
-import mods.castledefenders.config.ConfigCastleDefender;
+import mods.gollum.core.context.ModContext;
 import mods.gollum.core.i18n.I18n;
 import mods.gollum.core.log.Logger;
-import mods.gollum.core.version.VersionChecker;
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.relauncher.FMLInjectionData;
-import cpw.mods.fml.relauncher.Side;
 
 public abstract class GollumMod {
 
@@ -57,6 +52,10 @@ public abstract class GollumMod {
 		return this.modid;
 	}
 	
+	public int nextMobID() {
+		return ++this.mobId ;
+	}
+	
 	/**
 	 * Renvoie la version du MOD
 	 */
@@ -70,19 +69,21 @@ public abstract class GollumMod {
 	public String getMinecraftVersion () {
 		return this.minecraftVersion;
 	}
-	
+
 	public void preInit(FMLPreInitializationEvent event) {
 		
-		// Creation du logger
-		log = new Logger(event);
+		ModContext.instance ().setCurrent(this);
 		
 		// Creation du logger
-		i18n = new I18n(this);
+		this.log = new Logger();
+		
+		// Creation du logger
+		this.i18n = new I18n();
 	}
-
-
-	public int nextMobID() {
-		return ++this.mobId ;
+	
+	public void postInit(FMLPostInitializationEvent event) {
+		
+		ModContext.instance ().pop();
 	}
 	
 }

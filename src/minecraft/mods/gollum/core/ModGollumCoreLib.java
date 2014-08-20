@@ -1,19 +1,16 @@
 
 package mods.gollum.core;
 
-import mods.castledefenders.ModCastleDefenders;
 import mods.gollum.core.blocks.BlockSpawner;
 import mods.gollum.core.config.ConfigGollumCoreLib;
-import mods.gollum.core.config.ConfigLoader;
-import mods.gollum.core.config.ConfigProp;
+import mods.gollum.core.context.ModContext;
 import mods.gollum.core.facory.BlockFactory;
+import mods.gollum.core.i18n.I18n;
 import mods.gollum.core.log.Logger;
 import mods.gollum.core.mod.GollumMod;
-import mods.gollum.core.sound.SoundRegistry;
 import mods.gollum.core.tileentities.TileEntityBlockSpawner;
 import mods.gollum.core.version.VersionChecker;
 import net.minecraft.block.Block;
-import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -34,12 +31,12 @@ public class ModGollumCoreLib extends GollumMod {
 	public final static String MINECRAFT_VERSION = "1.6.4";
 
 	@Instance("ModGollumCoreLib")
-	public static ModCastleDefenders instance;
+	public static ModGollumCoreLib instance;
 	
 	@SidedProxy(clientSide = "mods.gollum.core.ClientProxyGolumCoreLib", serverSide = "mods.gollum.core.CommonProxyGolumCoreLib")
 	public static CommonProxyGolumCoreLib proxy;
 	
-	public ConfigGollumCoreLib config;
+	public static ConfigGollumCoreLib config;
 	
 	public static Block blockSpawner;
 	
@@ -47,11 +44,17 @@ public class ModGollumCoreLib extends GollumMod {
 	@Override
 	public void preInit(FMLPreInitializationEvent event) {
 		
-		super.preInit (event);
+		ModContext.instance ().setCurrent(this);
 		
 		// Charge la configuration
-		this.config = new ConfigGollumCoreLib(this);
-
+		this.config = new ConfigGollumCoreLib();
+		
+		// Creation du logger
+		this.log = new Logger();
+		
+		// Creation du logger
+		this.i18n = new I18n();
+		
 		// Affecte la config
 		VersionChecker.setDisplay(this.config.versionChecker);
 		
@@ -59,7 +62,7 @@ public class ModGollumCoreLib extends GollumMod {
 		Logger.setLevelDisplay(this.config.level);
 		
 		// Creation du checker de version
-		new VersionChecker(this);
+		new VersionChecker();
 	}
 	
 	/** 2 **/
@@ -79,7 +82,7 @@ public class ModGollumCoreLib extends GollumMod {
 	/** 3 **/
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
-
+		super.postInit(event);
 	}
 
 	/**

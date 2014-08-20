@@ -21,6 +21,7 @@ import argo.jdom.JdomParser;
 import argo.jdom.JsonNode;
 import argo.jdom.JsonNodeFactories;
 import argo.jdom.JsonRootNode;
+import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.relauncher.FMLInjectionData;
 
@@ -86,12 +87,13 @@ public class ConfigLoader {
 		return list;
 	}
 	
+	
 	/**
 	 * Charge la config
 	 */
 	public void loadConfig() {
-		
-		ModGollumCoreLib.log.info("Read config : "+this.fileName);
+
+		Logger.log(ModGollumCoreLib.MODID, Logger.LEVEL_INFO, "Read config : "+this.fileName);
 		
 		try {
 			
@@ -121,7 +123,7 @@ public class ConfigLoader {
 						
 						if (!obj.equals(field.get(null))) {
 							
-							ModGollumCoreLib.log.debug("Set field : "+field.getName()+", obj="+obj+", objType="+obj.getClass().getName());
+							Logger.log(ModGollumCoreLib.MODID, Logger.LEVEL_DEBUG, "Set field : "+field.getName()+", obj="+obj+", objType="+obj.getClass().getName());
 							field.set(null, obj);
 						}
 					} catch (Exception e) {
@@ -141,7 +143,8 @@ public class ConfigLoader {
 			
 		} catch (Exception e) {
 			this.updateFile = true;
-			ModGollumCoreLib.log.severe (e.getMessage());
+			e.printStackTrace();
+			Logger.log(ModGollumCoreLib.MODID, Logger.LEVEL_SEVERE, e.getMessage());
 		}
 		if (this.updateFile) {
 			updateConfig();
@@ -156,7 +159,7 @@ public class ConfigLoader {
 			JsonRootNode root = this.parser.parse(jsonStr);
 			return this.parseConvert(classType, root.getNode("root"));
 		} catch (Exception e) {
-			ModGollumCoreLib.log.severe("Erreur read config : file="+this.fileName+", prop="+prop+", json parsed="+jsonStr);
+			Logger.log(ModGollumCoreLib.MODID, Logger.LEVEL_SEVERE, "Erreur read config : file="+this.fileName+", prop="+prop+", json parsed="+jsonStr);
 			if (Logger.getLevel() <= Logger.LEVEL_DEBUG) {
 				e.printStackTrace();
 			}
@@ -245,7 +248,7 @@ public class ConfigLoader {
 						Object value = this.parseConvert(classType, prop);
 						
 						if (value != null) {
-							ModGollumCoreLib.log.debug ("Read "+this.fileName+" : "+name+":"+value);
+							Logger.log(ModGollumCoreLib.MODID, Logger.LEVEL_DEBUG, "Read "+this.fileName+" : "+name+":"+value);
 							config.put(name, value);
 						}
 					}

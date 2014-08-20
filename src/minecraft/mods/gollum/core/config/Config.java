@@ -1,5 +1,6 @@
 package mods.gollum.core.config;
 
+import mods.gollum.core.context.ModContext;
 import mods.gollum.core.mod.GollumMod;
 
 
@@ -7,8 +8,8 @@ public abstract class Config {
 	
 	private String fileName;
 	
-	public Config(GollumMod mod) {
-		this(mod.getModid());
+	public Config() {
+		this(ModContext.instance().getCurrent().getModid());
 	}
 	
 	public Config(String fileName) {
