@@ -9,7 +9,7 @@ import java.util.EnumSet;
 import java.util.logging.Level;
 
 import mods.gollum.core.ModGollumCoreLib;
-import mods.gollum.core.mod.ModMetaInfos;
+import mods.gollum.core.mod.GollumMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumChatFormatting;
@@ -30,7 +30,7 @@ public class VersionChecker extends Thread {
 	 */
 	private static boolean display = true;
 	
-	private ModMetaInfos mod = null;
+	private GollumMod mod = null;
 	private String message = null;
 	private String type = "";
 	
@@ -78,8 +78,8 @@ public class VersionChecker extends Thread {
 		VersionChecker.display = display;
 	}
 	
-	public VersionChecker (Object mod) {
-		this.mod = new ModMetaInfos(mod);
+	public VersionChecker (GollumMod mod) {
+		this.mod = mod;
 		TickRegistry.registerTickHandler(new EnterWorldHandler(), Side.CLIENT);
 		start ();
 	}

@@ -37,11 +37,11 @@ public class MobCapacitiesConfig implements IConfigJsonClass {
 	@Override
 	public void readConfig(JsonNode json)  throws Exception {
 
-		try { this.moveSpeed      = Double.parseDouble(json.getNumberValue("moveSpeed"));    } catch (Exception e) { ModGollumCoreLib.log.severe("Read config : can't parse json on capacity moveSpeed"); }
-		try { this.maxHealt       = Double.parseDouble(json.getNumberValue("maxHealt"));     } catch (Exception e) { ModGollumCoreLib.log.severe("Read config : can't parse json on capacity maxHealt"); }
-		try { this.attackStrength = Integer.parseInt(json.getNumberValue("attackStrength")); } catch (Exception e) { ModGollumCoreLib.log.severe("Read config : can't parse json on capacity attackStrength"); }
-		try { this.followRange    = Double.parseDouble(json.getNumberValue("followRange"));  } catch (Exception e) { ModGollumCoreLib.log.severe("Read config : can't parse json on capacity followRange"); }
-		try { this.timeRange      = Double.parseDouble(json.getNumberValue("timeRange"));    } catch (Exception e) { ModGollumCoreLib.log.severe("Read config : can't parse json on capacity timeRange"); }
+		try { this.moveSpeed      = Double.parseDouble(json.getNumberValue("moveSpeed"));      } catch (Exception e) { ModGollumCoreLib.log.severe("Read config : can't parse json on capacity moveSpeed"); }
+		try { this.maxHealt       = Double.parseDouble(json.getNumberValue("maxHealt"));       } catch (Exception e) { ModGollumCoreLib.log.severe("Read config : can't parse json on capacity maxHealt"); }
+		try { this.attackStrength = Double.parseDouble(json.getNumberValue("attackStrength")); } catch (Exception e) { ModGollumCoreLib.log.severe("Read config : can't parse json on capacity attackStrength"); }
+		try { this.followRange    = Double.parseDouble(json.getNumberValue("followRange"));    } catch (Exception e) { ModGollumCoreLib.log.severe("Read config : can't parse json on capacity followRange"); }
+		try { this.timeRange      = Double.parseDouble(json.getNumberValue("timeRange"));      } catch (Exception e) { ModGollumCoreLib.log.severe("Read config : can't parse json on capacity timeRange"); }
 		
 	}
 

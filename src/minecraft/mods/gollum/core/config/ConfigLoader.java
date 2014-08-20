@@ -22,16 +22,19 @@ import argo.jdom.JsonNode;
 import argo.jdom.JsonNodeFactories;
 import argo.jdom.JsonRootNode;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.relauncher.FMLInjectionData;
 
 public class ConfigLoader {
-	
+
+	private static final String extention = ".cfg";
+	private static final String configDir = "config";
 	private static final JdomParser parser = new JdomParser();
 	private static final JsonFormatter formatter = new CompactJsonFormatter(); 
 	
 	private boolean updateFile = false;
 	private File dir;
 	private String fileName;
-	private Class configClass;
+	private Config config;
 	private LinkedList<Field> configFields;
 	private HashSet<String> groupList;
 	
@@ -41,20 +44,20 @@ public class ConfigLoader {
 	 * @param dir
 	 * @param fileName
 	 */
-	public ConfigLoader (Class clss, FMLPreInitializationEvent event) {
+	public ConfigLoader (Config config) {
 		
-		this.dir = event.getModConfigurationDirectory();
+		this.dir = new File (((File)(FMLInjectionData.data()[6])).getAbsoluteFile(), this.configDir);
 		
 		if (!this.dir.exists()) {
 			this.dir.mkdir();
 		}
 		
-		this.configClass  = clss;
+		this.config       = config;
 		this.configFields = new LinkedList<Field>();
 		this.groupList    = new HashSet<String>();
-		this.fileName     = event.getSuggestedConfigurationFile().getName();
+		this.fileName     = config.getFileName ()+this.extention;
 		
-		Field[] fields = this.configClass.getDeclaredFields();
+		Field[] fields = this.config.getClass().getDeclaredFields();
 		for (Field field : fields) {
 			if (field.isAnnotationPresent(ConfigProp.class)) {
 				

@@ -70,7 +70,7 @@ public class BuildingParser {
 	 * @return
 	 * @throws Exception
 	 */
-	public Building parse (String name, String modID) throws Exception {
+	public Building parse (String name, String modID) {
 		
 		ModGollumCoreLib.log.info ("Parse '"+name+"' building");
 		Building building = new Building (name);
@@ -238,10 +238,10 @@ public class BuildingParser {
 			
 		} catch (IOException e) {
 			ModGollumCoreLib.log.severe ("Error to read resource in jar for building :'"+name+"'");
-			throw e;
+			return null;
 		} catch (InvalidSyntaxException e) {
 			ModGollumCoreLib.log.severe ("Invalid json in jar for building :'"+name+"'");
-			throw e;
+			return null;
 		}
 		
 		return building;

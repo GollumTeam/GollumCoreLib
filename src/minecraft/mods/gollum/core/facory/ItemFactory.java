@@ -1,15 +1,15 @@
 package mods.gollum.core.facory;
 
+import mods.gollum.core.mod.GollumMod;
 import net.minecraft.item.Item;
 import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class ItemFactory {
 
-	public Item create(Item item, String name, String modId) {
+	public Item create(Item item, String name, GollumMod mod) {
 		
 		item.setUnlocalizedName(name);
-		GameRegistry.registerItem (item, name, modId);
+		GameRegistry.registerItem (item, name, mod.getModid());
 		
 		return item;
 	}

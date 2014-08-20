@@ -3,10 +3,12 @@ package mods.gollum.core;
 
 import mods.castledefenders.ModCastleDefenders;
 import mods.gollum.core.blocks.BlockSpawner;
+import mods.gollum.core.config.ConfigGollumCoreLib;
 import mods.gollum.core.config.ConfigLoader;
 import mods.gollum.core.config.ConfigProp;
 import mods.gollum.core.facory.BlockFactory;
 import mods.gollum.core.log.Logger;
+import mods.gollum.core.mod.GollumMod;
 import mods.gollum.core.sound.SoundRegistry;
 import mods.gollum.core.tileentities.TileEntityBlockSpawner;
 import mods.gollum.core.version.VersionChecker;
@@ -24,7 +26,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 @Mod(modid = ModGollumCoreLib.MODID, name = ModGollumCoreLib.MODNAME, version = ModGollumCoreLib.VERSION, acceptedMinecraftVersions = ModGollumCoreLib.MINECRAFT_VERSION)
 @NetworkMod(clientSideRequired = true, serverSideRequired = false)
-public class ModGollumCoreLib {
+public class ModGollumCoreLib extends GollumMod {
 
 	public final static String MODID = "GollumCoreLib";
 	public final static String MODNAME = "Gollum Core Lib";
@@ -37,37 +39,24 @@ public class ModGollumCoreLib {
 	@SidedProxy(clientSide = "mods.gollum.core.ClientProxyGolumCoreLib", serverSide = "mods.gollum.core.CommonProxyGolumCoreLib")
 	public static CommonProxyGolumCoreLib proxy;
 	
-	@ConfigProp (info = "Log display level (DEBUG, INFO, WARNING, SEVERE, NONE)")
-	public static String level = "WARNING";
-	
-	@ConfigProp (info = "Display version checker message")
-	public static boolean versionChecker = true;
-	
-	@ConfigProp(group = "Blocks Ids")
-	public static int blockSpawnerID = 1243;
+	public ConfigGollumCoreLib config;
 	
 	public static Block blockSpawner;
 	
-	/**
-	 * Gestion des logs
-	 */
-	public static Logger log;
-	
 	@EventHandler
+	@Override
 	public void preInit(FMLPreInitializationEvent event) {
 		
-		// Creation du logger
-		log = new Logger(event);
+		super.preInit (event);
 		
 		// Charge la configuration
-		ConfigLoader configLoader = new ConfigLoader(this.getClass(), event);
-		configLoader.loadConfig();
+		this.config = new ConfigGollumCoreLib(this);
 
 		// Affecte la config
-		VersionChecker.setDisplay(versionChecker);
+		VersionChecker.setDisplay(this.config.versionChecker);
 		
 		// Gestion de la nivaeu de log
-		Logger.setLevelDisplay(level);
+		Logger.setLevelDisplay(this.config.level);
 		
 		// Creation du checker de version
 		new VersionChecker(this);
@@ -108,7 +97,7 @@ public class ModGollumCoreLib {
 		BlockFactory factory = new BlockFactory ();
 		
 		// Création des blocks
-		this.blockSpawner = factory.create (new BlockSpawner(this.blockSpawnerID), "GCLBlockSpawner");
+		this.blockSpawner = factory.create (new BlockSpawner(this.config.blockSpawnerID), "GCLBlockSpawner");
 		
 	}
 	
