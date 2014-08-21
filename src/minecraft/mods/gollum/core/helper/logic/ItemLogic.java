@@ -2,15 +2,13 @@ package mods.gollum.core.helper.logic;
 
 import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.context.ModContext;
+import mods.gollum.core.helper.items.Item;
 import mods.gollum.core.mod.GollumMod;
-import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.util.Icon;
 import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockLogic implements IBlockLogic {
+public class ItemLogic implements IBlockLogic {
 	
 	// Pour chaque element natural. Utilise le fonctionnement naturel mais pas des helper
 	// Une sorte de config
@@ -19,12 +17,12 @@ public class BlockLogic implements IBlockLogic {
 	public boolean naturalTexture = false;
 	
 	private GollumMod mod;
-	private Block parent;
+	private Item parent;
 	private String registerName;
-	public Icon icon;
+	private Icon icon;
 
-	public BlockLogic (Block parent, String registerName) {
-		this.parent       = parent;
+	public ItemLogic (Item item, String registerName) {
+		this.parent       = item;
 		this.registerName = registerName;
 		this.mod          = ModContext.instance().getCurrent();
 		
@@ -33,7 +31,7 @@ public class BlockLogic implements IBlockLogic {
 	
 	private void register () {
 		this.parent.setUnlocalizedName(this.registerName);
-		GameRegistry.registerBlock(this.parent, this.registerName);
+		GameRegistry.registerItem (this.parent, this.registerName, this.mod.getModId());
 	}
 	
 	/**

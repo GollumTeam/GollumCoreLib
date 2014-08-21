@@ -1,17 +1,13 @@
 package mods.gollum.core.helper.blocks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import mods.gollum.core.ModGollumCoreLib;
-import mods.gollum.core.context.ModContext;
 import mods.gollum.core.helper.logic.BlockLogic;
 import mods.gollum.core.helper.logic.IBlockLogic;
-import mods.gollum.core.mod.GollumMod;
-import mods.morepistons.ModMorePistons;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.util.Facing;
 import net.minecraft.util.Icon;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockPistonBase extends net.minecraft.block.BlockPistonBase implements IBlockLogic {
 	

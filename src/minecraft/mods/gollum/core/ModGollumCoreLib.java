@@ -102,7 +102,7 @@ public class ModGollumCoreLib extends GollumMod {
 	public void initBlocks () {
 		
 		// Création des blocks
-		this.blockSpawner = new BlockSpawner (this.config.blockSpawnerID);//, "GCLBlockSpawner");
+		this.blockSpawner = new BlockSpawner (this.config.blockSpawnerID, "GCLBlockSpawner");
 		
 	}
 	

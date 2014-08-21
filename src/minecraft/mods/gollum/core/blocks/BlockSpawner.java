@@ -1,7 +1,7 @@
 package mods.gollum.core.blocks;
 
+import mods.gollum.core.helper.blocks.BlockContainer;
 import mods.gollum.core.tileentities.TileEntityBlockSpawner;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -9,8 +9,10 @@ import net.minecraft.world.World;
 
 public class BlockSpawner extends BlockContainer {
 
-	public BlockSpawner(int id) {
-		super(id, Material.air);
+	public BlockSpawner(int id, String registerName) {
+		super(id, registerName, Material.air);
+		
+		this.logic.naturalTexture = true;
 	}
 
 	@Override
