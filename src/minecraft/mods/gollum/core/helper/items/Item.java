@@ -1,19 +1,24 @@
 package mods.gollum.core.helper.items;
 
 import mods.gollum.core.ModGollumCoreLib;
-import mods.gollum.core.helper.logic.IItemLogic;
-import mods.gollum.core.helper.logic.ItemLogic;
+import mods.gollum.core.helper.BlockHelper;
+import mods.gollum.core.helper.IItemHelper;
+import mods.gollum.core.helper.ItemHelper;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.util.Icon;
 
-public class Item extends net.minecraft.item.Item implements IItemLogic {
+public class Item extends net.minecraft.item.Item implements IItemHelper {
 
-	protected ItemLogic logic;
+	protected ItemHelper helper;
 	
 	public Item (int id, String registerName) {
 		super(id);
 		ModGollumCoreLib.log.info ("Create item id : " + id + " registerName : " + registerName);
-		this.logic = new ItemLogic(this, registerName);
+		this.helper = new ItemHelper(this, registerName);
+	}
+	
+	public ItemHelper getGollumHelper () {
+		return helper;
 	}
 	
 	/**
@@ -21,7 +26,12 @@ public class Item extends net.minecraft.item.Item implements IItemLogic {
 	 */
 	@Override
 	public String getRegisterName() {
-		return logic.getRegisterName();
+		return helper.getRegisterName();
+	}
+	
+	@Override
+	public Icon getIconFromDamage(int par1) {
+		return (helper.naturalTexture) ? super.getIconFromDamage(par1) : helper.getIconFromDamage(par1);
 	}
 	
 	//////////////////////////
@@ -30,7 +40,7 @@ public class Item extends net.minecraft.item.Item implements IItemLogic {
 	
 	@Override
 	public void registerIcons(IconRegister iconRegister) {
-		if (logic.naturalTexture) super.registerIcons(iconRegister); else logic.registerIcons(iconRegister);
+		if (helper.naturalTexture) super.registerIcons(iconRegister); else helper.registerIcons(iconRegister);
 	}
 	
 	/**
@@ -40,6 +50,6 @@ public class Item extends net.minecraft.item.Item implements IItemLogic {
 	 */
 	@Override
 	public String getTextureKey() {
-		return logic.getTextureKey();
+		return helper.getTextureKey();
 	}
 }

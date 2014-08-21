@@ -1,4 +1,4 @@
-package mods.gollum.core.helper.logic;
+package mods.gollum.core.helper;
 
 import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.context.ModContext;
@@ -10,7 +10,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockLogic implements IBlockLogic {
+public class BlockHelper implements IBlockHelper {
 	
 	// Pour chaque element natural. Utilise le fonctionnement naturel mais pas des helper
 	// Une sorte de config
@@ -23,12 +23,17 @@ public class BlockLogic implements IBlockLogic {
 	private String registerName;
 	public Icon icon;
 
-	public BlockLogic (Block parent, String registerName) {
+	public BlockHelper (Block parent, String registerName) {
 		this.parent       = parent;
 		this.registerName = registerName;
 		this.mod          = ModContext.instance().getCurrent();
 		
 		if (!naturalRegister) this.register();
+	}
+
+	@Override
+	public BlockHelper getGollumHelper() {
+		return this;
 	}
 	
 	private void register () {
@@ -54,7 +59,7 @@ public class BlockLogic implements IBlockLogic {
 	 */
 	@Override
 	public String getTextureKey () {
-		return ((IBlockLogic)this.parent).getRegisterName().toLowerCase();
+		return ((IBlockHelper)this.parent).getRegisterName().toLowerCase();
 	}
 	
 	/**
@@ -89,7 +94,7 @@ public class BlockLogic implements IBlockLogic {
 	*/
 	public Icon loadTexture(IconRegister iconRegister, String sufixe, boolean dontUseTextureKey) {
 		
-		String key = (dontUseTextureKey ?  "" : ((IBlockLogic)this.parent).getTextureKey ())+sufixe;
+		String key = (dontUseTextureKey ?  "" : ((IBlockHelper)this.parent).getTextureKey ())+sufixe;
 		String texture = this.mod.getModId().toLowerCase() + ":" + key;
 		
 		ModGollumCoreLib.log.debug ("Register icon " + texture + "\"");

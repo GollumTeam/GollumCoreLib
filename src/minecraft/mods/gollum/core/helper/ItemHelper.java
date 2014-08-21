@@ -1,4 +1,4 @@
-package mods.gollum.core.helper.logic;
+package mods.gollum.core.helper;
 
 import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.context.ModContext;
@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.util.Icon;
 import cpw.mods.fml.common.registry.GameRegistry;
 
-public class ItemLogic implements IBlockLogic {
+public class ItemHelper implements IItemHelper {
 	
 	// Pour chaque element natural. Utilise le fonctionnement naturel mais pas des helper
 	// Une sorte de config
@@ -21,12 +21,17 @@ public class ItemLogic implements IBlockLogic {
 	private String registerName;
 	private Icon icon;
 
-	public ItemLogic (Item item, String registerName) {
+	public ItemHelper (Item item, String registerName) {
 		this.parent       = item;
 		this.registerName = registerName;
 		this.mod          = ModContext.instance().getCurrent();
 		
 		if (!naturalRegister) this.register();
+	}
+
+	@Override
+	public ItemHelper getGollumHelper() {
+		return this;
 	}
 	
 	private void register () {
@@ -52,7 +57,7 @@ public class ItemLogic implements IBlockLogic {
 	 */
 	@Override
 	public String getTextureKey () {
-		return ((IBlockLogic)this.parent).getRegisterName().toLowerCase();
+		return ((IBlockHelper)this.parent).getRegisterName().toLowerCase();
 	}
 	
 	/**
@@ -87,7 +92,7 @@ public class ItemLogic implements IBlockLogic {
 	*/
 	public Icon loadTexture(IconRegister iconRegister, String sufixe, boolean dontUseTextureKey) {
 		
-		String key = (dontUseTextureKey ?  "" : ((IBlockLogic)this.parent).getTextureKey ())+sufixe;
+		String key = (dontUseTextureKey ?  "" : ((IBlockHelper)this.parent).getTextureKey ())+sufixe;
 		String texture = this.mod.getModId().toLowerCase() + ":" + key;
 		
 		ModGollumCoreLib.log.debug ("Register icon " + texture + "\"");
@@ -103,10 +108,8 @@ public class ItemLogic implements IBlockLogic {
 		this.icon = this.loadTexture(iconRegister);
 	}
 	
-	/**
-	 * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
-	 */
-	public Icon getIcon(int par1, int par2) {
+	@Override
+	public Icon getIconFromDamage(int par1) {
 		return this.icon;
 	}
 }

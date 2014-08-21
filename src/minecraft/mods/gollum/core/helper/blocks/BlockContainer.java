@@ -1,20 +1,24 @@
 package mods.gollum.core.helper.blocks;
 
 import mods.gollum.core.ModGollumCoreLib;
-import mods.gollum.core.helper.logic.BlockLogic;
-import mods.gollum.core.helper.logic.IBlockLogic;
+import mods.gollum.core.helper.BlockHelper;
+import mods.gollum.core.helper.IBlockHelper;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.util.Icon;
 
-public abstract class BlockContainer extends net.minecraft.block.BlockContainer implements IBlockLogic {
+public abstract class BlockContainer extends net.minecraft.block.BlockContainer implements IBlockHelper {
 
-	protected BlockLogic logic;
+	protected BlockHelper helper;
 	
 	public BlockContainer (int id, String registerName, Material material)  {
 		super(id, material);
 		ModGollumCoreLib.log.info ("Create block id : " + id + " registerName : " + registerName);
-		this.logic = new BlockLogic(this, registerName);
+		this.helper = new BlockHelper(this, registerName);
+	}
+	
+	public BlockHelper getGollumHelper () {
+		return helper;
 	}
 	
 	/**
@@ -22,7 +26,7 @@ public abstract class BlockContainer extends net.minecraft.block.BlockContainer 
 	 */
 	@Override
 	public String getRegisterName() {
-		return logic.getRegisterName();
+		return helper.getRegisterName();
 	}
 	
 	//////////////////////////
@@ -31,12 +35,12 @@ public abstract class BlockContainer extends net.minecraft.block.BlockContainer 
 	
 	@Override
 	public void registerIcons(IconRegister iconRegister) {
-		if (logic.naturalTexture) super.registerIcons(iconRegister); else logic.registerIcons(iconRegister);
+		if (helper.naturalTexture) super.registerIcons(iconRegister); else helper.registerIcons(iconRegister);
 	}
 	
 	@Override
 	public Icon getIcon(int par1, int par2) {
-		return (logic.naturalTexture) ? super.getIcon(par1, par2) : logic.getIcon(par1, par2);
+		return (helper.naturalTexture) ? super.getIcon(par1, par2) : helper.getIcon(par1, par2);
 	}
 	
 	/**
@@ -46,6 +50,6 @@ public abstract class BlockContainer extends net.minecraft.block.BlockContainer 
 	 */
 	@Override
 	public String getTextureKey() {
-		return logic.getTextureKey();
+		return helper.getTextureKey();
 	}
 }

@@ -1,9 +1,11 @@
-package mods.gollum.core.helper.logic;
+package mods.gollum.core.helper;
 
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.util.Icon;
 
-public interface IItemLogic {
+public interface IBlockHelper {
+	
+	public BlockHelper getGollumHelper ();
 	
 	/**
 	 * Nom d'enregistrement du mod
@@ -11,6 +13,8 @@ public interface IItemLogic {
 	public String getRegisterName();
 	
 	public void registerIcons(IconRegister iconRegister);
+	
+	public Icon getIcon(int par1, int par2);
 	
 	/**
 	 * Clef qui permet de générer le nom du fichier de texture 

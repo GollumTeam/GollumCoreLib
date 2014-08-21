@@ -1,17 +1,17 @@
 package mods.gollum.core.helper.blocks;
 
 import mods.gollum.core.ModGollumCoreLib;
-import mods.gollum.core.helper.logic.BlockLogic;
-import mods.gollum.core.helper.logic.IBlockLogic;
+import mods.gollum.core.helper.BlockHelper;
+import mods.gollum.core.helper.IBlockHelper;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.util.Facing;
 import net.minecraft.util.Icon;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockPistonBase extends net.minecraft.block.BlockPistonBase implements IBlockLogic {
+public class BlockPistonBase extends net.minecraft.block.BlockPistonBase implements IBlockHelper {
 	
-	protected BlockLogic logic;
+	protected BlockHelper helper;
 	
 	protected boolean isSticky;
 
@@ -29,14 +29,18 @@ public class BlockPistonBase extends net.minecraft.block.BlockPistonBase impleme
 	public BlockPistonBase(int id, String registerName, boolean isSticky)  {
 		super(id, isSticky);
 		ModGollumCoreLib.log.info ("Create block id : " + id + " registerName : " + registerName);
-		this.logic = new BlockLogic(this, registerName);
+		this.helper = new BlockHelper(this, registerName);
 		
 		this.isSticky = isSticky;
 	}
 	
+	public BlockHelper getGollumHelper () {
+		return helper;
+	}
+	
 	@Override
 	public String getRegisterName() {
-		return logic.getRegisterName();
+		return helper.getRegisterName();
 	}
 	
 	//////////////////////////
@@ -50,21 +54,21 @@ public class BlockPistonBase extends net.minecraft.block.BlockPistonBase impleme
 	@Override
 	public void registerIcons(IconRegister iconRegister) {
 		
-		if (logic.naturalTexture) {
+		if (helper.naturalTexture) {
 			super.registerIcons(iconRegister);
 			return;
 		};
 		
-		this.iconTop    = logic.loadTexture(iconRegister, suffixTop + (this.isSticky ? suffixSticky : ""));
-		this.iconOpen   = logic.loadTexture(iconRegister, suffixOpen);
-		this.iconBottom = logic.loadTexture(iconRegister, suffixBotom);
-		this.iconSide   = logic.loadTexture(iconRegister, suffixSide);
+		this.iconTop    = helper.loadTexture(iconRegister, suffixTop + (this.isSticky ? suffixSticky : ""));
+		this.iconOpen   = helper.loadTexture(iconRegister, suffixOpen);
+		this.iconBottom = helper.loadTexture(iconRegister, suffixBotom);
+		this.iconSide   = helper.loadTexture(iconRegister, suffixSide);
 	}
 	
 	@Override
 	public Icon getIcon(int i, int j) {
 		
-		if (logic.naturalTexture) return super.getIcon(i, j);
+		if (helper.naturalTexture) return super.getIcon(i, j);
 		
 		int k = getOrientation(j);
 		if (k > 5) {
@@ -87,13 +91,13 @@ public class BlockPistonBase extends net.minecraft.block.BlockPistonBase impleme
 	
 	@Override
 	public String getTextureKey() {
-		return logic.getTextureKey();
+		return helper.getTextureKey();
 	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Icon getPistonExtensionTexture() {
-		if (logic.naturalTexture) return super.getPistonExtensionTexture();
+		if (helper.naturalTexture) return super.getPistonExtensionTexture();
 		return this.iconSide;
 	}
 	
