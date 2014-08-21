@@ -7,8 +7,6 @@ import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.util.Icon;
 import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockHelper implements IBlockHelper {
 	
@@ -21,7 +19,6 @@ public class BlockHelper implements IBlockHelper {
 	private GollumMod mod;
 	private Block parent;
 	private String registerName;
-	public Icon icon;
 
 	public BlockHelper (Block parent, String registerName) {
 		this.parent       = parent;
@@ -107,13 +104,16 @@ public class BlockHelper implements IBlockHelper {
 	 */
 	@Override
 	public void registerIcons(IconRegister iconRegister) {
-		this.icon = this.loadTexture(iconRegister);
+		((IBlockHelper)this.parent).setIcon (this.loadTexture(iconRegister));
 	}
 	
 	/**
-	 * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
+	 * Setter de l'icon de l'objet
+	 * @param icon
 	 */
-	public Icon getIcon(int par1, int par2) {
-		return this.icon;
+	@Override
+	public IBlockHelper setIcon (Icon icon) {
+		ModGollumCoreLib.log.warning("setIcon don't be call by helper. It's stub");
+		return this;
 	}
 }

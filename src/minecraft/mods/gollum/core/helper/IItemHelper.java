@@ -14,7 +14,11 @@ public interface IItemHelper {
 	
 	public void registerIcons(IconRegister iconRegister);
 	
-	public Icon getIconFromDamage(int par1);
+	/**
+	 * Setter de l'icon de l'objet
+	 * @param icon
+	 */
+	public void setIcon (Icon icon);
 	
 	/**
 	 * Clef qui permet de générer le nom du fichier de texture 

@@ -2,9 +2,9 @@ package mods.gollum.core.helper;
 
 import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.context.ModContext;
-import mods.gollum.core.helper.items.Item;
 import mods.gollum.core.mod.GollumMod;
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.item.Item;
 import net.minecraft.util.Icon;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -12,14 +12,13 @@ public class ItemHelper implements IItemHelper {
 	
 	// Pour chaque element natural. Utilise le fonctionnement naturel mais pas des helper
 	// Une sorte de config
-	// Par defaut le helper vas enregistrer le block, charger des texture perso ...
+	// Par defaut le helper vas enregistrer l'item, charger des texture perso ...
 	public static boolean naturalRegister = false;
 	public boolean naturalTexture = false;
 	
 	private GollumMod mod;
 	private Item parent;
 	private String registerName;
-	private Icon icon;
 
 	public ItemHelper (Item item, String registerName) {
 		this.parent       = item;
@@ -57,7 +56,7 @@ public class ItemHelper implements IItemHelper {
 	 */
 	@Override
 	public String getTextureKey () {
-		return ((IBlockHelper)this.parent).getRegisterName().toLowerCase();
+		return ((IItemHelper)this.parent).getRegisterName().toLowerCase();
 	}
 	
 	/**
@@ -92,7 +91,7 @@ public class ItemHelper implements IItemHelper {
 	*/
 	public Icon loadTexture(IconRegister iconRegister, String sufixe, boolean dontUseTextureKey) {
 		
-		String key = (dontUseTextureKey ?  "" : ((IBlockHelper)this.parent).getTextureKey ())+sufixe;
+		String key = (dontUseTextureKey ?  "" : ((IItemHelper)this.parent).getTextureKey ())+sufixe;
 		String texture = this.mod.getModId().toLowerCase() + ":" + key;
 		
 		ModGollumCoreLib.log.debug ("Register icon " + texture + "\"");
@@ -105,11 +104,15 @@ public class ItemHelper implements IItemHelper {
 	 */
 	@Override
 	public void registerIcons(IconRegister iconRegister) {
-		this.icon = this.loadTexture(iconRegister);
+		((IItemHelper)this.parent).setIcon (this.loadTexture(iconRegister));
 	}
 	
+	/**
+	 * Setter de l'icon de l'objet
+	 * @param icon
+	 */
 	@Override
-	public Icon getIconFromDamage(int par1) {
-		return this.icon;
+	public void setIcon (Icon icon) {
+		ModGollumCoreLib.log.warning("setIcon don't be call by helper. It's stub");
 	}
 }

@@ -1,13 +1,13 @@
 package mods.gollum.core.blocks;
 
-import mods.gollum.core.helper.blocks.BlockContainer;
+import mods.gollum.core.helper.blocks.HBlockContainer;
 import mods.gollum.core.tileentities.TileEntityBlockSpawner;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 
-public class BlockSpawner extends BlockContainer {
+public class BlockSpawner extends HBlockContainer {
 
 	public BlockSpawner(int id, String registerName) {
 		super(id, registerName, Material.air);

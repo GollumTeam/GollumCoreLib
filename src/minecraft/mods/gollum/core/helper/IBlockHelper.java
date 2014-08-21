@@ -14,7 +14,11 @@ public interface IBlockHelper {
 	
 	public void registerIcons(IconRegister iconRegister);
 	
-	public Icon getIcon(int par1, int par2);
+	/**
+	 * Setter de l'icon de l'objet
+	 * @param icon
+	 */
+	public IBlockHelper setIcon (Icon icon);
 	
 	/**
 	 * Clef qui permet de générer le nom du fichier de texture 
