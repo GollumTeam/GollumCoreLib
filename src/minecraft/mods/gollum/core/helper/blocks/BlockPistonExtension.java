@@ -7,12 +7,12 @@ import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.helper.logic.BlockLogic;
 import mods.gollum.core.helper.logic.IBlockLogic;
 
-public class Block extends net.minecraft.block.Block implements IBlockLogic {
+public class BlockPistonExtension extends net.minecraft.block.BlockPistonExtension implements IBlockLogic {
 
 	protected BlockLogic logic;
 	
-	public Block (int id, String registerName, Material material)  {
-		super(id, material);
+	public BlockPistonExtension (int id, String registerName)  {
+		super(id);
 		ModGollumCoreLib.log.info ("Create block id : " + id + " registerName : " + registerName);
 		this.logic = new BlockLogic(this, registerName);
 	}
@@ -48,4 +48,6 @@ public class Block extends net.minecraft.block.Block implements IBlockLogic {
 	public String getTextureKey() {
 		return logic.getTextureKey();
 	}
+	
+	
 }

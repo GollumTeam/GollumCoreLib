@@ -1,6 +1,7 @@
 package mods.gollum.core.log;
 
 import java.io.IOException;
+import java.util.Hashtable;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -20,27 +21,17 @@ public class Logger {
 	public static final int LEVEL_SEVERE  = 3;
 	public static final int LEVEL_NONE    = 99;
 	
-//	private java.util.logging.Logger log;
+	private static final LogFormatter formater = new LogFormatter();
+	
 	private static int level = LEVEL_INFO;
 	private static Handler fileHandler = null;
+
+	private static Hashtable<String, java.util.logging.Logger> loggers = new Hashtable<String, java.util.logging.Logger>();
+	
 	private String modId = null;
 	
 	public Logger() {
-		
-		this.modId = ModContext.instance().getCurrent().getModid();
-		
-//		
-//		
-//		
-//		fileHandler.setFormatter(new LogFormatter());
-//		this.log = java.util.logging.Logger.getLogger();
-//		
-//		this.log.setLevel(Level.INFO);
-//		
-//		if (fileHandler != null) {
-//			fileHandler.setLevel(Level.INFO);
-//			this.log.addHandler(fileHandler);
-//		}
+		this.modId = ModContext.instance().getCurrent().getModId();
 	}
 	
 	/**
@@ -100,11 +91,12 @@ public class Logger {
 		this.log (this.modId, LEVEL_SEVERE ,this.implode (msg));
 	}
 	
-	public static void log(String key, int level, Object msg) {
+	public static java.util.logging.Logger getLogger (String key) {
 		
-		java.util.logging.Logger log = java.util.logging.Logger.getLogger(key);
-		log.setLevel(Level.INFO);
-		
+		if (loggers.containsKey(key)) {
+			return loggers.get (key);
+		}
+		java.util.logging.Logger logger = java.util.logging.Logger.getLogger(key);
 		
 		if (fileHandler == null) {
 			
@@ -119,18 +111,46 @@ public class Logger {
 
 			if (fileHandler != null) {
 				fileHandler.setLevel(Level.INFO);
-				log.addHandler(fileHandler);
+				fileHandler.setFormatter(formater);
 			}
 		}
+		if (fileHandler != null) {
+			logger.addHandler(fileHandler);
+			loggers.put (key, logger);
+		}
 		
-		if (level <= LEVEL_SEVERE) {
-			log.log(Level.SEVERE, msg.toString());
-		} else if (level <= LEVEL_WARNING) {
-			log.log(Level.WARNING, msg.toString());
-		} else if (level <= LEVEL_INFO) {
-			log.log(Level.INFO, msg.toString());
-		} else if (level <= LEVEL_DEBUG) {
-			log.log(Level.INFO, msg.toString());
+		return logger;
+	}
+	
+	public static void log(String key, int level, Object msg) {
+		
+		java.util.logging.Logger log = getLogger (key);
+		log.setLevel(Level.INFO);
+		
+		
+		
+		switch (level) {
+			
+			case LEVEL_SEVERE:
+				if (Logger.level <= LEVEL_SEVERE) {
+					log.log(Level.SEVERE, msg.toString());
+				}
+			case LEVEL_WARNING:
+				if (Logger.level <= LEVEL_WARNING) {
+					log.log(Level.WARNING, msg.toString());
+				}
+			case LEVEL_INFO:
+				if (Logger.level <= LEVEL_INFO) {
+					log.log(Level.INFO, msg.toString());
+				}
+			case LEVEL_DEBUG:
+				if (Logger.level <= LEVEL_DEBUG) {
+					log.log(Level.INFO, msg.toString());
+				}
+				break;
+	
+			default:
+				break;
 		}
 	}
 }

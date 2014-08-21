@@ -65,7 +65,7 @@ public class VersionChecker extends Thread {
 
 		@Override
 		public String getLabel() {
-			return mod.getModid() + " - Player update tick";
+			return mod.getModId() + " - Player update tick";
 		}
 	}
 	
@@ -93,8 +93,8 @@ public class VersionChecker extends Thread {
 		
 		try {
 			
-			String modid = mod.getModid ();
-			String modidEnc = URLEncoder.encode(mod.getModid (), "UTF-8");
+			String modid = mod.getModId ();
+			String modidEnc = URLEncoder.encode(mod.getModId (), "UTF-8");
 			String versionEnc = URLEncoder.encode(mod.getVersion (), "UTF-8");
 			String playerEnc = URLEncoder.encode(player, "UTF-8");
 			String mcVersionEnc = URLEncoder.encode(mod.getMinecraftVersion (), "UTF-8");

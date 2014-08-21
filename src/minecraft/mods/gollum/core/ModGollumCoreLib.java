@@ -4,7 +4,6 @@ package mods.gollum.core;
 import mods.gollum.core.blocks.BlockSpawner;
 import mods.gollum.core.config.ConfigGollumCoreLib;
 import mods.gollum.core.context.ModContext;
-import mods.gollum.core.facory.BlockFactory;
 import mods.gollum.core.i18n.I18n;
 import mods.gollum.core.log.Logger;
 import mods.gollum.core.mod.GollumMod;
@@ -45,6 +44,11 @@ public class ModGollumCoreLib extends GollumMod {
 	public void preInit(FMLPreInitializationEvent event) {
 		
 		ModContext.instance ().setCurrent(this);
+		
+		// On charge la config avant le logger mais après 
+		// le push du context
+		// Le logger à besoin de la config
+		// Tandis que le loader de config est indépendant
 		
 		// Charge la configuration
 		this.config = new ConfigGollumCoreLib();
@@ -97,10 +101,8 @@ public class ModGollumCoreLib extends GollumMod {
 	 */
 	public void initBlocks () {
 		
-		BlockFactory factory = new BlockFactory ();
-		
 		// Création des blocks
-		this.blockSpawner = factory.create (new BlockSpawner(this.config.blockSpawnerID), "GCLBlockSpawner");
+		this.blockSpawner = new BlockSpawner (this.config.blockSpawnerID);//, "GCLBlockSpawner");
 		
 	}
 	

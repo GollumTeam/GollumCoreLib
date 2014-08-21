@@ -9,7 +9,7 @@ public class I18n {
 	String modId;
 	
 	public I18n() {
-		modId = ModContext.instance().getCurrent().getModid().toLowerCase();
+		modId = ModContext.instance().getCurrent().getModId().toLowerCase();
 	}
 	
 	public String trans (String key, Object ... args) {

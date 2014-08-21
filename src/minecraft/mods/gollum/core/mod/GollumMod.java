@@ -12,24 +12,35 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 public abstract class GollumMod {
 
-	// Gestion des logs
+	/**
+	 * Gestion des logs
+	 */
 	public static Logger log;
 	
-	// Gestion de l'i18n
+	/**
+	 * Gestion de l'i18n
+	 */
 	public static I18n i18n;
-	
-	private String modid;
+
+	private String modId;
+	private String modName;
 	private String version;
 	private String minecraftVersion;
 
 	private int mobId = 0;
 	
 	public GollumMod() {
-		
-		this.modid = "Error";
+
+		this.modId = "Error";
 		for (Annotation annotation : this.getClass().getAnnotations()) {
 			if (annotation instanceof Mod) {
-				this.modid = ((Mod)annotation).modid();
+				this.modId = ((Mod)annotation).modid();
+			}
+		}
+		this.modName = "Error";
+		for (Annotation annotation : this.getClass().getAnnotations()) {
+			if (annotation instanceof Mod) {
+				this.modName = ((Mod)annotation).name();
 			}
 		}
 		
@@ -48,8 +59,15 @@ public abstract class GollumMod {
 	/**
 	 * Renvoie le modID du MOD
 	 */
-	public String getModid () {
-		return this.modid;
+	public String getModId () {
+		return this.modId;
+	}
+	
+	/**
+	 * Renvoie le modName du MOD
+	 */
+	public String getModName () {
+		return this.modName;
 	}
 	
 	public int nextMobID() {
@@ -69,7 +87,7 @@ public abstract class GollumMod {
 	public String getMinecraftVersion () {
 		return this.minecraftVersion;
 	}
-
+	
 	public void preInit(FMLPreInitializationEvent event) {
 		
 		ModContext.instance ().setCurrent(this);

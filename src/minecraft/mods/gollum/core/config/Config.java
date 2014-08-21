@@ -9,7 +9,7 @@ public abstract class Config {
 	private String fileName;
 	
 	public Config() {
-		this(ModContext.instance().getCurrent().getModid());
+		this(ModContext.instance().getCurrent().getModId());
 	}
 	
 	public Config(String fileName) {
