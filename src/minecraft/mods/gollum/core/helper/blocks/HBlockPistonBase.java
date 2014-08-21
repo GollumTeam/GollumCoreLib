@@ -3,18 +3,19 @@ package mods.gollum.core.helper.blocks;
 import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.helper.BlockHelper;
 import mods.gollum.core.helper.IBlockHelper;
+import net.minecraft.block.BlockPistonBase;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.util.Facing;
 import net.minecraft.util.Icon;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockPistonBase extends net.minecraft.block.BlockPistonBase implements IBlockHelper {
+public class HBlockPistonBase extends BlockPistonBase implements IBlockHelper {
 	
 	protected BlockHelper helper;
 	
 	protected boolean isSticky;
-
+	
 	protected Icon iconTop;
 	protected Icon iconOpen;
 	protected Icon iconBottom;
@@ -26,7 +27,7 @@ public class BlockPistonBase extends net.minecraft.block.BlockPistonBase impleme
 	protected String suffixBotom  = "_bottom";
 	protected String suffixSide   = "_side";
 	
-	public BlockPistonBase(int id, String registerName, boolean isSticky)  {
+	public HBlockPistonBase(int id, String registerName, boolean isSticky)  {
 		super(id, isSticky);
 		ModGollumCoreLib.log.info ("Create block id : " + id + " registerName : " + registerName);
 		this.helper = new BlockHelper(this, registerName);
@@ -63,6 +64,16 @@ public class BlockPistonBase extends net.minecraft.block.BlockPistonBase impleme
 		this.iconOpen   = helper.loadTexture(iconRegister, suffixOpen);
 		this.iconBottom = helper.loadTexture(iconRegister, suffixBotom);
 		this.iconSide   = helper.loadTexture(iconRegister, suffixSide);
+	}
+	
+	/**
+	 * Setter de l'icon de l'objet
+	 * @param icon
+	 */
+	@Override
+	public IBlockHelper setIcon (Icon icon) {
+		this.blockIcon = icon;
+		return this;
 	}
 	
 	@Override

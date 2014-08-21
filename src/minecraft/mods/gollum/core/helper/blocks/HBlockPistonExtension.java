@@ -1,23 +1,23 @@
-package mods.gollum.core.helper.items;
+package mods.gollum.core.helper.blocks;
 
 import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.helper.BlockHelper;
-import mods.gollum.core.helper.IItemHelper;
-import mods.gollum.core.helper.ItemHelper;
+import mods.gollum.core.helper.IBlockHelper;
+import net.minecraft.block.BlockPistonExtension;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.util.Icon;
 
-public class Item extends net.minecraft.item.Item implements IItemHelper {
+public class HBlockPistonExtension extends BlockPistonExtension implements IBlockHelper {
 
-	protected ItemHelper helper;
+	protected BlockHelper helper;
 	
-	public Item (int id, String registerName) {
+	public HBlockPistonExtension (int id, String registerName)  {
 		super(id);
-		ModGollumCoreLib.log.info ("Create item id : " + id + " registerName : " + registerName);
-		this.helper = new ItemHelper(this, registerName);
+		ModGollumCoreLib.log.info ("Create block id : " + id + " registerName : " + registerName);
+		this.helper = new BlockHelper(this, registerName);
 	}
 	
-	public ItemHelper getGollumHelper () {
+	public BlockHelper getGollumHelper () {
 		return helper;
 	}
 	
@@ -27,11 +27,6 @@ public class Item extends net.minecraft.item.Item implements IItemHelper {
 	@Override
 	public String getRegisterName() {
 		return helper.getRegisterName();
-	}
-	
-	@Override
-	public Icon getIconFromDamage(int par1) {
-		return (helper.naturalTexture) ? super.getIconFromDamage(par1) : helper.getIconFromDamage(par1);
 	}
 	
 	//////////////////////////
@@ -44,6 +39,16 @@ public class Item extends net.minecraft.item.Item implements IItemHelper {
 	}
 	
 	/**
+	 * Setter de l'icon de l'objet
+	 * @param icon
+	 */
+	@Override
+	public IBlockHelper setIcon (Icon icon) {
+		this.blockIcon = icon;
+		return this;
+	}
+	
+	/**
 	 * Clef qui permet de générer le nom du fichier de texture 
 	 * par rapport au register name en miniscule
 	 * @return
@@ -52,4 +57,6 @@ public class Item extends net.minecraft.item.Item implements IItemHelper {
 	public String getTextureKey() {
 		return helper.getTextureKey();
 	}
+	
+	
 }
