@@ -12,7 +12,7 @@ public class BlockSpawner extends HBlockContainer {
 	public BlockSpawner(int id, String registerName) {
 		super(id, registerName, Material.air);
 		
-		this.helper.naturalTexture = true;
+		this.helper.vanillaTexture = true;
 	}
 
 	@Override

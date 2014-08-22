@@ -35,7 +35,7 @@ public class HBlockPistonExtension extends BlockPistonExtension implements IBloc
 	
 	@Override
 	public void registerIcons(IconRegister iconRegister) {
-		if (helper.naturalTexture) super.registerIcons(iconRegister); else helper.registerIcons(iconRegister);
+		if (helper.vanillaTexture) super.registerIcons(iconRegister); else helper.registerIcons(iconRegister);
 	}
 	
 	/**

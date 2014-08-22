@@ -1,6 +1,6 @@
 package mods.gollum.core;
 
-import mods.gollum.core.sound.SoundRegistry;
+import mods.gollum.core.registry.SoundRegistry;
 import net.minecraftforge.common.MinecraftForge;
 
 public class ClientProxyGolumCoreLib extends CommonProxyGolumCoreLib {

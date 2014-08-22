@@ -67,6 +67,9 @@ public class ModGollumCoreLib extends GollumMod {
 		
 		// Creation du checker de version
 		new VersionChecker();
+		
+		// Initialisation des blocks
+		this.initBlocks ();
 	}
 	
 	/** 2 **/
@@ -75,9 +78,6 @@ public class ModGollumCoreLib extends GollumMod {
 		
 		// Enregistre les events
 		this.proxy.registerEvents();
-		
-		// Initialisation des blocks
-		this.initBlocks ();
 
 		// Initialisation les TileEntities
 		this.initTileEntities ();

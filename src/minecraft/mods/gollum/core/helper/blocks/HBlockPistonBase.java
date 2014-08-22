@@ -55,7 +55,7 @@ public class HBlockPistonBase extends BlockPistonBase implements IBlockHelper {
 	@Override
 	public void registerIcons(IconRegister iconRegister) {
 		
-		if (helper.naturalTexture) {
+		if (helper.vanillaTexture) {
 			super.registerIcons(iconRegister);
 			return;
 		};
@@ -79,7 +79,7 @@ public class HBlockPistonBase extends BlockPistonBase implements IBlockHelper {
 	@Override
 	public Icon getIcon(int i, int j) {
 		
-		if (helper.naturalTexture) return super.getIcon(i, j);
+		if (helper.vanillaTexture) return super.getIcon(i, j);
 		
 		int k = getOrientation(j);
 		if (k > 5) {
@@ -108,7 +108,7 @@ public class HBlockPistonBase extends BlockPistonBase implements IBlockHelper {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Icon getPistonExtensionTexture() {
-		if (helper.naturalTexture) return super.getPistonExtensionTexture();
+		if (helper.vanillaTexture) return super.getPistonExtensionTexture();
 		return this.iconSide;
 	}
 	

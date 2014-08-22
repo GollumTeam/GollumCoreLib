@@ -36,7 +36,7 @@ public abstract class HBlockContainer extends BlockContainer implements IBlockHe
 	
 	@Override
 	public void registerIcons(IconRegister iconRegister) {
-		if (helper.naturalTexture) super.registerIcons(iconRegister); else helper.registerIcons(iconRegister);
+		if (helper.vanillaTexture) super.registerIcons(iconRegister); else helper.registerIcons(iconRegister);
 	}
 	
 	/**

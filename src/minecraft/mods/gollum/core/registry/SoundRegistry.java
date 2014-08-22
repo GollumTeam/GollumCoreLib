@@ -1,4 +1,4 @@
-package mods.gollum.core.sound;
+package mods.gollum.core.registry;
 
 import java.util.ArrayList;
 
@@ -17,14 +17,14 @@ public class SoundRegistry {
 	
 	@ForgeSubscribe
 	public void onSound(SoundLoadEvent event) {
-			for (String sound : this.sounds) {
-				try {
-					event.manager.addSound(sound);
-					ModGollumCoreLib.log.debug ("Load sound : "+sound);
-				} catch (Exception e) {
-					e.printStackTrace();
-					ModGollumCoreLib.log.severe ("Failed to registry sound : "+sound);
-				}
+		for (String sound : this.sounds) {
+			try {
+				event.manager.addSound(sound);
+				ModGollumCoreLib.log.debug ("Load sound : "+sound);
+			} catch (Exception e) {
+				e.printStackTrace();
+				ModGollumCoreLib.log.severe ("Failed to registry sound : "+sound);
 			}
+		}
 	}
 }

@@ -13,8 +13,8 @@ public class BlockHelper implements IBlockHelper {
 	// Pour chaque element natural. Utilise le fonctionnement naturel mais pas des helper
 	// Une sorte de config
 	// Par defaut le helper vas enregistrer le block, charger des texture perso ...
-	public static boolean naturalRegister = false;
-	public boolean naturalTexture = false;
+	public static boolean vanillaRegister = false;
+	public boolean vanillaTexture = false;
 	
 	private GollumMod mod;
 	private Block parent;
@@ -25,7 +25,7 @@ public class BlockHelper implements IBlockHelper {
 		this.registerName = registerName;
 		this.mod          = ModContext.instance().getCurrent();
 		
-		if (!naturalRegister) this.register();
+		if (!vanillaRegister) this.register();
 	}
 
 	@Override

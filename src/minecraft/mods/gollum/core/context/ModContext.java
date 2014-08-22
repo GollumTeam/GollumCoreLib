@@ -4,14 +4,11 @@ import mods.gollum.core.mod.GollumMod;
 
 public class ModContext {
 	
-	private static ModContext instance = null;
+	private static ModContext instance = new ModContext();
 	
 	private GollumMod current;
 	
 	public static ModContext instance () {
-		if (instance == null) {
-			instance = new ModContext();
-		}
 		return instance;
 	}
 	
