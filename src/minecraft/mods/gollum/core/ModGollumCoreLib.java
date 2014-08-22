@@ -29,7 +29,7 @@ public class ModGollumCoreLib extends GollumMod {
 	public final static String VERSION = "1.1.0";
 	public final static String MINECRAFT_VERSION = "1.6.4";
 
-	@Instance("ModGollumCoreLib")
+	@Instance(ModGollumCoreLib.MODID)
 	public static ModGollumCoreLib instance;
 	
 	@SidedProxy(clientSide = "mods.gollum.core.ClientProxyGolumCoreLib", serverSide = "mods.gollum.core.CommonProxyGolumCoreLib")

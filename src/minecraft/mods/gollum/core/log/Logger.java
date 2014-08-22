@@ -124,33 +124,35 @@ public class Logger {
 	
 	public static void log(String key, int level, Object msg) {
 		
-		java.util.logging.Logger log = getLogger (key);
-		log.setLevel(Level.INFO);
-		
-		
-		
-		switch (level) {
-			
-			case LEVEL_SEVERE:
-				if (Logger.level <= LEVEL_SEVERE) {
-					log.log(Level.SEVERE, msg.toString());
-				}
-			case LEVEL_WARNING:
-				if (Logger.level <= LEVEL_WARNING) {
-					log.log(Level.WARNING, msg.toString());
-				}
-			case LEVEL_INFO:
-				if (Logger.level <= LEVEL_INFO) {
-					log.log(Level.INFO, msg.toString());
-				}
-			case LEVEL_DEBUG:
-				if (Logger.level <= LEVEL_DEBUG) {
-					log.log(Level.INFO, msg.toString());
-				}
-				break;
-	
-			default:
-				break;
-		}
+		return;
+//		
+//		java.util.logging.Logger log = getLogger (key);
+//		log.setLevel(Level.INFO);
+//		
+//		
+//		
+//		switch (level) {
+//			
+//			case LEVEL_SEVERE:
+//				if (Logger.level <= LEVEL_SEVERE) {
+//					log.log(Level.SEVERE, msg.toString());
+//				}
+//			case LEVEL_WARNING:
+//				if (Logger.level <= LEVEL_WARNING) {
+//					log.log(Level.WARNING, msg.toString());
+//				}
+//			case LEVEL_INFO:
+//				if (Logger.level <= LEVEL_INFO) {
+//					log.log(Level.INFO, msg.toString());
+//				}
+//			case LEVEL_DEBUG:
+//				if (Logger.level <= LEVEL_DEBUG) {
+//					log.log(Level.INFO, msg.toString());
+//				}
+//				break;
+//	
+//			default:
+//				break;
+//		}
 	}
 }

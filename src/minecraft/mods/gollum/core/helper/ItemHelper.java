@@ -13,8 +13,8 @@ public class ItemHelper implements IItemHelper {
 	// Pour chaque element natural. Utilise le fonctionnement naturel mais pas des helper
 	// Une sorte de config
 	// Par defaut le helper vas enregistrer l'item, charger des texture perso ...
-	public static boolean naturalRegister = false;
-	public boolean naturalTexture = false;
+	public static boolean vanillaRegister = false;
+	public boolean vanillaTexture = false;
 	
 	private GollumMod mod;
 	private Item parent;
@@ -25,7 +25,7 @@ public class ItemHelper implements IItemHelper {
 		this.registerName = registerName;
 		this.mod          = ModContext.instance().getCurrent();
 		
-		if (!naturalRegister) this.register();
+		if (!vanillaRegister) this.register();
 	}
 
 	@Override
