@@ -1,14 +1,17 @@
 
 package mods.gollum.core;
 
-import mods.gollum.core.blocks.BlockSpawner;
-import mods.gollum.core.config.ConfigGollumCoreLib;
-import mods.gollum.core.context.ModContext;
-import mods.gollum.core.i18n.I18n;
-import mods.gollum.core.log.Logger;
-import mods.gollum.core.mod.GollumMod;
+import mods.gollum.core.common.CommonProxyGolumCoreLib;
+import mods.gollum.core.common.blocks.BlockSpawner;
+import mods.gollum.core.common.config.ConfigGollumCoreLib;
+import mods.gollum.core.common.context.ModContext;
+import mods.gollum.core.common.i18n.I18n;
+import mods.gollum.core.common.log.Logger;
+import mods.gollum.core.common.mod.GollumMod;
+import mods.gollum.core.common.version.VersionChecker;
 import mods.gollum.core.tileentities.TileEntityBlockSpawner;
-import mods.gollum.core.version.VersionChecker;
+import mods.gollum.core.tools.registry.BlockRegistry;
+import mods.gollum.core.tools.registry.ItemRegistry;
 import net.minecraft.block.Block;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -32,12 +35,15 @@ public class ModGollumCoreLib extends GollumMod {
 	@Instance(ModGollumCoreLib.MODID)
 	public static ModGollumCoreLib instance;
 	
-	@SidedProxy(clientSide = "mods.gollum.core.ClientProxyGolumCoreLib", serverSide = "mods.gollum.core.CommonProxyGolumCoreLib")
+	@SidedProxy(clientSide = "mods.gollum.core.client.ClientProxyGolumCoreLib", serverSide = "mods.gollum.core.CommonProxyGolumCoreLib")
 	public static CommonProxyGolumCoreLib proxy;
 	
 	public static ConfigGollumCoreLib config;
 	
 	public static Block blockSpawner;
+	
+	@EventHandler public void handler(FMLInitializationEvent event)     { super.handler (event); }
+	@EventHandler public void handler(FMLPostInitializationEvent event) { super.handler (event); }
 	
 	@EventHandler
 	@Override
@@ -70,10 +76,12 @@ public class ModGollumCoreLib extends GollumMod {
 		
 		// Initialisation des blocks
 		this.initBlocks ();
+		
+		BlockRegistry.instance().registerAll();
+		ItemRegistry.instance().registerAll();
 	}
 	
 	/** 2 **/
-	@EventHandler
 	public void init(FMLInitializationEvent event) {
 		
 		// Enregistre les events
@@ -84,9 +92,7 @@ public class ModGollumCoreLib extends GollumMod {
 	}
 
 	/** 3 **/
-	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
-		super.postInit(event);
 	}
 
 	/**
