@@ -6,6 +6,7 @@ import mods.gollum.core.common.mod.GollumMod;
 import mods.gollum.core.tools.registry.BlockRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.Icon;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -64,6 +65,14 @@ public class BlockHelper implements IBlockHelper {
 	@Override
 	public String getRegisterName() {
 		return registerName;
+	}
+	
+	/**
+	 * Renvoie l'item en relation avec le block
+	 */
+	@Override
+	public Item getBlockItem () {
+		return Item.itemsList[this.parent.blockID - 256];
 	}
 	
 	//////////////////////////

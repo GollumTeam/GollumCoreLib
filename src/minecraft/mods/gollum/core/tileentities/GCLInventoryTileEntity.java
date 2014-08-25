@@ -7,7 +7,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 
-public abstract class GCLTileEntityInventory extends TileEntity implements IInventory {
+public abstract class GCLInventoryTileEntity extends TileEntity implements IInventory {
 
 	protected ItemStack[] inventory;
 	protected int maxSize;
@@ -17,7 +17,7 @@ public abstract class GCLTileEntityInventory extends TileEntity implements IInve
 	 */
 	protected int numUsingPlayers;
 	
-	public GCLTileEntityInventory(int maxSize) {
+	public GCLInventoryTileEntity(int maxSize) {
 		super();
 		this.maxSize   = maxSize;
 		this.inventory = new ItemStack[maxSize];
@@ -129,6 +129,7 @@ public abstract class GCLTileEntityInventory extends TileEntity implements IInve
 	 * name, and translated into the player's language. Otherwise it will be
 	 * used directly.
 	 */
+	@Override
 	public boolean isInvNameLocalized() {
 		return true;
 	}
@@ -147,6 +148,7 @@ public abstract class GCLTileEntityInventory extends TileEntity implements IInve
 	 * Do not make give this method the name canInteractWith because it clashes
 	 * with Container
 	 */
+	@Override
 	public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer) {
 		
 		boolean rtn = false;
@@ -154,6 +156,15 @@ public abstract class GCLTileEntityInventory extends TileEntity implements IInve
 			rtn = par1EntityPlayer.getDistanceSq((double) this.xCoord + 0.5D, (double) this.yCoord + 0.5D, (double) this.zCoord + 0.5D) <= 64.0D;
 		}
 		return rtn;
+	}
+
+	/**
+	 * invalidates a tile entity
+	 */
+	@Override
+	public void invalidate() {
+		this.updateContainingBlockInfo();
+		super.invalidate();
 	}
 	
 	
@@ -194,6 +205,7 @@ public abstract class GCLTileEntityInventory extends TileEntity implements IInve
 	/**
 	 * Reads a tile entity from NBT.
 	 */
+	@Override
 	public void readFromNBT(NBTTagCompound nbtTagCompound) {
 		super.readFromNBT(nbtTagCompound);
 		
@@ -222,6 +234,7 @@ public abstract class GCLTileEntityInventory extends TileEntity implements IInve
 	/**
 	 * Writes a tile entity to NBT.
 	 */
+	@Override
 	public void writeToNBT(NBTTagCompound nbtTagCompound) {
 		super.writeToNBT(nbtTagCompound);
 		

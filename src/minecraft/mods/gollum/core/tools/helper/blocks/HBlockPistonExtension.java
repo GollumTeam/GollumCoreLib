@@ -6,6 +6,7 @@ import mods.gollum.core.tools.helper.IBlockHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPistonExtension;
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.Icon;
 
@@ -39,6 +40,14 @@ public class HBlockPistonExtension extends BlockPistonExtension implements IBloc
 	@Override
 	public Block setItemBlockClass (Class<? extends ItemBlock> itemClass) {
 		return helper.setItemBlockClass(itemClass);
+	}
+	
+	/**
+	 * Renvoie l'item en relation avec le block
+	 */
+	@Override
+	public Item getBlockItem () {
+		return helper.getBlockItem();
 	}
 	
 	//////////////////////////

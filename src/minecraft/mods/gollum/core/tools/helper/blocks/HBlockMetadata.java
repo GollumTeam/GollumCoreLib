@@ -4,7 +4,7 @@ import java.util.List;
 
 import mods.gollum.core.tools.helper.BlockMetadataHelper;
 import mods.gollum.core.tools.helper.IBlockMetadataHelper;
-import mods.gollum.core.tools.helper.items.HMetadataItemBlock;
+import mods.gollum.core.tools.helper.items.HItemBlockMetadata;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
@@ -16,19 +16,19 @@ public class HBlockMetadata extends HBlock implements IBlockMetadataHelper {
 	public HBlockMetadata(int id, String registerName, Material material, Class itemClass) {
 		super(id, registerName, material);
 		this.helper = new BlockMetadataHelper(this, registerName);
-		this.setItemBlockClass(HMetadataItemBlock.class);
+		this.setItemBlockClass(HItemBlockMetadata.class);
 	}
 	
 	public HBlockMetadata(int id, String registerName, Material material, int listSubBlock[]) {
 		super(id, registerName, material);
 		this.helper = new BlockMetadataHelper(this, registerName, listSubBlock);
-		this.setItemBlockClass(HMetadataItemBlock.class);
+		this.setItemBlockClass(HItemBlockMetadata.class);
 	}
 	
 	public HBlockMetadata(int id, String registerName, Material material, int numberSubBlock) {
 		super(id, registerName, material);
 		this.helper = new BlockMetadataHelper(this, registerName, numberSubBlock);
-		this.setItemBlockClass(HMetadataItemBlock.class);
+		this.setItemBlockClass(HItemBlockMetadata.class);
 	}
 	
 	/**

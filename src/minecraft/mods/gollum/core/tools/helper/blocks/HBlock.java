@@ -3,10 +3,11 @@ package mods.gollum.core.tools.helper.blocks;
 import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.tools.helper.BlockHelper;
 import mods.gollum.core.tools.helper.IBlockHelper;
-import mods.gollum.core.tools.helper.items.HMetadataItemBlock;
+import mods.gollum.core.tools.helper.items.HItemBlockMetadata;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.Icon;
 
@@ -42,6 +43,14 @@ public class HBlock extends Block implements IBlockHelper {
 		return helper.setItemBlockClass(itemClass);
 	}
 	
+	/**
+	 * Renvoie l'item en relation avec le block
+	 */
+	@Override
+	public Item getBlockItem () {
+		return helper.getBlockItem();
+	}
+	
 	//////////////////////////
 	//Gestion des textures  //
 	//////////////////////////
@@ -70,4 +79,5 @@ public class HBlock extends Block implements IBlockHelper {
 	public String getTextureKey() {
 		return helper.getTextureKey();
 	}
+	
 }

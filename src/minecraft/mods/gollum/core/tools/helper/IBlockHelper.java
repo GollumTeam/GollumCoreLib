@@ -2,6 +2,7 @@ package mods.gollum.core.tools.helper;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.Icon;
 
@@ -37,4 +38,8 @@ public interface IBlockHelper {
 	 */
 	public Block setItemBlockClass (Class<? extends ItemBlock> itemClass);
 	
+	/**
+	 * Renvoie l'item en relation avec le block
+	 */
+	public Item getBlockItem ();
 }

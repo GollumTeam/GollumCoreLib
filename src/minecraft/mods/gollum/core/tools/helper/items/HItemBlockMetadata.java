@@ -7,11 +7,11 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
-public class HMetadataItemBlock extends ItemBlock {
+public class HItemBlockMetadata extends ItemBlock {
 	
 	Block block;
 	
-	public HMetadataItemBlock(int par1, Block block) {
+	public HItemBlockMetadata(int par1, Block block) {
 		super(par1);
 		this.setHasSubtypes(true);
 		this.block = block;

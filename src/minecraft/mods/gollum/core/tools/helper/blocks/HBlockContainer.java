@@ -7,6 +7,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.Icon;
 
@@ -40,6 +41,14 @@ public abstract class HBlockContainer extends BlockContainer implements IBlockHe
 	@Override
 	public String getRegisterName() {
 		return helper.getRegisterName();
+	}
+	
+	/**
+	 * Renvoie l'item en relation avec le block
+	 */
+	@Override
+	public Item getBlockItem () {
+		return helper.getBlockItem();
 	}
 	
 	//////////////////////////
