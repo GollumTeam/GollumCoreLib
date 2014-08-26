@@ -1,4 +1,4 @@
-package mods.gollum.core.tileentities;
+package mods.gollum.core.common.tileentities;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;

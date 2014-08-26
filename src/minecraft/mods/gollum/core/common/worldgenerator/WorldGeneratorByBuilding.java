@@ -10,7 +10,7 @@ import mods.gollum.core.common.blocks.BlockSpawner;
 import mods.gollum.core.common.building.Building;
 import mods.gollum.core.common.building.Building.Unity;
 import mods.gollum.core.common.building.Building.Unity.Content;
-import mods.gollum.core.tileentities.TileEntityBlockSpawner;
+import mods.gollum.core.common.tileentities.TileEntityBlockSpawner;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBed;
 import net.minecraft.block.BlockButton;

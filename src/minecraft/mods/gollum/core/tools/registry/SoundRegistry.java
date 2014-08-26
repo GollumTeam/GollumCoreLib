@@ -17,6 +17,9 @@ public class SoundRegistry {
 	
 	@ForgeSubscribe
 	public void onSound(SoundLoadEvent event) {
+		
+		if (this.sounds.isEmpty())ModGollumCoreLib.log.debug ("No sound registry");
+		
 		for (String sound : this.sounds) {
 			try {
 				event.manager.addSound(sound);

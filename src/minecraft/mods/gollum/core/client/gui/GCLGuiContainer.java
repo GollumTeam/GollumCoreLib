@@ -24,11 +24,23 @@ public class GCLGuiContainer extends GuiContainer {
 	
 	protected int numRows = 0;
 	protected int numColumns;
-	
+
+	public GCLGuiContainer(IInventory inventoryPlayer, IInventory inventoryBlock, int numColumns) {
+		super(new GCLContainer (inventoryPlayer, inventoryBlock, numColumns));
+		init(inventoryPlayer, inventoryBlock);
+	}
 	
 	public GCLGuiContainer(IInventory inventoryPlayer, IInventory inventoryBlock, Class<? extends GCLContainer> containerClass) throws Exception {
 		super(containerClass.getConstructor(IInventory.class, IInventory.class).newInstance(inventoryPlayer, inventoryBlock));
-		
+		init(inventoryPlayer, inventoryBlock);
+	}
+	
+	public GCLGuiContainer(IInventory inventoryPlayer, IInventory inventoryBlock, Class<? extends GCLContainer> containerClass, int numColumns) throws Exception {
+		super(containerClass.getConstructor(IInventory.class, IInventory.class, int.class).newInstance(inventoryPlayer, inventoryBlock, numColumns));
+		init(inventoryPlayer, inventoryBlock);
+	}
+
+	private void init(IInventory inventoryPlayer, IInventory inventoryBlock) {
 		this.inventoryPlayer = inventoryPlayer;
 		this.inventoryBlock = inventoryBlock;
 		
@@ -37,9 +49,9 @@ public class GCLGuiContainer extends GuiContainer {
 		this.numColumns = ((GCLContainer)this.inventorySlots).getNumColumns ();
 		this.numRows = (int)Math.ceil ((double)inventoryBlock.getSizeInventory() / (double)this.numColumns);
 		
-		this.ySize = 114 + this.numRows * 18;
+		this.ySize = 114 + this.numRows * SIZE_ITEM;
 	}
-
+	
 	/**
 	 * Draw the foreground layer for the GuiContainer (everything in front of
 	 * the items)
@@ -49,10 +61,10 @@ public class GCLGuiContainer extends GuiContainer {
 		int base = SIZE_BORDER_TOP + this.numRows*SIZE_ITEM;
 		int top = base-this.numRows*SIZE_ITEM;
 		
-		int widthTop = SIZE_BORDER_SIDE*2+SIZE_ITEM*this.numColumns;
+		int widthTop = SIZE_BORDER_SIDE+SIZE_ITEM*this.numColumns+1;
 		int xTop = (this.width - widthTop) / 2;
 		
-		this.fontRenderer.drawString(StatCollector.translateToLocal(this.inventoryBlock.getInvName()) , xTop-81, top-13                      , 0x404040);
+		this.fontRenderer.drawString(StatCollector.translateToLocal(this.inventoryBlock.getInvName()) , widthTop, top-13                      , 0x404040);
 		this.fontRenderer.drawString(StatCollector.translateToLocal(this.inventoryPlayer.getInvName()), 8      , top+this.numRows*SIZE_ITEM+6, 0x404040);
 		
 	}

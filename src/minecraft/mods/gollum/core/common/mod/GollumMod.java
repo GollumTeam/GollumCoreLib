@@ -5,14 +5,18 @@ import java.lang.annotation.Annotation;
 import mods.gollum.core.common.context.ModContext;
 import mods.gollum.core.common.i18n.I18n;
 import mods.gollum.core.common.log.Logger;
+import mods.gollum.core.tools.handler.GCLArrayGuiHandler;
+import mods.gollum.core.tools.handler.GCLGuiHandler;
 import mods.gollum.core.tools.registry.BlockRegistry;
+import mods.gollum.core.tools.registry.GCLNetworkRegistry;
+import mods.gollum.core.tools.registry.InventoryRegistry;
 import mods.gollum.core.tools.registry.ItemRegistry;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.network.NetworkRegistry;
 
 public abstract class GollumMod {
 
@@ -110,9 +114,16 @@ public abstract class GollumMod {
 	
 	public void handler (FMLInitializationEvent event) {
 		this.init(event);
+		
+		// Enregistrement du handler de gui d'inventaire simplifié
+		GCLNetworkRegistry.instance().registerGuiHandler(new GCLGuiHandler(InventoryRegistry.instance().getGuiInventoryList()));
+		
+		// Enregistrement de tous les Gui groupé
+		NetworkRegistry.instance().registerGuiHandler(this, new GCLArrayGuiHandler(GCLNetworkRegistry.instance().getGuiHandlers()));
 	}
 	public void handler (FMLPostInitializationEvent event) {
 		this.postInit(event);
+		
 		ModContext.instance ().pop();
 	}
 	
