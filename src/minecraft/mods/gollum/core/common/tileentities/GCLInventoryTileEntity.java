@@ -11,6 +11,7 @@ public abstract class GCLInventoryTileEntity extends TileEntity implements IInve
 
 	protected ItemStack[] inventory;
 	protected int maxSize;
+	protected boolean playSoundChest = true;
 
 	/**
 	 * Nombre de player utilisant le coffre
@@ -116,12 +117,29 @@ public abstract class GCLInventoryTileEntity extends TileEntity implements IInve
 		this.onInventoryChanged();
 	}
 	
+	@Override
 	public void openChest() {
+		
+		if (this.playSoundChest && this.numUsingPlayers == 0) {
+			double x = (double) this.xCoord + 0.5D;
+			double y = (double) this.yCoord + 0.5D;
+			double z = (double) this.zCoord + 0.5D;
+			this.worldObj.playSoundEffect(x, y, z, "random.chestopen", 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+		}
+		
 		++this.numUsingPlayers;
 	}
-
+	
+	@Override
 	public void closeChest() {
 		--this.numUsingPlayers;
+		
+		if (this.playSoundChest && this.numUsingPlayers == 0) {
+			double x = (double) this.xCoord + 0.5D;
+			double y = (double) this.yCoord + 0.5D;
+			double z = (double) this.zCoord + 0.5D;
+			this.worldObj.playSoundEffect(x, y, z, "random.chestclosed", 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+		}
 	}
 	
 	/**

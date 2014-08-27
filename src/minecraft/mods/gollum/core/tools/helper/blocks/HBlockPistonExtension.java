@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.Icon;
+import net.minecraft.world.World;
 
 public class HBlockPistonExtension extends BlockPistonExtension implements IBlockHelper {
 
@@ -48,6 +49,13 @@ public class HBlockPistonExtension extends BlockPistonExtension implements IBloc
 	@Override
 	public Item getBlockItem () {
 		return helper.getBlockItem();
+	}
+	
+	/**
+	 * Libère les items de l'inventory
+	 */
+	public void breakBlockInventory(World world, int x, int y, int z, int oldBlodkID) {
+		helper.breakBlockInventory(world, x, y, z, oldBlodkID);
 	}
 	
 	//////////////////////////

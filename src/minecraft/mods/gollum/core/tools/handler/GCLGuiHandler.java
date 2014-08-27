@@ -29,10 +29,40 @@ public class GCLGuiHandler implements IGuiHandler {
 				
 				GuiContainerInventoryClass guiContainerInventoryClass = this.guiInventoryList.get(id);
 				
-				try {
-					container = guiContainerInventoryClass.classContainer.getConstructor(IInventory.class, IInventory.class).newInstance(player.inventory, (IInventory)te);
-				} catch (Exception e) {
-					container = guiContainerInventoryClass.classContainer.getConstructor(IInventory.class, IInventory.class, int.class).newInstance(player.inventory, (IInventory)te, guiContainerInventoryClass.numColumns);
+				int i = 0;
+				while (container == null) {
+					
+					switch (i) {
+						case 0:
+							try {
+								container = guiContainerInventoryClass.classContainer.getConstructor(EntityPlayer.class, World.class, int.class, int.class, int.class).newInstance(player, world, x, y, z);
+							} catch (Exception e) {
+							}
+							break;
+						case 1:
+							try {
+								container = guiContainerInventoryClass.classContainer.getConstructor(IInventory.class, World.class, int.class, int.class, int.class).newInstance(player.inventory, world, x, y, z);
+							} catch (Exception e) {
+							}
+							break;
+						case 2:
+							try {
+								container = guiContainerInventoryClass.classContainer.getConstructor(IInventory.class, IInventory.class).newInstance(player.inventory, (IInventory)te);
+							} catch (Exception e) {
+							}
+							break;
+						case 3:
+							try {
+								container = guiContainerInventoryClass.classContainer.getConstructor(IInventory.class, IInventory.class, int.class).newInstance(player.inventory, (IInventory)te, guiContainerInventoryClass.numColumns);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+							break;
+							
+						default:
+							throw new Exception("No valid constructeur for your container");
+					}
+					i++;
 				}
 			}
 		} catch (Exception e) {
@@ -52,16 +82,40 @@ public class GCLGuiHandler implements IGuiHandler {
 				
 				GuiContainerInventoryClass guiContainerInventoryClass = this.guiInventoryList.get(id);
 				
-				try {
-					gui = guiContainerInventoryClass.classGuiContainer.getConstructor(IInventory.class, IInventory.class, Class.class).newInstance(
-						player.inventory, (IInventory)te, guiContainerInventoryClass.classContainer
-					);
-				} catch (Exception e) {
-					gui = guiContainerInventoryClass.classGuiContainer.getConstructor(IInventory.class, IInventory.class, Class.class, int.class).newInstance(
-						player.inventory, (IInventory)te, guiContainerInventoryClass.classContainer, guiContainerInventoryClass.numColumns
-					);
+				int i = 0;
+				while (gui == null) {
+					
+					switch (i) {
+						case 0:
+							try {
+								gui = guiContainerInventoryClass.classGuiContainer.getConstructor(EntityPlayer.class, World.class, int.class, int.class, int.class).newInstance(player, world, x, y, z);
+							} catch (Exception e) {
+							}
+							break;
+						case 1:
+							try {
+								gui = guiContainerInventoryClass.classGuiContainer.getConstructor(IInventory.class, World.class, int.class, int.class, int.class).newInstance(player.inventory, world, x, y, z);
+							} catch (Exception e) {
+							}
+							break;
+						case 2:
+							try {
+								gui = guiContainerInventoryClass.classGuiContainer.getConstructor(IInventory.class, IInventory.class).newInstance(player.inventory, (IInventory)te);
+							} catch (Exception e) {
+							}
+							break;
+						case 3:
+							try {
+								gui = guiContainerInventoryClass.classGuiContainer.getConstructor(IInventory.class, IInventory.class, int.class).newInstance(player.inventory, (IInventory)te, guiContainerInventoryClass.numColumns);
+							} catch (Exception e) {
+							}
+							break;
+							
+						default:
+							throw new Exception("No valid constructeur for your container");
+					}
+					i++;
 				}
-				
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

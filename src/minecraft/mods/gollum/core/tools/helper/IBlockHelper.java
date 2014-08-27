@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.Icon;
+import net.minecraft.world.World;
 
 public interface IBlockHelper {
 	
@@ -42,4 +43,9 @@ public interface IBlockHelper {
 	 * Renvoie l'item en relation avec le block
 	 */
 	public Item getBlockItem ();
+	
+	/**
+	 * Libère les items de l'inventory
+	 */
+	public void breakBlockInventory(World world, int x, int y, int z, int oldBlodkID);
 }

@@ -1,14 +1,22 @@
 package mods.gollum.core.tools.helper;
 
+import java.util.Random;
+
 import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.common.context.ModContext;
 import mods.gollum.core.common.mod.GollumMod;
 import mods.gollum.core.tools.registry.BlockRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
+import net.minecraft.world.World;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class BlockHelper implements IBlockHelper {
@@ -72,7 +80,51 @@ public class BlockHelper implements IBlockHelper {
 	 */
 	@Override
 	public Item getBlockItem () {
-		return Item.itemsList[this.parent.blockID - 256];
+		return Item.itemsList[this.parent.blockID];
+	}
+	
+	/**
+	 * Libère les items de l'inventory
+	 */
+	public void breakBlockInventory(World world, int x, int y, int z, int oldBlodkID) {
+		
+		Random random = new Random();		
+		TileEntity te = world.getBlockTileEntity(x, y, z);
+		
+		if (te != null && te instanceof IInventory) {
+			IInventory inventory = (IInventory)te;
+			
+			for (int i = 0; i < inventory.getSizeInventory(); ++i) {
+				ItemStack itemStack = inventory.getStackInSlot(i);
+				
+				if (itemStack != null) {
+					float f  = random.nextFloat() * 0.8F + 0.1F;
+					float f1 = random.nextFloat() * 0.8F + 0.1F;
+					EntityItem entityItem;
+					
+					for (float f2 = random.nextFloat() * 0.8F + 0.1F; itemStack.stackSize > 0; world.spawnEntityInWorld(entityItem)) {
+						int k1 = random.nextInt(21) + 10;
+						
+						if (k1 > itemStack.stackSize) {
+							k1 = itemStack.stackSize;
+						}
+						
+						itemStack.stackSize -= k1;
+						entityItem = new EntityItem(world, (double) ((float) x + f), (double) ((float) y + f1), (double) ((float) z + f2), new ItemStack(itemStack.itemID, k1, itemStack.getItemDamage()));
+						float f3 = 0.05F;
+						entityItem.motionX = (double) ((float) random.nextGaussian() * f3);
+						entityItem.motionY = (double) ((float) random.nextGaussian() * f3 + 0.2F);
+						entityItem.motionZ = (double) ((float) random.nextGaussian() * f3);
+						
+						if (itemStack.hasTagCompound()) {
+							entityItem.getEntityItem().setTagCompound((NBTTagCompound) itemStack.getTagCompound().copy());
+						}
+					}
+				}
+			}
+			
+			world.func_96440_m(x, y, z, oldBlodkID);
+		}
 	}
 	
 	//////////////////////////
