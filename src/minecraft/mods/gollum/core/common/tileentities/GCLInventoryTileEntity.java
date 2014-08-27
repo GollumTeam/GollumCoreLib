@@ -158,7 +158,6 @@ public abstract class GCLInventoryTileEntity extends TileEntity implements IInve
 	 */
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		// TODO a revoir
 		return true;
 	}
 	
