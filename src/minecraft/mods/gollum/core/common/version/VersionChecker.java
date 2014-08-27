@@ -87,7 +87,7 @@ public class VersionChecker extends Thread {
 	public void run () {
 		
 		String player = "MINECRAFT_SERVER";
-		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+		if (ModGollumCoreLib.proxy.isRemote ()) {
 			player = Minecraft.getMinecraft().getSession().getUsername();
 		}
 		

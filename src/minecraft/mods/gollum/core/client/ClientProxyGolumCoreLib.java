@@ -17,5 +17,9 @@ public class ClientProxyGolumCoreLib extends CommonProxyGolumCoreLib {
 		
 		if (ModGollumCoreLib.config.devTools) KeyBindingRegistry.registerKeyBinding(new GollumKeybinds());
 	}
+
+	public boolean isRemote() {
+		return true;
+	}
 	
 }

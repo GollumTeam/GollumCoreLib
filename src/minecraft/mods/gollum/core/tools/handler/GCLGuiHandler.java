@@ -2,6 +2,7 @@ package mods.gollum.core.tools.handler;
 
 import java.util.Hashtable;
 
+import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.tools.registry.InventoryRegistry.GuiContainerInventoryClass;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
@@ -60,7 +61,7 @@ public class GCLGuiHandler implements IGuiHandler {
 							break;
 							
 						default:
-							throw new Exception("No valid constructeur for your container");
+							throw new Exception("No valid constructeur with your Container for "+guiContainerInventoryClass.classContainer.getName());
 					}
 					i++;
 				}
@@ -84,35 +85,34 @@ public class GCLGuiHandler implements IGuiHandler {
 				
 				int i = 0;
 				while (gui == null) {
-					
 					switch (i) {
 						case 0:
 							try {
-								gui = guiContainerInventoryClass.classGuiContainer.getConstructor(EntityPlayer.class, World.class, int.class, int.class, int.class).newInstance(player, world, x, y, z);
+								gui = (GuiContainer) guiContainerInventoryClass.classGuiContainer.getConstructor(EntityPlayer.class, World.class, int.class, int.class, int.class).newInstance(player, world, x, y, z);
 							} catch (Exception e) {
 							}
 							break;
 						case 1:
 							try {
-								gui = guiContainerInventoryClass.classGuiContainer.getConstructor(IInventory.class, World.class, int.class, int.class, int.class).newInstance(player.inventory, world, x, y, z);
+								gui = (GuiContainer) guiContainerInventoryClass.classGuiContainer.getConstructor(IInventory.class, World.class, int.class, int.class, int.class).newInstance(player.inventory, world, x, y, z);
 							} catch (Exception e) {
 							}
 							break;
 						case 2:
 							try {
-								gui = guiContainerInventoryClass.classGuiContainer.getConstructor(IInventory.class, IInventory.class).newInstance(player.inventory, (IInventory)te);
+								gui = (GuiContainer) guiContainerInventoryClass.classGuiContainer.getConstructor(IInventory.class, IInventory.class).newInstance(player.inventory, (IInventory)te);
 							} catch (Exception e) {
 							}
 							break;
 						case 3:
 							try {
-								gui = guiContainerInventoryClass.classGuiContainer.getConstructor(IInventory.class, IInventory.class, int.class).newInstance(player.inventory, (IInventory)te, guiContainerInventoryClass.numColumns);
+								gui = (GuiContainer) guiContainerInventoryClass.classGuiContainer.getConstructor(IInventory.class, IInventory.class, int.class).newInstance(player.inventory, (IInventory)te, guiContainerInventoryClass.numColumns);
 							} catch (Exception e) {
 							}
 							break;
 							
 						default:
-							throw new Exception("No valid constructeur for your container");
+							throw new Exception("No valid constructeur with your GuiContainer for "+guiContainerInventoryClass.classGuiContainer.getName());
 					}
 					i++;
 				}

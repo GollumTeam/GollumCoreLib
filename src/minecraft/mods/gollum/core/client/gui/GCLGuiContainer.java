@@ -11,12 +11,6 @@ import org.lwjgl.opengl.GL11;
 
 public class GCLGuiContainer extends GuiContainer {
 	
-	public static int SIZE_PLAYER_INVENTORY = 101;
-	public static int SIZE_ITEM = 18;
-	public static int SIZE_BORDER_SIDE = 7;
-	public static int SIZE_BORDER_TOP = 15;
-	public static int SIZE_BORDER_BOTTOM = 7;
-	
 	protected static final ResourceLocation texture = new ResourceLocation(ModGollumCoreLib.MODID.toLowerCase()+":gui/generic_inventory.png");
 	
 	protected IInventory inventoryPlayer;
@@ -49,7 +43,7 @@ public class GCLGuiContainer extends GuiContainer {
 		this.numColumns = ((GCLContainer)this.inventorySlots).getNumColumns ();
 		this.numRows = (int)Math.ceil ((double)inventoryBlock.getSizeInventory() / (double)this.numColumns);
 		
-		this.ySize = 114 + this.numRows * SIZE_ITEM;
+		this.ySize = 114 + this.numRows * GCLContainer.SIZE_ITEM;
 	}
 	
 	/**
@@ -58,14 +52,14 @@ public class GCLGuiContainer extends GuiContainer {
 	 */
 	protected void drawGuiContainerForegroundLayer(int par1, int par2) {
 
-		int base = SIZE_BORDER_TOP + this.numRows*SIZE_ITEM;
-		int top = base-this.numRows*SIZE_ITEM;
+		int base = GCLContainer.SIZE_BORDER_TOP + this.numRows*GCLContainer.SIZE_ITEM;
+		int top = base-this.numRows*GCLContainer.SIZE_ITEM;
 		
-		int widthTop = SIZE_BORDER_SIDE+SIZE_ITEM*this.numColumns+1;
+		int widthTop = GCLContainer.SIZE_BORDER_SIDE+GCLContainer.SIZE_ITEM*this.numColumns+1;
 		int xTop = (this.width - widthTop) / 2;
 		
 		this.fontRenderer.drawString(StatCollector.translateToLocal(this.inventoryBlock.getInvName()) , widthTop, top-13                      , 0x404040);
-		this.fontRenderer.drawString(StatCollector.translateToLocal(this.inventoryPlayer.getInvName()), 8      , top+this.numRows*SIZE_ITEM+6, 0x404040);
+		this.fontRenderer.drawString(StatCollector.translateToLocal(this.inventoryPlayer.getInvName()), 8      , top+this.numRows*GCLContainer.SIZE_ITEM+6, 0x404040);
 		
 	}
 
@@ -75,12 +69,12 @@ public class GCLGuiContainer extends GuiContainer {
 	 */
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3) {
 		
-		int base = SIZE_BORDER_TOP + this.numRows*SIZE_ITEM;
-		int top = base-SIZE_BORDER_TOP-this.numRows*SIZE_ITEM-3;
+		int base = GCLContainer.SIZE_BORDER_TOP + this.numRows*GCLContainer.SIZE_ITEM;
+		int top = base-GCLContainer.SIZE_BORDER_TOP-this.numRows*GCLContainer.SIZE_ITEM-3;
 		int x = (this.width - this.xSize) / 2;
 		int y = (this.height - this.ySize) / 2;
 		
-		int widthTop = SIZE_BORDER_SIDE*2+SIZE_ITEM*this.numColumns;
+		int widthTop = GCLContainer.SIZE_BORDER_SIDE*2+GCLContainer.SIZE_ITEM*this.numColumns;
 		int xTop = (this.width - widthTop) / 2;
 		
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -90,47 +84,47 @@ public class GCLGuiContainer extends GuiContainer {
 		this.drawTexturedModalRect(
 			x, y+base, 
 			0, 0, 
-			this.xSize, SIZE_PLAYER_INVENTORY
+			this.xSize, GCLContainer.SIZE_PLAYER_INVENTORY
 		);
 		
 		// top left
 		this.drawTexturedModalRect(
 			xTop, y+top, // Position in screen
-			0, SIZE_PLAYER_INVENTORY, // Position in image
-			SIZE_BORDER_SIDE, SIZE_BORDER_TOP // Size in screen
+			0, GCLContainer.SIZE_PLAYER_INVENTORY, // Position in image
+			GCLContainer.SIZE_BORDER_SIDE, GCLContainer.SIZE_BORDER_TOP
 		);
 		
 		// top right
 		this.drawTexturedModalRect(
-			xTop + SIZE_BORDER_SIDE + SIZE_ITEM*this.numColumns, y + top, // Position in screen
-			SIZE_BORDER_SIDE+SIZE_ITEM, SIZE_PLAYER_INVENTORY, // Position in image
-			SIZE_BORDER_SIDE, SIZE_BORDER_TOP // Size in screen
+			xTop + GCLContainer.SIZE_BORDER_SIDE + GCLContainer.SIZE_ITEM*this.numColumns, y + top, // Position in screen
+			GCLContainer.SIZE_BORDER_SIDE+GCLContainer.SIZE_ITEM, GCLContainer.SIZE_PLAYER_INVENTORY, // Position in image
+			GCLContainer.SIZE_BORDER_SIDE, GCLContainer.SIZE_BORDER_TOP
 		);
 		
 		
 		for (int i = 0; i < this.numColumns; i++) {
 			// top
 			this.drawTexturedModalRect(
-				xTop + SIZE_BORDER_SIDE + SIZE_ITEM*i, y+top, // Position in screen
-				SIZE_BORDER_SIDE, SIZE_PLAYER_INVENTORY, // Position in image
-				SIZE_ITEM, SIZE_BORDER_TOP // Size in screen
+				xTop + GCLContainer.SIZE_BORDER_SIDE + GCLContainer.SIZE_ITEM*i, y+top, // Position in screen
+				GCLContainer.SIZE_BORDER_SIDE, GCLContainer.SIZE_PLAYER_INVENTORY, // Position in image
+				GCLContainer.SIZE_ITEM, GCLContainer.SIZE_BORDER_TOP
 			);
 			
 			// bottom
 			this.drawTexturedModalRect(
-				xTop + SIZE_BORDER_SIDE + SIZE_ITEM*i, y+top + SIZE_BORDER_TOP+SIZE_ITEM*this.numRows, // Position in screen
-				SIZE_BORDER_SIDE, SIZE_PLAYER_INVENTORY+SIZE_BORDER_TOP+SIZE_ITEM, // Position in image
-				SIZE_ITEM, SIZE_BORDER_BOTTOM // Size in screen
+				xTop + GCLContainer.SIZE_BORDER_SIDE + GCLContainer.SIZE_ITEM*i, y+top + GCLContainer.SIZE_BORDER_TOP+GCLContainer.SIZE_ITEM*this.numRows, // Position in screen
+				GCLContainer.SIZE_BORDER_SIDE, GCLContainer.SIZE_PLAYER_INVENTORY+GCLContainer.SIZE_BORDER_TOP+GCLContainer.SIZE_ITEM, // Position in image
+				GCLContainer.SIZE_ITEM, GCLContainer.SIZE_BORDER_BOTTOM
 			);
 			
-			int posX = xTop + SIZE_BORDER_SIDE + SIZE_ITEM*i;
+			int posX = xTop + GCLContainer.SIZE_BORDER_SIDE + GCLContainer.SIZE_ITEM*i;
 			
-			if (posX + SIZE_ITEM >= x && posX <= x + this.xSize) {
+			if (posX + GCLContainer.SIZE_ITEM >= x && posX <= x + this.xSize) {
 				// jointure
 				this.drawTexturedModalRect(
-					Math.max(x, posX), y+top + SIZE_BORDER_TOP+SIZE_ITEM*this.numRows+4, // Position in screen
-					SIZE_BORDER_SIDE, SIZE_PLAYER_INVENTORY+SIZE_BORDER_TOP, // Position in image
-					SIZE_ITEM+Math.min((x + this.xSize)-(posX + SIZE_ITEM), 0), SIZE_BORDER_BOTTOM-4 // Size in screen
+					Math.max(x, posX), y+top + GCLContainer.SIZE_BORDER_TOP+GCLContainer.SIZE_ITEM*this.numRows+4, // Position in screen
+					GCLContainer.SIZE_BORDER_SIDE, GCLContainer.SIZE_PLAYER_INVENTORY+GCLContainer.SIZE_BORDER_TOP, // Position in image
+					GCLContainer.SIZE_ITEM+Math.min((x + this.xSize)-(posX + GCLContainer.SIZE_ITEM), 0), GCLContainer.SIZE_BORDER_BOTTOM-4 // Size in screen
 				);
 			}
 		}
@@ -139,9 +133,9 @@ public class GCLGuiContainer extends GuiContainer {
 		for (int i = 0; i < this.numRows; i++) {
 			// left middle
 			this.drawTexturedModalRect(
-				xTop, y+top+SIZE_BORDER_TOP + SIZE_ITEM*i, 
-				0, SIZE_PLAYER_INVENTORY+SIZE_BORDER_TOP, 
-				SIZE_BORDER_SIDE, SIZE_ITEM
+				xTop, y+top+GCLContainer.SIZE_BORDER_TOP + GCLContainer.SIZE_ITEM*i, 
+				0, GCLContainer.SIZE_PLAYER_INVENTORY+GCLContainer.SIZE_BORDER_TOP, 
+				GCLContainer.SIZE_BORDER_SIDE, GCLContainer.SIZE_ITEM
 			);
 			
 			
@@ -150,16 +144,16 @@ public class GCLGuiContainer extends GuiContainer {
 				if (slot < inventoryBlock.getSizeInventory()) {
 					// center
 					this.drawTexturedModalRect(
-						xTop+ SIZE_BORDER_SIDE + SIZE_ITEM*j, y+top+SIZE_BORDER_TOP + SIZE_ITEM * i, // Position in screen
-						SIZE_BORDER_SIDE*2+SIZE_ITEM, SIZE_PLAYER_INVENTORY, // Position in image
-						SIZE_ITEM, SIZE_ITEM // Size in screen
+						xTop+ GCLContainer.SIZE_BORDER_SIDE + GCLContainer.SIZE_ITEM*j, y+top+GCLContainer.SIZE_BORDER_TOP + GCLContainer.SIZE_ITEM * i, // Position in screen
+						GCLContainer.SIZE_BORDER_SIDE*2+GCLContainer.SIZE_ITEM, GCLContainer.SIZE_PLAYER_INVENTORY, // Position in image
+						GCLContainer.SIZE_ITEM, GCLContainer.SIZE_ITEM
 					);
 				} else {
 					// center
 					this.drawTexturedModalRect(
-						xTop + SIZE_BORDER_SIDE + SIZE_ITEM*j, y+top+SIZE_BORDER_TOP + SIZE_ITEM * i, // Position in screen
-						SIZE_BORDER_SIDE, SIZE_PLAYER_INVENTORY+SIZE_BORDER_TOP, // Position in image
-						SIZE_ITEM, SIZE_ITEM // Size in screen
+						xTop + GCLContainer.SIZE_BORDER_SIDE + GCLContainer.SIZE_ITEM*j, y+top+GCLContainer.SIZE_BORDER_TOP + GCLContainer.SIZE_ITEM * i, // Position in screen
+						GCLContainer.SIZE_BORDER_SIDE, GCLContainer.SIZE_PLAYER_INVENTORY+GCLContainer.SIZE_BORDER_TOP, // Position in image
+						GCLContainer.SIZE_ITEM, GCLContainer.SIZE_ITEM
 					);
 				}
 
@@ -168,38 +162,38 @@ public class GCLGuiContainer extends GuiContainer {
 			
 			// right middle
 			this.drawTexturedModalRect(
-				xTop+SIZE_BORDER_SIDE+SIZE_ITEM*this.numColumns, y+top+SIZE_BORDER_TOP + SIZE_ITEM*i, 
-				SIZE_ITEM+SIZE_BORDER_SIDE, SIZE_PLAYER_INVENTORY+SIZE_BORDER_TOP, 
-				SIZE_BORDER_SIDE, SIZE_ITEM
+				xTop+GCLContainer.SIZE_BORDER_SIDE+GCLContainer.SIZE_ITEM*this.numColumns, y+top+GCLContainer.SIZE_BORDER_TOP + GCLContainer.SIZE_ITEM*i, 
+				GCLContainer.SIZE_ITEM+GCLContainer.SIZE_BORDER_SIDE, GCLContainer.SIZE_PLAYER_INVENTORY+GCLContainer.SIZE_BORDER_TOP, 
+				GCLContainer.SIZE_BORDER_SIDE, GCLContainer.SIZE_ITEM
 			);
 		}
 
 		// bottom left
 		this.drawTexturedModalRect(
-			xTop, y+top + SIZE_BORDER_TOP+SIZE_ITEM*this.numRows, // Position in screen
-			0, SIZE_PLAYER_INVENTORY+SIZE_BORDER_TOP+SIZE_ITEM, // Position in image
-			SIZE_BORDER_SIDE, SIZE_BORDER_BOTTOM // Size in screen
+			xTop, y+top + GCLContainer.SIZE_BORDER_TOP+GCLContainer.SIZE_ITEM*this.numRows, // Position in screen
+			0, GCLContainer.SIZE_PLAYER_INVENTORY+GCLContainer.SIZE_BORDER_TOP+GCLContainer.SIZE_ITEM, // Position in image
+			GCLContainer.SIZE_BORDER_SIDE, GCLContainer.SIZE_BORDER_BOTTOM
 		);
 		
 		// bottom right
 		this.drawTexturedModalRect(
-			xTop+SIZE_BORDER_SIDE+SIZE_ITEM*this.numColumns, y+top + SIZE_BORDER_TOP+SIZE_ITEM*this.numRows, // Position in screen
-			SIZE_BORDER_SIDE+SIZE_ITEM, SIZE_PLAYER_INVENTORY+SIZE_BORDER_TOP+SIZE_ITEM, // Position in image
-			SIZE_BORDER_SIDE, SIZE_BORDER_BOTTOM // Size in screen
+			xTop+GCLContainer.SIZE_BORDER_SIDE+GCLContainer.SIZE_ITEM*this.numColumns, y+top + GCLContainer.SIZE_BORDER_TOP+GCLContainer.SIZE_ITEM*this.numRows, // Position in screen
+			GCLContainer.SIZE_BORDER_SIDE+GCLContainer.SIZE_ITEM, GCLContainer.SIZE_PLAYER_INVENTORY+GCLContainer.SIZE_BORDER_TOP+GCLContainer.SIZE_ITEM, // Position in image
+			GCLContainer.SIZE_BORDER_SIDE, GCLContainer.SIZE_BORDER_BOTTOM
 		);
 		
 		// bottom left,
 		this.drawTexturedModalRect(
-			Math.max(x, xTop), y+top + SIZE_BORDER_TOP+SIZE_ITEM*this.numRows+4, // Position in screen
-			0, SIZE_PLAYER_INVENTORY+SIZE_BORDER_TOP, // Position in image
-			SIZE_BORDER_SIDE, SIZE_BORDER_BOTTOM-4 // Size in screen
+			Math.max(x, xTop), y+top + GCLContainer.SIZE_BORDER_TOP+GCLContainer.SIZE_ITEM*this.numRows+4, // Position in screen
+			0, GCLContainer.SIZE_PLAYER_INVENTORY+GCLContainer.SIZE_BORDER_TOP, // Position in image
+			GCLContainer.SIZE_BORDER_SIDE, GCLContainer.SIZE_BORDER_BOTTOM-4 // Size in screen
 		);
 		
 		// bottom right
 		this.drawTexturedModalRect(
-			Math.min(x+this.xSize-SIZE_BORDER_SIDE, xTop+SIZE_BORDER_SIDE+SIZE_ITEM*this.numColumns), y+top + SIZE_BORDER_TOP+SIZE_ITEM*this.numRows+3, // Position in screen
-			SIZE_BORDER_SIDE+SIZE_ITEM, SIZE_PLAYER_INVENTORY+SIZE_BORDER_TOP, // Position in image
-			SIZE_BORDER_SIDE, SIZE_BORDER_BOTTOM-3 // Size in screen
+			Math.min(x+this.xSize-GCLContainer.SIZE_BORDER_SIDE, xTop+GCLContainer.SIZE_BORDER_SIDE+GCLContainer.SIZE_ITEM*this.numColumns), y+top + GCLContainer.SIZE_BORDER_TOP+GCLContainer.SIZE_ITEM*this.numRows+3, // Position in screen
+			GCLContainer.SIZE_BORDER_SIDE+GCLContainer.SIZE_ITEM, GCLContainer.SIZE_PLAYER_INVENTORY+GCLContainer.SIZE_BORDER_TOP, // Position in image
+			GCLContainer.SIZE_BORDER_SIDE, GCLContainer.SIZE_BORDER_BOTTOM-3 // Size in screen
 		);
 	}
 

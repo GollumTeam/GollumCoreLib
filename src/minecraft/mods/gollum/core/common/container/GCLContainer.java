@@ -1,6 +1,5 @@
 package mods.gollum.core.common.container;
 
-import mods.gollum.core.client.gui.GCLGuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
@@ -8,6 +7,12 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 public class GCLContainer extends Container {
+	
+	public static final int SIZE_BORDER_BOTTOM = 7;
+	public static final int SIZE_BORDER_TOP = 15;
+	public static final int SIZE_BORDER_SIDE = 7;
+	public static final int SIZE_ITEM = 18;
+	public static final int SIZE_PLAYER_INVENTORY = 101;
 	
 	protected IInventory inventoryBlock;
 	protected int numRows;
@@ -21,12 +26,12 @@ public class GCLContainer extends Container {
 		
 		inventoryBlock.openChest();
 		
-		int height = (this.numRows - 4) * GCLGuiContainer.SIZE_ITEM;
+		int height = (this.numRows - 4) * SIZE_ITEM;
 		int distance = 106;
 		int i;
 		int j;
 		
-		int widthTop = GCLGuiContainer.SIZE_BORDER_SIDE*2+GCLGuiContainer.SIZE_ITEM*this.numColumns;
+		int widthTop = GCLContainer.SIZE_BORDER_SIDE*2+GCLContainer.SIZE_ITEM*this.numColumns;
 		int xTop = (177 - widthTop) / 2;
 		
 		xTop = (xTop < 0) ? xTop-1 : xTop; // FIXE de position
@@ -37,8 +42,8 @@ public class GCLContainer extends Container {
 				if (slot < inventoryBlock.getSizeInventory()) {
 					this.addSlotToContainer(new Slot(
 						inventoryBlock, slot, 
-						GCLGuiContainer.SIZE_BORDER_SIDE + j * GCLGuiContainer.SIZE_ITEM + 1 + xTop, 
-						GCLGuiContainer.SIZE_BORDER_TOP + i * GCLGuiContainer.SIZE_ITEM - 2
+						GCLContainer.SIZE_BORDER_SIDE + j * SIZE_ITEM + 1 + xTop, 
+						GCLContainer.SIZE_BORDER_TOP + i * SIZE_ITEM - 2
 					));
 				}
 				slot++;
@@ -47,7 +52,7 @@ public class GCLContainer extends Container {
 		
 		for (i = 0; i < 3; ++i) {
 			for (j = 0; j < 9; ++j) {
-				this.addSlotToContainer(new Slot(inventoryPlayer, j + i * 9 + 9, 8 + j * GCLGuiContainer.SIZE_ITEM, distance + i * GCLGuiContainer.SIZE_ITEM + height));
+				this.addSlotToContainer(new Slot(inventoryPlayer, j + i * 9 + 9, 8 + j * SIZE_ITEM, distance + i * SIZE_ITEM + height));
 			}
 		}
 		

@@ -2,6 +2,7 @@ package mods.gollum.core.common.mod;
 
 import java.lang.annotation.Annotation;
 
+import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.common.context.ModContext;
 import mods.gollum.core.common.i18n.I18n;
 import mods.gollum.core.common.log.Logger;
@@ -11,6 +12,9 @@ import mods.gollum.core.tools.registry.BlockRegistry;
 import mods.gollum.core.tools.registry.GCLNetworkRegistry;
 import mods.gollum.core.tools.registry.InventoryRegistry;
 import mods.gollum.core.tools.registry.ItemRegistry;
+import mods.jammyfurniture.client.gui.GuiCraftingSide;
+import mods.jammyfurniture.common.containers.ContainerCraftingSide;
+import mods.jammyfurniture.common.util.JFGuiHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -114,6 +118,11 @@ public abstract class GollumMod {
 	
 	public void handler (FMLInitializationEvent event) {
 		this.init(event);
+
+		this.initGuiCommon ();
+		if (ModGollumCoreLib.proxy.isRemote()) {
+			this.initGuiClient();
+		}
 		
 		// Enregistrement du handler de gui d'inventaire simplifié
 		GCLNetworkRegistry.instance().registerGuiHandler(new GCLGuiHandler(InventoryRegistry.instance().getGuiInventoryList()));
@@ -126,6 +135,20 @@ public abstract class GollumMod {
 		
 		ModContext.instance ().pop();
 	}
+	
+	/////////////////////
+	// Extends methods //
+	/////////////////////
+
+	/**
+	 * Initialisation des GUI côté serveur et client
+	 */
+	public void initGuiCommon () {}
+	
+	/**
+	 * Initialisation des GUI côté client
+	 */
+	public void initGuiClient () {}
 	
 	public abstract void preInit (FMLPreInitializationEvent event);
 	public abstract void init(FMLInitializationEvent event);
