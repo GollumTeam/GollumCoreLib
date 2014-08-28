@@ -16,11 +16,11 @@ public class InventoryRegistry {
 	public static class GuiContainerInventoryClass {
 		public Class<? extends Container> classContainer;
 		public Class classGuiContainer = null;
-		public int numColumns;
+		public Object parameter;
 		
 		public GuiContainerInventoryClass (Class<? extends Container> classContainer, int numColumns) {
 			this.classContainer = classContainer;
-			this.numColumns = numColumns;
+			this.parameter = numColumns;
 		}
 	}
 	

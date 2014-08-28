@@ -14,8 +14,9 @@ public abstract class GCLInventoryTileEntity extends TileEntity implements IInve
 	protected boolean playSoundChest = true;
 	
 	// Ouverture des porte	
-	public float lidAngle     = 0.0F;
-	public float prevLidAngle = 0.0F;
+	private float doorOpenProgress     = 0.0F;
+	private float prevDoorOpenProgress = 0.0F;
+	private float doorSpeed            = 0.1F;
 
 	/**
 	 * Nombre de player utilisant le coffre
@@ -184,52 +185,34 @@ public abstract class GCLInventoryTileEntity extends TileEntity implements IInve
 	 */
 	public void updateEntity() {
 		super.updateEntity();
-//		
-//		if (this.numUsingPlayers > 0 && this.lidAngle == 0.0F) {
-//			if (this.playSoundChest && this.numUsingPlayers == 0) {
-//				double x = (double) this.xCoord + 0.5D;
-//				double y = (double) this.yCoord + 0.5D;
-//				double z = (double) this.zCoord + 0.5D;
-//				this.worldObj.playSoundEffect(x, y, z, "random.chestopen", 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
-//			}
-//			
-//		}
 		
-		this.prevLidAngle = this.lidAngle;
-		float flag = 0.1F;
-//		double flag1;
-
-		if (this.numUsingPlayers > 0 && this.lidAngle == 0.0F) {
+		this.prevDoorOpenProgress = this.doorOpenProgress;
+		
+		// Son d'ouverture du coffre
+		if (this.numUsingPlayers > 0 && this.doorOpenProgress == 0.0F && playSoundChest) {
 			double x = (double) this.xCoord + 0.5D;
 			double y = (double) this.yCoord + 0.5D;
 			double z = (double) this.zCoord + 0.5D;
 			this.worldObj.playSoundEffect(x, y, z, "random.chestopen", 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
 		}
 
-		if (this.numUsingPlayers == 0 && this.lidAngle > 0.0F || this.numUsingPlayers > 0 && this.lidAngle < 1.0F) {
-			float var11 = this.lidAngle;
-
+		if (this.numUsingPlayers == 0 && this.doorOpenProgress > 0.0F || this.numUsingPlayers > 0 && this.doorOpenProgress < 1.0F) {
+			
+			// Dépalce la porte
 			if (this.numUsingPlayers > 0) {
-				this.lidAngle += flag;
+				this.doorOpenProgress += this.doorSpeed;
 			} else {
-				this.lidAngle -= flag;
+				this.doorOpenProgress -= this.doorSpeed;
 			}
+			this.doorOpenProgress = (this.doorOpenProgress > 1.0F) ? 1.0F : this.doorOpenProgress;
+			this.doorOpenProgress = (this.doorOpenProgress < 0.0F) ? 0.0F : this.doorOpenProgress;
 
-			if (this.lidAngle > 1.0F) {
-				this.lidAngle = 1.0F;
-			}
-
-			float var3 = 0.5F;
-
-			if (this.lidAngle < var3 && var11 >= var3) {
+			// Son de fermeture du coffre
+			if (this.doorOpenProgress < 0.7F && this.prevDoorOpenProgress >= 0.7F && playSoundChest) {
 				double x = (double) this.xCoord + 0.5D;
 				double y = (double) this.yCoord + 0.5D;
 				double z = (double) this.zCoord + 0.5D;
 				this.worldObj.playSoundEffect(x, y, z, "random.chestclosed", 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
-			}
-
-			if (this.lidAngle < 0.0F) {
-				this.lidAngle = 0.0F;
 			}
 		}
 		
@@ -310,8 +293,21 @@ public abstract class GCLInventoryTileEntity extends TileEntity implements IInve
 		
 	}
 	
+	////////////
+	// Others //
+	////////////
 	
-
+	public GCLInventoryTileEntity setDoorSpeed (float doorSpeed) {
+		this.doorSpeed = doorSpeed;
+		return this;
+	}
 	
+	public float getDoorOpenProgress () {
+		return this.doorOpenProgress;
+	}
+	
+	public float getPreviousDoorOpenProgress () {
+		return this.prevDoorOpenProgress;
+	}
 
 }

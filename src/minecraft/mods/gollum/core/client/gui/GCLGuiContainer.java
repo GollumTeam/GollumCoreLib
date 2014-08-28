@@ -11,7 +11,7 @@ import org.lwjgl.opengl.GL11;
 
 public class GCLGuiContainer extends GuiContainer {
 	
-	protected ResourceLocation texture = new ResourceLocation(ModGollumCoreLib.MODID.toLowerCase()+":gui/generic_inventory.png");
+	protected static ResourceLocation texture = new ResourceLocation(ModGollumCoreLib.MODID.toLowerCase()+":gui/generic_inventory.png");
 	
 	protected IInventory inventoryPlayer;
 	protected IInventory inventoryBlock;
@@ -55,11 +55,13 @@ public class GCLGuiContainer extends GuiContainer {
 		int base = GCLContainer.SIZE_BORDER_TOP + this.numRows*GCLContainer.SIZE_ITEM;
 		int top = base-this.numRows*GCLContainer.SIZE_ITEM;
 		
-		int widthTop = GCLContainer.SIZE_BORDER_SIDE+GCLContainer.SIZE_ITEM*this.numColumns+1;
+		int widthTop = GCLContainer.SIZE_BORDER_SIDE+GCLContainer.SIZE_ITEM*this.numColumns;
 		int xTop = (this.width - widthTop) / 2;
 		
-		this.fontRenderer.drawString(StatCollector.translateToLocal(this.inventoryBlock.getInvName()) , widthTop, top-13                      , 0x404040);
-		this.fontRenderer.drawString(StatCollector.translateToLocal(this.inventoryPlayer.getInvName()), 8      , top+this.numRows*GCLContainer.SIZE_ITEM+6, 0x404040);
+		int posX = (GCLContainer.SIZE_ITEM * (9 - this.numColumns)) / 2;
+		
+		this.fontRenderer.drawString(StatCollector.translateToLocal(this.inventoryBlock.getInvName()) , 8 + posX , top-13                      , 0x404040);
+		this.fontRenderer.drawString(StatCollector.translateToLocal(this.inventoryPlayer.getInvName()), 8 , top+this.numRows*GCLContainer.SIZE_ITEM+6, 0x404040);
 		
 	}
 
