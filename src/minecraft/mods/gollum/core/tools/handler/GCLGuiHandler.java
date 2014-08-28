@@ -33,6 +33,9 @@ public class GCLGuiHandler implements IGuiHandler {
 				int i = 0;
 				while (container == null) {
 					
+					// TODO rendre encore plus générique enr ecupérent les class de chaque object
+					// Et le int en aprmetre doit etre un Object
+					
 					switch (i) {
 						case 0:
 							try {

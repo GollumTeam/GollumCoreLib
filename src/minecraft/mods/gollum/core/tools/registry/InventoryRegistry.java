@@ -33,7 +33,7 @@ public class InventoryRegistry {
 	}
 	
 	// le int doit devenir un object
-	public static void register (int guiId, int numColumns) {
+	public static void registerInventory (int guiId, int numColumns) {
 		registerContainer(guiId, GCLContainer.class, numColumns);
 		if (ModGollumCoreLib.proxy.isRemote()) {
 			registerGui(guiId, GCLGuiContainer.class);

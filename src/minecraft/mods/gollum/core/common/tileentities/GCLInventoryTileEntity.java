@@ -12,6 +12,10 @@ public abstract class GCLInventoryTileEntity extends TileEntity implements IInve
 	protected ItemStack[] inventory;
 	protected int maxSize;
 	protected boolean playSoundChest = true;
+	
+	// Ouverture des porte	
+	public float lidAngle     = 0.0F;
+	public float prevLidAngle = 0.0F;
 
 	/**
 	 * Nombre de player utilisant le coffre
@@ -119,27 +123,12 @@ public abstract class GCLInventoryTileEntity extends TileEntity implements IInve
 	
 	@Override
 	public void openChest() {
-		
-		if (this.playSoundChest && this.numUsingPlayers == 0) {
-			double x = (double) this.xCoord + 0.5D;
-			double y = (double) this.yCoord + 0.5D;
-			double z = (double) this.zCoord + 0.5D;
-			this.worldObj.playSoundEffect(x, y, z, "random.chestopen", 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
-		}
-		
 		++this.numUsingPlayers;
 	}
 	
 	@Override
 	public void closeChest() {
 		--this.numUsingPlayers;
-		
-		if (this.playSoundChest && this.numUsingPlayers == 0) {
-			double x = (double) this.xCoord + 0.5D;
-			double y = (double) this.yCoord + 0.5D;
-			double z = (double) this.zCoord + 0.5D;
-			this.worldObj.playSoundEffect(x, y, z, "random.chestclosed", 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
-		}
 	}
 	
 	/**
@@ -182,6 +171,68 @@ public abstract class GCLInventoryTileEntity extends TileEntity implements IInve
 	public void invalidate() {
 		this.updateContainingBlockInfo();
 		super.invalidate();
+	}
+	
+	////////////
+	// Update //
+	////////////
+	
+	/**
+	 * Allows the entity to update its state. Overridden in most subclasses,
+	 * e.g. the mob spawner uses this to count ticks and creates a new spawn
+	 * inside its implementation.
+	 */
+	public void updateEntity() {
+		super.updateEntity();
+//		
+//		if (this.numUsingPlayers > 0 && this.lidAngle == 0.0F) {
+//			if (this.playSoundChest && this.numUsingPlayers == 0) {
+//				double x = (double) this.xCoord + 0.5D;
+//				double y = (double) this.yCoord + 0.5D;
+//				double z = (double) this.zCoord + 0.5D;
+//				this.worldObj.playSoundEffect(x, y, z, "random.chestopen", 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+//			}
+//			
+//		}
+		
+		this.prevLidAngle = this.lidAngle;
+		float flag = 0.1F;
+//		double flag1;
+
+		if (this.numUsingPlayers > 0 && this.lidAngle == 0.0F) {
+			double x = (double) this.xCoord + 0.5D;
+			double y = (double) this.yCoord + 0.5D;
+			double z = (double) this.zCoord + 0.5D;
+			this.worldObj.playSoundEffect(x, y, z, "random.chestopen", 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+		}
+
+		if (this.numUsingPlayers == 0 && this.lidAngle > 0.0F || this.numUsingPlayers > 0 && this.lidAngle < 1.0F) {
+			float var11 = this.lidAngle;
+
+			if (this.numUsingPlayers > 0) {
+				this.lidAngle += flag;
+			} else {
+				this.lidAngle -= flag;
+			}
+
+			if (this.lidAngle > 1.0F) {
+				this.lidAngle = 1.0F;
+			}
+
+			float var3 = 0.5F;
+
+			if (this.lidAngle < var3 && var11 >= var3) {
+				double x = (double) this.xCoord + 0.5D;
+				double y = (double) this.yCoord + 0.5D;
+				double z = (double) this.zCoord + 0.5D;
+				this.worldObj.playSoundEffect(x, y, z, "random.chestclosed", 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+			}
+
+			if (this.lidAngle < 0.0F) {
+				this.lidAngle = 0.0F;
+			}
+		}
+		
 	}
 	
 	
