@@ -11,7 +11,11 @@ public abstract class GCLInventoryTileEntity extends TileEntity implements IInve
 
 	protected ItemStack[] inventory;
 	protected int maxSize;
+	
 	protected boolean playSoundChest = true;
+	protected float volumeSoundOpenClosedInventory = 0.5F;
+	protected String soundOpenInventory   = "random.chestopen";
+	protected String soundClosedInventory = "random.chestclosed";
 	
 	// Ouverture des porte	
 	private float doorOpenProgress     = 0.0F;
@@ -173,6 +177,20 @@ public abstract class GCLInventoryTileEntity extends TileEntity implements IInve
 		this.updateContainingBlockInfo();
 		super.invalidate();
 	}
+
+	protected void playSoundClosedInventory() {
+		double x = (double) this.xCoord + 0.5D;
+		double y = (double) this.yCoord + 0.5D;
+		double z = (double) this.zCoord + 0.5D;
+		this.worldObj.playSoundEffect(x, y, z, this.soundClosedInventory, this.volumeSoundOpenClosedInventory, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+	}
+
+	protected void playSoundOpenInventory() {
+		double x = (double) this.xCoord + 0.5D;
+		double y = (double) this.yCoord + 0.5D;
+		double z = (double) this.zCoord + 0.5D;
+		this.worldObj.playSoundEffect(x, y, z, this.soundOpenInventory, this.volumeSoundOpenClosedInventory, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+	}
 	
 	////////////
 	// Update //
@@ -190,10 +208,7 @@ public abstract class GCLInventoryTileEntity extends TileEntity implements IInve
 		
 		// Son d'ouverture du coffre
 		if (this.numUsingPlayers > 0 && this.doorOpenProgress == 0.0F && playSoundChest) {
-			double x = (double) this.xCoord + 0.5D;
-			double y = (double) this.yCoord + 0.5D;
-			double z = (double) this.zCoord + 0.5D;
-			this.worldObj.playSoundEffect(x, y, z, "random.chestopen", 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+			playSoundOpenInventory();
 		}
 
 		if (this.numUsingPlayers == 0 && this.doorOpenProgress > 0.0F || this.numUsingPlayers > 0 && this.doorOpenProgress < 1.0F) {
@@ -209,10 +224,7 @@ public abstract class GCLInventoryTileEntity extends TileEntity implements IInve
 
 			// Son de fermeture du coffre
 			if (this.doorOpenProgress < 0.7F && this.prevDoorOpenProgress >= 0.7F && playSoundChest) {
-				double x = (double) this.xCoord + 0.5D;
-				double y = (double) this.yCoord + 0.5D;
-				double z = (double) this.zCoord + 0.5D;
-				this.worldObj.playSoundEffect(x, y, z, "random.chestclosed", 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+				playSoundClosedInventory();
 			}
 		}
 		

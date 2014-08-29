@@ -108,13 +108,13 @@ public class GCLContainer extends Container {
 		this.inventoryBlock.closeChest();
 		
 	}
-
+	
 	public int getNumRows() {
 		return numRows;
 	}
-
+	
 	public int getNumColumns() {
 		return numColumns;
 	}
-
+	
 }

@@ -11,7 +11,7 @@ import org.lwjgl.opengl.GL11;
 
 public class GCLGuiContainer extends GuiContainer {
 	
-	protected static ResourceLocation texture = new ResourceLocation(ModGollumCoreLib.MODID.toLowerCase()+":gui/generic_inventory.png");
+	protected static final ResourceLocation texture = new ResourceLocation(ModGollumCoreLib.MODID.toLowerCase()+":gui/generic_inventory.png");
 	
 	protected IInventory inventoryPlayer;
 	protected IInventory inventoryBlock;
