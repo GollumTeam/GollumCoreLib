@@ -107,7 +107,7 @@ public abstract class GCLInventoryTileEntity extends TileEntity implements IInve
 		}
 		return itemstack;
 	}
-
+	
 	/**
 	 * Sets the given item stack to the specified slot in the inventory (can be
 	 * crafting or armor sections).
@@ -151,7 +151,7 @@ public abstract class GCLInventoryTileEntity extends TileEntity implements IInve
 	 * stack size) into the given slot.
 	 */
 	@Override
-	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
+	public boolean isItemValidForSlot(int slot, ItemStack itemStack) {
 		return true;
 	}
 	
