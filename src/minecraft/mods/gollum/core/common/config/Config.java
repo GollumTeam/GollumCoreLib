@@ -1,7 +1,6 @@
 package mods.gollum.core.common.config;
 
 import mods.gollum.core.common.context.ModContext;
-import mods.gollum.core.common.mod.GollumMod;
 
 
 public abstract class Config {
