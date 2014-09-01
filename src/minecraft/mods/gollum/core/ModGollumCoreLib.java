@@ -10,7 +10,6 @@ import mods.gollum.core.common.log.Logger;
 import mods.gollum.core.common.mod.GollumMod;
 import mods.gollum.core.common.tileentities.TileEntityBlockSpawner;
 import mods.gollum.core.common.version.VersionChecker;
-import mods.gollum.core.items.ItemKey;
 import mods.gollum.core.tools.registry.BlockRegistry;
 import mods.gollum.core.tools.registry.ItemRegistry;
 import net.minecraft.block.Block;
@@ -60,7 +59,7 @@ public class ModGollumCoreLib extends GollumMod {
 		// Tandis que le loader de config est indépendant
 		
 		// Charge la configuration
-		this.config = new ConfigGollumCoreLib();
+		this.config = new ConfigGollumCoreLib().loadConfig();
 		
 		// Creation du logger
 		this.log = new Logger();
@@ -80,9 +79,6 @@ public class ModGollumCoreLib extends GollumMod {
 		// Initialisation des blocks
 		this.initBlocks ();
 		
-		// Initialisation des items
-		this.initItems ();
-		
 		BlockRegistry.instance().registerAll();
 		ItemRegistry.instance().registerAll();
 	}
@@ -92,7 +88,7 @@ public class ModGollumCoreLib extends GollumMod {
 		
 		// Enregistre les events
 		this.proxy.registerEvents();
-
+		
 		// Initialisation les TileEntities
 		this.initTileEntities ();
 	}
@@ -106,17 +102,6 @@ public class ModGollumCoreLib extends GollumMod {
 	 */
 	private void initTileEntities () {
 		GameRegistry.registerTileEntity(TileEntityBlockSpawner.class, "GollumCoreLib:BlockSpawner");
-	}
-	
-	/**
-	 * Initialisation des items
-	 */
-	public void initItems () {
-		
-		// Création des blocks
-		if (this.config.devTools) {
-			this.itemKey = new ItemKey (this.config.itemKeyID, "GCLItemKey");
-		}
 	}
 	
 	/**
