@@ -9,7 +9,7 @@ import net.minecraft.item.ItemStack;
 
 public class HItemBlockMetadata extends ItemBlock {
 	
-	Block block;
+	protected Block block;
 	
 	public HItemBlockMetadata(int par1, Block block) {
 		super(par1);

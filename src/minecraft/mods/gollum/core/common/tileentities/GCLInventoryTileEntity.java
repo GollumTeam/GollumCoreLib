@@ -1,5 +1,7 @@
 package mods.gollum.core.common.tileentities;
 
+import mods.jammyfurniture.ModJammyFurniture;
+import net.minecraft.block.BlockChest;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -128,12 +130,38 @@ public abstract class GCLInventoryTileEntity extends TileEntity implements IInve
 	
 	@Override
 	public void openChest() {
+		if (this.numUsingPlayers < 0) {
+			this.numUsingPlayers = 0;
+		}
+		
 		++this.numUsingPlayers;
+		this.worldObj.addBlockEvent(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID, 1, this.numUsingPlayers);
+		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID);
+		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord - 1, this.zCoord, this.getBlockType().blockID);
 	}
 	
 	@Override
 	public void closeChest() {
-		--this.numUsingPlayers;
+		if (this.getBlockType() != null && this.getBlockType().blockID == this.worldObj.getBlockId(this.xCoord, this.yCoord, this.zCoord)) {
+			--this.numUsingPlayers;
+			
+			this.worldObj.addBlockEvent(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID, 1, this.numUsingPlayers);
+			this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID);
+			this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord - 1, this.zCoord, this.getBlockType().blockID);
+		}
+	}
+	
+	/**
+	 * Called when a client event is received with the event number and
+	 * argument, see World.sendClientEvent
+	 */
+	public boolean receiveClientEvent(int idEvent, int value) {
+		if (idEvent == 1) {
+			this.numUsingPlayers = value;
+			return true;
+		} else {
+			return super.receiveClientEvent(idEvent, value);
+		}
 	}
 	
 	/**
