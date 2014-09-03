@@ -218,7 +218,7 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 				
 				//Test si on est sur de la terre (faudrais aps que le batiment vol)
 				if (
-					world.getBlockId(initX + 3, initY, initZ + 3) == Block.grass.blockID
+					world.getBlockId(initX + 3, initY, initZ + 3) == Block.grass.blockID// TODO Choisir le block
 				) {
 					
 					// Auteur initiale du batiment 
