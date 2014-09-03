@@ -1,7 +1,6 @@
 package mods.gollum.core.common.building;
 
 import java.awt.image.BufferedImage;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,8 +17,8 @@ import javax.imageio.ImageIO;
 import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.common.building.Building.Unity;
 import mods.gollum.core.common.building.Building.Unity.Content;
+import mods.gollum.core.common.resource.ResourceLoader;
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
 import argo.jdom.JdomParser;
 import argo.jdom.JsonNode;
@@ -28,39 +27,18 @@ import argo.jdom.JsonStringNode;
 import argo.saj.InvalidSyntaxException;
 
 public class BuildingParser {
-
+	
 	private static final String NAME_IMG       = "structure.png";
 	private static final String NAME_JSON      = "infos.json";
 	private static final String PATH_REOBF_JSON      = "/assets/gollumcorelib/reobf/index.json";
-	private String DIR_BUILDING_ASSETS  = "buildings/";
-	
-	private static JdomParser parser = new JdomParser();
 	private static HashMap<String, String> reobfArray;
 	
-	private String getPathBuildingAssets (String modID) {
-		return "/assets/"+modID.toLowerCase()+"/"+DIR_BUILDING_ASSETS;
-	}
+	private JdomParser     parser         = new JdomParser();
+	private ResourceLoader resourceLoader = new ResourceLoader();
+	private String modID;
 	
-	/**
-	 * Renvoie le flux de fichier depuis le jar (depuis le système de fichier en mode DEV)
-	 * @param path
-	 * @return
-	 * @throws FileNotFoundException
-	 */
-	public InputStream getResource (String path) throws FileNotFoundException {
-		
-		InputStream is = getClass().getResourceAsStream(path);
-		
-		if (is == null) {
-			ModGollumCoreLib.log.warning ("Failed to read resource '" + path + "' in jar. read by path file");
-			is = new FileInputStream (Minecraft.getMinecraft().mcDataDir + path);
-		}
-		
-		if (is != null) {
-			ModGollumCoreLib.log.info ("Read resource '" + path + "' in jar");
-		}
-		
-		return is;
+	private String getPathBuildingAssets (String modID) {
+		return "/assets/"+modID.toLowerCase()+"/"+ModBuildingParser.DIR_BUILDING_ASSETS;
 	}
 	
 	/**
@@ -72,7 +50,9 @@ public class BuildingParser {
 	 */
 	public Building parse (String name, String modID) {
 		
-		ModGollumCoreLib.log.info ("Parse '"+name+"' building");
+		this.modID = modID;
+		
+		ModGollumCoreLib.log.info ("Parse '"+name+"' building in "+modID);
 		Building building = new Building (name);
 		
 		// Liste de la correspondance couleur block
@@ -80,12 +60,13 @@ public class BuildingParser {
 		
 		try {
 			
-			InputStream is      = this.getResource(this.getPathBuildingAssets(modID) + name + "/" + NAME_IMG);
+			InputStream is      = this.resourceLoader.get(this.getPathBuildingAssets(modID) + name + "/" + NAME_IMG, this.modID); // TODO revoir el chargement
 			BufferedImage image = ImageIO.read(is);
+			is.close();
 			
-			InputStream isJson = this.getResource(this.getPathBuildingAssets(modID) + name + "/" + NAME_JSON);
+			InputStream isJson = this.resourceLoader.get(this.getPathBuildingAssets(modID) + name + "/" + NAME_JSON, this.modID);
 			JsonRootNode json  = this.parser.parse(new InputStreamReader(isJson));
-
+			isJson.close();
 			
 			////////////////////////////////////
 			//                                //
@@ -357,7 +338,7 @@ public class BuildingParser {
 		if (BuildingParser.reobfArray == null) {
 			BuildingParser.reobfArray = new HashMap<String, String> ();
 			
-			InputStream isJson = this.getResource(BuildingParser.PATH_REOBF_JSON);
+			InputStream isJson = this.resourceLoader.get(BuildingParser.PATH_REOBF_JSON, this.modID);
 			JsonRootNode json  = this.parser.parse(new InputStreamReader(isJson));
 			
 			Map<JsonStringNode, JsonNode> map = json.getFields();
