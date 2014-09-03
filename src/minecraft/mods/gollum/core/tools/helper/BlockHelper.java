@@ -173,7 +173,7 @@ public class BlockHelper implements IBlockHelper {
 	*/
 	public Icon loadTexture(IconRegister iconRegister, String sufixe, boolean dontUseTextureKey) {
 		
-		String key = (dontUseTextureKey ?  "" : ((IBlockHelper)this.parent).getTextureKey ())+sufixe;
+		String key = (dontUseTextureKey) ?  sufixe : (((IBlockHelper)this.parent).getTextureKey ()+sufixe);
 		String texture = this.mod.getModId().toLowerCase() + ":" + key;
 		
 		ModGollumCoreLib.log.debug ("Register icon " + texture + "\"");

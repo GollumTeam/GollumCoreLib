@@ -1,15 +1,12 @@
 package mods.gollum.core.common.log;
 
-import java.io.IOException;
 import java.util.Hashtable;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
-import java.util.logging.SimpleFormatter;
 
 import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.common.context.ModContext;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 public class Logger {
 	

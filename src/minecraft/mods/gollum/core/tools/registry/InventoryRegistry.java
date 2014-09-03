@@ -5,8 +5,6 @@ import java.util.Hashtable;
 import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.client.gui.GCLGuiContainer;
 import mods.gollum.core.common.container.GCLContainer;
-import mods.jammyfurniture.client.gui.GuiCraftingSide;
-import mods.jammyfurniture.common.containers.ContainerCraftingSide;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.Container;
 

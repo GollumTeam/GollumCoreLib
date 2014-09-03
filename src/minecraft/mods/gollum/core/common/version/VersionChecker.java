@@ -5,7 +5,6 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.EnumSet;
-import java.util.logging.Level;
 
 import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.common.context.ModContext;
@@ -16,8 +15,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumChatFormatting;
 import argo.jdom.JdomParser;
 import argo.jdom.JsonRootNode;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.registry.TickRegistry;

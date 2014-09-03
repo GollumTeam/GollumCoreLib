@@ -2,12 +2,7 @@ package mods.gollum.core.tools.handler;
 
 import java.util.ArrayList;
 
-import mods.gollum.core.tools.registry.InventoryRegistry.GuiContainerInventoryClass;
-import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import cpw.mods.fml.common.network.IGuiHandler;
 
