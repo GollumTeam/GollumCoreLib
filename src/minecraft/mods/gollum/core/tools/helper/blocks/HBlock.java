@@ -3,7 +3,6 @@ package mods.gollum.core.tools.helper.blocks;
 import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.tools.helper.BlockHelper;
 import mods.gollum.core.tools.helper.IBlockHelper;
-import mods.gollum.core.tools.helper.items.HItemBlockMetadata;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;

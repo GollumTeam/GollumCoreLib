@@ -1,7 +1,6 @@
 package mods.gollum.core.tools.helper.items;
 
 import mods.gollum.core.ModGollumCoreLib;
-import mods.gollum.core.tools.helper.BlockHelper;
 import mods.gollum.core.tools.helper.IItemHelper;
 import mods.gollum.core.tools.helper.ItemHelper;
 import net.minecraft.client.renderer.texture.IconRegister;

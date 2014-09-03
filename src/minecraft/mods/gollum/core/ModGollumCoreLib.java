@@ -1,8 +1,12 @@
 
 package mods.gollum.core;
 
+import java.io.IOException;
+
 import mods.gollum.core.common.CommonProxyGolumCoreLib;
 import mods.gollum.core.common.blocks.BlockSpawner;
+import mods.gollum.core.common.building.Building;
+import mods.gollum.core.common.building.BuildingParser;
 import mods.gollum.core.common.config.ConfigGollumCoreLib;
 import mods.gollum.core.common.context.ModContext;
 import mods.gollum.core.common.i18n.I18n;
@@ -10,6 +14,8 @@ import mods.gollum.core.common.log.Logger;
 import mods.gollum.core.common.mod.GollumMod;
 import mods.gollum.core.common.tileentities.TileEntityBlockSpawner;
 import mods.gollum.core.common.version.VersionChecker;
+import mods.gollum.core.common.worldgenerator.WorldGeneratorByBuilding;
+import mods.gollum.core.common.worldgenerator.WorldGeneratorByBuildingLoader;
 import mods.gollum.core.tools.registry.BlockRegistry;
 import mods.gollum.core.tools.registry.ItemRegistry;
 import net.minecraft.block.Block;
@@ -95,6 +101,13 @@ public class ModGollumCoreLib extends GollumMod {
 
 	/** 3 **/
 	public void postInit(FMLPostInitializationEvent event) {
+
+		
+		// Initialisation des buildings
+		this.initBuildings();
+		
+		// Initialisation des générateur de terrain
+		this.initWorldGenerators();
 	}
 
 	/**
@@ -114,4 +127,47 @@ public class ModGollumCoreLib extends GollumMod {
 		
 	}
 	
+	/**
+	 * Enregistre les générateur de terrain
+	 * @throws IOException 
+	 */
+	private void initBuildings () {
+		
+		BuildingParser parser = new BuildingParser ();
+//		
+//		this.buildingMercenary1 = parser.parse ("mercenary1", this.getModId());
+//		this.buildingMercenary2 = parser.parse ("mercenary2", this.getModId());
+//		this.buildingMercenary3 = parser.parse ("mercenary3", this.getModId());
+//		this.buildingMercenary4 = parser.parse ("mercenary4", this.getModId());
+//		this.buildingCastle1    = parser.parse ("castle1", this.getModId());
+//		this.buildingCastle2    = parser.parse ("castle2", this.getModId());
+//		this.buildingCastle3    = parser.parse ("castle3", this.getModId());
+//		this.buildingCastle4    = parser.parse ("castle4", this.getModId());
+	}
+	
+	/**
+	 * Enregistre les générateur de terrain
+	 */
+	private void initWorldGenerators () {
+//		
+//		// Céation du world generator
+		WorldGeneratorByBuilding worldGeneratorByBuilding = new WorldGeneratorByBuildingLoader().load ();
+//		
+//		int idGroupMercenary = worldGeneratorByBuilding.addGroup (this.config.mercenarySpawnRate);
+//		int idGroupCastle    = worldGeneratorByBuilding.addGroup (this.config.castleSpawnRate);
+//		
+//		// Ajout des batiments
+//		worldGeneratorByBuilding.addBuilding (idGroupMercenary, this.buildingMercenary1, this.config.mercenaryBuilding1SpawnRate);
+//		worldGeneratorByBuilding.addBuilding (idGroupMercenary, this.buildingMercenary2, this.config.mercenaryBuilding2SpawnRate);
+//		worldGeneratorByBuilding.addBuilding (idGroupMercenary, this.buildingMercenary3, this.config.mercenaryBuilding3SpawnRate);
+//		worldGeneratorByBuilding.addBuilding (idGroupMercenary, this.buildingMercenary4, this.config.mercenaryBuilding4SpawnRate);
+//		
+//		worldGeneratorByBuilding.addBuilding (idGroupCastle, this.buildingCastle1, this.config.castleBuilding1SpawnRate);
+//		worldGeneratorByBuilding.addBuilding (idGroupCastle, this.buildingCastle2, this.config.castleBuilding2SpawnRate);
+//		worldGeneratorByBuilding.addBuilding (idGroupCastle, this.buildingCastle3, this.config.castleBuilding3SpawnRate);
+//		worldGeneratorByBuilding.addBuilding (idGroupCastle, this.buildingCastle4, this.config.castleBuilding4SpawnRate);
+		
+		// Enregistrement du worldgenerator mercenary
+		GameRegistry.registerWorldGenerator (worldGeneratorByBuilding);
+	}
 }

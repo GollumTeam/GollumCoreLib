@@ -12,7 +12,6 @@ import mods.gollum.core.common.building.Building.Unity;
 import mods.gollum.core.common.building.Building.Unity.Content;
 import mods.gollum.core.common.tileentities.TileEntityBlockSpawner;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockBed;
 import net.minecraft.block.BlockButton;
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.BlockCommandBlock;
@@ -28,28 +27,20 @@ import net.minecraft.block.BlockPistonBase;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.BlockTrapDoor;
-import net.minecraft.block.BlockWall;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.tileentity.TileEntityCommandBlock;
-import net.minecraft.tileentity.TileEntityDispenser;
 import net.minecraft.tileentity.TileEntityMobSpawner;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Facing;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraftforge.event.EventPriority;
-import net.minecraftforge.event.ForgeSubscribe;
 import cpw.mods.fml.common.IWorldGenerator;
 
 
 public class WorldGeneratorByBuilding implements IWorldGenerator {
 	
+	// TODO a rendre générique
 	public static final int DIMENSION_ID_NETHER = -1;
 	public static final int DIMENSION_ID_SURFACE = 0;
 	

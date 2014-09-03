@@ -2,11 +2,11 @@ package mods.gollum.core.common.config.container;
 
 import java.util.List;
 
+import mods.gollum.core.common.config.IConfigJsonClass;
+import net.minecraft.item.ItemStack;
 import argo.jdom.JsonNode;
 import argo.jdom.JsonNodeFactories;
 import argo.jdom.JsonRootNode;
-import mods.gollum.core.common.config.IConfigJsonClass;
-import net.minecraft.item.ItemStack;
 
 public class ItemStackConfig implements IConfigJsonClass {
 	

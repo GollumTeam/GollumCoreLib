@@ -1,7 +1,5 @@
 package mods.gollum.core.common.blocks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import mods.gollum.core.common.tileentities.TileEntityBlockSpawner;
 import mods.gollum.core.tools.helper.blocks.HBlockContainer;
 import net.minecraft.block.material.Material;
@@ -9,6 +7,8 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockSpawner extends HBlockContainer {
 
