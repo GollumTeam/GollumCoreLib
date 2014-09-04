@@ -8,6 +8,7 @@ import java.util.Random;
 import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.common.blocks.BlockSpawner;
 import mods.gollum.core.common.building.Building;
+import mods.gollum.core.common.building.Building.DimentionSpawnInfos;
 import mods.gollum.core.common.building.Building.Unity;
 import mods.gollum.core.common.building.Building.Unity.Content;
 import mods.gollum.core.common.tileentities.TileEntityBlockSpawner;
@@ -40,36 +41,27 @@ import cpw.mods.fml.common.IWorldGenerator;
 
 public class WorldGeneratorByBuilding implements IWorldGenerator {
 	
-	private static HashMap<String, Boolean> chunkHasABuilding = new HashMap<String, Boolean>();
-	
-	private class BuildingAndInfos {
-		Building building;
-		int spawnRate;
-	}
+	private final static int ARROUND_CHUNK_NOBUILDING = 6;
+	private static ArrayList<String> chunkHasABuilding = new ArrayList<String>();
 	
 	/**
 	 * Spawn global de tous les batiment de cette instance de worldGenerator
 	 */
-	HashMap<Integer, ArrayList<Integer>> globalSpawnRate = new HashMap<Integer, ArrayList<Integer>> ();
+	ArrayList<Integer> globalSpawnRate = new ArrayList<Integer> ();
 	
-	private HashMap<Integer, ArrayList<ArrayList<BuildingAndInfos>>> buildings  = new HashMap<Integer, ArrayList<ArrayList<BuildingAndInfos>>> ();
-//	private ArrayList<ArrayList<BuildingAndInfos>> buildingsSurface = new ArrayList<ArrayList<BuildingAndInfos>> ();
+	/**
+	 * [DIMENTION:[ID_GROUP[Building]]]
+	 */
+	private HashMap<Integer, HashMap<Integer, ArrayList<Building>>> buildings  = new HashMap<Integer, HashMap<Integer, ArrayList<Building>>> ();
 	
 	/**
 	 * Ajoute un groupe de spawn
 	 * @param groupSpawnRate
 	 * @return
 	 */
-	public int addGroup(int groupSpawnRate, int dimention) {
+	public int addGroup(int groupSpawnRate) {
 		int id = globalSpawnRate.size ();
 		this.globalSpawnRate.add (groupSpawnRate);
-		
-		ArrayList<BuildingAndInfos> group = new ArrayList<BuildingAndInfos>();
-		
-		
-		
-		buildin.add(group);
-		buildingsSurface.add(group);
 		
 		return id;
 	}
@@ -81,59 +73,16 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 	 * @param mercenaryBuilding1SpawnRate
 	 * @param dimensionIdSurface
 	 */
-	public void addBuilding(int idGroup, Building building, int buildingSpawnRate, int dimensionId) {
+	public void addBuilding(int idGroup, int dimensionId, Building building) {
 		
-		BuildingAndInfos buildingAndInfos = new BuildingAndInfos ();
-		buildingAndInfos.building         = building;
-		buildingAndInfos.spawnRate        = buildingSpawnRate;
-		
-		switch (dimensionId) {
-			case WorldGeneratorByBuilding.DIMENSION_ID_NETHER:
-				this.buildingsNether.get (idGroup).add (buildingAndInfos);
-				break;
-				
-			case WorldGeneratorByBuilding.DIMENSION_ID_SURFACE:
-				this.buildingsSurface.get (idGroup).add (buildingAndInfos);
-				break;
-			default:
+		if (!this.buildings.containsKey (dimensionId)) {
+			this.buildings.put (dimensionId, new HashMap<Integer, ArrayList<Building>>());
 		}
-	}
-	
-	/**
-	 * Methode de genera
-	 */
-	@Override
-	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
-		
-		// Generation diffenrente entre le nether et la surface
-		switch (world.provider.dimensionId) {
-			case WorldGeneratorByBuilding.DIMENSION_ID_NETHER:
-				
-				ArrayList<Integer> randomGenerateNether = new ArrayList<Integer>();
-				for (int i = 0; i < this.buildingsNether.size (); i++) {
-					randomGenerateNether.add (i);
-				}
-				Collections.shuffle(randomGenerateNether);
-				
-				for (int i: randomGenerateNether) {
-					this.generateBuilding(world, random, chunkX, chunkZ, buildingsNether.get(i), this.globalSpawnRate.get(i));
-				}
-				break;
-				
-			case WorldGeneratorByBuilding.DIMENSION_ID_SURFACE:
-
-				ArrayList<Integer> randomGenerateSurface = new ArrayList<Integer>();
-				for (int i = 0; i < this.buildingsNether.size (); i++) {
-					randomGenerateSurface.add (i);
-				}
-				Collections.shuffle(randomGenerateSurface);
-				
-				for (int i: randomGenerateSurface) {
-					this.generateBuilding(world, random, chunkX, chunkZ, buildingsSurface.get(i), this.globalSpawnRate.get(i));
-				}
-				break;
-			default:
+		if (!this.buildings.get (dimensionId).containsKey(idGroup)) {
+			this.buildings.get (dimensionId).put (idGroup, new ArrayList<Building>());
 		}
+		
+		this.buildings.get (dimensionId).get(idGroup).add(building);
 	}
 	
 	/**
@@ -143,12 +92,7 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 	 * @return
 	 */
 	public boolean chunkHasBuilding (int chunkX, int chunkZ) {
-		try {
-			boolean hasBuilding = WorldGeneratorByBuilding.chunkHasABuilding.get(chunkX+"x"+chunkZ);
-			return hasBuilding;
-		}catch (Exception e) {
-		}
-		return false;
+		return WorldGeneratorByBuilding.chunkHasABuilding.contains(chunkX+"x"+chunkZ);
 	}
 	
 	/**
@@ -159,8 +103,8 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 	 */
 	public boolean hasBuildingArround (int chunkX, int chunkZ) {
 
-		for (int x = chunkX - 6; x < chunkX + 6; x++) {
-			for (int z = chunkZ - 6; z < chunkZ + 6; z++) {
+		for (int x = chunkX - ARROUND_CHUNK_NOBUILDING; x < chunkX + ARROUND_CHUNK_NOBUILDING; x++) {
+			for (int z = chunkZ - ARROUND_CHUNK_NOBUILDING; z < chunkZ + ARROUND_CHUNK_NOBUILDING; z++) {
 				if (this.chunkHasBuilding (x, z)) {
 					return true;
 				}
@@ -168,6 +112,57 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 		}
 		
 		return false;
+	}
+	
+	/**
+	 * Charge le batiment de maniere aléatoire en fonction du ratio
+	 * @param buildings
+	 * @param totalRate
+	 * @return
+	 */
+	private Building getBuildingByRate(ArrayList<Building> buildings, int dimention, Random random) {
+		
+		ArrayList<Building>buildingsForRate = new ArrayList<Building>();
+		
+		for (Building building : buildings) {
+			
+			if (building.dimentionsInfos.containsKey(dimention)) {
+				DimentionSpawnInfos dimentionsInfos = building.dimentionsInfos.get(dimention);
+				for (int i = 0; i < dimentionsInfos.spawnRate; i++) {
+					buildingsForRate.add(building);
+				}
+			}
+			
+		}
+		
+		return buildingsForRate.get(random.nextInt(buildingsForRate.size()));
+	}
+	
+	/**
+	 * Methode de generation
+	 */
+	@Override
+	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
+		
+		int dimention = world.provider.dimensionId;
+		
+		if (this.buildings.containsKey(dimention)) {
+			
+			HashMap<Integer, ArrayList<Building>> buildingsByDim = this.buildings.get(dimention);
+			
+			ArrayList<Integer> randomGenerate = new ArrayList<Integer>();
+			for (int i : buildingsByDim.keySet()) { // Parcour tous les groupes
+				randomGenerate.add (i);
+			}
+			Collections.shuffle(randomGenerate);
+			
+			for (int i: randomGenerate) {
+				if (this.generateBuilding(world, random, chunkX, chunkZ, buildingsByDim.get(i), this.globalSpawnRate.get(i), dimention)) {
+					break;
+				}
+			}
+			
+		}
 	}
 	
 	/**
@@ -179,42 +174,45 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 	 * @param buildings
 	 * @param random
 	 */
-	private void generateBuilding(World world, Random random, int chunkX, int chunkZ, ArrayList<BuildingAndInfos> buildings, int groupSpawnRate) {
+	private boolean generateBuilding(World world, Random random, int chunkX, int chunkZ, ArrayList<Building> buildings, int groupSpawnRate, int dimention) {
 		
 		if (buildings.size() == 0) {
-			return;
+			return false;
 		}
 		
-		// test du Spawn global
+		// test du Spawn global du groupe si echoue apsse au group suivant
 		float multiplicateur = 2;
 		if (random.nextInt((int)((Math.pow (10 , multiplicateur) * ((float)this.globalSpawnRate.size())/1.5f))) < (Math.pow (Math.min (groupSpawnRate, 10) , multiplicateur)) ) {
 			
 			
+			int rotate = random.nextInt(Building.ROTATED_360);
+//			rotate = Building.ROTATED_90;
+			Building            building        = this.getBuildingByRate (buildings, dimention, random).getRotatetedBuilding (rotate);
+			DimentionSpawnInfos dimentionsInfos = building.dimentionsInfos.get(dimention);
+			
+			// Position initial de la génération en hauteur
+			int worldY = dimentionsInfos.spawnHeight;
+			
+			// Position initiale du batiment
+			int initX = chunkX * 16 + random.nextInt(8) - random.nextInt(8);
+			int initY = worldY      + random.nextInt(8) - random.nextInt(8);
+			int initZ = chunkZ * 16 + random.nextInt(8) - random.nextInt(8);
+//			initY = 3; // Pour test sur un superflat
+			
 			if (!this.hasBuildingArround (chunkX, chunkZ)) {
 				
-				int rotate = random.nextInt(Building.ROTATED_360);
-//				rotate = Building.ROTATED_90;
-				Building building = this.getBuildingInRate (buildings, random).getRotatetedBuilding (rotate);
-				// Position initial de la génération en hauteur
-				int worldY = building.spawnHeight;
-				
-				// Position initiale du batiment
-				int initX = chunkX * 16 + random.nextInt(8) - random.nextInt(8);
-				int initY = worldY      + random.nextInt(8) - random.nextInt(8);
-				int initZ = chunkZ * 16 + random.nextInt(8) - random.nextInt(8);
-//				initY = 3; // Pour test sur un superflat
-				
 				int blockId = world.getBlockId(initX + 3, initY, initZ + 3);
-				Block block = Block.blocksList[blockId];
 				
 				//Test si on est sur de la terre (faudrais aps que le batiment vol)
-				if (blockId != 0 && building.blocksSpawn.contains(block)) {
+				if (blockId != 0 && dimentionsInfos.blocksSpawn.contains(Block.blocksList[blockId])) {
 					
 					// Auteur initiale du batiment 
 					initY += building.height + 1;
 					initY = (initY > 3) ? initY : 3;
 					
-					WorldGeneratorByBuilding.chunkHasABuilding.put(chunkX+"x"+chunkZ, true);
+					// Garde en mémoire que le chunk à généré un batiment (évite que tous se monte dessus)
+					// N'est pas sauvegardé enc as d'arret du serveur mais ca devrais pas dérangé
+					WorldGeneratorByBuilding.chunkHasABuilding.add(chunkX+"x"+chunkZ);
 					
 					ModGollumCoreLib.log.info("Create building width matrix : "+building.name+" "+initX+" "+initY+" "+initZ);
 					
@@ -226,7 +224,7 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 									int finalX = initX + x;
 									int finalY = initY + y;
 									int finalZ = initZ + z;
-									world.setBlock(finalX, finalY, finalZ, Block.grass.blockID, 0, 2);
+									world.setBlock(finalX, finalY, finalZ, Block.grass.blockID, 0, 3);
 					
 							}
 						}
@@ -245,9 +243,9 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 								int finalZ = initZ + z;
 								
 								if (unity.block != null) {
-									world.setBlock(finalX, finalY, finalZ, unity.block.blockID, unity.metadata, 2);
+									world.setBlock(finalX, finalY, finalZ, unity.block.blockID, unity.metadata, 3);
 								} else {
-									world.setBlock(finalX, finalY, finalZ, 0, 0, 2);
+									world.setBlock(finalX, finalY, finalZ, 0, 0, 3);
 								}
 	
 								this.setOrientation (world, finalX, finalY, finalZ, this.rotateOrientation(rotate, unity.orientation));
@@ -277,7 +275,7 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 									int finalZ = initZ + z;
 									
 									if (unity.block != null && unity.block.blockID != 0) {
-										world.setBlock(finalX, finalY, finalZ, unity.block.blockID, unity.metadata, 2);
+										world.setBlock(finalX, finalY, finalZ, unity.block.blockID, unity.metadata, 3);
 										
 										this.setOrientation (world, finalX, finalY, finalZ, this.rotateOrientation(rotate, unity.orientation));
 										this.setContents    (world, random, finalX, finalY, finalZ, unity.contents);
@@ -288,17 +286,17 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 						}
 					}
 					
-					///////////////////////////////////////////////////////////////
-					// Vide tous ce qu'il qu'il y a au dessus de la construction //
-					///////////////////////////////////////////////////////////////
+					////////////////////////////////////////////////
+					// Vide 10 blocs au dessus de la construction //
+					////////////////////////////////////////////////
 					for (int x = 0; x < building.maxX; x++) {
-						for (int y = building.maxY; y < 256; y++) {
+						for (int y = building.maxY; y < building.maxY+10; y++) {
 							for (int z = 0; z < building.maxZ; z++) {
 								// Position réél dans le monde du block
 								int finalX = initX + x;
 								int finalY = initY + y;
 								int finalZ = initZ + z;
-								world.setBlock(finalX, finalY, finalZ, 0, 0, 2);
+								world.setBlock(finalX, finalY, finalZ, 0, 0, 3);
 							}
 						}
 					}
@@ -322,7 +320,7 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 							}
 						}
 					}
-
+	
 					///////////////////////////////////////////////////////////////////////////////
 					// Crée un escalier sur les block de remplissage pour que ca sois plus jolie //
 					///////////////////////////////////////////////////////////////////////////////
@@ -489,14 +487,18 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 								int finalX = initX + x;
 								int finalY = initY + y;
 								int finalZ = initZ + z;
-								world.setBlockMetadataWithNotify (finalX, finalY, finalZ, world.getBlockMetadata (finalX, finalY, finalZ), 2);
+								world.setBlockMetadataWithNotify (finalX, finalY, finalZ, world.getBlockMetadata (finalX, finalY, finalZ), 3);
 							}
 						}
 					}
+					
+	
+					return true;
 				}
-				
 			}
 		}
+		
+		return false;
 	}
 	
 	/**
@@ -511,46 +513,14 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 			finalY > 0
 		) {
 			if (profondeur > -5) {
-				world.setBlock(finalX, finalY, finalZ, Block.grass.blockID, 0, 2);
+				world.setBlock(finalX, finalY, finalZ, Block.grass.blockID, 0, 3);
 			} else {
-				world.setBlock(finalX, finalY, finalZ, Block.stone.blockID, 0, 2);
+				world.setBlock(finalX, finalY, finalZ, Block.stone.blockID, 0, 3);
 			}
 			return true;
 		}
 		
 		return false;
-	}
-	
-	/**
-	 * Renvoie le spawn total de tous une liste de batiment
-	 * @param buildins
-	 * @return
-	 */
-	private int totalRateSpawnByBuildingList (ArrayList<BuildingAndInfos> buildings) {
-		int total = 0;
-		for (BuildingAndInfos building : buildings) {
-			total += building.spawnRate;
-		}
-		return total;
-	}
-	
-	/**
-	 * Charge le batiment de maniere aléatoire en fonction du ratio
-	 * @param buildings
-	 * @param totalRate
-	 * @return
-	 */
-	private Building getBuildingInRate(ArrayList<BuildingAndInfos> buildings, Random random) {
-		
-		ArrayList<Building>buildingsForRate = new ArrayList<Building>();
-		
-		for (BuildingAndInfos buildingAndInfos : buildings) {
-			for (int i = 0; i < buildingAndInfos.spawnRate; i++) {
-				buildingsForRate.add(buildingAndInfos.building);
-			}
-		}
-		
-		return buildingsForRate.get(random.nextInt(this.totalRateSpawnByBuildingList (buildings)));
 	}
 	
 	/**

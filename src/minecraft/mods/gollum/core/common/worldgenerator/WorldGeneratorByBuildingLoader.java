@@ -2,6 +2,7 @@ package mods.gollum.core.common.worldgenerator;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map.Entry;
 
 import mods.gollum.core.ModGollumCoreLib;
@@ -54,20 +55,31 @@ public class WorldGeneratorByBuildingLoader {
 				BuildingConfig.Group group = groupEntry.getValue();
 				
 				int idGroup = worldGeneratorByBuilding.addGroup(group.globalSpawnRate);
-				
-				for (Entry<String, BuildingConfig.Building> buildingEntry : group.buildings.entrySet()) {
-					String buildingName                    = buildingEntry.getKey();
-					BuildingConfig.Building configBuilding = buildingEntry.getValue();
+//				
+				for (Entry<String, HashMap<Integer, BuildingConfig.Building>> buildingEntry : group.buildings.entrySet()) {
 					
+					String                                    buildingName   = buildingEntry.getKey();
+					HashMap<Integer, BuildingConfig.Building> configBuilding = buildingEntry.getValue();
 					
 					Building building = parser.parse (buildingName, modId);
-					building.spawnHeight = configBuilding.spawnHeight;
-					building.blocksSpawn = configBuilding.getBlocksSpawn();
+
+					ModGollumCoreLib.log.info("Register building : modId="+modId+", idGroup="+idGroup+", buildingName="+buildingName);
 					
-					for (int dimention : configBuilding.dimentions) {
-						ModGollumCoreLib.log.info("Register building : modId="+modId+", idGroup="+idGroup+", buildingName="+buildingName+", spawnRate="+configBuilding.spawnRate+", dimention="+dimention);
-						worldGeneratorByBuilding.addBuilding(idGroup, building, configBuilding.spawnRate, dimention);
+					for (Entry<Integer, BuildingConfig.Building> entryBuildingInfos : configBuilding.entrySet()) {
+						
+						Integer                 dimention           = entryBuildingInfos.getKey();
+						BuildingConfig.Building configBuildingInfos = entryBuildingInfos.getValue();
+						
+						ModGollumCoreLib.log.info(" - For dimention : "+dimention);
+						ModGollumCoreLib.log.info(" -     spawnRate : "+configBuildingInfos.spawnRate);
+						ModGollumCoreLib.log.info(" -     spawnHeight : "+configBuildingInfos.spawnHeight);
+						
+						building.dimentionsInfos.put (dimention, new Building.DimentionSpawnInfos(configBuildingInfos.spawnRate, configBuildingInfos.spawnHeight, configBuildingInfos.getBlocksSpawn()));
+						
+						worldGeneratorByBuilding.addBuilding(idGroup, dimention, building);
+						
 					}
+					
 				}
 			}
 		}

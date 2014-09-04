@@ -32,6 +32,7 @@ public class BuildingParser {
 	private static final String NAME_JSON      = "infos.json";
 	private static final String PATH_REOBF_JSON      = "reobf/index.json";
 	private static HashMap<String, String> reobfArray;
+	private static HashMap<String, Building> parsed = new HashMap<String, Building>();
 	
 	private JdomParser     parser         = new JdomParser();
 	private ResourceLoader resourceLoader = new ResourceLoader();
@@ -45,6 +46,10 @@ public class BuildingParser {
 	 * @throws Exception
 	 */
 	public Building parse (String name, String modID) {
+		
+		if (this.parsed.containsKey(modID+":"+name)) {
+			return this.parsed.get(modID+":"+name);
+		}
 		
 		this.modID = modID;
 		
@@ -220,6 +225,8 @@ public class BuildingParser {
 			ModGollumCoreLib.log.severe ("Invalid json in jar for building :'"+name+"'");
 			return null;
 		}
+		
+		this.parsed.put(modID+":"+name, building);
 		
 		return building;
 	}
