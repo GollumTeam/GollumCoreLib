@@ -220,11 +220,16 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 					for (int x = 0; x < building.maxX; x++) {
 						for (int y = 0; y < building.maxY; y++) {
 							for (int z = 0; z < building.maxZ; z++) {
+									
+									if (!building.isEraseBlock(x, y, z)) {
+										continue;
+									}
+									
 									// Position réél dans le monde du block
 									int finalX = initX + x;
 									int finalY = initY + y;
 									int finalZ = initZ + z;
-									world.setBlock(finalX, finalY, finalZ, Block.grass.blockID, 0, 0);
+									world.setBlock(finalX, finalY, finalZ, Block.stone.blockID, 0, 0);
 					
 							}
 						}
@@ -236,6 +241,10 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 							for (int z = 0; z < building.maxZ; z++) {
 								
 								Unity unity = building.get(x, y, z);
+								
+								if (unity == null) {
+									continue;
+								}
 								
 								// Position réél dans le monde du block
 								int finalX = initX + x;
@@ -866,5 +875,5 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 		}
 		
 	}
-
+	
 }
