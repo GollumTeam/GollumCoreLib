@@ -6,6 +6,7 @@ import mods.gollum.core.common.context.ModContext;
 public abstract class Config<T> {
 	
 	private String fileName;
+	private String relativePath = "";
 	
 	public Config() {
 		this(ModContext.instance().getCurrent().getModId());
@@ -15,8 +16,16 @@ public abstract class Config<T> {
 		this.fileName = fileName;
 	}
 	
+	public void setRelativePath(String relativePath) {
+		this.relativePath = relativePath;
+	}
+	
 	public String getFileName() {
 		return this.fileName;
+	}
+	
+	public String getRelativePath() {
+		return this.relativePath;
 	}
 	
 	public T loadConfig() {

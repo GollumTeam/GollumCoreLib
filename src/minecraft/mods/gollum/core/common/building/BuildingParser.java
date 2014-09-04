@@ -30,16 +30,12 @@ public class BuildingParser {
 	
 	private static final String NAME_IMG       = "structure.png";
 	private static final String NAME_JSON      = "infos.json";
-	private static final String PATH_REOBF_JSON      = "/assets/gollumcorelib/reobf/index.json";
+	private static final String PATH_REOBF_JSON      = "reobf/index.json";
 	private static HashMap<String, String> reobfArray;
 	
 	private JdomParser     parser         = new JdomParser();
 	private ResourceLoader resourceLoader = new ResourceLoader();
 	private String modID;
-	
-	private String getPathBuildingAssets (String modID) {
-		return "/assets/"+modID.toLowerCase()+"/"+ModBuildingParser.DIR_BUILDING_ASSETS;
-	}
 	
 	/**
 	 * Parse un dossier de construction et renvoie al construction
@@ -60,12 +56,12 @@ public class BuildingParser {
 		
 		try {
 			
-			InputStream is      = this.resourceLoader.get(this.getPathBuildingAssets(modID) + name + "/" + NAME_IMG, this.modID); // TODO revoir el chargement
+			InputStream is      = this.resourceLoader.asset (ModBuildingParser.DIR_BUILDING_ASSETS + name + "/" + NAME_IMG, this.modID);
 			BufferedImage image = ImageIO.read(is);
 			is.close();
 			
-			InputStream isJson = this.resourceLoader.get(this.getPathBuildingAssets(modID) + name + "/" + NAME_JSON, this.modID);
-			JsonRootNode json  = this.parser.parse(new InputStreamReader(isJson));
+			InputStream isJson  = this.resourceLoader.asset (ModBuildingParser.DIR_BUILDING_ASSETS + name + "/" + NAME_JSON, this.modID);
+			JsonRootNode json   = this.parser.parse(new InputStreamReader(isJson));
 			isJson.close();
 			
 			////////////////////////////////////
@@ -320,6 +316,8 @@ public class BuildingParser {
 	 * Renvoie la valeur offusquée de la class
 	 * @param stringValue
 	 * @return
+	 * @deprecated
+	 * TODO a supprimer
 	 * @throws FileNotFoundException 
 	 */
 	private String reobfKey(String stringValue) throws Exception {
@@ -332,14 +330,17 @@ public class BuildingParser {
 	 * @return
 	 * @throws InvalidSyntaxException 
 	 * @throws IOException 
+	 * @deprecated
+	 * TODO a supprimer
 	 */
 	private HashMap<String, String> getReobfArray () throws Exception {
 		
 		if (BuildingParser.reobfArray == null) {
 			BuildingParser.reobfArray = new HashMap<String, String> ();
 			
-			InputStream isJson = this.resourceLoader.get(BuildingParser.PATH_REOBF_JSON, this.modID);
+			InputStream isJson = this.resourceLoader.asset(PATH_REOBF_JSON, ModGollumCoreLib.MODID);
 			JsonRootNode json  = this.parser.parse(new InputStreamReader(isJson));
+			isJson.close();
 			
 			Map<JsonStringNode, JsonNode> map = json.getFields();
 			for (JsonStringNode key : map.keySet()) {
