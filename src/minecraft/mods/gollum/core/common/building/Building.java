@@ -3,40 +3,17 @@ package mods.gollum.core.common.building;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import net.minecraft.block.Block;
 
 public class Building implements Cloneable {
-
-
+	
 	public static final int ROTATED_0  = 0;
 	public static final int ROTATED_90 = 1;
 	public static final int ROTATED_180 = 2;
 	public static final int ROTATED_270 = 3;
 	public static final int ROTATED_360 = 4;
-	
-	public int maxX;
-	public int maxY;
-	public int maxZ;
-	
-	public int height = -1;
-	public String name;
-	public Integer spawnHeight;
-	public ArrayList<Block> blocksSpawn;
-	
-	/**
-	 * Liste des block de la constuction
-	 */
-	private ArrayList<ArrayList<ArrayList<Unity>>> blocks = new ArrayList<ArrayList<ArrayList<Unity>>>();
-	/**
-	 * Liste des blocks posés aléatoirements
-	 */
-	private ArrayList<ArrayList<Building>> groupsRandomBlocks = new ArrayList<ArrayList<Building>>();
-	
-	/**
-	 * Element chargé apres
-	 */
-	public Building after;
 	
 	/**
 	 * Un element de lamatrice building
@@ -112,12 +89,58 @@ public class Building implements Cloneable {
 		}
 	}
 	
+	static public class DimentionSpawnInfos {
+
+		public int spawnRate = 0;
+		public int spawnHeight = 0;
+		public ArrayList<Block> blocksSpawn = new ArrayList<Block>();
+		
+
+		public DimentionSpawnInfos() {
+		}
+		
+		public DimentionSpawnInfos(int spawnRate, int spawnHeight, ArrayList<Block> blocksSpawn) {
+			this.spawnRate   = spawnRate;
+			this.spawnHeight = spawnHeight;
+			this.blocksSpawn = blocksSpawn;
+		}
+		
+		/**
+		 * Clone l'objet
+		 */
+		public Object clone() {
+			DimentionSpawnInfos o = new DimentionSpawnInfos ();
+			o.spawnHeight = this.spawnHeight;
+			o.spawnRate   = this.spawnRate;
+			for (Block block : this.blocksSpawn) {
+				o.blocksSpawn.add (block);
+			}
+			return o;
+		}
+	}
+	
+	public int maxX;
+	public int maxY;
+	public int maxZ;
+	
+	public int height = -1;
+	public String name = "";
+	public HashMap<Integer, DimentionSpawnInfos> dimentionsInfos = new HashMap<Integer, DimentionSpawnInfos>();
+	
+	/**
+	 * Liste des block de la constuction
+	 */
+	private ArrayList<ArrayList<ArrayList<Unity>>> blocks = new ArrayList<ArrayList<ArrayList<Unity>>>();
+	/**
+	 * Liste des blocks posés aléatoirements
+	 */
+	private ArrayList<ArrayList<Building>> groupsRandomBlocks = new ArrayList<ArrayList<Building>>();
+	
 	public Building(String name) {
 		this.name = name;
 	}
 
 	public Building() {
-		this("");
 	}
 
 	/**
@@ -186,6 +209,11 @@ public class Building implements Cloneable {
 		}
 		o.groupsRandomBlocks = newGroupsRandomBlocks;
 		o.height = this.height;
+		
+		for (Entry<Integer, DimentionSpawnInfos> entry : this.dimentionsInfos.entrySet()) {
+			o.dimentionsInfos.put(entry.getKey(), (DimentionSpawnInfos) entry.getValue().clone());
+		}
+		
 		return o;
 	}
 
