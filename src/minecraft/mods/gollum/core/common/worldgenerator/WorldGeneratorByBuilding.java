@@ -204,7 +204,7 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 				int blockId = world.getBlockId(initX + 3, initY, initZ + 3);
 				
 				//Test si on est sur de la terre (faudrais aps que le batiment vol)
-				if (blockId != 0 && dimentionsInfos.blocksSpawn.contains(Block.blocksList[blockId])) {
+				if (blockId != 0 && world.isAirBlock(initX + 3, initY+1, initZ + 3) && dimentionsInfos.blocksSpawn.contains(Block.blocksList[blockId])) {
 					
 					// Auteur initiale du batiment 
 					initY += building.height + 1;
@@ -224,7 +224,7 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 									int finalX = initX + x;
 									int finalY = initY + y;
 									int finalZ = initZ + z;
-									world.setBlock(finalX, finalY, finalZ, Block.grass.blockID, 0, 3);
+									world.setBlock(finalX, finalY, finalZ, Block.grass.blockID, 0, 0);
 					
 							}
 						}
@@ -243,7 +243,7 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 								int finalZ = initZ + z;
 								
 								if (unity.block != null) {
-									world.setBlock(finalX, finalY, finalZ, unity.block.blockID, unity.metadata, 3);
+									world.setBlock(finalX, finalY, finalZ, unity.block.blockID, unity.metadata, 0);
 								} else {
 									world.setBlock(finalX, finalY, finalZ, 0, 0, 3);
 								}
@@ -275,7 +275,7 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 									int finalZ = initZ + z;
 									
 									if (unity.block != null && unity.block.blockID != 0) {
-										world.setBlock(finalX, finalY, finalZ, unity.block.blockID, unity.metadata, 3);
+										world.setBlock(finalX, finalY, finalZ, unity.block.blockID, unity.metadata, 0);
 										
 										this.setOrientation (world, finalX, finalY, finalZ, this.rotateOrientation(rotate, unity.orientation));
 										this.setContents    (world, random, finalX, finalY, finalZ, unity.contents);
@@ -296,7 +296,7 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 								int finalX = initX + x;
 								int finalY = initY + y;
 								int finalZ = initZ + z;
-								world.setBlock(finalX, finalY, finalZ, 0, 0, 3);
+								world.setBlock(finalX, finalY, finalZ, 0, 0, 2);
 							}
 						}
 					}
@@ -513,9 +513,9 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 			finalY > 0
 		) {
 			if (profondeur > -5) {
-				world.setBlock(finalX, finalY, finalZ, Block.grass.blockID, 0, 3);
+				world.setBlock(finalX, finalY, finalZ, Block.grass.blockID, 0, 2);
 			} else {
-				world.setBlock(finalX, finalY, finalZ, Block.stone.blockID, 0, 3);
+				world.setBlock(finalX, finalY, finalZ, Block.stone.blockID, 0, 2);
 			}
 			return true;
 		}
