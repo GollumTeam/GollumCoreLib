@@ -21,6 +21,8 @@ public class Building implements Cloneable {
 	
 	public int height = -1;
 	public String name;
+	public Integer spawnHeight;
+	public ArrayList<Block> blocksSpawn;
 	
 	/**
 	 * Liste des block de la constuction

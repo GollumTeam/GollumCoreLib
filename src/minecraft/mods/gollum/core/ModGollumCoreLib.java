@@ -44,7 +44,20 @@ public class ModGollumCoreLib extends GollumMod {
 	
 	@SidedProxy(clientSide = "mods.gollum.core.client.ClientProxyGolumCoreLib", serverSide = "mods.gollum.core.common.CommonProxyGolumCoreLib")
 	public static CommonProxyGolumCoreLib proxy;
+
+	/**
+	 * Gestion des logs
+	 */
+	public static Logger log;
 	
+	/**
+	 * Gestion de l'i18n
+	 */
+	public static I18n i18n;
+	
+	/**
+	 * La configuration
+	 */
 	public static ConfigGollumCoreLib config;
 
 	public static Block blockSpawner;

@@ -1,6 +1,7 @@
 package mods.gollum.core.common.mod;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 
 import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.common.context.ModContext;
@@ -20,16 +21,6 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 
 public abstract class GollumMod {
-
-	/**
-	 * Gestion des logs
-	 */
-	public static Logger log;
-	
-	/**
-	 * Gestion de l'i18n
-	 */
-	public static I18n i18n;
 
 	private String modId;
 	private String modName;
@@ -102,10 +93,34 @@ public abstract class GollumMod {
 		ModContext.instance ().setCurrent(this);
 		
 		// Creation du logger
-		this.log = new Logger();
+		try {
+			Field fieldLog = this.getClass().getDeclaredField("log");
+			if (fieldLog != null) {
+				fieldLog.set(null, new Logger());
+			}
+		} catch (NoSuchFieldException e) {
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
 		
-		// Creation du logger
-		this.i18n = new I18n();
+		// Creation de l'i18n
+		try {
+			Field fieldI18n = this.getClass().getDeclaredField("i18n");
+			if (fieldI18n != null) {
+				fieldI18n.set(null, new I18n());
+			}
+		} catch (NoSuchFieldException e) {
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
 		
 		this.preInit(event);
 		

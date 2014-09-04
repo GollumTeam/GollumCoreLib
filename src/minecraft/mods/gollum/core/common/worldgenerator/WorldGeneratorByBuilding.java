@@ -40,10 +40,6 @@ import cpw.mods.fml.common.IWorldGenerator;
 
 public class WorldGeneratorByBuilding implements IWorldGenerator {
 	
-	// TODO a rendre générique
-	public static final int DIMENSION_ID_NETHER = -1;
-	public static final int DIMENSION_ID_SURFACE = 0;
-	
 	private static HashMap<String, Boolean> chunkHasABuilding = new HashMap<String, Boolean>();
 	
 	private class BuildingAndInfos {
@@ -54,34 +50,28 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 	/**
 	 * Spawn global de tous les batiment de cette instance de worldGenerator
 	 */
-	ArrayList<Integer> globalSpawnRate = new ArrayList<Integer> ();
-
-	private ArrayList<ArrayList<BuildingAndInfos>> buildingsNether  = new ArrayList<ArrayList<BuildingAndInfos>> ();
-	private ArrayList<ArrayList<BuildingAndInfos>> buildingsSurface = new ArrayList<ArrayList<BuildingAndInfos>> ();
+	HashMap<Integer, ArrayList<Integer>> globalSpawnRate = new HashMap<Integer, ArrayList<Integer>> ();
+	
+	private HashMap<Integer, ArrayList<ArrayList<BuildingAndInfos>>> buildings  = new HashMap<Integer, ArrayList<ArrayList<BuildingAndInfos>>> ();
+//	private ArrayList<ArrayList<BuildingAndInfos>> buildingsSurface = new ArrayList<ArrayList<BuildingAndInfos>> ();
 	
 	/**
 	 * Ajoute un groupe de spawn
 	 * @param groupSpawnRate
 	 * @return
 	 */
-	public int addGroup(int groupSpawnRate) {
+	public int addGroup(int groupSpawnRate, int dimention) {
 		int id = globalSpawnRate.size ();
 		this.globalSpawnRate.add (groupSpawnRate);
 		
 		ArrayList<BuildingAndInfos> group = new ArrayList<BuildingAndInfos>();
-		buildingsNether.add(group);
+		
+		
+		
+		buildin.add(group);
 		buildingsSurface.add(group);
 		
 		return id;
-	}
-	
-	/**
-	 * Ajoute un batiment 
-	 * @param building
-	 * @param buildingSpawnRate
-	 */
-	public void addBuilding(int idGroup, Building building, int buildingSpawnRate) {
-		this.addBuilding(idGroup, building, buildingSpawnRate, this.DIMENSION_ID_SURFACE);
 	}
 	
 	/**
@@ -195,7 +185,6 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 			return;
 		}
 		
-		
 		// test du Spawn global
 		float multiplicateur = 2;
 		if (random.nextInt((int)((Math.pow (10 , multiplicateur) * ((float)this.globalSpawnRate.size())/1.5f))) < (Math.pow (Math.min (groupSpawnRate, 10) , multiplicateur)) ) {
@@ -203,11 +192,11 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 			
 			if (!this.hasBuildingArround (chunkX, chunkZ)) {
 				
-				// Position initial de la génération en hauteur
-				int worldY = 64;
 				int rotate = random.nextInt(Building.ROTATED_360);
 //				rotate = Building.ROTATED_90;
 				Building building = this.getBuildingInRate (buildings, random).getRotatetedBuilding (rotate);
+				// Position initial de la génération en hauteur
+				int worldY = building.spawnHeight;
 				
 				// Position initiale du batiment
 				int initX = chunkX * 16 + random.nextInt(8) - random.nextInt(8);
@@ -215,11 +204,11 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 				int initZ = chunkZ * 16 + random.nextInt(8) - random.nextInt(8);
 //				initY = 3; // Pour test sur un superflat
 				
+				int blockId = world.getBlockId(initX + 3, initY, initZ + 3);
+				Block block = Block.blocksList[blockId];
 				
 				//Test si on est sur de la terre (faudrais aps que le batiment vol)
-				if (
-					world.getBlockId(initX + 3, initY, initZ + 3) == Block.grass.blockID// TODO Choisir le block
-				) {
+				if (blockId != 0 && building.blocksSpawn.contains(block)) {
 					
 					// Auteur initiale du batiment 
 					initY += building.height + 1;
