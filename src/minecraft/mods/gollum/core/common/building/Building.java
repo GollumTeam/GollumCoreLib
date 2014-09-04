@@ -297,7 +297,7 @@ public class Building implements Cloneable {
 		// Redimention de l'axe z
 		if (this.blocks.get(x).get(y).size() <= z) {
 			for (int i = this.blocks.get(x).get(y).size(); i <= z; i++) {
-				this.blocks.get(x).get(y).add(new Unity ());
+				this.blocks.get(x).get(y).add(null);
 			}
 			maxZ = Math.max (maxZ, this.blocks.get(x).get(y).size());
 		}
@@ -309,8 +309,12 @@ public class Building implements Cloneable {
 		try {
 			return this.blocks.get(x).get(y).get(z);
 		} catch (Exception e) {
-			return new Unity();
+			return null;
 		}
+	}
+	
+	public boolean isEraseBlock (int x, int y, int z) {
+		return this.get(x, y, z) != null;
 	}
 	
 	/**

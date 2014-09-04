@@ -1,5 +1,6 @@
 package mods.gollum.core.common.building;
 
+import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -137,7 +138,15 @@ public class BuildingParser {
 					for (xImage = originXSlide; xImage < image.getWidth(); xImage++) {
 						
 						int color = image.getRGB(xImage, zImage) & 0xFFFFFF;
+						boolean alpha = image.getTransparency() != Transparency.OPAQUE;
+						
+						if (alpha) {
+							break;
+						}
+						
 						if (color == 0x000000) {
+							Unity unity = new Unity ();
+							building.set(x, y, z, unity);
 							break;
 						}
 						
