@@ -169,8 +169,9 @@ public class Building implements Cloneable {
 				}
 				rotatedBuilding.addRandomBlock(newGroupsRandomBlocks);
 			}
-			
+
 			rotatedBuilding.height = this.height;
+			rotatedBuilding.dimentionsInfos = this.dimentionsInfos;
 			
 			return rotatedBuilding;
 		}
