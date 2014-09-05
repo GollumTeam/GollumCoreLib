@@ -22,7 +22,7 @@ import argo.jdom.JsonStringNode;
 
 public class BuildingConfigType implements IConfigJsonClass, IConfigMerge {
 
-	private final FieldReobfKey fieldReobfKey = new FieldReobfKey();
+	private static final FieldReobfKey fieldReobfKey = new FieldReobfKey();
 	
 	public static class Group {
 		
@@ -41,35 +41,29 @@ public class BuildingConfigType implements IConfigJsonClass, IConfigMerge {
 				public Integer spawnHeight = null;
 				public ArrayList<String> blocksSpawn = new ArrayList<String>(); // TODO changé en block
 				
+				public ArrayList<Block> getBlocksSpawn() {
+				ArrayList<Block> blocks = new ArrayList<Block>();
+					
+					for (String blockSpawn : blocksSpawn) {
+						Object obj;
+						try {
+							obj = fieldReobfKey.getTarget(blockSpawn);
+						
+							if (obj instanceof Block) {
+								blocks.add((Block) obj);
+							} else if (obj == null) {
+								ModGollumCoreLib.log.severe("Error field is null : "+blockSpawn);
+							} else {
+								ModGollumCoreLib.log.severe("Error field is'nt block : "+blockSpawn);
+							}
+						} catch (Exception e) {
+							ModGollumCoreLib.log.severe("Error field not found : "+blockSpawn);
+						}
+					}
+					
+					return blocks;
+				}
 			}
-			
-			
-//			private FieldReobfKey fieldReobfKey = new FieldReobfKey();
-			
-//			
-//			
-//			public ArrayList<Block> getBlocksSpawn() {
-//				ArrayList<Block> blocks = new ArrayList<Block>();
-//				
-//				for (String blockSpawn : blocksSpawn) {
-//					Object obj;
-//					try {
-//						obj = this.fieldReobfKey.getTarget(blockSpawn);
-//					
-//						if (obj instanceof Block) {
-//							blocks.add((Block) obj);
-//						} else if (obj == null) {
-//							ModGollumCoreLib.log.severe("Error field is null : "+blockSpawn);
-//						} else {
-//							ModGollumCoreLib.log.severe("Error field is'nt block : "+blockSpawn);
-//						}
-//					} catch (Exception e) {
-//						ModGollumCoreLib.log.severe("Error field not found : "+blockSpawn);
-//					}
-//				}
-//				
-//				return blocks;
-//			}
 		}
 		
 	}
@@ -123,49 +117,12 @@ public class BuildingConfigType implements IConfigJsonClass, IConfigMerge {
 			Building building   = new Building ();
 			building.disabled   = false; try { building.disabled = jsonBuilding.getBooleanValue("disabled"); } catch (Exception e) {}
 			building.dimentions = this.readDimentions (jsonBuilding.getNode("dimentions"));
-//			
-//			rtn.put(buildingName, building);
 			
-//			
-//			HashMap<Integer, Building> rtnBuildingData = new HashMap<Integer, Building> ();
-//			
-//			// Lecture de chaque dimention
-//			for (JsonNode nodeDimentionInfoBuilding : jsonDimentions.getElements()) {
-//				
-//				Integer dimention = Integer.parseInt(nodeDimentionInfoBuilding.getNumberValue("dimention"));
-//				
-//				Building building = new Building ();
-//				
-//				building.disabled    = false; try { disabled = Integer.parseInt(nodeDimentionInfoBuilding.get("spawnHeight"));
-//				for (JsonNode jsonBlock : nodeDimentionInfoBuilding.getNode("blocksSpawn").getElements()) {
-//					String key = jsonBlock.getText();
-//					try {
-//						Object obj = this.fieldReobfKey.getTarget(key);
-//						
-//						if (obj instanceof Block) {
-//							building.blocksSpawn.add(key);
-//						} else if (obj == null) {
-//							ModGollumCoreLib.log.severe("Error field is null : "+key);
-//						} else {
-//							ModGollumCoreLib.log.severe("Error field is'nt block : "+key);
-//						}
-//					} catch (Exception e) {
-//						ModGollumCoreLib.log.severe("Error field not found : "+key);
-//					}
-//				}
-//				
-//				rtnBuildingData.put(dimention, building);
-//				
-//			}
-			
+			rtn.put(buildingName, building);
 		}
 		
 		return rtn;
 	}
-	
-	///////////
-	// Write //
-	///////////
 	
 	private HashMap<Integer, Dimention> readDimentions(JsonNode node) {
 		
@@ -203,7 +160,11 @@ public class BuildingConfigType implements IConfigJsonClass, IConfigMerge {
 		}
 		return rtn;
 	}
-
+	
+	///////////
+	// Write //
+	///////////
+	
 	@Override
 	public JsonRootNode writeConfig() {
 		JsonObjectNodeBuilder builder = JsonNodeBuilders.anObjectBuilder();
@@ -235,27 +196,10 @@ public class BuildingConfigType implements IConfigJsonClass, IConfigMerge {
 			String   buildingName = entryBuilding.getKey();
 			Building building     = entryBuilding.getValue();
 			
-			
 			JsonObjectNodeBuilder jsonBuilding = JsonNodeBuilders.anObjectBuilder ()
 				.withField("disabled", (building.disabled) ? JsonNodeBuilders.aTrueBuilder() : JsonNodeBuilders.aFalseBuilder())
 				.withField("dimentions", this.getJsonDimentions (building.dimentions))
 			;
-//			
-//			for (Entry<Integer, Building> entryBuildingInfo : building.entrySet()) {
-//				
-//				Integer  dimention    = entryBuildingInfo.getKey();
-//				Building buildingInfo = entryBuildingInfo.getValue();
-//				
-//				JsonObjectNodeBuilder nodeDimentionBuildingInfo = JsonNodeBuilders.anObjectBuilder()
-//					
-////					.withField("dimention", JsonNodeBuilders.aNumberBuilder(dimention.toString()))
-////					.withField("spawnRate", JsonNodeBuilders.aNumberBuilder(buildingInfo.spawnRate.toString()))
-////					.withField("spawnHeight", JsonNodeBuilders.aNumberBuilder(buildingInfo.spawnHeight.toString()))
-////					.withField("blocksSpawn", this.getJsonBlocksSpawn (buildingInfo.blocksSpawn))
-//				;
-//				
-//				jsonBuilding.withElement(nodeDimentionBuildingInfo);
-//			}
 			
 			jsonBuildings.withField(buildingName, jsonBuilding);
 		}
@@ -263,13 +207,24 @@ public class BuildingConfigType implements IConfigJsonClass, IConfigMerge {
 		return jsonBuildings;
 	}
 	
-
 	private JsonNodeBuilder getJsonDimentions( HashMap<Integer, Dimention> dimentions) {
+
+		JsonObjectNodeBuilder jsonDimentions = JsonNodeBuilders.anObjectBuilder();
+
+		for (Entry<Integer, Dimention> entryDimentions : dimentions.entrySet()) {
+			Integer dimentionId = entryDimentions.getKey();
+			Dimention dimention = entryDimentions.getValue();
+			
+			JsonObjectNodeBuilder jsonDimention = JsonNodeBuilders.anObjectBuilder ()
+				.withField("spawnHeight", JsonNodeBuilders.aNumberBuilder(dimention.spawnHeight.toString()))
+				.withField("spawnRate", JsonNodeBuilders.aNumberBuilder(dimention.spawnRate.toString()))
+				.withField("blocksSpawn", this.getJsonBlocksSpawn (dimention.blocksSpawn))
+			;
+
+			jsonDimentions.withField(dimentionId.toString(), jsonDimention);
+		}
 		
-		HashMap<Integer, Dimention> dimentions
-		
-		// TODO Auto-generated method stub
-		return null;
+		return jsonDimentions;
 	}
 
 	private JsonNodeBuilder getJsonBlocksSpawn(ArrayList<String> blocksSpawn) {
@@ -277,7 +232,7 @@ public class BuildingConfigType implements IConfigJsonClass, IConfigMerge {
 		
 		for (String block : blocksSpawn) {
 			try {
-//				jsonBlocksSpawn.withElement(JsonNodeBuilders.aStringBuilder(this.fieldReobfKey.humanQualifiedName(block)));
+				jsonBlocksSpawn.withElement(JsonNodeBuilders.aStringBuilder(this.fieldReobfKey.humanQualifiedName(block)));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -306,14 +261,14 @@ public class BuildingConfigType implements IConfigJsonClass, IConfigMerge {
 				
 				group.globalSpawnRate = newGroup.globalSpawnRate;
 				
-//				for (Entry<String, HashMap<Integer, Building>> entryBuilding : group.buildings.entrySet()) {
-//					String buildingName = entryBuilding.getKey();
-//					HashMap<Integer, Building> building = entryBuilding.getValue();
-//					
-//					if (newGroup.buildings.containsKey(buildingName)) {
-//						group.buildings.put(buildingName, newGroup.buildings.get(buildingName));
-//					}
-//				}
+				for (Entry<String, Building> entryBuilding : group.buildings.entrySet()) {
+					String buildingName = entryBuilding.getKey();
+					Building building = entryBuilding.getValue();
+					
+					if (newGroup.buildings.containsKey(buildingName)) {
+						group.buildings.put(buildingName, newGroup.buildings.get(buildingName));
+					}
+				}
 				
 			} 
 		}
