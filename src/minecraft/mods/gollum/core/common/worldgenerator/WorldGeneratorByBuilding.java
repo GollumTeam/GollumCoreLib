@@ -283,7 +283,7 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 									int finalY = initY + y;
 									int finalZ = initZ + z;
 									
-									if (unity.block != null && unity.block.blockID != 0) {
+									if (unity != null && unity.block != null && unity.block.blockID != 0) {
 										world.setBlock(finalX, finalY, finalZ, unity.block.blockID, unity.metadata, 0);
 										
 										this.setOrientation (world, finalX, finalY, finalZ, this.rotateOrientation(rotate, unity.orientation));

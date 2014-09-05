@@ -137,22 +137,22 @@ public class BuildingParser {
 					
 					for (xImage = originXSlide; xImage < image.getWidth(); xImage++) {
 						
-						int color = image.getRGB(xImage, zImage) & 0xFFFFFF;
-						boolean alpha = image.getTransparency() != Transparency.OPAQUE;
+						int color = image.getRGB(xImage, zImage);
+						boolean alpha = /*image.getTransparency() != Transparency.OPAQUE &&*/ ((color>>24) & 0xff) == 0x00;
+						color = color & 0xFFFFFF;
+						
+						if (color == 0x000000 && !alpha) {
+							break;
+						}
+						
+						Unity unity = null;
 						
 						if (alpha) {
-							break;
+							ModGollumCoreLib.log.debug("is Alpha :",x, y, z);
+						} else {
+							Unity unityPtr = null; try { unityPtr = (Unity)corlorBlockIndex.get(color); } catch (Exception e) {};
+							unity = (unityPtr != null) ? (Unity)unityPtr.clone () : new Unity ();
 						}
-						
-						if (color == 0x000000) {
-							Unity unity = new Unity ();
-							building.set(x, y, z, unity);
-							break;
-						}
-						
-						Unity unityPtr = null; try { unityPtr = (Unity)corlorBlockIndex.get(color); } catch (Exception e) {};
-						Unity unity =  (unityPtr != null) ? (Unity)unityPtr.clone () : new Unity ();
-						
 						building.set(x, y, z, unity);
 						
 						x++;
