@@ -12,7 +12,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 public class HBlockMetadata extends HBlock implements IBlockMetadataHelper {
-
+	
 	public HBlockMetadata(int id, String registerName, Material material, Class itemClass) {
 		super(id, registerName, material);
 		this.helper = new BlockMetadataHelper(this, registerName);

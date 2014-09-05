@@ -61,6 +61,8 @@ public class WorldGeneratorByBuildingLoader {
 					String                                    buildingName   = buildingEntry.getKey();
 					HashMap<Integer, BuildingConfig.Building> configBuilding = buildingEntry.getValue();
 					
+					Building building = parser.parse (buildingName, modId);
+					
 					ModGollumCoreLib.log.info("Register building : modId="+modId+", idGroup="+idGroup+", buildingName="+buildingName);
 					
 					for (Entry<Integer, BuildingConfig.Building> entryBuildingInfos : configBuilding.entrySet()) {
@@ -72,8 +74,7 @@ public class WorldGeneratorByBuildingLoader {
 						ModGollumCoreLib.log.info(" -     spawnRate : "+configBuildingInfos.spawnRate);
 						ModGollumCoreLib.log.info(" -     spawnHeight : "+configBuildingInfos.spawnHeight);
 						
-						if (configBuildingInfos.spawnRate > 0) {
-							Building building = parser.parse (buildingName, modId);
+						if (configBuildingInfos.spawnRate > 0) { // USe param enabled for staff
 							
 							building.dimentionsInfos.put (dimention, new Building.DimentionSpawnInfos(configBuildingInfos.spawnRate, configBuildingInfos.spawnHeight, configBuildingInfos.getBlocksSpawn()));
 							
