@@ -8,8 +8,8 @@ import java.util.Map.Entry;
 
 import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.common.config.ConfigBuildings;
-import mods.gollum.core.common.config.container.BuildingConfig;
-import mods.gollum.core.common.config.container.BuildingConfig.Group;
+import mods.gollum.core.common.config.container.BuildingConfigType;
+import mods.gollum.core.common.config.container.BuildingConfigType.Group;
 import mods.gollum.core.common.resource.ResourceLoader;
 import argo.jdom.JdomParser;
 import argo.jdom.JsonNode;
@@ -24,7 +24,7 @@ public class ModBuildingParser {
 	private JdomParser     parser         = new JdomParser();
 	private ResourceLoader resourceLoader = new ResourceLoader();
 	
-	public BuildingConfig parse(String modId) {
+	public BuildingConfigType parse(String modId) {
 		
 		if (!resourceLoader.assetExist(DIR_BUILDING_ASSETS+NAME_JSON, modId)) {
 			ModGollumCoreLib.log.debug("No buildings Found : "+modId);
@@ -37,7 +37,7 @@ public class ModBuildingParser {
 			JsonRootNode json  = this.parser.parse(new InputStreamReader(isJson));
 			isJson.close();
 			
-			ConfigBuildings config = new ConfigBuildings(modId, new BuildingConfig(json, modId));
+			ConfigBuildings config = new ConfigBuildings(modId, new BuildingConfigType(json, modId));
 			
 			try {
 				config.loadConfig();

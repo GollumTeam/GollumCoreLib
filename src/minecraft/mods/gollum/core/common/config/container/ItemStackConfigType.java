@@ -8,25 +8,25 @@ import argo.jdom.JsonNode;
 import argo.jdom.JsonNodeFactories;
 import argo.jdom.JsonRootNode;
 
-public class ItemStackConfig implements IConfigJsonClass {
+public class ItemStackConfigType implements IConfigJsonClass {
 	
 	private int id;
 	private int metadata;
 	private int number;
 	
-	public ItemStackConfig() throws Exception {
+	public ItemStackConfigType() throws Exception {
 		this (0, 0, 0);
 	}
 	
-	public ItemStackConfig(int id) {
+	public ItemStackConfigType(int id) {
 		this(id, 1);
 	}
 	
-	public ItemStackConfig(int id, int number) {
+	public ItemStackConfigType(int id, int number) {
 		this(id, number, 0);
 	}
 	
-	public ItemStackConfig(int id, int number, int metadata) {
+	public ItemStackConfigType(int id, int number, int metadata) {
 		this.id = id;
 		this.number = number;
 		this.metadata = metadata;
@@ -55,7 +55,7 @@ public class ItemStackConfig implements IConfigJsonClass {
 		return new ItemStack (id, number, metadata);
 	}
 
-	public boolean equals (ItemStackConfig obj) {
+	public boolean equals (ItemStackConfigType obj) {
 		return
 			this.id       == obj.id       &&
 			this.metadata == obj.metadata &&
