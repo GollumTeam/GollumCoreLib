@@ -10,15 +10,18 @@ import mods.gollum.core.common.building.BuildingParser;
 import mods.gollum.core.common.config.ConfigGollumCoreLib;
 import mods.gollum.core.common.context.ModContext;
 import mods.gollum.core.common.i18n.I18n;
+import mods.gollum.core.common.items.ItemBuilding;
 import mods.gollum.core.common.log.Logger;
 import mods.gollum.core.common.mod.GollumMod;
 import mods.gollum.core.common.tileentities.TileEntityBlockSpawner;
 import mods.gollum.core.common.version.VersionChecker;
 import mods.gollum.core.common.worldgenerator.WorldGeneratorByBuilding;
 import mods.gollum.core.common.worldgenerator.WorldGeneratorByBuildingLoader;
+import mods.gollum.core.tools.helper.items.HItem;
 import mods.gollum.core.tools.registry.BlockRegistry;
 import mods.gollum.core.tools.registry.ItemRegistry;
 import net.minecraft.block.Block;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -61,7 +64,7 @@ public class ModGollumCoreLib extends GollumMod {
 	public static ConfigGollumCoreLib config;
 
 	public static Block blockSpawner;
-	public static Item itemKey;
+	public static Item itemBuilding;
 	
 	@EventHandler public void handler(FMLInitializationEvent event)     { super.handler (event); }
 	@EventHandler public void handler(FMLPostInitializationEvent event) { super.handler (event); }
@@ -94,9 +97,12 @@ public class ModGollumCoreLib extends GollumMod {
 		
 		// Creation du checker de version
 		new VersionChecker();
-		
+
 		// Initialisation des blocks
 		this.initBlocks ();
+		
+		// Initialisation des items
+		this.initItem ();
 		
 		BlockRegistry.instance().registerAll();
 		ItemRegistry.instance().registerAll();
@@ -132,6 +138,16 @@ public class ModGollumCoreLib extends GollumMod {
 		
 		// Création des blocks
 		this.blockSpawner = new BlockSpawner (this.config.blockSpawnerID, "GCLBlockSpawner");
+		
+	}
+	
+	/**
+	 * Initialisation des items
+	 */
+	public void initItem () {
+		
+		// Création des items
+		this.itemBuilding = new ItemBuilding(this.config.itemBuildingID, "GCLItemBuilding").setCreativeTab(CreativeTabs.tabTools); // TODO Creative tab custom
 		
 	}
 	

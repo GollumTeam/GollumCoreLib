@@ -39,6 +39,10 @@ public class BuildingParser {
 	private ResourceLoader resourceLoader = new ResourceLoader();
 	private String modID;
 	
+	public static HashMap<String, Building> getBuildingsList () {
+		return parsed;
+	}
+	
 	/**
 	 * Parse un dossier de construction et renvoie al construction
 	 * @param name
@@ -148,9 +152,9 @@ public class BuildingParser {
 						Unity unity = null;
 						
 						if (alpha) {
-							ModGollumCoreLib.log.debug("is Alpha color:", color, " xyz",x, y, z);
+//							ModGollumCoreLib.log.debug("is Alpha color:", color, " xyz",x, y, z);
 						} else {
-							ModGollumCoreLib.log.debug("is Opaque color:", color, " xyz",x, y, z);
+//							ModGollumCoreLib.log.debug("is Opaque color:", color, " xyz",x, y, z);
 							Unity unityPtr = null; try { unityPtr = (Unity)corlorBlockIndex.get(color); } catch (Exception e) {};
 							unity = (unityPtr != null) ? (Unity)unityPtr.clone () : new Unity ();
 						}
