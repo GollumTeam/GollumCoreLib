@@ -75,7 +75,7 @@ public class BuildingParser {
 			isJson.close();
 			
 			////////////////////////////////////
-			//                                // 
+			//                                //
 			// Hauteur par défaut du building //
 			//                                //
 			////////////////////////////////////
