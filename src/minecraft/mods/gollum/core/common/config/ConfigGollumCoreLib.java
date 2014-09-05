@@ -22,6 +22,6 @@ public class ConfigGollumCoreLib extends Config<ConfigGollumCoreLib> {
 	public int blockSpawnerID = 1243;
 	
 	@ConfigProp(group = "Items Ids")
-	public int itemKeyID = 5600;
+	public int itemBuildingID = 15600;
 	
 }
