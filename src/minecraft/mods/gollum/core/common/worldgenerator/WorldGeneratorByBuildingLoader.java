@@ -55,14 +55,14 @@ public class WorldGeneratorByBuildingLoader {
 				BuildingConfigType.Group group = groupEntry.getValue();
 				
 				int idGroup = worldGeneratorByBuilding.addGroup(group.globalSpawnRate);
-//				
+				
 				for (Entry<String, HashMap<Integer, BuildingConfigType.Building>> buildingEntry : group.buildings.entrySet()) {
 					
 					String                                    buildingName   = buildingEntry.getKey();
 					HashMap<Integer, BuildingConfigType.Building> configBuilding = buildingEntry.getValue();
 					
 					Building building = parser.parse (buildingName, modId);
-
+					
 					ModGollumCoreLib.log.info("Register building : modId="+modId+", idGroup="+idGroup+", buildingName="+buildingName);
 					
 					for (Entry<Integer, BuildingConfigType.Building> entryBuildingInfos : configBuilding.entrySet()) {
@@ -74,10 +74,12 @@ public class WorldGeneratorByBuildingLoader {
 						ModGollumCoreLib.log.info(" -     spawnRate : "+configBuildingInfos.spawnRate);
 						ModGollumCoreLib.log.info(" -     spawnHeight : "+configBuildingInfos.spawnHeight);
 						
-						building.dimentionsInfos.put (dimention, new Building.DimentionSpawnInfos(configBuildingInfos.spawnRate, configBuildingInfos.spawnHeight, configBuildingInfos.getBlocksSpawn()));
-						
-						worldGeneratorByBuilding.addBuilding(idGroup, dimention, building);
-						
+						if (configBuildingInfos.spawnRate > 0) { // USe param enabled for staff
+							
+							building.dimentionsInfos.put (dimention, new Building.DimentionSpawnInfos(configBuildingInfos.spawnRate, configBuildingInfos.spawnHeight, configBuildingInfos.getBlocksSpawn()));
+							
+							worldGeneratorByBuilding.addBuilding(idGroup, dimention, building);
+						}
 					}
 					
 				}

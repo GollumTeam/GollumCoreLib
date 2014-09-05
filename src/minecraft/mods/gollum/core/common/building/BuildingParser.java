@@ -1,5 +1,6 @@
 package mods.gollum.core.common.building;
 
+import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -38,6 +39,10 @@ public class BuildingParser {
 	private ResourceLoader resourceLoader = new ResourceLoader();
 	private String modID;
 	
+	public static HashMap<String, Building> getBuildingsList () {
+		return parsed;
+	}
+	
 	/**
 	 * Parse un dossier de construction et renvoie al construction
 	 * @param name
@@ -70,7 +75,7 @@ public class BuildingParser {
 			isJson.close();
 			
 			////////////////////////////////////
-			//                                //
+			//                                // 
 			// Hauteur par défaut du building //
 			//                                //
 			////////////////////////////////////
@@ -136,14 +141,23 @@ public class BuildingParser {
 					
 					for (xImage = originXSlide; xImage < image.getWidth(); xImage++) {
 						
-						int color = image.getRGB(xImage, zImage) & 0xFFFFFF;
-						if (color == 0x000000) {
+						int color = image.getRGB(xImage, zImage);
+						boolean alpha = image.getTransparency() != Transparency.OPAQUE && ((color>>24) & 0xff) == 0x00;
+						color = color & 0xFFFFFF;
+						
+						if (color == 0x000000 && !alpha) {
 							break;
 						}
 						
-						Unity unityPtr = null; try { unityPtr = (Unity)corlorBlockIndex.get(color); } catch (Exception e) {};
-						Unity unity =  (unityPtr != null) ? (Unity)unityPtr.clone () : new Unity ();
+						Unity unity = null;
 						
+						if (alpha) {
+//							ModGollumCoreLib.log.debug("is Alpha color:", color, " xyz",x, y, z);
+						} else {
+//							ModGollumCoreLib.log.debug("is Opaque color:", color, " xyz",x, y, z);
+							Unity unityPtr = null; try { unityPtr = (Unity)corlorBlockIndex.get(color); } catch (Exception e) {};
+							unity = (unityPtr != null) ? (Unity)unityPtr.clone () : new Unity ();
+						}
 						building.set(x, y, z, unity);
 						
 						x++;
