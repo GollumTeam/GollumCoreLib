@@ -206,14 +206,7 @@ public class BuildingParser {
 							randomBuilding.set(x, y, z, unity);
 						}
 						
-						// La randomBuilding doit etre de la meme taille que building pour les transformations
-						for (x = 0; x < building.maxX; x++) {
-							for (y = 0; y < building.maxY; y++) {
-								for (z = 0; z <building.maxZ; z++) {
-									randomBuilding.set (x, y, z, randomBuilding.get(x, y, z));
-								}
-							}
-						}
+						building.syncMax (randomBuilding);
 						
 						listGroupRandomBlocks.add (randomBuilding);
 						
@@ -223,11 +216,6 @@ public class BuildingParser {
 				
 			} catch (Exception e) {
 			}
-			
-			
-			//Renverse la matrice par X et par Z pour correspondre au position dans le monde
-			building.reverseByX();
-			building.reverseByZ();
 			
 			ModGollumCoreLib.log.info ("Matrice building '"+name+"' loaded");
 			
