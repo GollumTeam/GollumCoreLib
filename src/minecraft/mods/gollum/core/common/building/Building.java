@@ -119,9 +119,9 @@ public class Building implements Cloneable {
 		}
 	}
 	
-	public int maxX;
-	public int maxY;
-	public int maxZ;
+	private int maxX;
+	private int maxY;
+	private int maxZ;
 	
 	public int height = -1;
 	public String name = "";
@@ -142,54 +142,16 @@ public class Building implements Cloneable {
 
 	public Building() {
 	}
-
-	/**
-	 * Renvoie la matrice retourné de l'angle en parametre
-	 * @param enumAngle
-	 * @return
-	 */
-	public Building getRotatetedBuilding (int enumAngle) {
-		if (enumAngle == Building.ROTATED_90) {
-			Building rotatedBuilding = new Building (this.name);
-			
-			for (int x = 0; x < this.maxX; x++) {
-				for (int y = 0; y < this.maxY; y++) {
-					for (int z = 0; z < this.maxZ; z++) {
-						rotatedBuilding.set (z, y, x, this.get(x, y, z));
-					}
-				}
-			}
-			
-			rotatedBuilding.reverseByX(false);
-			
-			for (ArrayList<Building> groupBlock: this.groupsRandomBlocks) {
-				ArrayList<Building> newGroupsRandomBlocks = new ArrayList<Building>();
-				for (Building blocks: groupBlock) {
-					newGroupsRandomBlocks.add (blocks.getRotatetedBuilding (enumAngle));
-				}
-				rotatedBuilding.addRandomBlock(newGroupsRandomBlocks);
-			}
-
-			rotatedBuilding.height = this.height;
-			rotatedBuilding.dimentionsInfos = this.dimentionsInfos;
-			
-			return rotatedBuilding;
-		}
-		if (enumAngle == Building.ROTATED_180) {
-			return this.getRotatetedBuilding(Building.ROTATED_90).getRotatetedBuilding(Building.ROTATED_90);
-		}
-		if (enumAngle == Building.ROTATED_270) {
-			return this.getRotatetedBuilding(Building.ROTATED_180).getRotatetedBuilding(Building.ROTATED_90);
-		}
-		
-		return (Building)this.clone ();
-	}
 	
 	/**
 	 * Clone l'objet
 	 */
 	public Object clone() {
 		Building o = new Building (this.name);
+		
+		o.maxX = this.maxX;
+		o.maxY = this.maxY;
+		o.maxZ = this.maxZ;
 		
 		for (int x = 0; x < this.maxX; x++) {
 			for (int y = 0; y < this.maxY; y++) {
@@ -217,63 +179,20 @@ public class Building implements Cloneable {
 		
 		return o;
 	}
-
-	public Building reverseByX () { return this.reverseByX(true); }
-	public Building reverseByY () { return this.reverseByY(true); }
-	public Building reverseByZ () { return this.reverseByZ(true); }
 	
-	/**
-	 * Renverse la matrice par X
-	 */
-	public Building reverseByX (boolean reverseRandom) {
-		Collections.reverse(this.blocks);
-		
-		if (reverseRandom) {
-			for (ArrayList<Building> groupBlock: this.groupsRandomBlocks) {
-				for (Building blocks: groupBlock) {
-					blocks.reverseByX ();
-				}
-			}
-		}
-		return this;
-	}
+	public int maxX() { return maxX; }
+	public int maxY() { return maxY; }
+	public int maxZ() { return maxZ; }
+	public int maxX(int rotate) { return (rotate == this.ROTATED_90 || rotate == this.ROTATED_270) ? maxZ : maxX; }
+	public int maxZ(int rotate) { return (rotate == this.ROTATED_90 || rotate == this.ROTATED_270) ? maxX : maxZ; }
 	
-	/**
-	 * Renverse la matrice par Y
-	 */
-	public Building reverseByY (boolean reverseRandom) {
-		for (ArrayList<ArrayList<Unity>> list: this.blocks) {
-			Collections.reverse(list);
-		}
-		
-		if (reverseRandom) {
-			for (ArrayList<Building> groupBlock: this.groupsRandomBlocks) {
-				for (Building blocks: groupBlock) {
-					blocks.reverseByY ();
-				}
-			}
-		}
-		return this;
-	}
-	
-	/**
-	 * Renverse la matrice par Z
-	 */
-	public Building reverseByZ (boolean reverseRandom) {
-		for (ArrayList<ArrayList<Unity>> list: this.blocks) {
-			for (ArrayList<Unity> list2: list) {
-				Collections.reverse(list2);
-			}
-		}
-		
-		if (reverseRandom) {
-			for (ArrayList<Building> groupBlock: this.groupsRandomBlocks) {
-				for (Building blocks: groupBlock) {
-					blocks.reverseByZ ();
-				}
-			}
-		}
-		return this;
+	public void syncMax(Building building) {
+		this.maxX = Math.max(this.maxX, building.maxX);
+		this.maxY = Math.max(this.maxY, building.maxY);
+		this.maxZ = Math.max(this.maxZ, building.maxZ);
+		building.maxX = Math.max(this.maxX, building.maxX);
+		building.maxY = Math.max(this.maxY, building.maxY);
+		building.maxZ = Math.max(this.maxZ, building.maxZ);
 	}
 	
 	public void set (int x, int y, int z, Unity unity) {
@@ -313,8 +232,20 @@ public class Building implements Cloneable {
 		}
 	}
 	
-	public boolean isEraseBlock (int x, int y, int z) {
-		return this.get(x, y, z) != null;
+	public Unity get (int x, int y, int z, int rotate) {
+		try {
+			if (rotate == this.ROTATED_90 || rotate == this.ROTATED_270) {
+				return this.get(z, y, this.maxX(rotate) - x - 1);
+			} else {
+				return this.get(x, y, this.maxZ(rotate) - z - 1);
+			}
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+	public boolean isEraseBlock (int x, int y, int z, int rotate) {
+		return this.get(x, y, z, rotate) != null;
 	}
 	
 	/**
