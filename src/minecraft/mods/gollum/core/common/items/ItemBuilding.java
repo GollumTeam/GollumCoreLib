@@ -74,7 +74,7 @@ public class ItemBuilding extends HItem {
 			
 			ModGollumCoreLib.log.debug("orientation = "+orientation);
 			
-			builder.build(world, orientation, building, x, y, z); // TODO revoir la rotation
+			builder.build(world, orientation, building, x, y - building.height, z); // TODO revoir la rotation
 			
 		}
 		
