@@ -6,7 +6,7 @@ import argo.jdom.JsonNode;
 import argo.jdom.JsonNodeFactories;
 import argo.jdom.JsonRootNode;
 
-public class MobCapacitiesConfig implements IConfigJsonClass {
+public class MobCapacitiesConfigType implements IConfigJsonClass {
 	
 	public double moveSpeed      = 0D;
 	public double maxHealt       = 0.D;
@@ -14,14 +14,14 @@ public class MobCapacitiesConfig implements IConfigJsonClass {
 	public double followRange    = 0.D;
 	public double timeRange      = 0.D;
 	
-	public MobCapacitiesConfig () {
+	public MobCapacitiesConfigType () {
 	}
 	
-	public MobCapacitiesConfig (double moveSpeed, double maxHealt, double attackStrength, double followRange) {
+	public MobCapacitiesConfigType (double moveSpeed, double maxHealt, double attackStrength, double followRange) {
 		this (moveSpeed, maxHealt, attackStrength, followRange, 0.D);
 	}
 
-	public MobCapacitiesConfig (double moveSpeed, double maxHealt, double attackStrength, double followRange, double timeRange) {
+	public MobCapacitiesConfigType (double moveSpeed, double maxHealt, double attackStrength, double followRange, double timeRange) {
 		this.moveSpeed = moveSpeed;
 		this.maxHealt = maxHealt;
 		this.attackStrength = attackStrength;
@@ -51,7 +51,7 @@ public class MobCapacitiesConfig implements IConfigJsonClass {
 		);
 	}
 	
-	public boolean equals (MobCapacitiesConfig obj) {
+	public boolean equals (MobCapacitiesConfigType obj) {
 		return
 			this.moveSpeed      == obj.moveSpeed &&
 			this.maxHealt       == obj.maxHealt  &&

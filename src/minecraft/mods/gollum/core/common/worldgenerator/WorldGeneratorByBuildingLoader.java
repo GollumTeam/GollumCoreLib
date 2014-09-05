@@ -10,12 +10,12 @@ import mods.gollum.core.common.building.Building;
 import mods.gollum.core.common.building.BuildingParser;
 import mods.gollum.core.common.building.ModBuildingParser;
 import mods.gollum.core.common.config.ConfigBuildings;
-import mods.gollum.core.common.config.container.BuildingConfig;
+import mods.gollum.core.common.config.container.BuildingConfigType;
 import cpw.mods.fml.common.Loader;
 
 public class WorldGeneratorByBuildingLoader {
 	
-	private ArrayList<BuildingConfig> configs = new ArrayList<BuildingConfig>();;
+	private ArrayList<BuildingConfigType> configs = new ArrayList<BuildingConfigType>();;
 
 	public WorldGeneratorByBuilding load() {
 		
@@ -35,7 +35,7 @@ public class WorldGeneratorByBuildingLoader {
 		for (String modId : Loader.instance().getIndexedModList().keySet()) {
 			ModGollumCoreLib.log.info("Search buildings in mod : "+modId);
 			
-			BuildingConfig config = parser.parse (modId);
+			BuildingConfigType config = parser.parse (modId);
 			if (config != null) {
 				this.configs.add (config);
 			}				
@@ -47,28 +47,28 @@ public class WorldGeneratorByBuildingLoader {
 		
 		BuildingParser parser = new BuildingParser ();
 		
-		for (BuildingConfig config : configs) {
+		for (BuildingConfigType config : configs) {
 			
 			String modId = config.modId;
 			
-			for (Entry<String, BuildingConfig.Group> groupEntry : config.lists.entrySet()) {
-				BuildingConfig.Group group = groupEntry.getValue();
+			for (Entry<String, BuildingConfigType.Group> groupEntry : config.lists.entrySet()) {
+				BuildingConfigType.Group group = groupEntry.getValue();
 				
 				int idGroup = worldGeneratorByBuilding.addGroup(group.globalSpawnRate);
 //				
-				for (Entry<String, HashMap<Integer, BuildingConfig.Building>> buildingEntry : group.buildings.entrySet()) {
+				for (Entry<String, HashMap<Integer, BuildingConfigType.Building>> buildingEntry : group.buildings.entrySet()) {
 					
 					String                                    buildingName   = buildingEntry.getKey();
-					HashMap<Integer, BuildingConfig.Building> configBuilding = buildingEntry.getValue();
+					HashMap<Integer, BuildingConfigType.Building> configBuilding = buildingEntry.getValue();
 					
 					Building building = parser.parse (buildingName, modId);
 
 					ModGollumCoreLib.log.info("Register building : modId="+modId+", idGroup="+idGroup+", buildingName="+buildingName);
 					
-					for (Entry<Integer, BuildingConfig.Building> entryBuildingInfos : configBuilding.entrySet()) {
+					for (Entry<Integer, BuildingConfigType.Building> entryBuildingInfos : configBuilding.entrySet()) {
 						
 						Integer                 dimention           = entryBuildingInfos.getKey();
-						BuildingConfig.Building configBuildingInfos = entryBuildingInfos.getValue();
+						BuildingConfigType.Building configBuildingInfos = entryBuildingInfos.getValue();
 						
 						ModGollumCoreLib.log.info(" - For dimention : "+dimention);
 						ModGollumCoreLib.log.info(" -     spawnRate : "+configBuildingInfos.spawnRate);

@@ -1,12 +1,8 @@
 
 package mods.gollum.core;
 
-import java.io.IOException;
-
 import mods.gollum.core.common.CommonProxyGolumCoreLib;
 import mods.gollum.core.common.blocks.BlockSpawner;
-import mods.gollum.core.common.building.Building;
-import mods.gollum.core.common.building.BuildingParser;
 import mods.gollum.core.common.config.ConfigGollumCoreLib;
 import mods.gollum.core.common.context.ModContext;
 import mods.gollum.core.common.i18n.I18n;
@@ -139,8 +135,12 @@ public class ModGollumCoreLib extends GollumMod {
 	 * Enregistre les générateur de terrain
 	 */
 	private void initWorldGenerators () {
-//		
-//		// Céation du world generator
+		
+
+		Block b = GameRegistry.findBlock(this.MODID, "GCLBlockSpawner");
+		log.debug("Block", b.getUnlocalizedName());
+		
+		// Céation du world generator
 		WorldGeneratorByBuilding worldGeneratorByBuilding = new WorldGeneratorByBuildingLoader().load ();
 		
 		// Enregistrement du worldgenerator mercenary
