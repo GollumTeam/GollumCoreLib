@@ -333,20 +333,20 @@ public class Builder {
 //			}
 //		}
 //		
-//		////////////////////////
-//		// Notifie les blocks //
-//		////////////////////////
-//		for (int x = 0; x < building.maxX; x++) {
-//			for (int y = building.maxY; y < 256; y++) {
-//				for (int z = 0; z < building.maxZ; z++) {
-//					// Position réél dans le monde du block
-//					int finalX = initX + x;
-//					int finalY = initY + y;
-//					int finalZ = initZ + z;
-//					world.setBlockMetadataWithNotify (finalX, finalY, finalZ, world.getBlockMetadata (finalX, finalY, finalZ), 3);
-//				}
-//			}
-//		}
+		////////////////////////
+		// Notifie les blocks //
+		////////////////////////
+		for (int x = 0; x < building.maxX(rotate); x++) {
+			for (int y = building.maxY(); y < 256; y++) {
+				for (int z = 0; z < building.maxZ(rotate); z++) {
+					// Position réél dans le monde du block
+					int finalX = initX + x*dx;
+					int finalY = initY + y;
+					int finalZ = initZ + z*dz;
+					world.setBlockMetadataWithNotify (finalX, finalY, finalZ, world.getBlockMetadata (finalX, finalY, finalZ), 3);
+				}
+			}
+		}
 	}
 //	
 //	/**

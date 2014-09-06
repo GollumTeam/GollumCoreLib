@@ -50,15 +50,15 @@ public class BuildingParser {
 	 * @return
 	 * @throws Exception
 	 */
-	public Building parse (String name, String modID) {
+	public Building parse (String name, String modId) {
 		
-		if (this.parsed.containsKey(modID+":"+name)) {
-			return this.parsed.get(modID+":"+name);
+		if (this.parsed.containsKey(modId+":"+name)) {
+			return this.parsed.get(modId+":"+name);
 		}
 		
-		this.modID = modID;
+		this.modID = modId;
 		
-		ModGollumCoreLib.log.info ("Parse '"+name+"' building in "+modID);
+		ModGollumCoreLib.log.info ("Parse '"+name+"' building in "+modId);
 		Building building = new Building (name);
 		
 		// Liste de la correspondance couleur block
@@ -186,6 +186,28 @@ public class BuildingParser {
 			}
 			
 			try {
+				Map<JsonStringNode, JsonNode> map = json.getNode ("buildings").getFields();
+				for (JsonStringNode key : map.keySet()) {
+					String position3D[] = key.getText().split("x");
+					x = Integer.parseInt(position3D[0]);
+					y = Integer.parseInt(position3D[1]);
+					z = Integer.parseInt(position3D[2]);
+					
+					Building subBuilding = this.parse(map.get(key).getText(), modId);
+					// TODO revoir le parcour
+					for (int subX = 0; subX < subBuilding.maxX(); subX++) {
+						for (int subY = 0; subY < subBuilding.maxY(); subY++) {
+							for (int subZ = 0; subZ < subBuilding.maxZ(); subZ++) {
+								building.set(subX+x, subY+y, subZ+z, subBuilding.get(subX, subY, subZ));
+							}
+						}
+					}
+					
+				}
+			} catch (Exception e) {
+			}
+			
+			try {
 				
 				for (JsonNode randomBlock: json.getArrayNode ("random")) {
 					
@@ -217,6 +239,48 @@ public class BuildingParser {
 			} catch (Exception e) {
 			}
 			
+			try {
+				
+				for (JsonNode randomBlock: json.getArrayNode ("randomBuildings")) {
+					
+					ArrayList<Building> listGroupRandomBlocks = new ArrayList();
+					
+					for (JsonNode group: randomBlock.getElements()) {
+						
+						Building randomBuilding = new Building();
+							
+						Map<JsonStringNode, JsonNode> map = group.getFields();
+						for (JsonStringNode key : map.keySet()) {
+							String position3D[] = key.getText().split("x");
+							x = Integer.parseInt(position3D[0]);
+							y = Integer.parseInt(position3D[1]);
+							z = Integer.parseInt(position3D[2]);
+							
+							Building subBuilding = this.parse(map.get(key).getText(), modId);
+							
+							// TODO revoir le parcour
+							for (int subX = 0; subX < subBuilding.maxX(); subX++) {
+								for (int subY = 0; subY < subBuilding.maxY(); subY++) {
+									for (int subZ = 0; subZ < subBuilding.maxZ(); subZ++) {
+										randomBuilding.set(subX+x, subY+y, subZ+z, subBuilding.get(subX, subY, subZ));
+									}
+								}
+							}
+						}
+						
+						building.syncMax (randomBuilding);
+						
+						listGroupRandomBlocks.add (randomBuilding);
+						
+					}
+					building.addRandomBlock (listGroupRandomBlocks);
+				}
+				
+			} catch (Exception e) {
+			}
+			
+			
+			
 			ModGollumCoreLib.log.info ("Matrice building '"+name+"' loaded");
 			
 			
@@ -228,7 +292,7 @@ public class BuildingParser {
 			return null;
 		}
 		
-		this.parsed.put(modID+":"+name, building);
+		this.parsed.put(modId+":"+name, building);
 		
 		return building;
 	}

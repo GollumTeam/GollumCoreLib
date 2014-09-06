@@ -64,6 +64,10 @@ public class ItemBuilding extends HItem {
 	@Override
 	public boolean onItemUse(ItemStack itemStack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
 		
+		if (world.isRemote) {
+			return true;
+		}
+		
 		int metadata = itemStack.getItemDamage();
 		ArrayList<Building> buildings = this.getNBuildingIndex(); 
 		int orientation = MathHelper.floor_double((double) (player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
@@ -96,9 +100,10 @@ public class ItemBuilding extends HItem {
 		return name;
 	}
 	
+	
 	@Override
-	public String getItemStackDisplayName(ItemStack par1ItemStack) {
-		return StatCollector.translateToLocal(this.getUnlocalizedName(par1ItemStack));
+	public String getItemDisplayName(ItemStack par1ItemStack) {
+		return this.getUnlocalizedNameInefficiently(par1ItemStack).trim();
 	}
 	
 	@SideOnly(Side.CLIENT)
