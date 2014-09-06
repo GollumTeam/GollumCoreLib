@@ -210,14 +210,13 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 				if (blockId != 0 && world.isAirBlock(initX + 3, initY+1, initZ + 3) && dimentionsInfos.blocksSpawn.contains(Block.blocksList[blockId])) {
 					
 					// Auteur initiale du batiment 
-					initY += building.height + 1;
-					initY = (initY > 3) ? initY : 3;
+					initY += 1;
 					
 					// Garde en mémoire que le chunk à généré un batiment (évite que tous se monte dessus)
 					// N'est pas sauvegardé enc as d'arret du serveur mais ca devrais pas dérangé
 					WorldGeneratorByBuilding.chunkHasABuilding.add(chunkX+"x"+chunkZ);
 					
-					builder.build(world, random, chunkX, chunkZ, rotate, building, initX, initY, initZ);
+					builder.build(world, rotate, building, initX, initY, initZ);
 					
 					return true;
 				}

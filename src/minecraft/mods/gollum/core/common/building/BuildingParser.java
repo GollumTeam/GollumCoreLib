@@ -16,6 +16,9 @@ import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
 
 import mods.gollum.core.ModGollumCoreLib;
+import mods.gollum.core.common.building.Building.GroupSubBuildings;
+import mods.gollum.core.common.building.Building.ListSubBuildings;
+import mods.gollum.core.common.building.Building.SubBuilding;
 import mods.gollum.core.common.building.Building.Unity;
 import mods.gollum.core.common.building.Building.Unity.Content;
 import mods.gollum.core.common.resource.ResourceLoader;
@@ -153,12 +156,13 @@ public class BuildingParser {
 						
 						if (alpha) {
 //							ModGollumCoreLib.log.debug("is Alpha color:", color, " xyz",x, y, z);
+							building.setNull(x, y, z);
 						} else {
 //							ModGollumCoreLib.log.debug("is Opaque color:", color, " xyz",x, y, z);
 							Unity unityPtr = null; try { unityPtr = (Unity)corlorBlockIndex.get(color); } catch (Exception e) {};
-							unity = (unityPtr != null) ? (Unity)unityPtr.clone () : new Unity ();
+							unity = (unityPtr != null) ? (Unity)unityPtr : new Unity ();
+							building.set(x, y, z, unity);
 						}
-						building.set(x, y, z, unity);
 						
 						x++;
 					}
@@ -172,6 +176,7 @@ public class BuildingParser {
 			
 			try {
 				Map<JsonStringNode, JsonNode> map = json.getNode ("sets").getFields();
+				
 				for (JsonStringNode key : map.keySet()) {
 					String position3D[] = key.getText().split("x");
 					x = Integer.parseInt(position3D[0]);
@@ -179,9 +184,10 @@ public class BuildingParser {
 					z = Integer.parseInt(position3D[2]);
 					
 					Unity unity = this.parseBlockDescription(map.get(key));
-					building.set(x, y, z, unity);
+					building.set(x, y, building.maxZ() - z - 1, unity);
 					
 				}
+				
 			} catch (Exception e) {
 			}
 			
@@ -189,19 +195,13 @@ public class BuildingParser {
 				Map<JsonStringNode, JsonNode> map = json.getNode ("buildings").getFields();
 				for (JsonStringNode key : map.keySet()) {
 					String position3D[] = key.getText().split("x");
-					x = Integer.parseInt(position3D[0]);
-					y = Integer.parseInt(position3D[1]);
-					z = Integer.parseInt(position3D[2]);
 					
-					Building subBuilding = this.parse(map.get(key).getText(), modId);
-					// TODO revoir le parcour
-					for (int subX = 0; subX < subBuilding.maxX(); subX++) {
-						for (int subY = 0; subY < subBuilding.maxY(); subY++) {
-							for (int subZ = 0; subZ < subBuilding.maxZ(); subZ++) {
-								building.set(subX+x, subY+y, subZ+z, subBuilding.get(subX, subY, subZ));
-							}
-						}
-					}
+					SubBuilding subBuilding = new SubBuilding();
+					subBuilding.building = this.parse(map.get(key).getText(), modId);
+					subBuilding.x = Integer.parseInt(position3D[0]);
+					subBuilding.y = Integer.parseInt(position3D[1]);
+					subBuilding.z = Integer.parseInt(position3D[2]);
+					building.addBuilding (subBuilding);
 					
 				}
 			} catch (Exception e) {
@@ -211,12 +211,12 @@ public class BuildingParser {
 				
 				for (JsonNode randomBlock: json.getArrayNode ("random")) {
 					
-					ArrayList<Building> listGroupRandomBlocks = new ArrayList();
+					GroupSubBuildings groupSubBuildings = new GroupSubBuildings();
 					
 					for (JsonNode group: randomBlock.getElements()) {
 						
-						Building randomBuilding = new Building();
-							
+						SubBuilding subBuilding = new SubBuilding();
+						
 						Map<JsonStringNode, JsonNode> map = group.getFields();
 						for (JsonStringNode key : map.keySet()) {
 							String position3D[] = key.getText().split("x");
@@ -225,15 +225,14 @@ public class BuildingParser {
 							z = Integer.parseInt(position3D[2]);
 							
 							Unity unity = this.parseBlockDescription(map.get(key));
-							randomBuilding.set(x, y, z, unity);
+							subBuilding.building.set(x, y, building.maxZ() - z - 1, unity);
+							subBuilding.synMax (building);
 						}
 						
-						building.syncMax (randomBuilding);
-						
-						listGroupRandomBlocks.add (randomBuilding);
+						groupSubBuildings.add (subBuilding);
 						
 					}
-					building.addRandomBlock (listGroupRandomBlocks);
+					building.addRandomBuildings (groupSubBuildings);
 				}
 				
 			} catch (Exception e) {
@@ -243,43 +242,34 @@ public class BuildingParser {
 				
 				for (JsonNode randomBlock: json.getArrayNode ("randomBuildings")) {
 					
-					ArrayList<Building> listGroupRandomBlocks = new ArrayList();
+					GroupSubBuildings groupSubBuildings = new GroupSubBuildings();
 					
 					for (JsonNode group: randomBlock.getElements()) {
 						
-						Building randomBuilding = new Building();
-							
+						ListSubBuildings listSubBuildings = new ListSubBuildings();
+						
 						Map<JsonStringNode, JsonNode> map = group.getFields();
 						for (JsonStringNode key : map.keySet()) {
 							String position3D[] = key.getText().split("x");
-							x = Integer.parseInt(position3D[0]);
-							y = Integer.parseInt(position3D[1]);
-							z = Integer.parseInt(position3D[2]);
 							
-							Building subBuilding = this.parse(map.get(key).getText(), modId);
+							SubBuilding subBuilding = new SubBuilding();
 							
-							// TODO revoir le parcour
-							for (int subX = 0; subX < subBuilding.maxX(); subX++) {
-								for (int subY = 0; subY < subBuilding.maxY(); subY++) {
-									for (int subZ = 0; subZ < subBuilding.maxZ(); subZ++) {
-										randomBuilding.set(subX+x, subY+y, subZ+z, subBuilding.get(subX, subY, subZ));
-									}
-								}
-							}
+							subBuilding.x = Integer.parseInt(position3D[0]);
+							subBuilding.y = Integer.parseInt(position3D[1]);
+							subBuilding.z = Integer.parseInt(position3D[2]);
+							subBuilding.building = this.parse(map.get(key).getText(), modId);
+							
+							listSubBuildings.add(subBuilding);
 						}
 						
-						building.syncMax (randomBuilding);
-						
-						listGroupRandomBlocks.add (randomBuilding);
+						groupSubBuildings.add (listSubBuildings);
 						
 					}
-					building.addRandomBlock (listGroupRandomBlocks);
+					building.addRandomBuildings (groupSubBuildings);
 				}
 				
 			} catch (Exception e) {
 			}
-			
-			
 			
 			ModGollumCoreLib.log.info ("Matrice building '"+name+"' loaded");
 			
