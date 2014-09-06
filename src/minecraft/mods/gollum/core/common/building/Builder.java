@@ -6,6 +6,9 @@ import java.util.Random;
 
 import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.common.blocks.BlockSpawner;
+import mods.gollum.core.common.building.Building.GroupSubBuildings;
+import mods.gollum.core.common.building.Building.ListSubBuildings;
+import mods.gollum.core.common.building.Building.SubBuilding;
 import mods.gollum.core.common.building.Building.Unity;
 import mods.gollum.core.common.building.Building.Unity.Content;
 import mods.gollum.core.common.tileentities.TileEntityBlockSpawner;
@@ -34,15 +37,15 @@ import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.world.World;
 
 public class Builder {
-
-
-	public void build(World world, int rotate, Building building, int x, int y, int z) {
-		this.build(world, world.rand, x / 16, z / 16, rotate, building, x, y, z);
-	}
 	
-	public void build(World world, Random random, int chunkX, int chunkZ, int rotate, Building building, int initX, int initY, int initZ) {
+	public void build(World world, int rotate, Building building, int initX, int initY, int initZ) {
+		
+		Random random = world.rand;
 		
 		ModGollumCoreLib.log.info("Create building width matrix : "+building.name+" "+initX+" "+initY+" "+initZ);
+
+		initY = initY + building.height;
+		initY = (initY < 3) ? 3 : initY;
 		
 		int dx = -1; 
 		int dz = 1;
@@ -116,47 +119,52 @@ public class Builder {
 		// Ajoute les blocks aléatoires //
 		//////////////////////////////////
 		
-		for(ArrayList<Building> group: building.getRandomBlocksGroup()) {
+		for(GroupSubBuildings group: building.getRandomGroupSubBuildings()) {
 			
-			Building lisBlockRandom = group.get(random.nextInt(group.size ()));
+			ListSubBuildings randomBuilding = group.get(random.nextInt(group.size ()));
 			
-			for (int x = 0; x < lisBlockRandom.maxX(rotate); x++) {
-				for (int y = 0; y < lisBlockRandom.maxY(); y++) {
-					for (int z = 0; z < lisBlockRandom.maxZ(rotate); z++) {
-						Unity unity = lisBlockRandom.get(x, y, z, rotate);
-						
-						// Position réél dans le monde du block
-						int finalX = initX + x*dx;
-						int finalY = initY + y;
-						int finalZ = initZ + z*dz;
-						
-						if (unity != null && unity.block != null && unity.block.blockID != 0) {
-							world.setBlock(finalX, finalY, finalZ, unity.block.blockID, unity.metadata, 0);
-							
-							this.setOrientation (world, finalX, finalY, finalZ, this.rotateOrientation(rotate, unity.orientation));
-							this.setContents    (world, random, finalX, finalY, finalZ, unity.contents);
-							this.setExtra       (world, random, finalX, finalY, finalZ, unity.extra, initX, initY, initZ, rotate, building.maxX(rotate), building.maxZ(rotate));
-						}
-					}
-				}
+			for (SubBuilding subBuilding : randomBuilding) {
+				this.build (world, rotate, subBuilding.building, initX+subBuilding.x*dx, initY+subBuilding.y, initZ+subBuilding.z*dz);
 			}
+			
+			
+//			for (int x = 0; x < lisBlockRandom.maxX(rotate); x++) {
+//				for (int y = 0; y < lisBlockRandom.maxY(); y++) {
+//					for (int z = 0; z < lisBlockRandom.maxZ(rotate); z++) {
+//						Unity unity = lisBlockRandom.get(x, y, z, rotate);
+//						
+//						// Position réél dans le monde du block
+//						int finalX = initX + x*dx;
+//						int finalY = initY + y;
+//						int finalZ = initZ + z*dz;
+//						
+//						if (unity != null && unity.block != null && unity.block.blockID != 0) {
+//							world.setBlock(finalX, finalY, finalZ, unity.block.blockID, unity.metadata, 0);
+//							
+//							this.setOrientation (world, finalX, finalY, finalZ, this.rotateOrientation(rotate, unity.orientation));
+//							this.setContents    (world, random, finalX, finalY, finalZ, unity.contents);
+//							this.setExtra       (world, random, finalX, finalY, finalZ, unity.extra, initX, initY, initZ, rotate, building.maxX(rotate), building.maxZ(rotate));
+//						}
+//					}
+//				}
+//			}
 		}
-		
-		////////////////////////////////////////////////
-		// Vide 10 blocs au dessus de la construction //
-		////////////////////////////////////////////////
-		for (int x = 0; x < building.maxX(rotate); x++) {
-			for (int y = building.maxY(); y < building.maxY()+10; y++) {
-				for (int z = 0; z < building.maxZ(rotate); z++) {
-					// Position réél dans le monde du block
-					int finalX = initX + x*dx;
-					int finalY = initY + y;
-					int finalZ = initZ + z*dz;
-					world.setBlock(finalX, finalY, finalZ, 0, 0, 2);
-				}
-			}
-		}
-		
+//		
+//		////////////////////////////////////////////////
+//		// Vide 10 blocs au dessus de la construction //
+//		////////////////////////////////////////////////
+//		for (int x = 0; x < building.maxX(rotate); x++) {
+//			for (int y = building.maxY(); y < building.maxY()+10; y++) {
+//				for (int z = 0; z < building.maxZ(rotate); z++) {
+//					// Position réél dans le monde du block
+//					int finalX = initX + x*dx;
+//					int finalY = initY + y;
+//					int finalZ = initZ + z*dz;
+//					world.setBlock(finalX, finalY, finalZ, 0, 0, 2);
+//				}
+//			}
+//		}
+//		
 //		/////////////////////////////////////////////////////////////
 //		// Rempli en dessous du batiment pour pas que ca sois vide //
 //		/////////////////////////////////////////////////////////////
@@ -343,7 +351,8 @@ public class Builder {
 					int finalX = initX + x*dx;
 					int finalY = initY + y;
 					int finalZ = initZ + z*dz;
-					world.setBlockMetadataWithNotify (finalX, finalY, finalZ, world.getBlockMetadata (finalX, finalY, finalZ), 3);
+					world.markBlockForUpdate(finalX, finalY, finalZ);
+//					world.setBlockMetadataWithNotify (finalX, finalY, finalZ, world.getBlockMetadata (finalX, finalY, finalZ), 3);
 				}
 			}
 		}
