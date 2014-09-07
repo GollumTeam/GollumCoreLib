@@ -45,6 +45,16 @@ public class BuildingParser {
 	public static HashMap<String, Building> getBuildingsList () {
 		return parsed;
 	}
+
+
+	public static void reloadAll() {
+		HashMap<String, String> oldParsed = (HashMap<String, String>) parsed.clone();
+		parsed.clear();
+		BuildingParser parser = new BuildingParser();
+		for (String modIDName : oldParsed.keySet()) {
+			parser.parse (modIDName.substring(modIDName.indexOf(":")+1), modIDName.substring(0, modIDName.indexOf(":")));
+		}
+	}
 	
 	/**
 	 * Parse un dossier de construction et renvoie al construction
@@ -62,7 +72,7 @@ public class BuildingParser {
 		this.modID = modId;
 		
 		ModGollumCoreLib.log.info ("Parse '"+name+"' building in "+modId);
-		Building building = new Building (name);
+		Building building = new Building (name, modId);
 		
 		// Liste de la correspondance couleur block
 		Hashtable<Integer, Unity> corlorBlockIndex = new Hashtable ();

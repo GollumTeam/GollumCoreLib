@@ -2,12 +2,14 @@ package mods.gollum.core.common.building;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.Random;
 
 import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.common.blocks.BlockSpawner;
 import mods.gollum.core.common.building.Building.GroupSubBuildings;
 import mods.gollum.core.common.building.Building.ListSubBuildings;
+import mods.gollum.core.common.building.Building.Position3D;
 import mods.gollum.core.common.building.Building.SubBuilding;
 import mods.gollum.core.common.building.Building.Unity;
 import mods.gollum.core.common.building.Building.Unity.Content;
@@ -38,6 +40,11 @@ import net.minecraft.world.World;
 
 public class Builder {
 	
+
+	public void build(World world, SubBuilding subBuilding) {
+		this.build(world, subBuilding.orientation, subBuilding.building, subBuilding.x, subBuilding.y, subBuilding.z);
+	}
+	
 	public void build(World world, int rotate, Building building, int initX, int initY, int initZ) {
 		
 		Random random = world.rand;
@@ -66,52 +73,40 @@ public class Builder {
 				break;
 		}
 		
-		// Parcours la matrice et ajoute des blocks de stone pour les blocks qui s'accroche
-		for (int x = 0; x < building.maxX(rotate); x++) {
-			for (int y = 0; y < building.maxY(); y++) {
-				for (int z = 0; z < building.maxZ(rotate); z++) {
-						
-						if (!building.isEraseBlock(x, y, z, rotate)) {
-							continue;
-						}
-						
-						// Position réél dans le monde du block
-						int finalX = initX + x*dx;
-						int finalY = initY + y;
-						int finalZ = initZ + z*dz;
-						world.setBlock(finalX, finalY, finalZ, Block.stone.blockID, 0, 0);
-		
-				}
-			}
+		// Peut etre inutile
+		for (Entry<Position3D, Unity> entry : building.unities.entrySet()) {
+			
+			Position3D p = entry.getKey();
+			Unity unity  = entry.getValue();
+			
+			// Position réél dans le monde du block
+			int finalX = initX + p.x(rotate)*dx;
+			int finalY = initY + p.y(rotate);
+			int finalZ = initZ + p.z(rotate)*dz;
+			world.setBlock(finalX, finalY, finalZ, Block.stone.blockID, 0, 0);
+			
 		}
 		
-		// Parcours la matrice et ajoute les blocks
-		for (int x = 0; x < building.maxX(rotate); x++) {
-			for (int y = 0; y < building.maxY(); y++) {
-				for (int z = 0; z < building.maxZ(rotate); z++) {
-					
-					Unity unity = building.get(x, y, z, rotate);
-					
-					if (unity == null) {
-						continue;
-					}
-					
-					// Position réél dans le monde du block
-					int finalX = initX + x*dx;
-					int finalY = initY + y;
-					int finalZ = initZ + z*dz;
-					
-					if (unity.block != null) {
-						world.setBlock(finalX, finalY, finalZ, unity.block.blockID, unity.metadata, 0);
-					} else {
-						world.setBlock(finalX, finalY, finalZ, 0, 0, 2);
-					}
-					
-					this.setOrientation (world, finalX, finalY, finalZ, this.rotateOrientation(rotate, unity.orientation));
-					this.setContents    (world, random, finalX, finalY, finalZ, unity.contents);
-					this.setExtra       (world, random, finalX, finalY, finalZ, unity.extra, initX, initY, initZ, rotate, building.maxX(rotate), building.maxZ(rotate));
-				}
+		for (Entry<Position3D, Unity> entry : building.unities.entrySet()) {
+			
+			Position3D p = entry.getKey();
+			Unity unity  = entry.getValue();
+			
+			// Position réél dans le monde du block
+			int finalX = initX + p.x(rotate)*dx;
+			int finalY = initY + p.y(rotate);
+			int finalZ = initZ + p.z(rotate)*dz;
+			
+			if (unity.block != null) {
+				world.removeBlockTileEntity(finalX, finalY, finalZ);
+				world.setBlock(finalX, finalY, finalZ, unity.block.blockID, unity.metadata, 0);
+			} else {
+				world.setBlock(finalX, finalY, finalZ, 0, 0, 2);
 			}
+			
+			this.setOrientation (world, finalX, finalY, finalZ, this.rotateOrientation(rotate, unity.orientation));
+			this.setContents    (world, random, finalX, finalY, finalZ, unity.contents);
+			this.setExtra       (world, random, finalX, finalY, finalZ, unity.extra, initX, initY, initZ, rotate, building.maxX(rotate), building.maxZ(rotate));
 		}
 		
 		
@@ -126,28 +121,6 @@ public class Builder {
 			for (SubBuilding subBuilding : randomBuilding) {
 				this.build (world, rotate, subBuilding.building, initX+subBuilding.x*dx, initY+subBuilding.y, initZ+subBuilding.z*dz);
 			}
-			
-			
-//			for (int x = 0; x < lisBlockRandom.maxX(rotate); x++) {
-//				for (int y = 0; y < lisBlockRandom.maxY(); y++) {
-//					for (int z = 0; z < lisBlockRandom.maxZ(rotate); z++) {
-//						Unity unity = lisBlockRandom.get(x, y, z, rotate);
-//						
-//						// Position réél dans le monde du block
-//						int finalX = initX + x*dx;
-//						int finalY = initY + y;
-//						int finalZ = initZ + z*dz;
-//						
-//						if (unity != null && unity.block != null && unity.block.blockID != 0) {
-//							world.setBlock(finalX, finalY, finalZ, unity.block.blockID, unity.metadata, 0);
-//							
-//							this.setOrientation (world, finalX, finalY, finalZ, this.rotateOrientation(rotate, unity.orientation));
-//							this.setContents    (world, random, finalX, finalY, finalZ, unity.contents);
-//							this.setExtra       (world, random, finalX, finalY, finalZ, unity.extra, initX, initY, initZ, rotate, building.maxX(rotate), building.maxZ(rotate));
-//						}
-//					}
-//				}
-//			}
 		}
 //		
 //		////////////////////////////////////////////////
@@ -344,17 +317,20 @@ public class Builder {
 		////////////////////////
 		// Notifie les blocks //
 		////////////////////////
-		for (int x = 0; x < building.maxX(rotate); x++) {
-			for (int y = building.maxY(); y < 256; y++) {
-				for (int z = 0; z < building.maxZ(rotate); z++) {
-					// Position réél dans le monde du block
-					int finalX = initX + x*dx;
-					int finalY = initY + y;
-					int finalZ = initZ + z*dz;
-					world.markBlockForUpdate(finalX, finalY, finalZ);
-//					world.setBlockMetadataWithNotify (finalX, finalY, finalZ, world.getBlockMetadata (finalX, finalY, finalZ), 3);
-				}
-			}
+		
+		for (Entry<Position3D, Unity> entry : building.unities.entrySet()) {
+			
+			Position3D p = entry.getKey();
+			Unity unity  = entry.getValue();
+				
+			
+			// Position réél dans le monde du block
+			int finalX = initX + p.x(rotate)*dx;
+			int finalY = initY + p.y(rotate);
+			int finalZ = initZ + p.z(rotate)*dz;
+			world.markBlockForUpdate(finalX, finalY, finalZ);
+//			world.setBlockMetadataWithNotify (finalX, finalY, finalZ, world.getBlockMetadata (finalX, finalY, finalZ), 3);
+			
 		}
 	}
 //	

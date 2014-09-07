@@ -3,6 +3,7 @@ package mods.gollum.core;
 
 import mods.gollum.core.common.CommonProxyGolumCoreLib;
 import mods.gollum.core.common.blocks.BlockSpawner;
+import mods.gollum.core.common.command.CommandBuilding;
 import mods.gollum.core.common.config.ConfigGollumCoreLib;
 import mods.gollum.core.common.context.ModContext;
 import mods.gollum.core.common.i18n.I18n;
@@ -13,7 +14,6 @@ import mods.gollum.core.common.tileentities.TileEntityBlockSpawner;
 import mods.gollum.core.common.version.VersionChecker;
 import mods.gollum.core.common.worldgenerator.WorldGeneratorByBuilding;
 import mods.gollum.core.common.worldgenerator.WorldGeneratorByBuildingLoader;
-import mods.gollum.core.tools.helper.items.HItem;
 import mods.gollum.core.tools.registry.BlockRegistry;
 import mods.gollum.core.tools.registry.ItemRegistry;
 import net.minecraft.block.Block;
@@ -26,6 +26,7 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -59,8 +60,8 @@ public class ModGollumCoreLib extends GollumMod {
 	 */
 	public static ConfigGollumCoreLib config;
 
-	public static Block blockSpawner;
-	public static Item itemBuilding;
+	public static BlockSpawner blockSpawner;
+	public static ItemBuilding itemBuilding;
 	
 	@EventHandler public void handler(FMLInitializationEvent event)     { super.handler (event); }
 	@EventHandler public void handler(FMLPostInitializationEvent event) { super.handler (event); }
@@ -119,7 +120,12 @@ public class ModGollumCoreLib extends GollumMod {
 		// Initialisation des générateur de terrain
 		this.initWorldGenerators();
 	}
-
+	
+	@EventHandler
+	public void serverStarting(FMLServerStartingEvent event) {
+		event.registerServerCommand(new CommandBuilding());
+	}
+	
 	/**
 	 * // Nom des TileEntities
 	 */
@@ -143,7 +149,7 @@ public class ModGollumCoreLib extends GollumMod {
 	public void initItem () {
 		
 		// Création des items
-		this.itemBuilding = new ItemBuilding(this.config.itemBuildingID, "GCLItemBuilding").setCreativeTab(CreativeTabs.tabTools); // TODO Creative tab custom
+		this.itemBuilding = (ItemBuilding)new ItemBuilding(this.config.itemBuildingID, "GCLItemBuilding").setCreativeTab(CreativeTabs.tabTools); // TODO Creative tab custom
 		
 	}
 	
