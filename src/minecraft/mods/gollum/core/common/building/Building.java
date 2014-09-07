@@ -32,13 +32,13 @@ public class Building {
 		}
 		
 		public int x(int rotate) {
-			return (rotate == ROTATED_90 || rotate == ROTATED_270) ? z : x;
+			return (rotate == ROTATED_90 || rotate == ROTATED_270) ? building.maxZ(rotate) - z - 1 : x;
 		}
 		public int y(int rotate) {
 			return y;
 		}
 		public int z(int rotate) {
-			return (rotate == ROTATED_90 || rotate == ROTATED_270) ? building.maxX(rotate) - x - 1 : building.maxZ(rotate) - z - 1;
+			return (rotate == ROTATED_90 || rotate == ROTATED_270) ? x : building.maxZ(rotate) - z - 1;
 		}
 		
 		public boolean equal (Object o) {
