@@ -20,7 +20,7 @@ public class WorldGeneratorByBuildingLoader {
 	public WorldGeneratorByBuilding load() {
 		
 		WorldGeneratorByBuilding worldGeneratorByBuilding = new WorldGeneratorByBuilding ();
-
+		
 		this.loadBuildingList();
 		this.addBuildingList(worldGeneratorByBuilding);
 		
@@ -74,10 +74,12 @@ public class WorldGeneratorByBuildingLoader {
 							ModGollumCoreLib.log.info(" - For dimention : "+dimentionId);
 							ModGollumCoreLib.log.info(" -     spawnRate : "+configDimention.spawnRate);
 							ModGollumCoreLib.log.info(" -     spawnHeight : "+configDimention.spawnHeight);
-
-							building.dimentionsInfos.put (dimentionId, new Building.DimentionSpawnInfos(configDimention.spawnRate, configDimention.spawnHeight, configDimention.getBlocksSpawn()));
+							
+							building.dimentionsInfos.put (dimentionId, new Building.DimentionSpawnInfos(configDimention.spawnRate, configDimention.spawnHeight, configDimention.blocksSpawn));
 							
 						}
+						
+						worldGeneratorByBuilding.addBuilding(idGroup, building);
 					}
 				}
 			}

@@ -22,6 +22,7 @@ import mods.gollum.core.common.building.Building.SubBuilding;
 import mods.gollum.core.common.building.Building.Unity;
 import mods.gollum.core.common.building.Building.Unity.Content;
 import mods.gollum.core.common.resource.ResourceLoader;
+import mods.gollum.core.tools.registered.RegisteredObjects;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import argo.jdom.JdomParser;
@@ -35,7 +36,6 @@ public class BuildingParser {
 	private static final String NAME_IMG       = "structure.png";
 	private static final String NAME_JSON      = "infos.json";
 	private static final String PATH_REOBF_JSON      = "reobf/index.json";
-	private static HashMap<String, String> reobfArray;
 	private static HashMap<String, Building> parsed = new HashMap<String, Building>();
 	
 	private JdomParser     parser         = new JdomParser();
@@ -75,7 +75,7 @@ public class BuildingParser {
 		Building building = new Building (name, modId);
 		
 		// Liste de la correspondance couleur block
-		Hashtable<Integer, Unity> corlorBlockIndex = new Hashtable ();
+		Hashtable<Integer, Unity> colorBlockIndex = new Hashtable ();
 		
 		try {
 			
@@ -123,7 +123,7 @@ public class BuildingParser {
 				
 				Unity unity = this.parseBlockDescription (type);
 				
-				corlorBlockIndex.put(color, unity);
+				colorBlockIndex.put(color, unity);
 			}
 			
 			ModGollumCoreLib.log.info ("Color index  building '"+name+"' loaded");
@@ -169,7 +169,7 @@ public class BuildingParser {
 							building.setNull(x, y, z);
 						} else {
 //							ModGollumCoreLib.log.debug("is Opaque color:", color, " xyz",x, y, z);
-							Unity unityPtr = null; try { unityPtr = (Unity)corlorBlockIndex.get(color); } catch (Exception e) {};
+							Unity unityPtr = null; try { unityPtr = (Unity)colorBlockIndex.get(color); } catch (Exception e) {};
 							unity = (unityPtr != null) ? (Unity)unityPtr : new Unity ();
 							building.set(x, y, z, unity);
 						}
@@ -304,51 +304,14 @@ public class BuildingParser {
 	 */
 	private Unity parseBlockDescription(JsonNode type) {
 		
-		
-		ModGollumCoreLib.log.debug ("parseBlockDescription");
-		
 		Unity unity = new Unity();
 		try {
-			// Découpe le type par ClassName|ObjetBlock ou ClassName|ObjetBlock:intMetadataOptional
 			String blockStr    = type.getStringValue ("block");
-			String[] explode   = blockStr.split(Pattern.quote("|"));
 			String metadata    = "0"; try { metadata = type.getNumberValue ("metadata"); } catch (Exception e) { }
 			String orientation = "none"; try { orientation = type.getStringValue ("orientation"); } catch (Exception e) { }
 			JsonNode contents  = null; try { contents = type.getNode("contents"); } catch (Exception e) { }
 			
-			// Récupère l'attribut
-			Class classBlock;
-			Block block = null;
-			try {
-				
-				ModGollumCoreLib.log.debug ("parseBlockDescription Add block : "+explode[0]);
-				
-				classBlock = Class.forName(explode[0]);
-				Field f    = classBlock.getDeclaredField(explode[1]);
-				block      = (Block) f.get(null);
-				
-				ModGollumCoreLib.log.debug ("parseBlockDescription Added : "+explode[0]);
-				
-			} catch (Exception e) {
-				
-				// Si le code est reofusqué
-				try {
-					
-					ModGollumCoreLib.log.debug ("parseBlockDescription Test reofuscate  : "+explode[0]);
-					
-					explode    = this.reobfKey (blockStr).split(Pattern.quote("|"));
-					classBlock = Class.forName(explode[0]);
-					Field f    = classBlock.getDeclaredField(explode[1]);
-					block      = (Block) f.get(null);
-					
-					ModGollumCoreLib.log.debug ("parseBlockDescription Added : "+explode[0]);
-					
-				} catch (Exception e2) {
-					ModGollumCoreLib.log.severe ("parseBlockDescription Erreur load  : "+explode[0]);
-				}
-			}
-			
-			unity.block       = block;
+			unity.block       = RegisteredObjects.instance().getBlock(blockStr);
 			unity.metadata    = Integer.parseInt(metadata);
 			
 			if (orientation.equals("none"))              { unity.orientation = Unity.ORIENTATION_NONE;              } else 
@@ -383,47 +346,6 @@ public class BuildingParser {
 		}
 		return unity;
 	}
-	
-	
-	/**
-	 * Renvoie la valeur offusquée de la class
-	 * @param stringValue
-	 * @return
-	 * @deprecated
-	 * TODO a supprimer
-	 * @throws FileNotFoundException 
-	 */
-	private String reobfKey(String stringValue) throws Exception {
-		HashMap<String, String> map = this.getReobfArray ();
-		return map.get(stringValue);
-	}
-	
-	/**
-	 * Renvoie le tableau reobfArray
-	 * @return
-	 * @throws InvalidSyntaxException 
-	 * @throws IOException 
-	 * @deprecated
-	 * TODO a supprimer
-	 */
-	private HashMap<String, String> getReobfArray () throws Exception {
-		
-		if (BuildingParser.reobfArray == null) {
-			BuildingParser.reobfArray = new HashMap<String, String> ();
-			
-			InputStream isJson = this.resourceLoader.asset(PATH_REOBF_JSON, ModGollumCoreLib.MODID);
-			JsonRootNode json  = this.parser.parse(new InputStreamReader(isJson));
-			isJson.close();
-			
-			Map<JsonStringNode, JsonNode> map = json.getFields();
-			for (JsonStringNode key : map.keySet()) {
-				BuildingParser.reobfArray.put(key.getText(), map.get(key).getText());
-			}
-			
-		}
-		
-		return BuildingParser.reobfArray;
-	}
 
 	/**
 	 * Parse un contenu d'objet (Les chests par exemple)
@@ -436,49 +358,16 @@ public class BuildingParser {
 		
 		for (JsonNode el: group.getElements()) {
 			
-			String[] explode   = el.getStringValue ("element").split(Pattern.quote("|"));
-			
 			try {
 				
 				// Récupère l'attribut
 				Class classEl;
 				int type = 0;
-				Item item = null;
-				Block block = null;
-				try {
-					
-					classEl = Class.forName(explode[0]);
-					Field f = classEl.getDeclaredField(explode[1]);
-					Object o = f.get(null);
-					if (o instanceof Item) {
-						item = (Item)o;
-						type = Content.TYPE_ITEM;
-					}
-					if (o instanceof Block) {
-						block = (Block)o;
-						type = Content.TYPE_BLOCK;
-					}
-					
-				} catch (Exception e) {
-					// Si le code est reofusqué
-					explode = this.reobfKey (el.getStringValue ("element")).split(Pattern.quote("|"));
-					classEl = Class.forName(explode[0]);
-					Field f = classEl.getDeclaredField(explode[1]);
-					Object o = f.get(null);
-					if (o instanceof Item) {
-						item = (Item)o;
-						type = Content.TYPE_ITEM;
-					}
-					if (o instanceof Block) {
-						block = (Block)o;
-						type = Content.TYPE_BLOCK;
-					}
-				}
-				
+				Item item = RegisteredObjects.instance().getItem(el.getStringValue ("element"));
 				
 				Content content = new Content ();
 
-				content.id       = (item != null) ? item.itemID : ((block != null) ? block.blockID : 0);
+				content.item     = item;
 				content.type     = type;
 				content.min      = 1;  try { content.min      = Integer.parseInt (el.getNumberValue ("min"));      } catch (Exception e) { }
 				content.max      = 1;  try { content.max      = Integer.parseInt (el.getNumberValue ("max"));      } catch (Exception e) { }

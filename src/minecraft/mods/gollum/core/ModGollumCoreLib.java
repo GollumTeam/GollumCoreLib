@@ -1,6 +1,12 @@
 
 package mods.gollum.core;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.Field;
+
+import org.apache.commons.lang3.StringUtils;
+
 import mods.gollum.core.common.CommonProxyGolumCoreLib;
 import mods.gollum.core.common.blocks.BlockSpawner;
 import mods.gollum.core.common.command.CommandBuilding;
@@ -14,6 +20,7 @@ import mods.gollum.core.common.tileentities.TileEntityBlockSpawner;
 import mods.gollum.core.common.version.VersionChecker;
 import mods.gollum.core.common.worldgenerator.WorldGeneratorByBuilding;
 import mods.gollum.core.common.worldgenerator.WorldGeneratorByBuildingLoader;
+import mods.gollum.core.tools.registered.RegisteredObjects;
 import mods.gollum.core.tools.registry.BlockRegistry;
 import mods.gollum.core.tools.registry.ItemRegistry;
 import net.minecraft.block.Block;
@@ -139,7 +146,7 @@ public class ModGollumCoreLib extends GollumMod {
 	public void initBlocks () {
 		
 		// Création des blocks
-		this.blockSpawner = new BlockSpawner (this.config.blockSpawnerID, "GCLBlockSpawner");
+		this.blockSpawner = new BlockSpawner (this.config.blockSpawnerID, "BlockSpawner");
 		
 	}
 	
@@ -149,7 +156,7 @@ public class ModGollumCoreLib extends GollumMod {
 	public void initItem () {
 		
 		// Création des items
-		this.itemBuilding = (ItemBuilding)new ItemBuilding(this.config.itemBuildingID, "GCLItemBuilding").setCreativeTab(CreativeTabs.tabTools); // TODO Creative tab custom
+		this.itemBuilding = (ItemBuilding)new ItemBuilding(this.config.itemBuildingID, "ItemBuilding").setCreativeTab(CreativeTabs.tabTools); // TODO Creative tab custom
 		
 	}
 	
@@ -157,10 +164,6 @@ public class ModGollumCoreLib extends GollumMod {
 	 * Enregistre les générateur de terrain
 	 */
 	private void initWorldGenerators () {
-		
-
-		Block b = GameRegistry.findBlock(this.MODID, "GCLBlockSpawner");
-		log.debug("Block", b.getUnlocalizedName());
 		
 		// Céation du world generator
 		WorldGeneratorByBuilding worldGeneratorByBuilding = new WorldGeneratorByBuildingLoader().load ();
