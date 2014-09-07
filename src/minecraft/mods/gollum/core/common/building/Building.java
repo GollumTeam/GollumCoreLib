@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 
 public class Building {
 	
@@ -88,11 +89,11 @@ public class Building {
 			public static final int TYPE_ITEM  = 0;
 			public static final int TYPE_BLOCK = 1;
 			
-			public int id = 0;
-			public int min = 1;
-			public int max = 1;
-			public int metadata = -1;
-			public int type;
+			public Item item = null;
+			public int  min = 1;
+			public int  max = 1;
+			public int  metadata = -1;
+			public int  type;
 			
 		}
 		

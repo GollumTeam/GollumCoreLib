@@ -6,11 +6,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import mods.gollum.core.ModGollumCoreLib;
-import mods.gollum.core.common.building.FieldReobfKey;
 import mods.gollum.core.common.config.IConfigJsonClass;
 import mods.gollum.core.common.config.IConfigMerge;
 import mods.gollum.core.common.config.container.BuildingConfigType.Group.Building;
 import mods.gollum.core.common.config.container.BuildingConfigType.Group.Building.Dimention;
+import mods.gollum.core.tools.registered.RegisteredObjects;
 import net.minecraft.block.Block;
 import argo.jdom.JsonArrayNodeBuilder;
 import argo.jdom.JsonNode;
@@ -21,8 +21,6 @@ import argo.jdom.JsonRootNode;
 import argo.jdom.JsonStringNode;
 
 public class BuildingConfigType implements IConfigJsonClass, IConfigMerge {
-
-	private static final FieldReobfKey fieldReobfKey = new FieldReobfKey();
 	
 	public static class Group {
 		
@@ -39,30 +37,8 @@ public class BuildingConfigType implements IConfigJsonClass, IConfigMerge {
 				
 				public Integer spawnRate = null;
 				public Integer spawnHeight = null;
-				public ArrayList<String> blocksSpawn = new ArrayList<String>(); // TODO changé en block
+				public ArrayList<Block> blocksSpawn = new ArrayList<Block>();
 				
-				public ArrayList<Block> getBlocksSpawn() {
-				ArrayList<Block> blocks = new ArrayList<Block>();
-					
-					for (String blockSpawn : blocksSpawn) {
-						Object obj;
-						try {
-							obj = fieldReobfKey.getTarget(blockSpawn);
-						
-							if (obj instanceof Block) {
-								blocks.add((Block) obj);
-							} else if (obj == null) {
-								ModGollumCoreLib.log.severe("Error field is null : "+blockSpawn);
-							} else {
-								ModGollumCoreLib.log.severe("Error field is'nt block : "+blockSpawn);
-							}
-						} catch (Exception e) {
-							ModGollumCoreLib.log.severe("Error field not found : "+blockSpawn);
-						}
-					}
-					
-					return blocks;
-				}
 			}
 		}
 		
@@ -141,17 +117,15 @@ public class BuildingConfigType implements IConfigJsonClass, IConfigMerge {
 			for (JsonNode jsonBlock : jsonDimention.getNode("blocksSpawn").getElements()) {
 				String key = jsonBlock.getText();
 				try {
-					Object obj = this.fieldReobfKey.getTarget(key); // TODO a revoir
+					Block b = RegisteredObjects.instance().getBlock(key);
 					
-					if (obj instanceof Block) {
-						dimention.blocksSpawn.add(key);
-					} else if (obj == null) {
-						ModGollumCoreLib.log.severe("Error field is null : "+key);
+					if (b != null) {
+						dimention.blocksSpawn.add(b);
 					} else {
-						ModGollumCoreLib.log.severe("Error field is'nt block : "+key);
+						ModGollumCoreLib.log.severe("Error block not found : "+key);
 					}
 				} catch (Exception e) {
-					ModGollumCoreLib.log.severe("Error field not found : "+key);
+					ModGollumCoreLib.log.severe("Error block not found : "+key);
 				}
 			}
 			
@@ -227,12 +201,12 @@ public class BuildingConfigType implements IConfigJsonClass, IConfigMerge {
 		return jsonDimentions;
 	}
 
-	private JsonNodeBuilder getJsonBlocksSpawn(ArrayList<String> blocksSpawn) {
+	private JsonNodeBuilder getJsonBlocksSpawn(ArrayList<Block> blocksSpawn) {
 		JsonArrayNodeBuilder jsonBlocksSpawn = JsonNodeBuilders.anArrayBuilder();
 		
-		for (String block : blocksSpawn) {
+		for (Block block : blocksSpawn) {
 			try {
-				jsonBlocksSpawn.withElement(JsonNodeBuilders.aStringBuilder(this.fieldReobfKey.humanQualifiedName(block)));
+				jsonBlocksSpawn.withElement(JsonNodeBuilders.aStringBuilder(RegisteredObjects.instance().getRegisterName (block)));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

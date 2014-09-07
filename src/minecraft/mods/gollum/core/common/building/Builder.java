@@ -426,21 +426,16 @@ public class Builder {
 					int diff   = content.max - content.min;
 					int nombre = content.min + ((diff > 0) ? random.nextInt (diff) : 0);
 					
-					ItemStack itemStack;
-					if (content.type == Content.TYPE_ITEM) {
+					if (content.item != null) {
+						ItemStack itemStack;
 						if (content.metadata == -1) {
-							itemStack = new ItemStack(Item.itemsList[content.id], nombre);
+							itemStack = new ItemStack(content.item, nombre);
 						} else {
-							itemStack = new ItemStack(Item.itemsList[content.id], nombre, content.metadata);
+							itemStack = new ItemStack(content.item, nombre, content.metadata);
 						}
-					} else {
-						if (content.metadata == -1) {
-							itemStack = new ItemStack(Block.blocksList [content.id], nombre);
-						} else {
-							itemStack = new ItemStack(Block.blocksList [content.id], nombre, content.metadata);
-						}
+						
+						((IInventory) te).setInventorySlotContents (i, itemStack);
 					}
-					((IInventory) te).setInventorySlotContents (i, itemStack);
 				}
 			}
 		}

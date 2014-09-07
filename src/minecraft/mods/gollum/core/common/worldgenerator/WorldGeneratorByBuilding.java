@@ -3,6 +3,7 @@ package mods.gollum.core.common.worldgenerator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.Random;
 
 import mods.gollum.core.ModGollumCoreLib;
@@ -76,16 +77,21 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 	 * @param mercenaryBuilding1SpawnRate
 	 * @param dimensionIdSurface
 	 */
-	public void addBuilding(int idGroup, int dimensionId, Building building) {
+	public void addBuilding(int idGroup, Building building) {
 		
-		if (!this.buildings.containsKey (dimensionId)) {
-			this.buildings.put (dimensionId, new HashMap<Integer, ArrayList<Building>>());
+		for (Entry<Integer, DimentionSpawnInfos> entry : building.dimentionsInfos.entrySet()) {
+			
+			int dimensionId = entry.getKey();
+			
+			if (!this.buildings.containsKey (dimensionId)) {
+				this.buildings.put (dimensionId, new HashMap<Integer, ArrayList<Building>>());
+			}
+			if (!this.buildings.get (dimensionId).containsKey(idGroup)) {
+				this.buildings.get (dimensionId).put (idGroup, new ArrayList<Building>());
+			}
+			
+			this.buildings.get (dimensionId).get(idGroup).add(building);
 		}
-		if (!this.buildings.get (dimensionId).containsKey(idGroup)) {
-			this.buildings.get (dimensionId).put (idGroup, new ArrayList<Building>());
-		}
-		
-		this.buildings.get (dimensionId).get(idGroup).add(building);
 	}
 	
 	/**
