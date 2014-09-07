@@ -2,6 +2,9 @@ package mods.gollum.core.common.building;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
 
 import net.minecraft.block.Block;
 
@@ -12,6 +15,55 @@ public class Building {
 	public static final int ROTATED_180 = 2;
 	public static final int ROTATED_270 = 3;
 	public static final int ROTATED_360 = 4;
+	
+	
+	public static class Position3D implements Comparable {
+		
+		private Building building;
+		private int x;
+		private int y;
+		private int z;
+		
+		public Position3D (Building building, int x, int y, int z) {
+			this.building = building;
+			this.x = x;
+			this.y = y;
+			this.z = z;
+		}
+		
+		public int x(int rotate) {
+			return (rotate == ROTATED_90 || rotate == ROTATED_270) ? z : x;
+		}
+		public int y(int rotate) {
+			return y;
+		}
+		public int z(int rotate) {
+			return (rotate == ROTATED_90 || rotate == ROTATED_270) ? building.maxX(rotate) - x - 1 : building.maxZ(rotate) - z - 1;
+		}
+		
+		public boolean equal (Object o) {
+
+			Position3D position3D = (Position3D)o;
+			
+			return x == position3D.x || y == position3D.y || z == position3D.z;
+		}
+
+		@Override
+		public int compareTo(Object o) {
+			
+			Position3D position3D = (Position3D)o;
+			
+			if (x < position3D.x) { return -1; }
+			if (x > position3D.x) { return 1; }
+			if (y < position3D.y) { return -1; }
+			if (y > position3D.y) { return 1; }
+			if (z < position3D.z) { return -1; }
+			if (z > position3D.z) { return 1; }
+			
+			return 0;
+		}
+		
+	}
 	
 	/**
 	 * Un element de lamatrice building
@@ -74,7 +126,8 @@ public class Building {
 		public int x = 0;
 		public int y = 0;
 		public int z = 0;
-		Building building = new Building();
+		public int orientation;
+		public Building building = new Building();
 		
 		public void synMax(Building building) {
 			this.building.maxX = building.maxX;
@@ -98,19 +151,21 @@ public class Building {
 	
 	public int height = 0;
 	public String name = "random";
+	public String modId = "";
 	public HashMap<Integer, DimentionSpawnInfos> dimentionsInfos = new HashMap<Integer, DimentionSpawnInfos>();
 	
 	/**
 	 * Liste des block de la constuction
 	 */
-	private HashMap<Integer, HashMap<Integer, HashMap<Integer, Unity>>> blocks = new HashMap<Integer, HashMap<Integer, HashMap<Integer, Unity>>>();
+	public LinkedHashMap<Position3D, Unity> unities = new LinkedHashMap<Position3D, Unity>();
 	/**
 	 * Liste des blocks posés aléatoirements
 	 */
 	private ArrayList<GroupSubBuildings> randomGroupSubBuildings = new ArrayList<GroupSubBuildings>();
 	
-	public Building(String name) {
+	public Building(String name, String modId) {
 		this.name = name;
+		this.modId = modId;
 	}
 
 	public Building() {
@@ -128,40 +183,19 @@ public class Building {
 		maxY = Math.max(maxY, y+1);
 		maxZ = Math.max(maxZ, z+1);
 		
+		Position3D position3D = new Position3D(this, x, y, z);
+		if (this.unities.containsKey(position3D)) {
+			this.unities.remove(position3D);
+		}
 	}
 	
 	public void set (int x, int y, int z, Unity unity) {
 		
 		this.setNull(x, y, z);
 		
-		if (!this.blocks.containsKey(x))        { this.blocks       .put(x, new HashMap<Integer, HashMap<Integer, Unity>>()); }
-		if (!this.blocks.get(x).containsKey(y)) { this.blocks.get(x).put(y, new HashMap<Integer, Unity>()); }
-		
-		this.blocks.get(x).get(y).put(z, unity);
-	}
-	
-	public Unity get (int x, int y, int z) {
-		try {
-			return this.blocks.get(x).get(y).get(z);
-		} catch (Exception e) {
-			return null;
+		if (unity != null) {
+			this.unities.put(new Position3D(this, x, y, z), unity);
 		}
-	}
-	
-	public Unity get (int x, int y, int z, int rotate) {
-		try {
-			if (rotate == this.ROTATED_90 || rotate == this.ROTATED_270) {
-				return this.get(z, y, this.maxX(rotate) - x - 1);
-			} else {
-				return this.get(x, y, this.maxZ(rotate) - z - 1);
-			}
-		} catch (Exception e) {
-			return null;
-		}
-	}
-	
-	public boolean isEraseBlock (int x, int y, int z, int rotate) {
-		return this.get(x, y, z, rotate) != null;
 	}
 	
 	public void addRandomBuildings(GroupSubBuildings groupSubBuildings) {

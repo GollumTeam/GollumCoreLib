@@ -8,6 +8,7 @@ import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.common.building.Builder;
 import mods.gollum.core.common.building.Building;
 import mods.gollum.core.common.building.BuildingParser;
+import mods.gollum.core.common.building.Building.SubBuilding;
 import mods.gollum.core.tools.helper.items.HItem;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,6 +21,15 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemBuilding extends HItem {
 	
+	long lastBuild = 0;
+	
+	private ArrayList<SubBuilding> lastBuildings = new ArrayList<Building.SubBuilding>();
+	
+	public SubBuilding getLastBuild(int i) {
+		return this.lastBuildings.get (lastBuildings.size() - i - 1);
+	}
+	
+	
 	private Builder builder = new Builder();
 	public ArrayList<String>   nameIndex     = null;
 	public ArrayList<Building> buildingIndex = null;
@@ -31,7 +41,9 @@ public class ItemBuilding extends HItem {
 		
 	}
 	
-	private void init () {
+	private void initBuildingList () {
+		this.nameIndex     = new ArrayList<String>();
+		this.buildingIndex = new ArrayList<Building>();
 		for (Entry<String, Building> entry : BuildingParser.getBuildingsList().entrySet()) {
 			this.nameIndex    .add(entry.getKey());
 			this.buildingIndex.add(entry.getValue());
@@ -39,20 +51,12 @@ public class ItemBuilding extends HItem {
 	}
 
 	private ArrayList<String> getNameIndex() {
-		if (this.nameIndex == null) {
-			this.nameIndex     = new ArrayList<String>();
-			this.buildingIndex = new ArrayList<Building>();
-			this.init();
-		}
+		this.initBuildingList();
 		return this.nameIndex;
 	}
 
 	private ArrayList<Building> getNBuildingIndex() {
-		if (this.buildingIndex == null) {
-			this.nameIndex     = new ArrayList<String>();
-			this.buildingIndex = new ArrayList<Building>();
-			this.init();
-		}
+		this.initBuildingList();
 		return this.buildingIndex;
 	}
 	
@@ -68,17 +72,27 @@ public class ItemBuilding extends HItem {
 			return true;
 		}
 		
+		if (System.currentTimeMillis() - this.lastBuild < 3000) {
+			return true;
+		}
+		this.lastBuild = System.currentTimeMillis();
+		
 		int metadata = itemStack.getItemDamage();
 		ArrayList<Building> buildings = this.getNBuildingIndex(); 
 		int orientation = MathHelper.floor_double((double) (player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 		
 		if (metadata < buildings.size()) {
 			
-			Building building = buildings.get(metadata);
+			SubBuilding subBuilding = new SubBuilding();
+			subBuilding.building = buildings.get(metadata);
+			subBuilding.x = x;
+			subBuilding.y = y;
+			subBuilding.z = z;
+			subBuilding.orientation= orientation;
 			
 			ModGollumCoreLib.log.debug("orientation = "+orientation);
-			
-			builder.build(world, orientation, building, x, y, z); // TODO revoir la rotation
+			this.lastBuildings.add(subBuilding);
+			builder.build(world, subBuilding);
 			
 		}
 		
