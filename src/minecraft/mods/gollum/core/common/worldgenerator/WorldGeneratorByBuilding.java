@@ -143,6 +143,10 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 			}
 			
 		}
+		if (buildingsForRate.isEmpty()) {
+			return null;
+		}
+		
 		
 		return buildingsForRate.get(random.nextInt(buildingsForRate.size()));
 	}
@@ -195,8 +199,10 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 			
 			
 			int rotate = random.nextInt(Building.ROTATED_360);
-//			rotate = Building.ROTATED_90;
-			Building            building        = this.getBuildingByRate (buildings, dimention, random);
+			Building building = this.getBuildingByRate (buildings, dimention, random);
+			if (building == null) {
+				return false;
+			}
 			DimentionSpawnInfos dimentionsInfos = building.dimentionsInfos.get(dimention);
 			
 			// Position initial de la génération en hauteur
@@ -206,7 +212,6 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 			int initX = chunkX * 16 + random.nextInt(8) - random.nextInt(8);
 			int initY = worldY      + random.nextInt(8) - random.nextInt(8);
 			int initZ = chunkZ * 16 + random.nextInt(8) - random.nextInt(8);
-//			initY = 3; // Pour test sur un superflat
 			
 			if (!this.hasBuildingArround (chunkX, chunkZ)) {
 				

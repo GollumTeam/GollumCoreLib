@@ -12,6 +12,7 @@ import mods.gollum.core.common.blocks.BlockSpawner;
 import mods.gollum.core.common.command.CommandBuilding;
 import mods.gollum.core.common.config.ConfigGollumCoreLib;
 import mods.gollum.core.common.context.ModContext;
+import mods.gollum.core.common.creativetab.GollumCreativeTabs;
 import mods.gollum.core.common.i18n.I18n;
 import mods.gollum.core.common.items.ItemBuilding;
 import mods.gollum.core.common.log.Logger;
@@ -66,7 +67,12 @@ public class ModGollumCoreLib extends GollumMod {
 	 * La configuration
 	 */
 	public static ConfigGollumCoreLib config;
-
+	
+	/**
+	 * Tab du mode creative
+	 */
+	public static GollumCreativeTabs tabBuildingStaff = new GollumCreativeTabs("BuildingStaff");;
+	
 	public static BlockSpawner blockSpawner;
 	public static ItemBuilding itemBuilding;
 	
@@ -120,6 +126,9 @@ public class ModGollumCoreLib extends GollumMod {
 		
 		// Initialisation les TileEntities
 		this.initTileEntities ();
+		
+		// Set de l'icon du tab creative
+		this.tabBuildingStaff.setIcon(this.itemBuilding);
 	}
 
 	/** 3 **/
@@ -156,7 +165,7 @@ public class ModGollumCoreLib extends GollumMod {
 	public void initItem () {
 		
 		// Création des items
-		this.itemBuilding = (ItemBuilding)new ItemBuilding(this.config.itemBuildingID, "ItemBuilding").setCreativeTab(CreativeTabs.tabTools); // TODO Creative tab custom
+		this.itemBuilding = (ItemBuilding)new ItemBuilding(this.config.itemBuildingID, "ItemBuilding").setCreativeTab(this.tabBuildingStaff);
 		
 	}
 	

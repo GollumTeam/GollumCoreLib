@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -111,10 +112,16 @@ public class ItemBuilding extends HItem {
 		return name;
 	}
 	
-	
 	@Override
-	public String getItemDisplayName(ItemStack par1ItemStack) {
-		return this.getUnlocalizedNameInefficiently(par1ItemStack).trim();
+	public String getItemDisplayName(ItemStack itemStack) {
+		int metadata = itemStack.getItemDamage();
+		
+		String name= ModGollumCoreLib.i18n.trans ("Building staff");
+		if (metadata < this.getNameIndex().size()) {
+			name += " : "+this.getNameIndex().get(metadata);
+		}
+		
+		return name;
 	}
 	
 	@SideOnly(Side.CLIENT)
