@@ -72,7 +72,7 @@ public class ItemBuilding extends HItem {
 			return true;
 		}
 		
-		if (System.currentTimeMillis() - this.lastBuild < 3000) {
+		if (System.currentTimeMillis() - this.lastBuild < 1000) {
 			return true;
 		}
 		this.lastBuild = System.currentTimeMillis();
