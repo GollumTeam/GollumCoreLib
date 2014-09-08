@@ -7,6 +7,7 @@ import mods.gollum.core.common.command.CommandBuilding;
 import mods.gollum.core.common.config.ConfigGollumCoreLib;
 import mods.gollum.core.common.context.ModContext;
 import mods.gollum.core.common.creativetab.GollumCreativeTabs;
+import mods.gollum.core.common.event.WorldHandler;
 import mods.gollum.core.common.i18n.I18n;
 import mods.gollum.core.common.items.ItemBuilding;
 import mods.gollum.core.common.log.Logger;
@@ -17,6 +18,7 @@ import mods.gollum.core.common.worldgenerator.WorldGeneratorByBuilding;
 import mods.gollum.core.common.worldgenerator.WorldGeneratorByBuildingLoader;
 import mods.gollum.core.tools.registry.BlockRegistry;
 import mods.gollum.core.tools.registry.ItemRegistry;
+import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -119,6 +121,8 @@ public class ModGollumCoreLib extends GollumMod {
 		
 		// Set de l'icon du tab creative
 		this.tabBuildingStaff.setIcon(this.itemBuilding);
+		
+		MinecraftForge.EVENT_BUS.register(new WorldHandler());
 	}
 
 	/** 3 **/
