@@ -1,15 +1,12 @@
 package mods.gollum.core.common.worldgenerator;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map.Entry;
 
 import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.common.building.Building;
 import mods.gollum.core.common.building.BuildingParser;
 import mods.gollum.core.common.building.ModBuildingParser;
-import mods.gollum.core.common.config.ConfigBuildings;
 import mods.gollum.core.common.config.container.BuildingConfigType;
 import cpw.mods.fml.common.Loader;
 

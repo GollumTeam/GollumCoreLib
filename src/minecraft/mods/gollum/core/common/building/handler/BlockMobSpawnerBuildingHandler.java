@@ -3,15 +3,9 @@ package mods.gollum.core.common.building.handler;
 import java.util.HashMap;
 import java.util.Random;
 
-import mods.gollum.core.ModGollumCoreLib;
-import mods.gollum.core.common.blocks.BlockProximitySpawn;
-import mods.gollum.core.common.building.Builder;
-import mods.gollum.core.common.tileentities.TileEntityBlockSpawner;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockCommandBlock;
 import net.minecraft.block.BlockMobSpawner;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityCommandBlock;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.world.World;
 

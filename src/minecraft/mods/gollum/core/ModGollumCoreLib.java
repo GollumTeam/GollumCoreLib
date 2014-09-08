@@ -1,12 +1,6 @@
 
 package mods.gollum.core;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.lang.reflect.Field;
-
-import org.apache.commons.lang3.StringUtils;
-
 import mods.gollum.core.common.CommonProxyGolumCoreLib;
 import mods.gollum.core.common.blocks.BlockProximitySpawn;
 import mods.gollum.core.common.command.CommandBuilding;
@@ -21,12 +15,8 @@ import mods.gollum.core.common.tileentities.TileEntityBlockSpawner;
 import mods.gollum.core.common.version.VersionChecker;
 import mods.gollum.core.common.worldgenerator.WorldGeneratorByBuilding;
 import mods.gollum.core.common.worldgenerator.WorldGeneratorByBuildingLoader;
-import mods.gollum.core.tools.registered.RegisteredObjects;
 import mods.gollum.core.tools.registry.BlockRegistry;
 import mods.gollum.core.tools.registry.ItemRegistry;
-import net.minecraft.block.Block;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -52,7 +42,7 @@ public class ModGollumCoreLib extends GollumMod {
 	
 	@SidedProxy(clientSide = "mods.gollum.core.client.ClientProxyGolumCoreLib", serverSide = "mods.gollum.core.common.CommonProxyGolumCoreLib")
 	public static CommonProxyGolumCoreLib proxy;
-
+	
 	/**
 	 * Gestion des logs
 	 */

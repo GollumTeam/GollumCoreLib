@@ -1,8 +1,32 @@
 package mods.gollum.core.tools.helper;
 
-import net.minecraft.client.renderer.texture.IconRegister;
+import java.util.List;
+import java.util.TreeSet;
+
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public interface IItemMetadataHelper {
-	// TODO
+	
+	/**
+	 * returns a list of blocks with the same ID, but different meta (eg: wood
+	 * returns 4 blocks)
+	 */
+	@SideOnly(Side.CLIENT)
+	public void getSubItems(int id, CreativeTabs ctabs, List list);
+	
+	/**
+	 * Liste des metadata enabled pour le subtype
+	 */
+	TreeSet<Integer> listSubEnabled();
+	
+	int getEnabledMetadata(int dammage);
+	
+	public String getUnlocalizedName(ItemStack stack);
+	
+	public Icon getIconFromDamage(int metadata);
+	
 }

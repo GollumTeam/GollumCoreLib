@@ -4,8 +4,6 @@ import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.common.building.Building.Unity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockButton;
-import net.minecraft.block.BlockDirectional;
-import net.minecraft.block.BlockSign;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.world.World;
 

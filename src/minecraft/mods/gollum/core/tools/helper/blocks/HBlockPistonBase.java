@@ -106,17 +106,17 @@ public class HBlockPistonBase extends BlockPistonBase implements IBlockHelper {
 	}
 	
 	@Override
-	public Icon getIcon(int i, int j) {
+	public Icon getIcon(int side, int metadata) {
 		
-		if (helper.vanillaTexture) return super.getIcon(i, j);
+		if (helper.vanillaTexture) return super.getIcon(side, metadata);
 		
-		int k = getOrientation(j);
-		if (k > 5) {
+		int orientation = getOrientation(metadata);
+		if (orientation > 5) {
 			return this.iconTop;
 		}
-		if (i == k) {
+		if (side == orientation) {
 			if (
-				(isExtended(j)) ||
+				(isExtended(metadata)) ||
 				(this.minX > 0.0D) || (this.minY > 0.0D) || (this.minZ > 0.0D) ||
 				(this.maxX < 1.0D) || (this.maxY < 1.0D) || (this.maxZ < 1.0D)
 			) {
@@ -126,7 +126,7 @@ public class HBlockPistonBase extends BlockPistonBase implements IBlockHelper {
 			return this.iconTop;
 		}
 		
-		return i != Facing.oppositeSide[k] ? this.iconSide : this.iconBottom;
+		return side != Facing.oppositeSide[orientation] ? this.iconSide : this.iconBottom;
 	}
 	
 	@Override

@@ -15,12 +15,12 @@ public class ItemHelper implements IItemHelper {
 	// Pour chaque element natural. Utilise le fonctionnement naturel mais pas des helper
 	// Une sorte de config
 	// Par defaut le helper vas enregistrer l'item, charger des texture perso ...
-	public static boolean vanillaRegister = false;
-	public boolean vanillaTexture = false;
+	public boolean vanillaRegister      = false;
+	public boolean vanillaTexture       = false;
 	
-	private GollumMod mod;
-	private Item parent;
-	private String registerName;
+	protected GollumMod mod;
+	protected Item parent;
+	protected String registerName;
 
 	public ItemHelper (Item item, String registerName) {
 		this.parent       = item;

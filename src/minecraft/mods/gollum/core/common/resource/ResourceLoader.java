@@ -7,10 +7,8 @@ import java.io.InputStream;
 import java.util.Map;
 
 import mods.gollum.core.ModGollumCoreLib;
-import net.minecraft.client.Minecraft;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ModContainer;
-import cpw.mods.fml.relauncher.FMLInjectionData;
 
 public class ResourceLoader {
 	

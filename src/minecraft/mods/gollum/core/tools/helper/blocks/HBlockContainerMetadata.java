@@ -1,35 +1,45 @@
 package mods.gollum.core.tools.helper.blocks;
 
 import java.util.List;
+import java.util.TreeSet;
 
+import mods.gollum.core.tools.helper.BlockHelper;
 import mods.gollum.core.tools.helper.BlockMetadataHelper;
 import mods.gollum.core.tools.helper.IBlockMetadataHelper;
 import mods.gollum.core.tools.helper.items.HItemBlockMetadata;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Icon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 public abstract class HBlockContainerMetadata extends HBlockContainer implements IBlockMetadataHelper {
 
+	private BlockMetadataHelper helperMetadata;
+
 	public HBlockContainerMetadata(int id, String registerName, Material material) {
 		super(id, registerName, material);
-		this.helper = new BlockMetadataHelper(this, registerName);
+		this.helperMetadata = new BlockMetadataHelper(this, registerName);
 		this.setItemBlockClass(HItemBlockMetadata.class);
 	}
 	
 	public HBlockContainerMetadata(int id, String registerName, Material material, int listSubBlock[]) {
 		super(id, registerName, material);
-		this.helper = new BlockMetadataHelper(this, registerName, listSubBlock);
+		this.helperMetadata = new BlockMetadataHelper(this, registerName, listSubBlock);
 		this.setItemBlockClass(HItemBlockMetadata.class);
 	}
 	
 	public HBlockContainerMetadata(int id, String registerName, Material material, int numberSubBlock) {
 		super(id, registerName, material);
-		this.helper = new BlockMetadataHelper(this, registerName, numberSubBlock);
+		this.helperMetadata = new BlockMetadataHelper(this, registerName, numberSubBlock);
 		this.setItemBlockClass(HItemBlockMetadata.class);
 	}
+	
+	public BlockHelper getGollumHelperMetadata () {
+		return helperMetadata;
+	}
+	
 	
 	/**
 	 * returns a list of blocks with the same ID, but different meta (eg: wood
@@ -37,7 +47,7 @@ public abstract class HBlockContainerMetadata extends HBlockContainer implements
 	 */
 	@Override
 	public void getSubBlocks(int id, CreativeTabs ctabs, List list) {
-		((IBlockMetadataHelper) this.helper).getSubBlocks(id, ctabs, list);
+		((IBlockMetadataHelper) this.helperMetadata).getSubBlocks(id, ctabs, list);
 	}
 	
 	/**
@@ -65,11 +75,16 @@ public abstract class HBlockContainerMetadata extends HBlockContainer implements
 	/**
 	 * Liste des metadata enabled pour le subtype
 	 */
-	public boolean[] listSubEnabled () {
-		return ((IBlockMetadataHelper) this.helper).listSubEnabled();
+	public TreeSet<Integer> listSubEnabled () {
+		return ((IBlockMetadataHelper) this.helperMetadata).listSubEnabled();
 	}
 	
 	public int getEnabledMetadata (int dammage) {
-		return ((IBlockMetadataHelper) this.helper).getEnabledMetadata(dammage);
+		return ((IBlockMetadataHelper) this.helperMetadata).getEnabledMetadata(dammage);
+	}
+	
+	@Override
+	public Icon getIcon(int side, int metadata) {
+		return (helper.vanillaTexture) ? super.getIcon(side, metadata) : ((IBlockMetadataHelper) this.helperMetadata).getIcon(side, metadata);
 	}
 }
