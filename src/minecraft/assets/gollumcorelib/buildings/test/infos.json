@@ -1,0 +1,112 @@
+{
+	"height":-1,
+	"color" : [
+		{ "block": "minecraft:wool" },
+		{ "block": "minecraft:grass" },
+		{ "block": "CastleDefenders:BlockMerc" },
+		{ "block": "minecraft:fence" },
+		{ "block": "minecraft:torch", "orientation": "up"},
+		{ "block": "minecraft:fire" },
+		{ "block": "minecraft:cobblestone" },
+		{ "block": "minecraft:netherrack" }
+	],
+	
+	"sets": {
+
+		"0x2x3":  { "block": "minecraft:grass" },
+		"1x2x3":  { "block": "minecraft:grass" },
+		"2x2x3":  { "block": "minecraft:grass" },
+		"3x2x3":  { "block": "minecraft:grass" },
+		"4x2x3":  { "block": "minecraft:grass" },
+		"5x2x3":  { "block": "minecraft:grass" },
+		"6x2x3":  { "block": "minecraft:grass" },
+		"7x2x3":  { "block": "minecraft:grass" },
+		"8x2x3":  { "block": "minecraft:grass" },
+		"9x2x3":  { "block": "minecraft:grass" },
+		"10x2x3": { "block": "minecraft:grass" },
+		"11x2x3": { "block": "minecraft:grass" },
+		"12x2x3": { "block": "minecraft:grass" },
+		"13x2x3": { "block": "minecraft:grass" },
+		"14x2x3": { "block": "minecraft:grass" },
+		"15x2x3": { "block": "minecraft:grass" },
+
+		"0x3x3":  { "block": "minecraft:standing_sign", "metadata":0 },
+		"1x3x3":  { "block": "minecraft:standing_sign", "metadata":1 },
+		"2x3x3":  { "block": "minecraft:standing_sign", "metadata":2 },
+		"3x3x3":  { "block": "minecraft:standing_sign", "metadata":3 },
+		"4x3x3":  { "block": "minecraft:standing_sign", "metadata":4 },
+		"5x3x3":  { "block": "minecraft:standing_sign", "metadata":5 },
+		"6x3x3":  { "block": "minecraft:standing_sign", "metadata":6 },
+		"7x3x3":  { "block": "minecraft:standing_sign", "metadata":7 },
+		"8x3x3":  { "block": "minecraft:standing_sign", "metadata":8 },
+		"9x3x3":  { "block": "minecraft:standing_sign", "metadata":9 },
+		"10x3x3": { "block": "minecraft:standing_sign", "metadata":10 },
+		"11x3x3": { "block": "minecraft:standing_sign", "metadata":11 },
+		"12x3x3": { "block": "minecraft:standing_sign", "metadata":12 },
+		"13x3x3": { "block": "minecraft:standing_sign", "metadata":13 },
+		"14x3x3": { "block": "minecraft:standing_sign", "metadata":14 },
+		"15x3x3": { "block": "minecraft:standing_sign", "metadata":15 },
+
+		"0x2x7":  { "block": "minecraft:grass" },
+		"1x2x7":  { "block": "minecraft:grass" },
+		"2x2x7":  { "block": "minecraft:grass" },
+		"3x2x7":  { "block": "minecraft:grass" },
+
+		"0x3x7":  {
+			"block": "minecraft:wall_sign",
+			"orientation":"up",
+			"extra": {
+				"text1": "text 1",
+				"text2": "text 2",
+				"text3": "text 3",
+				"text4": "text 4"
+			}
+		},
+		"1x3x7":  {
+			"block": "minecraft:wall_sign",
+			"orientation":"right",
+			"extra": {
+				"text1": "text 11",
+				"text2": "text 22",
+				"text3": "text 33",
+				"text4": "text 44"
+			}
+		},
+		"2x3x7":  { "block": "minecraft:wall_sign", "orientation":"down" },
+		"3x3x7":  { "block": "minecraft:wall_sign", "orientation":"left" },
+		
+		
+		
+		"2x1x2": {
+			"block": "minecraft:netherrack",
+			"orientation":"down"
+		},
+		"2x2x2": {
+			"block": "minecraft:netherrack",
+			"orientation":"down"
+		},
+		"2x3x2": {
+			"block": "minecraft:netherrack",
+			"orientation":"down"
+		},
+		"2x4x2": {
+			"block": "minecraft:netherrack",
+			"orientation":"down"
+		}
+	},
+	
+	"buildings": {
+		"0x1x0": "test/test"
+	},
+	
+	"randomBuildings": [
+		[
+			{
+				"3x5x3": "test/test"
+			},
+			{
+				"3x15x3": "test/test"
+			}
+		]
+	]
+}

@@ -8,10 +8,10 @@ import java.util.Random;
 import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.common.building.Building.GroupSubBuildings;
 import mods.gollum.core.common.building.Building.ListSubBuildings;
-import mods.gollum.core.common.building.Building.Position3D;
 import mods.gollum.core.common.building.Building.SubBuilding;
 import mods.gollum.core.common.building.Building.Unity;
 import mods.gollum.core.common.building.Building.Unity.Content;
+import mods.gollum.core.common.building.Building.Unity3D;
 import mods.gollum.core.common.building.handler.BlockCommandBlockBuildingHandler;
 import mods.gollum.core.common.building.handler.BlockDirectionalBuildingHandler;
 import mods.gollum.core.common.building.handler.BlockDirectionalWithBit1BuildingHandler;
@@ -81,28 +81,24 @@ public class Builder {
 		}
 		
 		// Peut etre inutile
-		for (Entry<Position3D, Unity> entry : building.unities.entrySet()) {
-			
-			Position3D p = entry.getKey();
-			Unity unity  = entry.getValue();
+		for (Unity3D unity3D : building.unities) {
 			
 			// Position réél dans le monde du block
-			int finalX = initX + p.x(rotate)*dx;
-			int finalY = initY + p.y(rotate);
-			int finalZ = initZ + p.z(rotate)*dz;
+			int finalX = initX + unity3D.x(rotate)*dx;
+			int finalY = initY + unity3D.y(rotate);
+			int finalZ = initZ + unity3D.z(rotate)*dz;
 			world.setBlock(finalX, finalY, finalZ, Block.stone.blockID, 0, 0);
 			
 		}
 		
-		for (Entry<Position3D, Unity> entry : building.unities.entrySet()) {
+		for (Unity3D unity3D : building.unities) {
 			
-			Position3D p = entry.getKey();
-			Unity unity  = entry.getValue();
+			Unity unity = unity3D.unity;
 			
 			// Position réél dans le monde du block
-			int finalX = initX + p.x(rotate)*dx;
-			int finalY = initY + p.y(rotate);
-			int finalZ = initZ + p.z(rotate)*dz;
+			int finalX = initX + unity3D.x(rotate)*dx;
+			int finalY = initY + unity3D.y(rotate);
+			int finalZ = initZ + unity3D.z(rotate)*dz;
 			
 			if (unity.block != null) {
 				world.removeBlockTileEntity(finalX, finalY, finalZ);
@@ -324,17 +320,13 @@ public class Builder {
 		////////////////////////
 		// Notifie les blocks //
 		////////////////////////
-		
-		for (Entry<Position3D, Unity> entry : building.unities.entrySet()) {
-			
-			Position3D p = entry.getKey();
-			Unity unity  = entry.getValue();
-				
+
+		for (Unity3D unity3D : building.unities) {
 			
 			// Position réél dans le monde du block
-			int finalX = initX + p.x(rotate)*dx;
-			int finalY = initY + p.y(rotate);
-			int finalZ = initZ + p.z(rotate)*dz;
+			int finalX = initX + unity3D.x(rotate)*dx;
+			int finalY = initY + unity3D.y(rotate);
+			int finalZ = initZ + unity3D.z(rotate)*dz;
 			world.markBlockForUpdate(finalX, finalY, finalZ);
 //			world.setBlockMetadataWithNotify (finalX, finalY, finalZ, world.getBlockMetadata (finalX, finalY, finalZ), 3);
 			
