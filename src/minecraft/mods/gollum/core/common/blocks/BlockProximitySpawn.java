@@ -10,9 +10,9 @@ import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockSpawner extends HBlockContainer {
+public class BlockProximitySpawn extends HBlockContainer {
 
-	public BlockSpawner(int id, String registerName) {
+	public BlockProximitySpawn(int id, String registerName) {
 		super(id, registerName, Material.air);
 		
 		this.helper.vanillaTexture = true;
