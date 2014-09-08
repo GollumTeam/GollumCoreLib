@@ -35,7 +35,6 @@ public class BuildingParser {
 	
 	private static final String NAME_IMG       = "structure.png";
 	private static final String NAME_JSON      = "infos.json";
-	private static final String PATH_REOBF_JSON      = "reobf/index.json";
 	private static HashMap<String, Building> parsed = new HashMap<String, Building>();
 	
 	private JdomParser     parser         = new JdomParser();

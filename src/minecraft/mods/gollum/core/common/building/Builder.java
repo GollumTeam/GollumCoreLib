@@ -27,6 +27,7 @@ import net.minecraft.block.BlockLadder;
 import net.minecraft.block.BlockLever;
 import net.minecraft.block.BlockMobSpawner;
 import net.minecraft.block.BlockPistonBase;
+import net.minecraft.block.BlockSign;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.BlockTrapDoor;
@@ -36,6 +37,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityCommandBlock;
 import net.minecraft.tileentity.TileEntityMobSpawner;
+import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.world.World;
 
 public class Builder {
@@ -104,7 +106,7 @@ public class Builder {
 				world.setBlock(finalX, finalY, finalZ, 0, 0, 2);
 			}
 			
-			this.setOrientation (world, finalX, finalY, finalZ, this.rotateOrientation(rotate, unity.orientation));
+			this.setOrientation (world, finalX, finalY, finalZ, this.rotateOrientation(rotate, unity.orientation), rotate);
 			this.setContents    (world, random, finalX, finalY, finalZ, unity.contents);
 			this.setExtra       (world, random, finalX, finalY, finalZ, unity.extra, initX, initY, initZ, rotate, building.maxX(rotate), building.maxZ(rotate));
 		}
@@ -478,7 +480,28 @@ public class Builder {
 			default: 
 				break;
 		}
-		
+
+		if (block instanceof BlockSign) {
+			TileEntity te  = world.getBlockTileEntity (x, y, z);
+			if (te instanceof TileEntitySign) {
+				
+				try {
+					String text1 = ""   ; try { text1 = extra.get("text1");                     } catch (Exception e) {} text1 = (text1 != null) ? text1 : "";
+					String text2 = ""   ; try { text2 = extra.get("text2");                     } catch (Exception e) {} text2 = (text2 != null) ? text2 : "";
+					String text3 = ""   ; try { text3 = extra.get("text3");                     } catch (Exception e) {} text3 = (text3 != null) ? text3 : "";
+					String text4 = ""   ; try { text4 = extra.get("text4");                     } catch (Exception e) {} text4 = (text4 != null) ? text4 : "";
+					Boolean edit = false; try { edit = Boolean.parseBoolean(extra.get("edit")); } catch (Exception e) {} edit  = (edit != null) ? edit : false;
+					
+					((TileEntitySign) te).signText[0] = text1;
+					((TileEntitySign) te).signText[1] = text2;
+					((TileEntitySign) te).signText[2] = text3;
+					((TileEntitySign) te).signText[3] = text4;
+					((TileEntitySign) te).setEditable(edit);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
 		
 		if (block instanceof BlockCommandBlock) {
 			
@@ -488,13 +511,13 @@ public class Builder {
 				String command = ""; try { command = extra.get("command"); } catch (Exception e) {} command = (command != null) ? command : "";
 				
 				
-				int varX = 0; try { varX = Integer.parseInt(extra.get("x"))*dx; } catch (Exception e) {}
+				int varX = 0; try { varX = Integer.parseInt(extra.get("x")); } catch (Exception e) {}
 				int varY = 0; try { varY = Integer.parseInt(extra.get("y")); } catch (Exception e) {}
-				int varZ = 0; try { varZ = Integer.parseInt(extra.get("z"))*dz; } catch (Exception e) {}
+				int varZ = 0; try { varZ = Integer.parseInt(extra.get("z")); } catch (Exception e) {}
 				
-				command = command.replace("{$x}", ""+(this.getRotatedX(varX, varZ, rotate, maxX, maxZ) + initX));
+				command = command.replace("{$x}", ""+(this.getRotatedX(varX, varZ, rotate, maxX, maxZ)*dx + initX));
 				command = command.replace("{$y}", ""+ (varY + initY));
-				command = command.replace("{$z}", ""+(this.getRotatedZ(varX, varZ, rotate, maxX, maxZ) + initZ));
+				command = command.replace("{$z}", ""+(this.getRotatedZ(varX, varZ, rotate, maxX, maxZ)*dz + initZ));
 				ModGollumCoreLib.log.info("command : "+command);
 				
 				((TileEntityCommandBlock) te).setCommand(command);
@@ -587,12 +610,30 @@ public class Builder {
 	 * @param j
 	 * @param k
 	 * @param orientation
+	 * @param rotate 
 	 * @param rotation
 	 */
-	private void setOrientation(World world, int x, int y, int z, int orientation) {
+	private void setOrientation(World world, int x, int y, int z, int orientation, int rotate) {
 		
 		Block block  = Block.blocksList [world.getBlockId (x, y, z)];
 		int metadata = world.getBlockMetadata (x, y, z);
+		
+		if (block instanceof BlockSign) {
+			
+			if (block.blockID == 63) {
+				metadata = (metadata + 4*rotate) % 0xF;
+			} else {
+				if (orientation == Unity.ORIENTATION_NONE)  { metadata = (metadata & 0x8) + 0; } else 
+				if (orientation == Unity.ORIENTATION_UP)    { metadata = (metadata & 0x8) + 2; } else 
+				if (orientation == Unity.ORIENTATION_DOWN)  { metadata = (metadata & 0x8) + 3; } else 
+				if (orientation == Unity.ORIENTATION_LEFT)  { metadata = (metadata & 0x8) + 4; } else 
+				if (orientation == Unity.ORIENTATION_RIGTH) { metadata = (metadata & 0x8) + 5; } else 
+				{
+					ModGollumCoreLib.log.severe("Bad orientation : "+orientation+" id:"+block.blockID+" pos:"+x+","+y+","+z);
+				}
+			}
+			world.setBlockMetadataWithNotify(x, y, z, metadata, 2);
+		}
 		
 		if (
 			block instanceof BlockTorch ||
