@@ -8,7 +8,7 @@ import java.lang.reflect.Field;
 import org.apache.commons.lang3.StringUtils;
 
 import mods.gollum.core.common.CommonProxyGolumCoreLib;
-import mods.gollum.core.common.blocks.BlockSpawner;
+import mods.gollum.core.common.blocks.BlockProximitySpawn;
 import mods.gollum.core.common.command.CommandBuilding;
 import mods.gollum.core.common.config.ConfigGollumCoreLib;
 import mods.gollum.core.common.context.ModContext;
@@ -73,7 +73,7 @@ public class ModGollumCoreLib extends GollumMod {
 	 */
 	public static GollumCreativeTabs tabBuildingStaff = new GollumCreativeTabs("BuildingStaff");;
 	
-	public static BlockSpawner blockSpawner;
+	public static BlockProximitySpawn blockProximitySpawn;
 	public static ItemBuilding itemBuilding;
 	
 	@EventHandler public void handler(FMLInitializationEvent event)     { super.handler (event); }
@@ -155,7 +155,7 @@ public class ModGollumCoreLib extends GollumMod {
 	public void initBlocks () {
 		
 		// Création des blocks
-		this.blockSpawner = new BlockSpawner (this.config.blockSpawnerID, "BlockSpawner");
+		this.blockProximitySpawn = new BlockProximitySpawn (this.config.blockSpawnerID, "BlockProximitySpawn");
 		
 	}
 	

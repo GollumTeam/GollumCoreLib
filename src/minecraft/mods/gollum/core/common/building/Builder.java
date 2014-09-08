@@ -6,43 +6,48 @@ import java.util.Map.Entry;
 import java.util.Random;
 
 import mods.gollum.core.ModGollumCoreLib;
-import mods.gollum.core.common.blocks.BlockSpawner;
 import mods.gollum.core.common.building.Building.GroupSubBuildings;
 import mods.gollum.core.common.building.Building.ListSubBuildings;
 import mods.gollum.core.common.building.Building.Position3D;
 import mods.gollum.core.common.building.Building.SubBuilding;
 import mods.gollum.core.common.building.Building.Unity;
 import mods.gollum.core.common.building.Building.Unity.Content;
-import mods.gollum.core.common.tileentities.TileEntityBlockSpawner;
+import mods.gollum.core.common.building.handler.BlockCommandBlockBuildingHandler;
+import mods.gollum.core.common.building.handler.BlockDirectionalBuildingHandler;
+import mods.gollum.core.common.building.handler.BlockDirectionalWithBit1BuildingHandler;
+import mods.gollum.core.common.building.handler.BlockDirectionalWithNoneBuildingHandler;
+import mods.gollum.core.common.building.handler.BlockDoorBuildingHandler;
+import mods.gollum.core.common.building.handler.BlockLeverBuildingHandler;
+import mods.gollum.core.common.building.handler.BlockMobSpawnerBuildingHandler;
+import mods.gollum.core.common.building.handler.BlockProximitySpawnBuildingHandler;
+import mods.gollum.core.common.building.handler.BlockSignBuildingHandler;
+import mods.gollum.core.common.building.handler.BlockStairsBuildingHandler;
+import mods.gollum.core.common.building.handler.BlockTrapDoorBuildingHandler;
+import mods.gollum.core.common.building.handler.BuildingBlockHandler;
+import mods.gollum.core.tools.registry.BuildingBlockRegistry;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockButton;
-import net.minecraft.block.BlockChest;
-import net.minecraft.block.BlockCommandBlock;
 import net.minecraft.block.BlockContainer;
-import net.minecraft.block.BlockDirectional;
-import net.minecraft.block.BlockDispenser;
-import net.minecraft.block.BlockDoor;
-import net.minecraft.block.BlockFurnace;
-import net.minecraft.block.BlockLadder;
-import net.minecraft.block.BlockLever;
-import net.minecraft.block.BlockMobSpawner;
-import net.minecraft.block.BlockPistonBase;
-import net.minecraft.block.BlockSign;
-import net.minecraft.block.BlockStairs;
-import net.minecraft.block.BlockTorch;
-import net.minecraft.block.BlockTrapDoor;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityCommandBlock;
-import net.minecraft.tileentity.TileEntityMobSpawner;
-import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.world.World;
 
 public class Builder {
 	
-
+	public Builder() {
+		BuildingBlockRegistry.register(new BlockSignBuildingHandler());
+		BuildingBlockRegistry.register(new BlockDirectionalBuildingHandler());
+		BuildingBlockRegistry.register(new BlockDirectionalWithNoneBuildingHandler());
+		BuildingBlockRegistry.register(new BlockDirectionalWithBit1BuildingHandler());
+		BuildingBlockRegistry.register(new BlockTrapDoorBuildingHandler());
+		BuildingBlockRegistry.register(new BlockLeverBuildingHandler());
+		BuildingBlockRegistry.register(new BlockDoorBuildingHandler());
+		BuildingBlockRegistry.register(new BlockStairsBuildingHandler());
+		BuildingBlockRegistry.register(new BlockCommandBlockBuildingHandler());
+		BuildingBlockRegistry.register(new BlockProximitySpawnBuildingHandler());
+		BuildingBlockRegistry.register(new BlockMobSpawnerBuildingHandler());
+	}
+	
 	public void build(World world, SubBuilding subBuilding) {
 		this.build(world, subBuilding.orientation, subBuilding.building, subBuilding.x, subBuilding.y, subBuilding.z);
 	}
@@ -446,18 +451,7 @@ public class Builder {
 	
 	/**
 	 * Insert les extras informations du block
-	 * @param world
-	 * @param random
-	 * @param x
-	 * @param y
-	 * @param x
-	 * @param contents
-	 * @param initX
-	 * @param initY
-	 * @param initZ
-	 * @param rotate	
 	 */
-	// TODO revoir le postion
 	private void setExtra(World world, Random random, int x, int y, int z, HashMap<String, String> extra,int initX, int initY, int initZ, int rotate, int maxX, int maxZ) {
 		
 		Block block  = Block.blocksList [world.getBlockId (x, y, z)];
@@ -480,70 +474,11 @@ public class Builder {
 			default: 
 				break;
 		}
-
-		if (block instanceof BlockSign) {
-			TileEntity te  = world.getBlockTileEntity (x, y, z);
-			if (te instanceof TileEntitySign) {
-				
-				try {
-					String text1 = ""   ; try { text1 = extra.get("text1");                     } catch (Exception e) {} text1 = (text1 != null) ? text1 : "";
-					String text2 = ""   ; try { text2 = extra.get("text2");                     } catch (Exception e) {} text2 = (text2 != null) ? text2 : "";
-					String text3 = ""   ; try { text3 = extra.get("text3");                     } catch (Exception e) {} text3 = (text3 != null) ? text3 : "";
-					String text4 = ""   ; try { text4 = extra.get("text4");                     } catch (Exception e) {} text4 = (text4 != null) ? text4 : "";
-					Boolean edit = false; try { edit = Boolean.parseBoolean(extra.get("edit")); } catch (Exception e) {} edit  = (edit != null) ? edit : false;
-					
-					((TileEntitySign) te).signText[0] = text1;
-					((TileEntitySign) te).signText[1] = text2;
-					((TileEntitySign) te).signText[2] = text3;
-					((TileEntitySign) te).signText[3] = text4;
-					((TileEntitySign) te).setEditable(edit);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
+		
+		for (BuildingBlockHandler handler : BuildingBlockRegistry.instance().getHandlers()) {
+			handler.setExtra(block, world, random, x, y, z, extra, initX, initY, initZ, rotate, dx, dz, maxX, maxZ);
 		}
 		
-		if (block instanceof BlockCommandBlock) {
-			
-			TileEntity te  = world.getBlockTileEntity (x, y, z);
-			if (te instanceof TileEntityCommandBlock) {
-				
-				String command = ""; try { command = extra.get("command"); } catch (Exception e) {} command = (command != null) ? command : "";
-				
-				
-				int varX = 0; try { varX = Integer.parseInt(extra.get("x")); } catch (Exception e) {}
-				int varY = 0; try { varY = Integer.parseInt(extra.get("y")); } catch (Exception e) {}
-				int varZ = 0; try { varZ = Integer.parseInt(extra.get("z")); } catch (Exception e) {}
-				
-				command = command.replace("{$x}", ""+(this.getRotatedX(varX, varZ, rotate, maxX, maxZ)*dx + initX));
-				command = command.replace("{$y}", ""+ (varY + initY));
-				command = command.replace("{$z}", ""+(this.getRotatedZ(varX, varZ, rotate, maxX, maxZ)*dz + initZ));
-				ModGollumCoreLib.log.info("command : "+command);
-				
-				((TileEntityCommandBlock) te).setCommand(command);
-				
-			}
-			
-		}
-		
-		if (block instanceof BlockSpawner) {
-			
-			TileEntity te  = world.getBlockTileEntity (x, y, z);
-			if (te instanceof TileEntityBlockSpawner) {
-				String entity = ""; try { entity = extra.get("entity"); } catch (Exception e) {} entity = (entity != null) ? entity : "Chicken";
-				((TileEntityBlockSpawner) te).setModId (entity);
-			}
-		}
-		
-
-		if (block instanceof BlockMobSpawner) {
-
-			TileEntity te  = world.getBlockTileEntity (x, y, z);
-			if (te instanceof TileEntityMobSpawner) {
-				String entity = ""; try { entity = extra.get("entity"); } catch (Exception e) {} entity = (entity != null) ? entity : "Pigg";
-				((TileEntityMobSpawner) te).getSpawnerLogic().setMobID(entity);
-			}
-		}
 	}
 	
 	/**
@@ -554,23 +489,23 @@ public class Builder {
 	 * @param maxZ
 	 * @return
 	 */
-	private int getRotatedX(int x, int z, int rotate, int maxX, int maxZ) {
+	public static int getRotatedX(int x, int z, int rotate, int maxX, int maxZ) {
 		if (rotate == Building.ROTATED_90) {
 			return z;
 		}
 		if (rotate == Building.ROTATED_180) {
 
-			int newX = this.getRotatedX (x, z, Building.ROTATED_90, maxX, maxZ);
-			int newZ = this.getRotatedZ (x, z, Building.ROTATED_90, maxX, maxZ);
+			int newX = getRotatedX (x, z, Building.ROTATED_90, maxX, maxZ);
+			int newZ = getRotatedZ (x, z, Building.ROTATED_90, maxX, maxZ);
 			
-			return this.getRotatedX (newX, newZ, Building.ROTATED_90, maxX, maxZ);
+			return getRotatedX (newX, newZ, Building.ROTATED_90, maxX, maxZ);
 		}
 		if (rotate == Building.ROTATED_270) {
 
-			int newX = this.getRotatedX (x, z, Building.ROTATED_180, maxX, maxZ);
-			int newZ = this.getRotatedZ (x, z, Building.ROTATED_180, maxX, maxZ);
+			int newX = getRotatedX (x, z, Building.ROTATED_180, maxX, maxZ);
+			int newZ = getRotatedZ (x, z, Building.ROTATED_180, maxX, maxZ);
 			
-			return this.getRotatedX (newX, newZ, Building.ROTATED_90, maxX, maxZ);
+			return getRotatedX (newX, newZ, Building.ROTATED_90, maxX, maxZ);
 		}
 		return x;
 	}
@@ -583,174 +518,37 @@ public class Builder {
 	 * @param maxX
 	 * @return
 	 */
-	private int getRotatedZ(int x, int z, int rotate, int maxX, int maxZ) {
+	public static int getRotatedZ(int x, int z, int rotate, int maxX, int maxZ) {
 		if (rotate == Building.ROTATED_90) {
 			return maxX - x -1;
 		}
 		if (rotate == Building.ROTATED_180) {
 
-			int newX = this.getRotatedX (x, z, Building.ROTATED_90, maxX, maxZ);
-			int newZ = this.getRotatedZ (x, z, Building.ROTATED_90, maxX, maxZ);
+			int newX = getRotatedX (x, z, Building.ROTATED_90, maxX, maxZ);
+			int newZ = getRotatedZ (x, z, Building.ROTATED_90, maxX, maxZ);
 			
-			return this.getRotatedZ (newX, newZ, Building.ROTATED_90, maxX, maxZ);
+			return getRotatedZ (newX, newZ, Building.ROTATED_90, maxX, maxZ);
 		}
 		if (rotate == Building.ROTATED_270) {
 
-			int newX = this.getRotatedX (x, z, Building.ROTATED_180, maxX, maxZ);
-			int newZ = this.getRotatedZ (x, z, Building.ROTATED_180, maxX, maxZ);
+			int newX = getRotatedX (x, z, Building.ROTATED_180, maxX, maxZ);
+			int newZ = getRotatedZ (x, z, Building.ROTATED_180, maxX, maxZ);
 			
-			return this.getRotatedZ (newX, newZ, Building.ROTATED_90, maxX, maxZ);
+			return getRotatedZ (newX, newZ, Building.ROTATED_90, maxX, maxZ);
 		}
 		return z;
 	}
 	
 	/**
 	 * Affecte l'orientation
-	 * @param i
-	 * @param j
-	 * @param k
-	 * @param orientation
-	 * @param rotate 
-	 * @param rotation
 	 */
 	private void setOrientation(World world, int x, int y, int z, int orientation, int rotate) {
 		
 		Block block  = Block.blocksList [world.getBlockId (x, y, z)];
 		int metadata = world.getBlockMetadata (x, y, z);
 		
-		if (block instanceof BlockSign) {
-			
-			if (block.blockID == 63) {
-				metadata = (metadata + 4*rotate) % 0xF;
-			} else {
-				if (orientation == Unity.ORIENTATION_NONE)  { metadata = (metadata & 0x8) + 0; } else 
-				if (orientation == Unity.ORIENTATION_UP)    { metadata = (metadata & 0x8) + 2; } else 
-				if (orientation == Unity.ORIENTATION_DOWN)  { metadata = (metadata & 0x8) + 3; } else 
-				if (orientation == Unity.ORIENTATION_LEFT)  { metadata = (metadata & 0x8) + 4; } else 
-				if (orientation == Unity.ORIENTATION_RIGTH) { metadata = (metadata & 0x8) + 5; } else 
-				{
-					ModGollumCoreLib.log.severe("Bad orientation : "+orientation+" id:"+block.blockID+" pos:"+x+","+y+","+z);
-				}
-			}
-			world.setBlockMetadataWithNotify(x, y, z, metadata, 2);
-		}
-		
-		if (
-			block instanceof BlockTorch ||
-			block instanceof BlockButton
-		) {
-			
-			if (orientation == Unity.ORIENTATION_NONE)  { metadata = (metadata & 0x8) + 0; } else 
-			if (orientation == Unity.ORIENTATION_UP)    { metadata = (metadata & 0x8) + 4; } else 
-			if (orientation == Unity.ORIENTATION_DOWN)  { metadata = (metadata & 0x8) + 3; } else 
-			if (orientation == Unity.ORIENTATION_LEFT)  { metadata = (metadata & 0x8) + 2; } else 
-			if (orientation == Unity.ORIENTATION_RIGTH) { metadata = (metadata & 0x8) + 1; } else 
-			{
-				ModGollumCoreLib.log.severe("Bad orientation : "+orientation+" id:"+block.blockID+" pos:"+x+","+y+","+z);
-			}
-			
-			world.setBlockMetadataWithNotify(x, y, z, metadata, 2);
-			return;
-		}
-
-		if (block instanceof BlockDirectional) {
-			
-			if (orientation == Unity.ORIENTATION_NONE)  { metadata = (metadata & 0xC) + 0; } else 
-			if (orientation == Unity.ORIENTATION_UP)    { metadata = (metadata & 0xC) + 0; } else 
-			if (orientation == Unity.ORIENTATION_DOWN)  { metadata = (metadata & 0xC) + 2; } else 
-			if (orientation == Unity.ORIENTATION_LEFT)  { metadata = (metadata & 0xC) + 3; } else 
-			if (orientation == Unity.ORIENTATION_RIGTH) { metadata = (metadata & 0xC) + 1; } else 
-			{
-				ModGollumCoreLib.log.severe("Bad orientation : "+orientation+" id:"+block.blockID+" pos:"+x+","+y+","+z);
-			}
-			
-			world.setBlockMetadataWithNotify(x, y, z, metadata, 2);
-			return;
-		}
-		
-		if (block instanceof BlockDoor) {
-
-			if ((metadata & 0x8) != 0x8) {
-				if (orientation == Unity.ORIENTATION_UP)    { metadata = (metadata & 0x4) + 3; } else 
-				if (orientation == Unity.ORIENTATION_DOWN)  { metadata = (metadata & 0x4) + 1; } else 
-				if (orientation == Unity.ORIENTATION_LEFT)  { metadata = (metadata & 0x4) + 2; } else 
-				if (orientation == Unity.ORIENTATION_RIGTH) { metadata = (metadata & 0x4) + 0; } else 
-				{
-					ModGollumCoreLib.log.severe("Bad orientation : "+orientation+" id:"+block.blockID+" pos:"+x+","+y+","+z);
-				}
-			}
-			
-			world.setBlockMetadataWithNotify(x, y, z, metadata, 2);
-			return;
-		}
-		
-		if (block instanceof BlockTrapDoor) {
-			
-			if (orientation == Unity.ORIENTATION_UP)    { metadata = (metadata & 0x8) + 3; } else 
-			if (orientation == Unity.ORIENTATION_DOWN)  { metadata = (metadata & 0x8) + 1; } else 
-			if (orientation == Unity.ORIENTATION_LEFT)  { metadata = (metadata & 0x8) + 2; } else 
-			if (orientation == Unity.ORIENTATION_RIGTH) { metadata = (metadata & 0x8) + 0; } else 
-			{
-				ModGollumCoreLib.log.severe("Bad orientation : "+orientation+" id:"+block.blockID+" pos:"+x+","+y+","+z);
-			}
-			
-			world.setBlockMetadataWithNotify(x, y, z, metadata, 2);
-			return;
-		}
-		
-		if (
-			block instanceof BlockLadder ||
-			block instanceof BlockFurnace ||
-			block instanceof BlockChest ||
-			block instanceof BlockDispenser ||
-			block instanceof BlockPistonBase
-		) {
-			
-			if (orientation == Unity.ORIENTATION_UP)    { metadata = (metadata & 0x8) + 2; } else 
-			if (orientation == Unity.ORIENTATION_DOWN)  { metadata = (metadata & 0x8) + 3; } else 
-			if (orientation == Unity.ORIENTATION_LEFT)  { metadata = (metadata & 0x8) + 4; } else 
-			if (orientation == Unity.ORIENTATION_RIGTH) { metadata = (metadata & 0x8) + 5; } else 
-			{
-				ModGollumCoreLib.log.severe("Bad orientation : "+orientation+" id:"+block.blockID+" pos:"+x+","+y+","+z);
-			}
-			
-			world.setBlockMetadataWithNotify(x, y, z, metadata, 2);
-			return;
-		}
-		
-		if (block instanceof BlockStairs) {
-			
-			if (orientation == Unity.ORIENTATION_UP)    { metadata = (metadata & 0xC) + 2; } else 
-			if (orientation == Unity.ORIENTATION_DOWN)  { metadata = (metadata & 0xC) + 3; } else 
-			if (orientation == Unity.ORIENTATION_LEFT)  { metadata = (metadata & 0xC) + 0; } else 
-			if (orientation == Unity.ORIENTATION_RIGTH) { metadata = (metadata & 0xC) + 1; } else 
-			{
-				ModGollumCoreLib.log.severe("Bad orientation : "+orientation+" id:"+block.blockID+" pos:"+x+","+y+","+z);
-			}
-			
-			world.setBlockMetadataWithNotify(x, y, z, metadata, 2);
-			return;
-		}
-
-		if (block instanceof BlockLever) {
-			
-
-			if (orientation == Unity.ORIENTATION_UP)    { metadata = (metadata & 0x8) + 4; } else 
-			if (orientation == Unity.ORIENTATION_DOWN)  { metadata = (metadata & 0x8) + 3; } else 
-			if (orientation == Unity.ORIENTATION_LEFT)  { metadata = (metadata & 0x8) + 2; } else 
-			if (orientation == Unity.ORIENTATION_RIGTH) { metadata = (metadata & 0x8) + 1; } else 
-			
-			if (orientation == Unity.ORIENTATION_BOTTOM_VERTICAL)   { metadata = (metadata & 0x8) + 5; } else 
-			if (orientation == Unity.ORIENTATION_BOTTOM_HORIZONTAL) { metadata = (metadata & 0x8) + 6; } else
-			
-			if (orientation == Unity.ORIENTATION_TOP_VERTICAL)   { metadata = (metadata & 0x8) + 7; } else 
-			if (orientation == Unity.ORIENTATION_TOP_HORIZONTAL) { metadata = (metadata & 0x8) + 0; } else 
-			{
-				ModGollumCoreLib.log.severe("Bad orientation : "+orientation+" id:"+block.blockID+" pos:"+x+","+y+","+z);
-			}
-			
-			world.setBlockMetadataWithNotify(x, y, z, metadata, 2);
-			return;
+		for (BuildingBlockHandler handler : BuildingBlockRegistry.instance().getHandlers()) {
+			handler.setOrientation(world, x, y, z, block, metadata, orientation, rotate);
 		}
 		
 	}

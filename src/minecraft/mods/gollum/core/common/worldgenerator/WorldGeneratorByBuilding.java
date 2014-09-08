@@ -7,7 +7,7 @@ import java.util.Map.Entry;
 import java.util.Random;
 
 import mods.gollum.core.ModGollumCoreLib;
-import mods.gollum.core.common.blocks.BlockSpawner;
+import mods.gollum.core.common.blocks.BlockProximitySpawn;
 import mods.gollum.core.common.building.Builder;
 import mods.gollum.core.common.building.Building;
 import mods.gollum.core.common.building.Building.DimentionSpawnInfos;
