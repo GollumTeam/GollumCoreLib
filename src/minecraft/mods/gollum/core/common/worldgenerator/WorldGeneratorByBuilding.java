@@ -201,7 +201,7 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 					// N'est pas sauvegardé enc as d'arret du serveur mais ca devrais pas dérangé
 					WorldGeneratorByBuilding.chunkHasABuilding.add(chunkX+"x"+chunkZ);
 					
-					builder.build(world, rotate, building, initX, initY, initZ);
+					builder.build(world, building, rotate, initX, initY, initZ);
 					
 					return true;
 				}

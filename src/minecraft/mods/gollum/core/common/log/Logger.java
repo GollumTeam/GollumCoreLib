@@ -14,8 +14,9 @@ public class Logger {
 	
 	public static final int LEVEL_DEBUG   = 0;
 	public static final int LEVEL_INFO    = 1;
-	public static final int LEVEL_WARNING = 2;
-	public static final int LEVEL_SEVERE  = 3;
+	public static final int LEVEL_MESSAGE = 2;
+	public static final int LEVEL_WARNING = 3;
+	public static final int LEVEL_SEVERE  = 4;
 	public static final int LEVEL_NONE    = 99;
 	
 	private static final LogFormatter formater = new LogFormatter();
@@ -67,6 +68,7 @@ public class Logger {
 	public static void setLevelDisplay (String levelDisplay) {
 		Logger.level = LEVEL_INFO;
 		if (levelDisplay.equals("DEBUG"))   Logger.level = LEVEL_DEBUG;
+		if (levelDisplay.equals("MESSAGE")) Logger.level = LEVEL_MESSAGE;
 		if (levelDisplay.equals("WARNING")) Logger.level = LEVEL_WARNING;
 		if (levelDisplay.equals("SEVERE"))  Logger.level = LEVEL_SEVERE;
 		if (levelDisplay.equals("NONE"))    Logger.level = LEVEL_NONE;
@@ -78,6 +80,10 @@ public class Logger {
 	
 	public void info(Object... msg) {
 		this.log (this.modId, LEVEL_INFO ,this.implode (msg));
+	}
+	
+	public void message(Object... msg) {
+		this.log (this.modId, LEVEL_MESSAGE ,this.implode (msg));
 	}
 	
 	public void warning(Object...  msg) {
@@ -136,6 +142,11 @@ public class Logger {
 			case LEVEL_WARNING:
 				if (Logger.level <= LEVEL_WARNING) {
 					log.log(Level.WARNING, msg.toString());
+				}
+				break;
+			case LEVEL_MESSAGE:
+				if (Logger.level <= LEVEL_MESSAGE) {
+					log.log(Level.INFO, msg.toString());
 				}
 				break;
 			case LEVEL_INFO:
