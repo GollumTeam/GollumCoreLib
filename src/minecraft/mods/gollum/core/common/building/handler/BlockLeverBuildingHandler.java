@@ -3,10 +3,7 @@ package mods.gollum.core.common.building.handler;
 import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.common.building.Building.Unity;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.BlockLever;
-import net.minecraft.block.BlockSign;
-import net.minecraft.block.BlockTrapDoor;
 import net.minecraft.world.World;
 
 public class BlockLeverBuildingHandler extends BuildingBlockHandler {

@@ -2,7 +2,6 @@ package mods.gollum.core.common.building;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map.Entry;
 import java.util.Random;
 
 import mods.gollum.core.ModGollumCoreLib;

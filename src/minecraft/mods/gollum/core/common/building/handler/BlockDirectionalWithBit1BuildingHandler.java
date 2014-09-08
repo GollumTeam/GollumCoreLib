@@ -4,12 +4,10 @@ import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.common.building.Building.Unity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
-import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.block.BlockFurnace;
 import net.minecraft.block.BlockLadder;
 import net.minecraft.block.BlockPistonBase;
-import net.minecraft.block.BlockSign;
 import net.minecraft.world.World;
 
 public class BlockDirectionalWithBit1BuildingHandler extends BuildingBlockHandler {

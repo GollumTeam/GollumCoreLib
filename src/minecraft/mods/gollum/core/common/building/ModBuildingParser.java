@@ -2,8 +2,6 @@ package mods.gollum.core.common.building;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import mods.gollum.core.ModGollumCoreLib;
@@ -12,9 +10,7 @@ import mods.gollum.core.common.config.container.BuildingConfigType;
 import mods.gollum.core.common.config.container.BuildingConfigType.Group;
 import mods.gollum.core.common.resource.ResourceLoader;
 import argo.jdom.JdomParser;
-import argo.jdom.JsonNode;
 import argo.jdom.JsonRootNode;
-import argo.jdom.JsonStringNode;
 
 public class ModBuildingParser {
 

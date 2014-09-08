@@ -1,6 +1,7 @@
 package mods.gollum.core.tools.helper.blocks;
 
 import java.util.List;
+import java.util.TreeSet;
 
 import mods.gollum.core.tools.helper.BlockMetadataHelper;
 import mods.gollum.core.tools.helper.IBlockMetadataHelper;
@@ -8,10 +9,15 @@ import mods.gollum.core.tools.helper.items.HItemBlockMetadata;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Icon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 public class HBlockMetadata extends HBlock implements IBlockMetadataHelper {
+
+	/////////////////
+	// Contructeur //
+	/////////////////
 	
 	public HBlockMetadata(int id, String registerName, Material material, Class itemClass) {
 		super(id, registerName, material);
@@ -30,6 +36,10 @@ public class HBlockMetadata extends HBlock implements IBlockMetadataHelper {
 		this.helper = new BlockMetadataHelper(this, registerName, numberSubBlock);
 		this.setItemBlockClass(HItemBlockMetadata.class);
 	}
+	
+	////////////
+	// Helper //
+	////////////
 	
 	/**
 	 * returns a list of blocks with the same ID, but different meta (eg: wood
@@ -64,11 +74,16 @@ public class HBlockMetadata extends HBlock implements IBlockMetadataHelper {
 	/**
 	 * Liste des metadata enabled pour le subtype
 	 */
-	public boolean[] listSubEnabled () {
+	public TreeSet<Integer> listSubEnabled () {
 		return ((IBlockMetadataHelper) this.helper).listSubEnabled();
 	}
 	
 	public int getEnabledMetadata (int dammage) {
 		return ((IBlockMetadataHelper) this.helper).getEnabledMetadata(dammage);
+	}
+	
+	@Override
+	public Icon getIcon(int side, int metadata) {
+		return  (helper.vanillaTexture) ? super.getIcon(side, metadata) : ((IBlockMetadataHelper) this.helper).getIcon(side, metadata);
 	}
 }

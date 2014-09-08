@@ -3,12 +3,11 @@ package mods.gollum.core.tools.registered;
 import java.util.Hashtable;
 import java.util.Map.Entry;
 
-import cpw.mods.fml.common.registry.GameData;
-import cpw.mods.fml.common.registry.GameRegistry;
 import mods.gollum.core.ModGollumCoreLib;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class RegisteredObjects {
 	

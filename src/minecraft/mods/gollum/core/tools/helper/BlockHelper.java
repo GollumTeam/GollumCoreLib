@@ -196,6 +196,7 @@ public class BlockHelper implements IBlockHelper {
 	@Override
 	public IBlockHelper setIcon (Icon icon) {
 		ModGollumCoreLib.log.warning("setIcon don't be call by helper. It's stub");
+		((IBlockHelper)this.parent).setIcon(icon);
 		return this;
 	}
 }
