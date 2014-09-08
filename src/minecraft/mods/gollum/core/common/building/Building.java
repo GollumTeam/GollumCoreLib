@@ -2,9 +2,7 @@ package mods.gollum.core.common.building;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.TreeSet;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -17,16 +15,17 @@ public class Building {
 	public static final int ROTATED_270 = 3;
 	public static final int ROTATED_360 = 4;
 	
-	
-	public static class Position3D implements Comparable {
+	public static class Unity3D implements Comparable {
 		
 		private Building building;
 		private int x;
 		private int y;
 		private int z;
+		public Unity unity;
 		
-		public Position3D (Building building, int x, int y, int z) {
+		public Unity3D (Building building, Unity unity, int x, int y, int z) {
 			this.building = building;
+			this.unity = unity;
 			this.x = x;
 			this.y = y;
 			this.z = z;
@@ -44,27 +43,29 @@ public class Building {
 		
 		public boolean equal (Object o) {
 
-			Position3D position3D = (Position3D)o;
+			Unity3D unity3D = (Unity3D)o;
 			
-			return x == position3D.x || y == position3D.y || z == position3D.z;
+			return x == unity3D.x || y == unity3D.y || z == unity3D.z;
 		}
 
 		@Override
 		public int compareTo(Object o) {
 			
-			Position3D position3D = (Position3D)o;
+			Unity3D unity3D = (Unity3D)o;
 			
-			if (x < position3D.x) { return -1; }
-			if (x > position3D.x) { return 1; }
-			if (y < position3D.y) { return -1; }
-			if (y > position3D.y) { return 1; }
-			if (z < position3D.z) { return -1; }
-			if (z > position3D.z) { return 1; }
+			if (x < unity3D.x) { return -1; }
+			if (x > unity3D.x) { return  1; }
+			if (y < unity3D.y) { return -1; }
+			if (y > unity3D.y) { return  1; }
+			if (z < unity3D.z) { return -1; }
+			if (z > unity3D.z) { return  1; }
 			
 			return 0;
 		}
 		
 	}
+	
+	
 	
 	/**
 	 * Un element de lamatrice building
@@ -158,7 +159,9 @@ public class Building {
 	/**
 	 * Liste des block de la constuction
 	 */
-	public LinkedHashMap<Position3D, Unity> unities = new LinkedHashMap<Position3D, Unity>();
+	public TreeSet<Unity3D> unities = new TreeSet<Unity3D>();
+	
+	
 	/**
 	 * Liste des blocks posés aléatoirements
 	 */
@@ -184,9 +187,9 @@ public class Building {
 		maxY = Math.max(maxY, y+1);
 		maxZ = Math.max(maxZ, z+1);
 		
-		Position3D position3D = new Position3D(this, x, y, z);
-		if (this.unities.containsKey(position3D)) {
-			this.unities.remove(position3D);
+		Unity3D unity3D = new Unity3D(this, null, x, y, z);
+		if (this.unities.contains(unity3D)) {
+			this.unities.remove(unity3D);
 		}
 	}
 	
@@ -195,7 +198,7 @@ public class Building {
 		this.setNull(x, y, z);
 		
 		if (unity != null) {
-			this.unities.put(new Position3D(this, x, y, z), unity);
+			this.unities.add (new Unity3D(this, unity, x, y, z));
 		}
 	}
 	
