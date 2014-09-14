@@ -29,8 +29,8 @@ public class WorldHandler {
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-					mustBeSave = true;
 				}
+				mustBeSave = true;
 			}
 			if (mustBeSave) {
 				ModGollumCoreLib.log.message("Resave after building...");
@@ -41,8 +41,6 @@ public class WorldHandler {
 					e.printStackTrace();
 				}
 			}
-			
-			
 			Builder.currentBuilds.clear ();
 			ModGollumCoreLib.log.debug("=========== UnloadEvent ===========");
 		}
