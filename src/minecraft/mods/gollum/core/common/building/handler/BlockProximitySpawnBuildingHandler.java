@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Random;
 
 import mods.gollum.core.common.blocks.BlockProximitySpawn;
-import mods.gollum.core.common.tileentities.TileEntityBlockSpawner;
+import mods.gollum.core.common.tileentities.TileEntityBlockProximitySpawn;
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -31,9 +31,9 @@ public class BlockProximitySpawnBuildingHandler extends BuildingBlockHandler {
 		if (block instanceof BlockProximitySpawn) {
 			
 			TileEntity te  = world.getBlockTileEntity (x, y, z);
-			if (te instanceof TileEntityBlockSpawner) {
+			if (te instanceof TileEntityBlockProximitySpawn) {
 				String entity = ""; try { entity = extra.get("entity"); } catch (Exception e) {} entity = (entity != null) ? entity : "Chicken";
-				((TileEntityBlockSpawner) te).setModId (entity);
+				((TileEntityBlockProximitySpawn) te).setModId (entity);
 			}
 		}
 	}

@@ -1,6 +1,6 @@
 package mods.gollum.core.common.blocks;
 
-import mods.gollum.core.common.tileentities.TileEntityBlockSpawner;
+import mods.gollum.core.common.tileentities.TileEntityBlockProximitySpawn;
 import mods.gollum.core.tools.helper.blocks.HBlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -20,7 +20,7 @@ public class BlockProximitySpawn extends HBlockContainer {
 
 	@Override
 	public TileEntity createNewTileEntity(World world) {
-		return new TileEntityBlockSpawner();
+		return new TileEntityBlockProximitySpawn();
 	}
 	
 	@SideOnly(Side.CLIENT)

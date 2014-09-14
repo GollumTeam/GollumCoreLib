@@ -12,7 +12,7 @@ import mods.gollum.core.common.i18n.I18n;
 import mods.gollum.core.common.items.ItemBuilding;
 import mods.gollum.core.common.log.Logger;
 import mods.gollum.core.common.mod.GollumMod;
-import mods.gollum.core.common.tileentities.TileEntityBlockSpawner;
+import mods.gollum.core.common.tileentities.TileEntityBlockProximitySpawn;
 import mods.gollum.core.common.version.VersionChecker;
 import mods.gollum.core.common.worldgenerator.WorldGeneratorByBuilding;
 import mods.gollum.core.common.worldgenerator.WorldGeneratorByBuildingLoader;
@@ -140,7 +140,7 @@ public class ModGollumCoreLib extends GollumMod {
 	 * // Nom des TileEntities
 	 */
 	private void initTileEntities () {
-		GameRegistry.registerTileEntity(TileEntityBlockSpawner.class, "GollumCoreLib:BlockSpawner");
+		GameRegistry.registerTileEntity(TileEntityBlockProximitySpawn.class, "GollumCoreLib:BlockProximitySpawn");
 	}
 	
 	/**

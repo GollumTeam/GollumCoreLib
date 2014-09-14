@@ -7,7 +7,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
-public class TileEntityBlockSpawner extends TileEntity {
+public class TileEntityBlockProximitySpawn extends TileEntity {
 	
 	// Le mob
 	private String mobID;
