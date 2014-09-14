@@ -27,11 +27,9 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 @Mod(modid = ModGollumCoreLib.MODID, name = ModGollumCoreLib.MODNAME, version = ModGollumCoreLib.VERSION, acceptedMinecraftVersions = ModGollumCoreLib.MINECRAFT_VERSION)
-@NetworkMod(clientSideRequired = true, serverSideRequired = false)
 public class ModGollumCoreLib extends GollumMod {
 
 	public final static String MODID = "GollumCoreLib";
@@ -172,6 +170,6 @@ public class ModGollumCoreLib extends GollumMod {
 		WorldGeneratorByBuilding worldGeneratorByBuilding = new WorldGeneratorByBuildingLoader().load ();
 		
 		// Enregistrement du worldgenerator mercenary
-		GameRegistry.registerWorldGenerator (worldGeneratorByBuilding);
+		GameRegistry.registerWorldGenerator (worldGeneratorByBuilding, 0);
 	}
 }
