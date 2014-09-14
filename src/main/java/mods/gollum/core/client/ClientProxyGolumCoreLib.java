@@ -5,7 +5,6 @@ import mods.gollum.core.client.keys.GollumKeybinds;
 import mods.gollum.core.common.CommonProxyGolumCoreLib;
 import mods.gollum.core.tools.registry.SoundRegistry;
 import net.minecraftforge.common.MinecraftForge;
-import cpw.mods.fml.client.registry.KeyBindingRegistry;
 
 public class ClientProxyGolumCoreLib extends CommonProxyGolumCoreLib {
 
