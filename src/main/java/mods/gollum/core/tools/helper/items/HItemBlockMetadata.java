@@ -9,12 +9,9 @@ import net.minecraft.item.ItemStack;
 
 public class HItemBlockMetadata extends ItemBlock {
 	
-	protected Block block;
-	
-	public HItemBlockMetadata(int par1, Block block) {
-		super(par1);
+	public HItemBlockMetadata(Block block) {
+		super(block);
 		this.setHasSubtypes(true);
-		this.block = block;
 	}
 	
 	/**
@@ -27,7 +24,7 @@ public class HItemBlockMetadata extends ItemBlock {
 		int dammage = itemStack.getItemDamage();
 		
 		// Castage du helper
-		BlockHelper blockHelper = ((IBlockHelper) this.block).getGollumHelper ();
+		BlockHelper blockHelper = ((IBlockHelper) this.field_150939_a).getGollumHelper ();
 		BlockMetadataHelper blockMetadataHelper = (BlockMetadataHelper)blockHelper;
 		
 		return this.getUnlocalizedName() + "." + blockMetadataHelper.getEnabledMetadata (dammage);

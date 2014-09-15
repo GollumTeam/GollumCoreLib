@@ -4,17 +4,18 @@ import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import javax.swing.Icon;
+
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 
 public class ItemMetadataHelper extends ItemHelper implements IItemMetadataHelper {
 	
-	protected TreeSet<Integer>       listSubEnabled = new TreeSet<Integer>();
-	protected TreeMap<Integer, IIcon> blockIcons     = new TreeMap<Integer, Icon>();
+	protected TreeSet<Integer>        listSubEnabled = new TreeSet<Integer>();
+	protected TreeMap<Integer, IIcon> blockIcons     = new TreeMap<Integer, IIcon>();
 
 	/////////////////
 	// Contructeur //
@@ -52,9 +53,9 @@ public class ItemMetadataHelper extends ItemHelper implements IItemMetadataHelpe
 	}
 	
 	@Override
-	public void getSubItems(int id, CreativeTabs ctabs, List list) {
+	public void getSubItems(Item item, CreativeTabs ctabs, List list) {
 		for (int metadata : this.listSubEnabled) {
-			list.add(new ItemStack(id, 1, metadata));
+			list.add(new ItemStack(item, 1, metadata));
 		}
 	}
 	
@@ -92,7 +93,7 @@ public class ItemMetadataHelper extends ItemHelper implements IItemMetadataHelpe
 	}
 	
 	@Override
-	public Icon getIconFromDamage(int metadata) {
+	public IIcon getIconFromDamage(int metadata) {
 		
 		int subBlock = this.getEnabledMetadata(metadata);
 		if (this.blockIcons.containsKey(subBlock)) {

@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.Constants;
 
 public abstract class GCLInventoryTileEntity extends TileEntity implements IInventory {
 
@@ -123,7 +124,7 @@ public abstract class GCLInventoryTileEntity extends TileEntity implements IInve
 			itemStack.stackSize = this.getInventoryStackLimit();
 		}
 
-		this.onInventoryChanged();
+		this.markDirty();
 	}
 	
 	@Override
@@ -271,11 +272,11 @@ public abstract class GCLInventoryTileEntity extends TileEntity implements IInve
 			return;
 		}
 		
-		NBTTagList nbttaglist = nbtTagCompound.getTagList(tagName);
+		NBTTagList nbttaglist = nbtTagCompound.getTagList(tagName, Constants.NBT.TAG_COMPOUND);
 		
 		for (int i = 0; i < nbttaglist.tagCount(); ++i) {
 			try {
-				NBTTagCompound nbttagcompound = (NBTTagCompound) nbttaglist.tagAt(i);
+				NBTTagCompound nbttagcompound = (NBTTagCompound) nbttaglist.getCompoundTagAt(i);
 				int j = nbttagcompound.getByte("Slot");
 				
 				if (j >= 0 && j < this.inventory.length) {

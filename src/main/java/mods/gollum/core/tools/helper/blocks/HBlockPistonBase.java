@@ -71,8 +71,8 @@ public class HBlockPistonBase extends BlockPistonBase implements IBlockHelper {
 	/**
 	 * Libère les items de l'inventory
 	 */
-	public void breakBlockInventory(World world, int x, int y, int z, int oldBlodkID) {
-		helper.breakBlockInventory(world, x, y, z, oldBlodkID);
+	public void breakBlockInventory(World world, int x, int y, int z, Block oldBlock) {
+		helper.breakBlockInventory(world, x, y, z, oldBlock);
 	}
 	
 	//////////////////////////

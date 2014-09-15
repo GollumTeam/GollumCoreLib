@@ -9,8 +9,9 @@ import mods.gollum.core.tools.helper.IBlockMetadataHelper;
 import mods.gollum.core.tools.helper.items.HItemBlockMetadata;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
@@ -19,19 +20,19 @@ public abstract class HBlockContainerMetadata extends HBlockContainer implements
 	private BlockMetadataHelper helperMetadata;
 
 	public HBlockContainerMetadata(int id, String registerName, Material material) {
-		super(id, registerName, material);
+		super(registerName, material);
 		this.helperMetadata = new BlockMetadataHelper(this, registerName);
 		this.setItemBlockClass(HItemBlockMetadata.class);
 	}
 	
 	public HBlockContainerMetadata(int id, String registerName, Material material, int listSubBlock[]) {
-		super(id, registerName, material);
+		super(registerName, material);
 		this.helperMetadata = new BlockMetadataHelper(this, registerName, listSubBlock);
 		this.setItemBlockClass(HItemBlockMetadata.class);
 	}
 	
 	public HBlockContainerMetadata(int id, String registerName, Material material, int numberSubBlock) {
-		super(id, registerName, material);
+		super(registerName, material);
 		this.helperMetadata = new BlockMetadataHelper(this, registerName, numberSubBlock);
 		this.setItemBlockClass(HItemBlockMetadata.class);
 	}
@@ -46,8 +47,8 @@ public abstract class HBlockContainerMetadata extends HBlockContainer implements
 	 * returns 4 blocks)
 	 */
 	@Override
-	public void getSubBlocks(int id, CreativeTabs ctabs, List list) {
-		((IBlockMetadataHelper) this.helperMetadata).getSubBlocks(id, ctabs, list);
+	public void getSubBlocks(Item item, CreativeTabs ctabs, List list) {
+		((IBlockMetadataHelper) this.helperMetadata).getSubBlocks(item, ctabs, list);
 	}
 	
 	/**
@@ -84,7 +85,7 @@ public abstract class HBlockContainerMetadata extends HBlockContainer implements
 	}
 	
 	@Override
-	public Icon getIcon(int side, int metadata) {
+	public IIcon getIcon(int side, int metadata) {
 		return (helper.vanillaTexture) ? super.getIcon(side, metadata) : ((IBlockMetadataHelper) this.helperMetadata).getIcon(side, metadata);
 	}
 }

@@ -7,6 +7,7 @@ import mods.gollum.core.common.context.ModContext;
 import mods.gollum.core.common.mod.GollumMod;
 import mods.gollum.core.tools.registry.BlockRegistry;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockChest;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;
@@ -80,13 +81,14 @@ public class BlockHelper implements IBlockHelper {
 	 */
 	@Override
 	public Item getBlockItem () {
-		return this.parent.blockID];
+		return Item.getItemFromBlock(this.parent);
 	}
 	
 	/**
 	 * Libère les items de l'inventory
 	 */
-	public void breakBlockInventory(World world, int x, int y, int z, int oldBlodkID) {
+	@Override
+	public void breakBlockInventory(World world, int x, int y, int z, Block oldBlock) {
 		
 		Random random = new Random();		
 		TileEntity te = world.getTileEntity(x, y, z);
@@ -123,7 +125,7 @@ public class BlockHelper implements IBlockHelper {
 				}
 			}
 			
-			world.func_96440_m(x, y, z, oldBlodkID);
+			world.func_147453_f(x, y, z, oldBlock);
 		}
 	}
 	
