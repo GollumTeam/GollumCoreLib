@@ -22,7 +22,8 @@ public class SoundRegistry {
 		
 		for (String sound : this.sounds) {
 			try {
-				event.manager.addSound(sound);
+				// TODO a revoir pas fini
+//				event.manager.addSound(sound);
 				ModGollumCoreLib.log.debug ("Load sound : "+sound);
 			} catch (Exception e) {
 				e.printStackTrace();

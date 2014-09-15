@@ -5,10 +5,10 @@ import mods.gollum.core.tools.helper.BlockHelper;
 import mods.gollum.core.tools.helper.IBlockHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPistonExtension;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 public class HBlockPistonExtension extends BlockPistonExtension implements IBlockHelper {
@@ -16,7 +16,7 @@ public class HBlockPistonExtension extends BlockPistonExtension implements IBloc
 	protected BlockHelper helper;
 	
 	public HBlockPistonExtension (int id, String registerName)  {
-		super(id);
+		super();
 		ModGollumCoreLib.log.info ("Create block id : " + id + " registerName : " + registerName);
 		this.helper = new BlockHelper(this, registerName);
 	}
@@ -63,8 +63,8 @@ public class HBlockPistonExtension extends BlockPistonExtension implements IBloc
 	//////////////////////////
 	
 	@Override
-	public void registerIcons(IconRegister iconRegister) {
-		if (helper.vanillaTexture) super.registerIcons(iconRegister); else helper.registerIcons(iconRegister);
+	public void registerBlockIcons(IIconRegister iconRegister) {
+		if (helper.vanillaTexture) super.registerBlockIcons(iconRegister); else helper.registerBlockIcons(iconRegister);
 	}
 	
 	/**
@@ -72,7 +72,7 @@ public class HBlockPistonExtension extends BlockPistonExtension implements IBloc
 	 * @param icon
 	 */
 	@Override
-	public IBlockHelper setIcon (Icon icon) {
+	public IBlockHelper setIcon (IIcon icon) {
 		this.blockIcon = icon;
 		return this;
 	}

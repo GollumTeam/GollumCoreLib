@@ -32,7 +32,7 @@ public class BlockCommandBlockBuildingHandler extends BuildingBlockHandler {
 		
 		if (block instanceof BlockCommandBlock) {
 			
-			TileEntity te  = world.getBlockTileEntity (x, y, z);
+			TileEntity te  = world.getTileEntity (x, y, z);
 			if (te instanceof TileEntityCommandBlock) {
 				
 				String command = ""; try { command = extra.get("command"); } catch (Exception e) {} command = (command != null) ? command : "";
@@ -47,7 +47,7 @@ public class BlockCommandBlockBuildingHandler extends BuildingBlockHandler {
 				command = command.replace("{$z}", ""+(Builder.getRotatedZ(varX, varZ, rotate, maxX, maxZ)*dz + initZ));
 				ModGollumCoreLib.log.info("command : "+command);
 				
-				((TileEntityCommandBlock) te).setCommand(command);
+				((TileEntityCommandBlock) te).func_145993_a().func_145752_a(command);
 				
 			}
 			

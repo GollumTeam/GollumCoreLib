@@ -30,10 +30,10 @@ public class BlockMobSpawnerBuildingHandler extends BuildingBlockHandler {
 		
 		if (block instanceof BlockMobSpawner) {
 			
-			TileEntity te  = world.getBlockTileEntity (x, y, z);
+			TileEntity te  = world.getTileEntity (x, y, z);
 			if (te instanceof TileEntityMobSpawner) {
-				String entity = ""; try { entity = extra.get("entity"); } catch (Exception e) {} entity = (entity != null) ? entity : "Pigg";
-				((TileEntityMobSpawner) te).getSpawnerLogic().setMobID(entity);
+				String entity = ""; try { entity = extra.get("entity"); } catch (Exception e) {} entity = (entity != null) ? entity : "Pig";
+				((TileEntityMobSpawner) te).func_145881_a().setEntityName(entity);
 			}
 		}
 	}

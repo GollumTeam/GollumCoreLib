@@ -9,7 +9,7 @@ import mods.gollum.core.common.building.BuildingParser;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
-import net.minecraft.util.ChatMessageComponent;
+import net.minecraft.util.ChatComponentText;
 
 public class CommandBuilding extends CommandBase {
 
@@ -38,7 +38,7 @@ public class CommandBuilding extends CommandBase {
 		
 		} else if(arguments[0].matches("reload")) {
 
-			sender.sendChatToPlayer(ChatMessageComponent.createFromText("Reload all buildings"));
+			sender.addChatMessage(new ChatComponentText("Reload all buildings"));
 			
 			BuildingParser.reloadAll ();
 			
@@ -51,7 +51,7 @@ public class CommandBuilding extends CommandBase {
 				}
 				
 				SubBuilding subBuilding = ModGollumCoreLib.itemBuilding.getLastBuild (last);
-				sender.sendChatToPlayer(ChatMessageComponent.createFromText("Rebuild last building "+subBuilding.building.modId+":"+subBuilding.building.name));
+				sender.addChatMessage(new ChatComponentText("Rebuild last building "+subBuilding.building.modId+":"+subBuilding.building.name));
 				
 				subBuilding.building = new BuildingParser().parse(subBuilding.building.name, subBuilding.building.modId);
 				new Builder().build(sender.getEntityWorld(), subBuilding);

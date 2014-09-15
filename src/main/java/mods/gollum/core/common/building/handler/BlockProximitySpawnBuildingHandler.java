@@ -30,7 +30,7 @@ public class BlockProximitySpawnBuildingHandler extends BuildingBlockHandler {
 		
 		if (block instanceof BlockProximitySpawn) {
 			
-			TileEntity te  = world.getBlockTileEntity (x, y, z);
+			TileEntity te  = world.getTileEntity (x, y, z);
 			if (te instanceof TileEntityBlockProximitySpawn) {
 				String entity = ""; try { entity = extra.get("entity"); } catch (Exception e) {} entity = (entity != null) ? entity : "Chicken";
 				((TileEntityBlockProximitySpawn) te).setModId (entity);

@@ -17,11 +17,5 @@ public class ConfigGollumCoreLib extends Config<ConfigGollumCoreLib> {
 			
 	@ConfigProp (info = "Display version checker message")
 	public boolean versionChecker = true;
-
-	@ConfigProp(group = "Blocks Ids")
-	public int blockSpawnerID = 1243;
-	
-	@ConfigProp(group = "Items Ids")
-	public int itemBuildingID = 15600;
 	
 }
