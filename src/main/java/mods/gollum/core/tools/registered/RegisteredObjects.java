@@ -23,17 +23,22 @@ public class RegisteredObjects {
 	}
 	
 	public Block getBlock (String registerName) {
-		if (this.vanillaBlocks.containsKey(registerName)) {
-			return this.vanillaBlocks.get(registerName);
-		}
 		
 		try {
 
 			String modId = registerName.substring(0, registerName.indexOf(":"));
 			String name  = registerName.substring(registerName.indexOf(":")+1);
-			ItemStack s  = GameRegistry.findItemStack(modId, name, 1);
-			return Block.blocksList[s.itemID];
 			
+			if (modId.equals("minecraft")) {
+				
+				return (Block)Block.blockRegistry.getObject(name);
+				
+			} else {
+				// TODO A Analyser
+				return (Block)Block.blockRegistry.getObject(registerName);
+//				ItemStack s  = GameRegistry.findItemStack(modId, name, 1);
+//				return Block.blocksList[s.itemID];
+			}
 		} catch (Exception e) {
 		}
 		
@@ -43,17 +48,21 @@ public class RegisteredObjects {
 	}
 	
 	public Item getItem (String registerName) {
-		if (this.vanillaItems.containsKey(registerName)) {
-			return this.vanillaItems.get(registerName);
-		}
-
+		
 		try {
-
 			String modId = registerName.substring(0, registerName.indexOf(":"));
 			String name  = registerName.substring(registerName.indexOf(":")+1);
-			ItemStack s  = GameRegistry.findItemStack(modId, name, 1);
-			return s.getItem();
 			
+			if (modId.equals("minecraft")) {
+				
+				return (Item)Item.itemRegistry.getObject(name);
+				
+			} else {
+				// TODO A Analyser
+				return (Item)Item.itemRegistry.getObject(registerName);
+//				ItemStack s  = GameRegistry.findItemStack(modId, name, 1);
+//				return s.getItem();
+			}
 		} catch (Exception e) {
 		}
 		
@@ -63,26 +72,38 @@ public class RegisteredObjects {
 	}
 	
 	public String getRegisterName (Block block) {
-		if (this.vanillaBlocks.contains(block)) {
-			
-			for (Entry<String, Block> entry: this.vanillaBlocks.entrySet()) {
-				if (entry.getValue() == block) {
-					return entry.getKey();
-				}
+		// TODO A Analyser
+		for (Object key: Block.blockRegistry.getKeys()) {
+			if (block == Item.itemRegistry.getObject(key)) {
+				return (String) key;
 			}
 		}
+//		if (this.vanillaBlocks.contains(block)) {
+//			
+//			for (Entry<String, Block> entry: this.vanillaBlocks.entrySet()) {
+//				if (entry.getValue() == block) {
+//					return entry.getKey();
+//				}
+//			}
+//		}
 		return null;
 	}
 	
 	public String getRegisterName (Item item) {
-		if (this.vanillaItems.contains(item)) {
-			
-			for (Entry<String, Item> entry: this.vanillaItems.entrySet()) {
-				if (entry.getValue() == item) {
-					return entry.getKey();
-				}
+		// TODO A Analyser
+		for (Object key: Item.itemRegistry.getKeys()) {
+			if (item == Item.itemRegistry.getObject(key)) {
+				return (String) key;
 			}
 		}
+//		if (this.vanillaItems.contains(item)) {
+//			
+//			for (Entry<String, Item> entry: this.vanillaItems.entrySet()) {
+//				if (entry.getValue() == item) {
+//					return entry.getKey();
+//				}
+//			}
+//		}
 		return null;
 	}
 	

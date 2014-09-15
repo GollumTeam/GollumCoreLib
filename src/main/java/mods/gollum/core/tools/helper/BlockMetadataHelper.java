@@ -7,6 +7,7 @@ import java.util.TreeSet;
 import javax.swing.Icon;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -48,9 +49,9 @@ public class BlockMetadataHelper extends BlockHelper implements IBlockMetadataHe
 	 * returns 4 blocks)
 	 */
 	@Override
-	public void getSubBlocks(int id, CreativeTabs ctabs, List list) {
+	public void getSubBlocks(Item item, CreativeTabs ctabs, List list) {
 		for (int metadata : this.listSubEnabled) {
-			list.add(new ItemStack(id, 1, metadata));
+			list.add(new ItemStack(item, 1, metadata));
 		}
 	}
 	
@@ -74,20 +75,15 @@ public class BlockMetadataHelper extends BlockHelper implements IBlockMetadataHe
 	@Override
 	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
 		
-		int id = this.parent.idPicked(world, x, y, z);
+		ItemStack is = this.parent.getPickBlock(null, world, x, y, z);
 		
-		if (id == 0) {
-			return null;
-		}
-		
-		Item item = Item.itemsList[id];
-		if (item == null) {
+		if (is == null) {
 			return null;
 		}
 		
 		int dammage = this.parent.getDamageValue(world, x, y, z);
 		
-		return new ItemStack(id, 1, this.getEnabledMetadata (dammage));
+		return new ItemStack(is.getItem(), 1, this.getEnabledMetadata (dammage));
 	}
 	
 	/**
@@ -117,14 +113,14 @@ public class BlockMetadataHelper extends BlockHelper implements IBlockMetadataHe
 	 * Depuis la 1.5 on est obligé de charger les texture fichier par fichier
 	 */
 	@Override
-	public void registerIcons(IconRegister iconRegister) {
+	public void registerBlockIcons(IIconRegister iconRegister) {
 		for (int metadata : this.listSubEnabled) {
 			this.blockIcons.put(metadata, this.loadTexture(iconRegister, "_"+metadata));
 		}
 	}
 	
 	@Override
-	public Icon getIcon(int side, int metadata) {
+	public IIcon getIcon(int side, int metadata) {
 		
 		int subBlock = this.getEnabledMetadata(metadata);
 		if (this.blockIcons.containsKey(subBlock)) {

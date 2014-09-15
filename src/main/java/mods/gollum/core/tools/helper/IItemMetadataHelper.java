@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.TreeSet;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import cpw.mods.fml.relauncher.Side;
@@ -16,7 +17,7 @@ public interface IItemMetadataHelper {
 	 * returns 4 blocks)
 	 */
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(int id, CreativeTabs ctabs, List list);
+	public void getSubItems(Item item, CreativeTabs ctabs, List list);
 	
 	/**
 	 * Liste des metadata enabled pour le subtype

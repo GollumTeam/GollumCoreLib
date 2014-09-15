@@ -7,8 +7,9 @@ import mods.gollum.core.tools.helper.IItemMetadataHelper;
 import mods.gollum.core.tools.helper.ItemHelper;
 import mods.gollum.core.tools.helper.ItemMetadataHelper;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -21,12 +22,12 @@ public class HItemMetadata extends HItem implements IItemMetadataHelper  {
 	/////////////////
 	
 	public HItemMetadata(int id, String registerName, int listSubBlock[]) {
-		super(id, registerName);
+		super(registerName);
 		this.helper = new ItemMetadataHelper(this, registerName, listSubBlock);
 	}
 	
 	public HItemMetadata(int id, String registerName, int numberSubBlock) {
-		super(id, registerName);
+		super(registerName);
 		this.helper = new ItemMetadataHelper(this, registerName, numberSubBlock);
 	}
 	
@@ -55,8 +56,8 @@ public class HItemMetadata extends HItem implements IItemMetadataHelper  {
 	 */
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(int id, CreativeTabs ctabs, List list) {
-		((IItemMetadataHelper) this.helper).getSubItems(id, ctabs, list);
+	public void getSubItems(Item item, CreativeTabs ctabs, List list) {
+		((IItemMetadataHelper) this.helper).getSubItems(item, ctabs, list);
 	}
 	
 	/**
@@ -74,7 +75,7 @@ public class HItemMetadata extends HItem implements IItemMetadataHelper  {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public Icon getIconFromDamage (int metadata) {
+	public IIcon getIconFromDamage (int metadata) {
 		return  (helper.vanillaTexture) ? super.getIconFromDamage(metadata) : ((IItemMetadataHelper) this.helper).getIconFromDamage (metadata);
 	}
 	

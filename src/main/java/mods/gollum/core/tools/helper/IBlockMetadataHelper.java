@@ -5,6 +5,7 @@ import java.util.TreeSet;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
@@ -12,7 +13,7 @@ import net.minecraft.world.World;
 
 public interface IBlockMetadataHelper {
 	
-	public void getSubBlocks(int id, CreativeTabs ctabs, List list);
+	public void getSubBlocks(Item item, CreativeTabs ctabs, List list);
 	
 	/**
 	 * Determines the damage on the item the block drops. Used in cloth and
@@ -37,7 +38,7 @@ public interface IBlockMetadataHelper {
 	
 	public int getEnabledMetadata (int dammage);
 	
-	public void registerIcons(IIconRegister iconRegister);
+	public void registerBlockIcons(IIconRegister iconRegister);
 	
 	public IIcon getIcon(int side, int metadata);
 	

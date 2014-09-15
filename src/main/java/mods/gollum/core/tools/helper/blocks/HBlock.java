@@ -20,7 +20,8 @@ public class HBlock extends Block implements IBlockHelper {
 		ModGollumCoreLib.log.info ("Create block id : " + id + " registerName : " + registerName);
 		this.helper = new BlockHelper(this, registerName);
 	}
-	
+
+	@Override
 	public BlockHelper getGollumHelper () {
 		return helper;
 	}
@@ -54,8 +55,9 @@ public class HBlock extends Block implements IBlockHelper {
 	/**
 	 * Libère les items de l'inventory
 	 */
-	public void breakBlockInventory(World world, int x, int y, int z, int oldBlodkID) {
-		helper.breakBlockInventory(world, x, y, z, oldBlodkID);
+	@Override
+	public void breakBlockInventory(World world, int x, int y, int z, Block oldBlock) {
+		helper.breakBlockInventory(world, x, y, z, oldBlock);
 	}
 	
 	//////////////////////////
