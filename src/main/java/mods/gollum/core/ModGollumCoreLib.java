@@ -147,7 +147,7 @@ public class ModGollumCoreLib extends GollumMod {
 	public void initBlocks () {
 		
 		// Création des blocks
-		this.blockProximitySpawn = new BlockProximitySpawn (this.config.blockSpawnerID, "BlockProximitySpawn");
+		this.blockProximitySpawn = new BlockProximitySpawn ("BlockProximitySpawn");
 		
 	}
 	
@@ -157,7 +157,7 @@ public class ModGollumCoreLib extends GollumMod {
 	public void initItem () {
 		
 		// Création des items
-		this.itemBuilding = (ItemBuilding)new ItemBuilding(this.config.itemBuildingID, "ItemBuilding").setCreativeTab(this.tabBuildingStaff);
+		this.itemBuilding = (ItemBuilding)new ItemBuilding("ItemBuilding").setCreativeTab(this.tabBuildingStaff);
 		
 	}
 	

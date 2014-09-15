@@ -3,16 +3,16 @@ package mods.gollum.core.tools.helper.items;
 import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.tools.helper.IItemHelper;
 import mods.gollum.core.tools.helper.ItemHelper;
-import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.util.Icon;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.item.Item;
+import net.minecraft.util.IIcon;
 
-public class HItem extends net.minecraft.item.Item implements IItemHelper {
+public class HItem extends Item implements IItemHelper {
 
 	protected ItemHelper helper;
 	
-	public HItem (int id, String registerName) {
-		super(id);
-		ModGollumCoreLib.log.info ("Create item id : " + id + " registerName : " + registerName);
+	public HItem (String registerName) {
+		ModGollumCoreLib.log.info ("Create item registerName : " + registerName);
 		this.helper = new ItemHelper(this, registerName);
 	}
 	
@@ -33,7 +33,7 @@ public class HItem extends net.minecraft.item.Item implements IItemHelper {
 	 * @param icon
 	 */
 	@Override
-	public void setIcon (Icon icon) {
+	public void setIcon (IIcon icon) {
 		this.itemIcon = icon;
 	}
 	
@@ -42,7 +42,7 @@ public class HItem extends net.minecraft.item.Item implements IItemHelper {
 	//////////////////////////
 	
 	@Override
-	public void registerIcons(IconRegister iconRegister) {
+	public void registerIcons(IIconRegister iconRegister) {
 		if (helper.vanillaTexture) super.registerIcons(iconRegister); else helper.registerIcons(iconRegister);
 	}
 	

@@ -4,19 +4,20 @@ import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import javax.swing.Icon;
+
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 public class BlockMetadataHelper extends BlockHelper implements IBlockMetadataHelper {
 
 	protected TreeSet<Integer>       listSubEnabled = new TreeSet<Integer>();
-	protected TreeMap<Integer, Icon> blockIcons     = new TreeMap<Integer, Icon>();
+	protected TreeMap<Integer, IIcon> blockIcons     = new TreeMap<Integer, IIcon>();
 	
 	public BlockMetadataHelper(Block parent, String registerName) {
 		super(parent, registerName);

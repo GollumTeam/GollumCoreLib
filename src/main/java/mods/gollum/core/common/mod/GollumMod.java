@@ -140,7 +140,8 @@ public abstract class GollumMod {
 		GCLNetworkRegistry.instance().registerGuiHandler(new GCLGuiHandler(InventoryRegistry.instance().getGuiInventoryList()));
 		
 		// Enregistrement de tous les Gui groupé
-		NetworkRegistry.instance().registerGuiHandler(this, new GCLArrayGuiHandler(GCLNetworkRegistry.instance().getGuiHandlers()));
+		// TODO a verifier
+		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GCLArrayGuiHandler(GCLNetworkRegistry.instance().getGuiHandlers()));
 	}
 	public void handler (FMLPostInitializationEvent event) {
 		this.postInit(event);

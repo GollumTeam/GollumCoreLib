@@ -3,6 +3,7 @@ package mods.gollum.core.common.blocks;
 import java.util.Random;
 
 import mods.gollum.core.common.tileentities.TileEntityBlockProximitySpawn;
+import mods.gollum.core.tools.helper.IBlockHelper;
 import mods.gollum.core.tools.helper.blocks.HBlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -10,6 +11,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -18,8 +20,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockProximitySpawn extends HBlockContainer {
 
-	public BlockProximitySpawn(int id, String registerName) {
-		super(id, registerName, Material.air);
+	public BlockProximitySpawn(String registerName) {
+		super(registerName, Material.air);
 		
 		this.helper.vanillaTexture = true;
 	}
@@ -86,5 +88,4 @@ public class BlockProximitySpawn extends HBlockContainer {
 	public boolean renderAsNormalBlock() {
 		return false;
 	}
-	
 }

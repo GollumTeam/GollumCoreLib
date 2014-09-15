@@ -6,19 +6,19 @@ import mods.gollum.core.tools.helper.IBlockHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 public abstract class HBlockContainer extends BlockContainer implements IBlockHelper {
 
 	protected BlockHelper helper;
 	
-	public HBlockContainer (int id, String registerName, Material material)  {
-		super(id, material);
-		ModGollumCoreLib.log.info ("Create block id : " + id + " registerName : " + registerName);
+	public HBlockContainer (String registerName, Material material)  {
+		super(material);
+		ModGollumCoreLib.log.info ("Create block registerName : " + registerName);
 		this.helper = new BlockHelper(this, registerName);
 	}
 	
@@ -64,8 +64,8 @@ public abstract class HBlockContainer extends BlockContainer implements IBlockHe
 	//////////////////////////
 	
 	@Override
-	public void registerIcons(IconRegister iconRegister) {
-		if (helper.vanillaTexture) super.registerIcons(iconRegister); else helper.registerIcons(iconRegister);
+	public void registerBlockIcons(IIconRegister iconRegister) {
+		if (helper.vanillaTexture) super.registerBlockIcons(iconRegister); else helper.registerBlockIcons(iconRegister);
 	}
 	
 	/**
@@ -73,7 +73,7 @@ public abstract class HBlockContainer extends BlockContainer implements IBlockHe
 	 * @param icon
 	 */
 	@Override
-	public IBlockHelper setIcon (Icon icon) {
+	public IBlockHelper setIcon (IIcon icon) {
 		this.blockIcon = icon;
 		return this;
 	}

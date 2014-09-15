@@ -26,7 +26,7 @@ public class BlockDirectionalWithNoneBuildingHandler extends BuildingBlockHandle
 			if (orientation == Unity.ORIENTATION_LEFT)  { metadata = (metadata & 0x8) + 2; } else 
 			if (orientation == Unity.ORIENTATION_RIGTH) { metadata = (metadata & 0x8) + 1; } else 
 			{
-				ModGollumCoreLib.log.severe("Bad orientation : "+orientation+" id:"+block.blockID+" pos:"+x+","+y+","+z);
+				ModGollumCoreLib.log.severe("Bad orientation : "+orientation+" name:"+block.getUnlocalizedName()+" pos:"+x+","+y+","+z);
 			}
 			
 			world.setBlockMetadataWithNotify(x, y, z, metadata, 0);

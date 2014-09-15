@@ -12,6 +12,7 @@ import mods.gollum.core.common.building.BuildingParser;
 import mods.gollum.core.tools.helper.items.HItem;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -33,8 +34,8 @@ public class ItemBuilding extends HItem {
 	public ArrayList<String>   nameIndex     = null;
 	public ArrayList<Building> buildingIndex = null;
 	
-	public ItemBuilding(int id, String registerName) {
-		super(id, registerName);
+	public ItemBuilding(String registerName) {
+		super(registerName);
 		
 		this.setHasSubtypes(true);
 		
@@ -111,7 +112,7 @@ public class ItemBuilding extends HItem {
 	}
 	
 	@Override
-	public String getItemDisplayName(ItemStack itemStack) {
+	public String getUnlocalizedNameInefficiently(ItemStack itemStack) {
 		int metadata = itemStack.getItemDamage();
 		
 		String name= ModGollumCoreLib.i18n.trans ("Building staff");
@@ -124,9 +125,9 @@ public class ItemBuilding extends HItem {
 	
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void getSubItems(int id, CreativeTabs creativeTabs, List list) {
+	public void getSubItems(Item item, CreativeTabs creativeTabs, List list) {
 		for (int metadata = 0; metadata < this.getNameIndex().size(); metadata++) {
-			list.add(new ItemStack(id, 1, metadata));
+			list.add(new ItemStack(item, 1, metadata));
 		}
 	}
 	
