@@ -7,6 +7,7 @@ import mods.gollum.core.common.context.ModContext;
 import mods.gollum.core.common.mod.GollumMod;
 import mods.gollum.core.tools.registry.BlockRegistry;
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;
@@ -15,6 +16,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -63,7 +65,7 @@ public class BlockHelper implements IBlockHelper {
 	 * Enregistrement du block. Appelé a la fin du postInit
 	 */
 	public void register () {
-		this.parent.setUnlocalizedName(this.registerName);
+		this.parent.setBlockName(this.registerName);
 		GameRegistry.registerBlock (this.parent , this.itemBlockClass , this.getRegisterName (), mod.getModId());
 	}
 	
@@ -80,7 +82,7 @@ public class BlockHelper implements IBlockHelper {
 	 */
 	@Override
 	public Item getBlockItem () {
-		return Item.itemsList[this.parent.blockID];
+		return this.parent.blockID];
 	}
 	
 	/**
@@ -89,7 +91,7 @@ public class BlockHelper implements IBlockHelper {
 	public void breakBlockInventory(World world, int x, int y, int z, int oldBlodkID) {
 		
 		Random random = new Random();		
-		TileEntity te = world.getBlockTileEntity(x, y, z);
+		TileEntity te = world.getTileEntity(x, y, z);
 		
 		if (te != null && te instanceof IInventory) {
 			IInventory inventory = (IInventory)te;
@@ -110,7 +112,7 @@ public class BlockHelper implements IBlockHelper {
 						}
 						
 						itemStack.stackSize -= k1;
-						entityItem = new EntityItem(world, (double) ((float) x + f), (double) ((float) y + f1), (double) ((float) z + f2), new ItemStack(itemStack.itemID, k1, itemStack.getItemDamage()));
+						entityItem = new EntityItem(world, (double) ((float) x + f), (double) ((float) y + f1), (double) ((float) z + f2), new ItemStack(itemStack.getItem(), k1, itemStack.getItemDamage()));
 						float f3 = 0.05F;
 						entityItem.motionX = (double) ((float) random.nextGaussian() * f3);
 						entityItem.motionY = (double) ((float) random.nextGaussian() * f3 + 0.2F);
@@ -149,7 +151,7 @@ public class BlockHelper implements IBlockHelper {
 	* @param key
 	* @return
 	*/
-	public Icon loadTexture(IconRegister iconRegister) {
+	public IIcon loadTexture(IIconRegister iconRegister) {
 		return this.loadTexture(iconRegister, "");
 	}
 	/**
@@ -160,7 +162,7 @@ public class BlockHelper implements IBlockHelper {
 	* @param key
 	* @return
 	*/
-	public Icon loadTexture(IconRegister iconRegister, String sufixe) {
+	public IIcon loadTexture(IIconRegister iconRegister, String sufixe) {
 		return this.loadTexture(iconRegister, sufixe, false);
 	}
 	/**
@@ -171,7 +173,7 @@ public class BlockHelper implements IBlockHelper {
 	* @param key
 	* @return
 	*/
-	public Icon loadTexture(IconRegister iconRegister, String sufixe, boolean dontUseTextureKey) {
+	public IIcon loadTexture(IIconRegister iconRegister, String sufixe, boolean dontUseTextureKey) {
 		
 		String key = (dontUseTextureKey) ?  sufixe : (((IBlockHelper)this.parent).getTextureKey ()+sufixe);
 		String texture = this.mod.getModId().toLowerCase() + ":" + key;
@@ -185,7 +187,7 @@ public class BlockHelper implements IBlockHelper {
 	 * Depuis la 1.5 on est obligé de charger les texture fichier par fichier
 	 */
 	@Override
-	public void registerIcons(IconRegister iconRegister) {
+	public void registerBlockIcons(IIconRegister iconRegister) {
 		((IBlockHelper)this.parent).setIcon (this.loadTexture(iconRegister));
 	}
 	
@@ -194,7 +196,7 @@ public class BlockHelper implements IBlockHelper {
 	 * @param icon
 	 */
 	@Override
-	public IBlockHelper setIcon (Icon icon) {
+	public IBlockHelper setIcon (IIcon icon) {
 		ModGollumCoreLib.log.warning("setIcon don't be call by helper. It's stub");
 		((IBlockHelper)this.parent).setIcon(icon);
 		return this;

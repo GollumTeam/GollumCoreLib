@@ -3,10 +3,10 @@ package mods.gollum.core.tools.helper;
 import java.util.List;
 import java.util.TreeSet;
 
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
@@ -37,8 +37,8 @@ public interface IBlockMetadataHelper {
 	
 	public int getEnabledMetadata (int dammage);
 	
-	public void registerIcons(IconRegister iconRegister);
+	public void registerIcons(IIconRegister iconRegister);
 	
-	public Icon getIcon(int side, int metadata);
+	public IIcon getIcon(int side, int metadata);
 	
 }

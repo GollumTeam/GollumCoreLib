@@ -7,7 +7,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
-public class TileEntityBlockSpawner extends TileEntity {
+public class TileEntityBlockProximitySpawn extends TileEntity {
 	
 	// Le mob
 	private String mobID;
@@ -42,7 +42,7 @@ public class TileEntityBlockSpawner extends TileEntity {
 				return;
 			}
 			
-			this.worldObj.setBlock(this.xCoord , this.yCoord , this.zCoord , 0, 0, 2);
+			this.worldObj.setBlockToAir(this.xCoord , this.yCoord , this.zCoord);
 			
 			double x = (double)this.xCoord + 0.5D;
 			double y = (double)(this.yCoord);// + this.worldObj.rand.nextInt(3) - 1);

@@ -26,6 +26,7 @@ import mods.gollum.core.common.building.handler.BuildingBlockHandler;
 import mods.gollum.core.tools.registry.BuildingBlockRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -171,7 +172,7 @@ public class Builder {
 				int finalX = initX + unity3D.x(rotate)*dx;
 				int finalY = initY + unity3D.y(rotate);
 				int finalZ = initZ + unity3D.z(rotate)*dz;
-				world.setBlock(finalX, finalY, finalZ, Block.stone.blockID, 0, 0);
+				world.setBlock(finalX, finalY, finalZ, Blocks.stone, 0, 0);
 				
 			}
 			
@@ -185,10 +186,10 @@ public class Builder {
 				int finalZ = initZ + unity3D.z(rotate)*dz;
 				
 				if (unity.block != null) {
-					world.removeBlockTileEntity(finalX, finalY, finalZ);
-					world.setBlock(finalX, finalY, finalZ, unity.block.blockID, unity.metadata, 0);
+					world.removeTileEntity(finalX, finalY, finalZ);
+					world.setBlock(finalX, finalY, finalZ, unity.block, unity.metadata, 0);
 				} else {
-					world.setBlock(finalX, finalY, finalZ, 0, 0, 2);
+					world.setBlockToAir (finalX, finalY, finalZ);
 				}
 				
 				this.setOrientation (world, finalX, finalY, finalZ, this.rotateOrientation(rotate, unity.orientation), rotate);
@@ -498,11 +499,11 @@ public class Builder {
 		 */
 		private void setContents(World world, Random random, int x, int y, int z, ArrayList<ArrayList<Content>> contents) {
 			
-			Block block  = Block.blocksList [world.getBlockId (x, y, z)];
+			Block block  = world.getBlock (x, y, z);
 			
 			if (block instanceof BlockContainer) {
 				
-				TileEntity te  = world.getBlockTileEntity (x, y, z);
+				TileEntity te  = world.getTileEntity (x, y, z);
 				if (te instanceof IInventory) {
 					
 					for (int i = 0; i < contents.size(); i++) {
@@ -536,7 +537,7 @@ public class Builder {
 		 */
 		private void setExtra(World world, Random random, int x, int y, int z, HashMap<String, String> extra,int initX, int initY, int initZ, int rotate, int maxX, int maxZ) {
 			
-			Block block  = Block.blocksList [world.getBlockId (x, y, z)];
+			Block block  = world.getBlock (x, y, z);
 	
 			int dx = -1; 
 			int dz = 1;
@@ -568,7 +569,7 @@ public class Builder {
 		 */
 		private void setOrientation(World world, int x, int y, int z, int orientation, int rotate) {
 			
-			Block block  = Block.blocksList [world.getBlockId (x, y, z)];
+			Block block  = world.getBlock (x, y, z);
 			int metadata = world.getBlockMetadata (x, y, z);
 			
 			for (BuildingBlockHandler handler : BuildingBlockRegistry.instance().getHandlers()) {

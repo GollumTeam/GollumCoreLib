@@ -1,11 +1,17 @@
 package mods.gollum.core.common.blocks;
 
-import mods.gollum.core.common.tileentities.TileEntityBlockSpawner;
+import java.util.Random;
+
+import mods.gollum.core.common.tileentities.TileEntityBlockProximitySpawn;
 import mods.gollum.core.tools.helper.blocks.HBlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -19,16 +25,16 @@ public class BlockProximitySpawn extends HBlockContainer {
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World world) {
-		return new TileEntityBlockSpawner();
+	public TileEntity createNewTileEntity(World world, int i) {
+		return new TileEntityBlockProximitySpawn();
 	}
 	
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister iconRegister) {
+	public void registerIcons(IIconRegister iconRegister) {
 	}
 	
 	@Override
-	public boolean isAirBlock(World world, int x, int y, int z) {
+	public boolean isAir(IBlockAccess world, int x, int y, int z) {
 		return true;
 	}
 	
@@ -37,8 +43,13 @@ public class BlockProximitySpawn extends HBlockContainer {
 	 * inventory.setCurrentItem (along with isCreative)
 	 */
 	@Override
-	public int idPicked(World var1, int var2, int var3, int var4) {
-		return 0;
+	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
+	return null;
+	}
+	
+	@Override
+	public Item getItemDropped(int par1, Random par2Random, int par3) {
+		return null;
 	}
 	
 	/**

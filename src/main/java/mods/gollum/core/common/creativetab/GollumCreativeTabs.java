@@ -2,6 +2,7 @@ package mods.gollum.core.common.creativetab;
 
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -31,5 +32,16 @@ public class GollumCreativeTabs extends CreativeTabs {
 			return new ItemStack(block);
 		}
 		return super.getIconItemStack();
+	}
+	
+	@Override
+	public Item getTabIconItem() {
+		if (item != null) {
+			return item;
+		}
+		if (block != null) {
+			return Item.getItemFromBlock(block);
+		}
+		return Item.getItemFromBlock(Blocks.grass);
 	}
 }

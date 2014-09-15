@@ -1,10 +1,10 @@
 package mods.gollum.core.tools.helper;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 public interface IBlockHelper {
@@ -16,13 +16,13 @@ public interface IBlockHelper {
 	 */
 	public String getRegisterName();
 	
-	public void registerIcons(IconRegister iconRegister);
+	public void registerBlockIcons(IIconRegister iconRegister);
 	
 	/**
 	 * Setter de l'icon de l'objet
 	 * @param icon
 	 */
-	public IBlockHelper setIcon (Icon icon);
+	public IBlockHelper setIcon (IIcon icon);
 	
 	/**
 	 * Clef qui permet de générer le nom du fichier de texture 

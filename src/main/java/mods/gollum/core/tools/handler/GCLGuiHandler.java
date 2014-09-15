@@ -21,7 +21,7 @@ public class GCLGuiHandler implements IGuiHandler {
 
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 		
-		TileEntity te = world.getBlockTileEntity(x, y, z);
+		TileEntity te = world.getTileEntity(x, y, z);
 		Container container = null;
 		
 		boolean bE   = world.blockExists(x, y, z); // bE = Block Exist
@@ -74,7 +74,7 @@ public class GCLGuiHandler implements IGuiHandler {
 
 	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 
-		TileEntity te = world.getBlockTileEntity(x, y, z);
+		TileEntity te = world.getTileEntity(x, y, z);
 		GuiContainer gui = null;
 		
 		boolean bE   = world.blockExists(x, y, z); // bE = Block Exist

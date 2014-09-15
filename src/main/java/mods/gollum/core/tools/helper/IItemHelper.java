@@ -1,7 +1,7 @@
 package mods.gollum.core.tools.helper;
 
-import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.util.Icon;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.util.IIcon;
 
 public interface IItemHelper {
 	
@@ -12,13 +12,13 @@ public interface IItemHelper {
 	 */
 	public String getRegisterName();
 	
-	public void registerIcons(IconRegister iconRegister);
+	public void registerIcons(IIconRegister iconRegister);
 	
 	/**
 	 * Setter de l'icon de l'objet
 	 * @param icon
 	 */
-	public void setIcon (Icon icon);
+	public void setIcon (IIcon icon);
 	
 	/**
 	 * Clef qui permet de générer le nom du fichier de texture 

@@ -1,14 +1,14 @@
 package mods.gollum.core.tools.helper.blocks;
 
+import javax.swing.Icon;
+
 import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.tools.helper.BlockHelper;
 import mods.gollum.core.tools.helper.IBlockHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 
 public class HBlock extends Block implements IBlockHelper {
@@ -16,7 +16,7 @@ public class HBlock extends Block implements IBlockHelper {
 	protected BlockHelper helper;
 	
 	public HBlock (int id, String registerName, Material material)  {
-		super(id, material);
+		super(material);
 		ModGollumCoreLib.log.info ("Create block id : " + id + " registerName : " + registerName);
 		this.helper = new BlockHelper(this, registerName);
 	}
