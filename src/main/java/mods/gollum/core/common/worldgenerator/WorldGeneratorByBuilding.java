@@ -189,10 +189,10 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 			
 			if (!this.hasBuildingArround (chunkX, chunkZ)) {
 				
-				int blockId = world.getBlockId(initX + 3, initY, initZ + 3);
+				Block block = world.getBlock(initX + 3, initY, initZ + 3);
 				
 				//Test si on est sur de la terre (faudrais aps que le batiment vol)
-				if (blockId != 0 && world.isAirBlock(initX + 3, initY+1, initZ + 3) && dimentionsInfos.blocksSpawn.contains(Block.blocksList[blockId])) {
+				if (block != null && world.isAirBlock(initX + 3, initY+1, initZ + 3) && dimentionsInfos.blocksSpawn.contains(block)) {
 					
 					// Auteur initiale du batiment 
 					initY += 1;

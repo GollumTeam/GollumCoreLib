@@ -2,19 +2,15 @@ package mods.gollum.core.common.event;
 
 import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.common.building.Builder;
-import net.minecraft.client.Minecraft;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.IProgressUpdate;
-import net.minecraft.world.MinecraftException;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.event.ForgeSubscribe;
-import net.minecraftforge.event.world.WorldEvent.Save;
 import net.minecraftforge.event.world.WorldEvent.Unload;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 
 public class WorldHandler {
 	
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void onUnload (Unload event) {
 		
 		if (!event.world.isRemote) {

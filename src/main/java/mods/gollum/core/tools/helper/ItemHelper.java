@@ -5,9 +5,9 @@ import mods.gollum.core.common.context.ModContext;
 import mods.gollum.core.common.mod.GollumMod;
 import mods.gollum.core.tools.helper.items.HItem;
 import mods.gollum.core.tools.registry.ItemRegistry;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ItemHelper implements IItemHelper {
@@ -69,7 +69,7 @@ public class ItemHelper implements IItemHelper {
 	* @param key
 	* @return
 	*/
-	public Icon loadTexture(IconRegister iconRegister) {
+	public IIcon loadTexture(IIconRegister iconRegister) {
 		return this.loadTexture(iconRegister, "");
 	}
 	/**
@@ -80,7 +80,7 @@ public class ItemHelper implements IItemHelper {
 	* @param key
 	* @return
 	*/
-	public Icon loadTexture(IconRegister iconRegister, String sufixe) {
+	public IIcon loadTexture(IIconRegister iconRegister, String sufixe) {
 		return this.loadTexture(iconRegister, sufixe, false);
 	}
 	/**
@@ -91,7 +91,7 @@ public class ItemHelper implements IItemHelper {
 	* @param key
 	* @return
 	*/
-	public Icon loadTexture(IconRegister iconRegister, String sufixe, boolean dontUseTextureKey) {
+	public IIcon loadTexture(IIconRegister iconRegister, String sufixe, boolean dontUseTextureKey) {
 		
 		String key = (dontUseTextureKey ?  "" : ((IItemHelper)this.parent).getTextureKey ())+sufixe;
 		String texture = this.mod.getModId().toLowerCase() + ":" + key;
@@ -105,7 +105,7 @@ public class ItemHelper implements IItemHelper {
 	 * Depuis la 1.5 on est obligé de charger les texture fichier par fichier
 	 */
 	@Override
-	public void registerIcons(IconRegister iconRegister) {
+	public void registerIcons(IIconRegister iconRegister) {
 		((IItemHelper)this.parent).setIcon (this.loadTexture(iconRegister));
 	}
 	
@@ -114,7 +114,7 @@ public class ItemHelper implements IItemHelper {
 	 * @param icon
 	 */
 	@Override
-	public void setIcon (Icon icon) {
+	public void setIcon (IIcon icon) {
 		ModGollumCoreLib.log.warning("setIcon don't be call by helper. It's stub");
 	}
 }

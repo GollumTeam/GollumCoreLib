@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.common.context.ModContext;
 import net.minecraftforge.client.event.sound.SoundLoadEvent;
-import net.minecraftforge.event.ForgeSubscribe;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class SoundRegistry {
 	
@@ -15,7 +15,7 @@ public class SoundRegistry {
 		sounds.add(ModContext.instance().getCurrent().getModId().toLowerCase()+":"+sound+".ogg");
 	}
 	
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void onSound(SoundLoadEvent event) {
 		
 		if (this.sounds.isEmpty())ModGollumCoreLib.log.debug ("No sound registry");

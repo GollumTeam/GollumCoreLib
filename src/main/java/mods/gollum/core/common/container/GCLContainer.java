@@ -24,7 +24,7 @@ public class GCLContainer extends Container {
 		this.numColumns     = numColumns;
 		this.numRows        = (int)Math.ceil ((double)inventoryBlock.getSizeInventory() / (double)this.numColumns);
 		
-		inventoryBlock.openChest();
+		inventoryBlock.openInventory();
 		
 		int height = (this.numRows - 4) * SIZE_ITEM;
 		int distance = 106;
@@ -105,7 +105,7 @@ public class GCLContainer extends Container {
 	public void onContainerClosed(EntityPlayer par1EntityPlayer) {
 		
 		super.onContainerClosed(par1EntityPlayer);
-		this.inventoryBlock.closeChest();
+		this.inventoryBlock.closeInventory();
 		
 	}
 	

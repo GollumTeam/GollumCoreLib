@@ -12,13 +12,14 @@ import mods.gollum.core.common.log.Logger;
 import mods.gollum.core.common.mod.GollumMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.ChatComponentText;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import argo.jdom.JdomParser;
 import argo.jdom.JsonRootNode;
-import cpw.mods.fml.common.ITickHandler;
-import cpw.mods.fml.common.TickType;
-import cpw.mods.fml.common.registry.TickRegistry;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class VersionChecker extends Thread {
 	
@@ -32,37 +33,25 @@ public class VersionChecker extends Thread {
 	private String type = "";
 	
 	
-	public class EnterWorldHandler implements ITickHandler {
+	public class EnterWorldHandler {
 		
 		private boolean nagged = false;;
 		
-		@Override
-		public void tickStart(EnumSet<TickType> type, Object... tickData) {
-		}
-		
-		@Override
-		public void tickEnd(EnumSet<TickType> type, Object... tickData) {
+		@SideOnly(Side.CLIENT)
+		@SubscribeEvent
+		public void OnPlayerTickEvent(EntityJoinWorldEvent event) {
+			
+			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 			
 			if (nagged || !VersionChecker.display) {
 				return;
 			}
 			if (message != null) {
-				EntityPlayer player = (EntityPlayer) tickData[0];
-				player.addChatMessage("-------------------------------");
-				player.addChatMessage(EnumChatFormatting.YELLOW + message);
-				player.addChatMessage("-------------------------------");
+				player.addChatMessage(new ChatComponentText("-------------------------------"));
+				player.addChatMessage(new ChatComponentText(message));// TODO COLOR YElLOW
+				player.addChatMessage(new ChatComponentText("-------------------------------"));
 			}
 			nagged = true;
-		}
-
-		@Override
-		public EnumSet<TickType> ticks() {
-			return EnumSet.of(TickType.PLAYER);
-		}
-
-		@Override
-		public String getLabel() {
-			return mod.getModId() + " - Player update tick";
 		}
 	}
 	
@@ -77,7 +66,7 @@ public class VersionChecker extends Thread {
 	
 	public VersionChecker () {
 		this.mod = ModContext.instance().getCurrent();
-		TickRegistry.registerTickHandler(new EnterWorldHandler(), Side.CLIENT);
+		MinecraftForge.EVENT_BUS.register(new EnterWorldHandler ());
 		start ();
 	}
 	

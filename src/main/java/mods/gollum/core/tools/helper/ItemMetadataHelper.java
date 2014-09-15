@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -13,7 +14,7 @@ import net.minecraft.util.Icon;
 public class ItemMetadataHelper extends ItemHelper implements IItemMetadataHelper {
 	
 	protected TreeSet<Integer>       listSubEnabled = new TreeSet<Integer>();
-	protected TreeMap<Integer, Icon> blockIcons     = new TreeMap<Integer, Icon>();
+	protected TreeMap<Integer, IIcon> blockIcons     = new TreeMap<Integer, Icon>();
 
 	/////////////////
 	// Contructeur //
@@ -84,7 +85,7 @@ public class ItemMetadataHelper extends ItemHelper implements IItemMetadataHelpe
 	 * Depuis la 1.5 on est obligé de charger les texture fichier par fichier
 	 */
 	@Override
-	public void registerIcons(IconRegister iconRegister) {
+	public void registerIcons(IIconRegister iconRegister) {
 		for (int metadata : this.listSubEnabled) {
 			this.blockIcons.put(metadata, this.loadTexture(iconRegister, "_"+metadata));
 		}

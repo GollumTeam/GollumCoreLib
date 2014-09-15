@@ -1,15 +1,17 @@
 package mods.gollum.core.tools.helper.blocks;
 
+import javax.swing.Icon;
+
 import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.tools.helper.BlockHelper;
 import mods.gollum.core.tools.helper.IBlockHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPistonBase;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.Facing;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -20,10 +22,10 @@ public class HBlockPistonBase extends BlockPistonBase implements IBlockHelper {
 	
 	protected boolean isSticky;
 	
-	protected Icon iconTop;
-	protected Icon iconOpen;
-	protected Icon iconBottom;
-	protected Icon iconSide;
+	protected IIcon iconTop;
+	protected IIcon iconOpen;
+	protected IIcon iconBottom;
+	protected IIcon iconSide;
 
 	protected String suffixTop    = "_top";
 	protected String suffixSticky = "_sticky";
@@ -31,9 +33,9 @@ public class HBlockPistonBase extends BlockPistonBase implements IBlockHelper {
 	protected String suffixBotom  = "_bottom";
 	protected String suffixSide   = "_side";
 	
-	public HBlockPistonBase(int id, String registerName, boolean isSticky)  {
-		super(id, isSticky);
-		ModGollumCoreLib.log.info ("Create block id : " + id + " registerName : " + registerName);
+	public HBlockPistonBase(String registerName, boolean isSticky)  {
+		super(isSticky);
+		ModGollumCoreLib.log.info ("Create block registerName : " + registerName);
 		this.helper = new BlockHelper(this, registerName);
 		
 		this.isSticky = isSticky;
@@ -82,10 +84,10 @@ public class HBlockPistonBase extends BlockPistonBase implements IBlockHelper {
 	 * Depuis la 1.5 on est obligé de charger les texture fichier par fichier
 	 */
 	@Override
-	public void registerIcons(IconRegister iconRegister) {
+	public void registerBlockIcons(IIconRegister iconRegister) {
 		
 		if (helper.vanillaTexture) {
-			super.registerIcons(iconRegister);
+			super.registerBlockIcons(iconRegister);
 			return;
 		};
 		
@@ -100,17 +102,17 @@ public class HBlockPistonBase extends BlockPistonBase implements IBlockHelper {
 	 * @param icon
 	 */
 	@Override
-	public IBlockHelper setIcon (Icon icon) {
+	public IBlockHelper setIcon (IIcon icon) {
 		this.blockIcon = icon;
 		return this;
 	}
 	
 	@Override
-	public Icon getIcon(int side, int metadata) {
+	public IIcon getIcon(int side, int metadata) {
 		
 		if (helper.vanillaTexture) return super.getIcon(side, metadata);
 		
-		int orientation = getOrientation(metadata);
+		int orientation = getPistonOrientation(metadata);
 		if (orientation > 5) {
 			return this.iconTop;
 		}
@@ -136,7 +138,7 @@ public class HBlockPistonBase extends BlockPistonBase implements IBlockHelper {
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public Icon getPistonExtensionTexture() {
+	public IIcon getPistonExtensionTexture() {
 		if (helper.vanillaTexture) return super.getPistonExtensionTexture();
 		return this.iconSide;
 	}

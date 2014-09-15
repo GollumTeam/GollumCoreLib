@@ -127,25 +127,25 @@ public abstract class GCLInventoryTileEntity extends TileEntity implements IInve
 	}
 	
 	@Override
-	public void openChest() {
+	public void openInventory() {
 		if (this.numUsingPlayers < 0) {
 			this.numUsingPlayers = 0;
 		}
 		
 		++this.numUsingPlayers;
-		this.worldObj.addBlockEvent(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID, 1, this.numUsingPlayers);
-		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID);
-		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord - 1, this.zCoord, this.getBlockType().blockID);
+		this.worldObj.addBlockEvent(this.xCoord, this.yCoord, this.zCoord, this.getBlockType(), 1, this.numUsingPlayers);
+		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType());
+		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord - 1, this.zCoord, this.getBlockType());
 	}
 	
 	@Override
-	public void closeChest() {
-		if (this.getBlockType() != null && this.getBlockType().blockID == this.worldObj.getBlockId(this.xCoord, this.yCoord, this.zCoord)) {
+	public void closeInventory () {
+		if (this.getBlockType() != null && this.getBlockType() == this.worldObj.getBlock(this.xCoord, this.yCoord, this.zCoord)) {
 			--this.numUsingPlayers;
 			
-			this.worldObj.addBlockEvent(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID, 1, this.numUsingPlayers);
-			this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID);
-			this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord - 1, this.zCoord, this.getBlockType().blockID);
+			this.worldObj.addBlockEvent(this.xCoord, this.yCoord, this.zCoord, this.getBlockType(), 1, this.numUsingPlayers);
+			this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType());
+			this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord - 1, this.zCoord, this.getBlockType());
 		}
 	}
 	
@@ -168,7 +168,7 @@ public abstract class GCLInventoryTileEntity extends TileEntity implements IInve
 	 * used directly.
 	 */
 	@Override
-	public boolean isInvNameLocalized() {
+	public boolean hasCustomInventoryName() {
 		return true;
 	}
 	
@@ -189,7 +189,7 @@ public abstract class GCLInventoryTileEntity extends TileEntity implements IInve
 	public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer) {
 		
 		boolean rtn = false;
-		if (this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) == this) {
+		if (this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord) == this) {
 			rtn = par1EntityPlayer.getDistanceSq((double) this.xCoord + 0.5D, (double) this.yCoord + 0.5D, (double) this.zCoord + 0.5D) <= 64.0D;
 		}
 		return rtn;
