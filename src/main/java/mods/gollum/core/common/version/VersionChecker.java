@@ -41,17 +41,20 @@ public class VersionChecker extends Thread {
 		@SubscribeEvent
 		public void OnPlayerTickEvent(EntityJoinWorldEvent event) {
 			
-			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-			
-			if (nagged || !VersionChecker.display) {
-				return;
+			if (event.world.isRemote) {
+				
+				EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+				
+				if (nagged || !VersionChecker.display) {
+					return;
+				}
+				if (message != null) {
+					player.addChatMessage(new ChatComponentText("-------------------------------"));
+					player.addChatMessage(new ChatComponentText(message));// TODO COLOR YElLOW
+					player.addChatMessage(new ChatComponentText("-------------------------------"));
+				}
+				nagged = true;
 			}
-			if (message != null) {
-				player.addChatMessage(new ChatComponentText("-------------------------------"));
-				player.addChatMessage(new ChatComponentText(message));// TODO COLOR YElLOW
-				player.addChatMessage(new ChatComponentText("-------------------------------"));
-			}
-			nagged = true;
 		}
 	}
 	

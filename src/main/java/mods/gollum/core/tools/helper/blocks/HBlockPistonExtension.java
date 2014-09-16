@@ -15,9 +15,9 @@ public class HBlockPistonExtension extends BlockPistonExtension implements IBloc
 
 	protected BlockHelper helper;
 	
-	public HBlockPistonExtension (int id, String registerName)  {
+	public HBlockPistonExtension (String registerName)  {
 		super();
-		ModGollumCoreLib.log.info ("Create block id : " + id + " registerName : " + registerName);
+		ModGollumCoreLib.log.info ("Create block registerName : " + registerName);
 		this.helper = new BlockHelper(this, registerName);
 	}
 	

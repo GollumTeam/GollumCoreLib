@@ -15,9 +15,9 @@ public class HBlock extends Block implements IBlockHelper {
 
 	protected BlockHelper helper;
 	
-	public HBlock (int id, String registerName, Material material)  {
+	public HBlock (String registerName, Material material)  {
 		super(material);
-		ModGollumCoreLib.log.info ("Create block id : " + id + " registerName : " + registerName);
+		ModGollumCoreLib.log.info ("Create block registerName : " + registerName);
 		this.helper = new BlockHelper(this, registerName);
 	}
 

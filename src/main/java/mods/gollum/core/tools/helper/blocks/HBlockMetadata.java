@@ -20,20 +20,20 @@ public class HBlockMetadata extends HBlock implements IBlockMetadataHelper {
 	// Contructeur //
 	/////////////////
 	
-	public HBlockMetadata(int id, String registerName, Material material, Class itemClass) {
-		super(id, registerName, material);
+	public HBlockMetadata(String registerName, Material material, Class itemClass) {
+		super(registerName, material);
 		this.helper = new BlockMetadataHelper(this, registerName);
 		this.setItemBlockClass(HItemBlockMetadata.class);
 	}
 	
-	public HBlockMetadata(int id, String registerName, Material material, int listSubBlock[]) {
-		super(id, registerName, material);
+	public HBlockMetadata(String registerName, Material material, int listSubBlock[]) {
+		super(registerName, material);
 		this.helper = new BlockMetadataHelper(this, registerName, listSubBlock);
 		this.setItemBlockClass(HItemBlockMetadata.class);
 	}
 	
-	public HBlockMetadata(int id, String registerName, Material material, int numberSubBlock) {
-		super(id, registerName, material);
+	public HBlockMetadata(String registerName, Material material, int numberSubBlock) {
+		super(registerName, material);
 		this.helper = new BlockMetadataHelper(this, registerName, numberSubBlock);
 		this.setItemBlockClass(HItemBlockMetadata.class);
 	}
