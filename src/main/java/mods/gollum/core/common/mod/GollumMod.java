@@ -129,6 +129,9 @@ public abstract class GollumMod {
 	}
 	
 	public void handler (FMLInitializationEvent event) {
+		
+		ModContext.instance ().setCurrent(this);
+		
 		this.init(event);
 
 		this.initGuiCommon ();
@@ -144,6 +147,9 @@ public abstract class GollumMod {
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GCLArrayGuiHandler(GCLNetworkRegistry.instance().getGuiHandlers()));
 	}
 	public void handler (FMLPostInitializationEvent event) {
+		
+		ModContext.instance ().setCurrent(this);
+		
 		this.postInit(event);
 		
 		ModContext.instance ().pop();
