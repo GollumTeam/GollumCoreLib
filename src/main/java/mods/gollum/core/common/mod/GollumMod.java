@@ -126,6 +126,8 @@ public abstract class GollumMod {
 		
 		BlockRegistry.instance().registerAll();
 		ItemRegistry.instance().registerAll();
+		
+		ModContext.instance ().pop();
 	}
 	
 	public void handler (FMLInitializationEvent event) {
@@ -145,6 +147,8 @@ public abstract class GollumMod {
 		// Enregistrement de tous les Gui groupé
 		// TODO a verifier
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GCLArrayGuiHandler(GCLNetworkRegistry.instance().getGuiHandlers()));
+		
+		ModContext.instance ().pop();
 	}
 	public void handler (FMLPostInitializationEvent event) {
 		
