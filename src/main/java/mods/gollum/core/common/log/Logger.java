@@ -130,8 +130,6 @@ public class Logger {
 		java.util.logging.Logger log = getLogger (key);
 		log.setLevel(Level.INFO);
 		
-		
-		
 		switch (level) {
 			
 			case LEVEL_SEVERE:
