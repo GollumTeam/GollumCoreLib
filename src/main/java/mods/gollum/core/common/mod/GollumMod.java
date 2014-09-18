@@ -2,8 +2,10 @@ package mods.gollum.core.common.mod;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.Map;
 
 import mods.gollum.core.ModGollumCoreLib;
+import mods.gollum.core.client.gui.TestModGuiFactory;
 import mods.gollum.core.common.context.ModContext;
 import mods.gollum.core.common.i18n.I18n;
 import mods.gollum.core.common.log.Logger;
@@ -13,8 +15,10 @@ import mods.gollum.core.tools.registry.BlockRegistry;
 import mods.gollum.core.tools.registry.GCLNetworkRegistry;
 import mods.gollum.core.tools.registry.InventoryRegistry;
 import mods.gollum.core.tools.registry.ItemRegistry;
+import cpw.mods.fml.common.FMLModContainer;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -70,10 +74,6 @@ public abstract class GollumMod {
 		return this.modName;
 	}
 	
-	public int nextMobID() {
-		return ++this.mobId ;
-	}
-	
 	/**
 	 * Renvoie la version du MOD
 	 */
@@ -87,6 +87,41 @@ public abstract class GollumMod {
 	public String getMinecraftVersion () {
 		return this.minecraftVersion;
 	}
+	
+	/**
+	 * @return conatiner of mod
+	 */
+	public ModContainer getContainer() {
+		return Loader.instance().getIndexedModList().get(this.getModId());
+	}
+	
+	public int nextMobID() {
+		return ++this.mobId ;
+	}
+	
+	/**
+	 * Set gollum gui config
+	 */
+	protected void initGuiConfig() {
+		ModContainer container = this.getContainer();
+		if (container instanceof FMLModContainer) {
+			
+			// Set gollum gui config
+			try {
+				Field f = (container.getClass().getDeclaredField("descriptor"));
+				f.setAccessible(true);
+				Map<String, Object> descriptor = (Map<String, Object>)f.get(container);
+				if (!descriptor.containsKey("guiFactory")) {
+					descriptor.put ("guiFactory", TestModGuiFactory.class.getName());
+				}
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+		}
+	}
+	
 	
 	public void handler (FMLPreInitializationEvent event) {
 		
@@ -122,6 +157,9 @@ public abstract class GollumMod {
 			e.printStackTrace();
 		}
 		
+		// Set gollum gui config
+		initGuiConfig();
+		
 		this.preInit(event);
 		
 		BlockRegistry.instance().registerAll();
@@ -150,6 +188,7 @@ public abstract class GollumMod {
 		
 		ModContext.instance ().pop();
 	}
+	
 	public void handler (FMLPostInitializationEvent event) {
 		
 		ModContext.instance ().setCurrent(this);
