@@ -1,6 +1,10 @@
 
 package mods.gollum.core;
 
+import java.lang.reflect.Field;
+import java.util.Map;
+
+import mods.gollum.core.client.gui.TestModGuiFactory;
 import mods.gollum.core.common.CommonProxyGolumCoreLib;
 import mods.gollum.core.common.blocks.BlockProximitySpawn;
 import mods.gollum.core.common.command.CommandBuilding;
@@ -19,7 +23,9 @@ import mods.gollum.core.common.worldgenerator.WorldGeneratorByBuildingLoader;
 import mods.gollum.core.tools.registry.BlockRegistry;
 import mods.gollum.core.tools.registry.ItemRegistry;
 import net.minecraftforge.common.MinecraftForge;
+import cpw.mods.fml.common.FMLModContainer;
 import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
@@ -29,7 +35,12 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 
-@Mod(modid = ModGollumCoreLib.MODID, name = ModGollumCoreLib.MODNAME, version = ModGollumCoreLib.VERSION, acceptedMinecraftVersions = ModGollumCoreLib.MINECRAFT_VERSION)
+@Mod(
+	modid                     = ModGollumCoreLib.MODID,
+	name                      = ModGollumCoreLib.MODNAME,
+	version                   = ModGollumCoreLib.VERSION,
+	acceptedMinecraftVersions = ModGollumCoreLib.MINECRAFT_VERSION
+)
 public class ModGollumCoreLib extends GollumMod {
 
 	public final static String MODID = "GollumCoreLib";
@@ -88,6 +99,9 @@ public class ModGollumCoreLib extends GollumMod {
 		
 		// Creation du logger
 		this.i18n = new I18n();
+		
+		// Set gollum gui config
+		initGuiConfig();
 		
 		// Affecte la config
 		VersionChecker.setDisplay(this.config.versionChecker);
