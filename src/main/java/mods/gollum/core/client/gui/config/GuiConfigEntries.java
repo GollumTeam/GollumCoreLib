@@ -1,46 +1,123 @@
 package mods.gollum.core.client.gui.config;
 
+import static cpw.mods.fml.client.config.GuiUtils.RESET_CHAR;
+import static cpw.mods.fml.client.config.GuiUtils.UNDO_CHAR;
+import static mods.gollum.core.ModGollumCoreLib.log;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import cpw.mods.fml.client.config.GuiButtonExt;
+import cpw.mods.fml.client.config.GuiConfigEntries.IConfigEntry;
 import mods.gollum.core.common.config.ConfigProp;
 import mods.gollum.core.common.config.ConfigLoader.ConfigLoad;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiListExtended;
+import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.util.EnumChatFormatting;
 
 public class GuiConfigEntries extends GuiListExtended {
 	
 	private ArrayList<ConfigEntry> entries;
 	private GuiConfigMod parent;
+	private Minecraft mc;
+	private ConfigLoad configLoad;
+
+	//////////////
+	// Position //
+	//////////////
+	
+	public int maxEntryRightBound = 0;
+	public int maxLabelTextWidth = 0;
+	public int labelX;
+	public int controlX;
+	public int resetX;
+	public int controlWidth;
+	public int scrollBarX;
 	
 	public GuiConfigEntries(GuiConfigMod parent, Minecraft mc, ConfigLoad configLoad) {
 		
 		super(mc, parent.width, parent.height, 23, parent.height - 32, 20);
-		this.parent = parent;
+		
+		this.parent     = parent;
+		this.mc         = mc;
+		this.configLoad = configLoad;
 		
 		this.entries = new ArrayList<ConfigEntry>();
 		
-		for (Field f : configLoad.getClass().getDeclaredFields()) {
-			f.setAccessible(true);
-			
-			ConfigProp anno = f.getAnnotation(ConfigProp.class);
-			if (anno != null) {
+		
+		if (configLoad.config != null) {
+			for (Field f : configLoad.config.getClass().getDeclaredFields()) {
+				f.setAccessible(true);
 				
-				// TODO généraliser aux autres champs
-				if (
-					f.getType().isAssignableFrom(Long.TYPE) ||
-					f.getType().isAssignableFrom(Integer.TYPE)
-				) {
-					entries.add(new ConfigEntry(f, anno));
+				ConfigProp anno = f.getAnnotation(ConfigProp.class);
+				if (anno != null) {
+					
+					// TODO généraliser aux autres champs
+					if (
+						f.getType().isAssignableFrom(Long.TYPE) ||
+						f.getType().isAssignableFrom(Integer.TYPE)
+					) {
+						
+						String label = this.getLabel (f.getName());
+						
+						try {
+							
+							entries.add(new ConfigEntry(this, label, Long.parseLong (f.get(configLoad.config).toString())) {
+								@Override
+								protected void onSave() {
+									log.debug ("Save entity");
+								}
+							});
+							
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
 				}
+				
 			}
-			
 		}
 		
+		this.initGui();
 	}
+	
 
+	protected void initGui() {
+		this.width  = parent.width;
+		this.height = parent.height;
+		
+		this.maxLabelTextWidth = 0;
+		for (ConfigEntry entry : this.entries) {
+			this.maxLabelTextWidth = Math.max (this.maxLabelTextWidth, this.mc.fontRenderer.getStringWidth(entry.label));
+		}
+		
+		this.top = 23;
+		this.bottom = parent.height - 32;
+		this.left = 0;
+		this.right = width;
+
+		int viewWidth = this.maxLabelTextWidth + 8 + (this.width / 2);
+		this.labelX   = (this.width / 2) - (viewWidth / 2);
+		this.controlX = this.labelX + this.maxLabelTextWidth + 8;
+		this.resetX   = (this.width / 2) + (viewWidth / 2) - 45;
+		
+		this.maxEntryRightBound = 0;
+		for (ConfigEntry entry : this.entries) {
+			this.maxEntryRightBound = Math.max(this.maxEntryRightBound, entry.getEntryRightBound());
+		}
+		
+		scrollBarX = this.maxEntryRightBound + 5;
+		controlWidth = maxEntryRightBound - controlX - 45;
+
+	}
+	
+	public String getLabel (String name) {
+		return this.configLoad.mod.i18n().trans("config."+name);
+	}
+	
 	@Override
 	public IGuiListEntry getListEntry(int i) {
 		return this.entries.get(i);
@@ -50,30 +127,77 @@ public class GuiConfigEntries extends GuiListExtended {
 	protected int getSize() {
 		return this.entries.size();
 	}
-	
-	protected void initGui() {
-	}
 
 	public void updateScreen() {
 		
 	}
 	
-	public class ConfigEntry implements IGuiListEntry {
+	public abstract class ConfigEntry implements IGuiListEntry {
 		
-		Field f;
-		ConfigProp config;
+		public GuiConfigEntries parent;
+		public String label;
 		
-		public ConfigEntry (Field f, ConfigProp config) {
-			this.f = f;
-			this.config = config;
+		protected final GuiButtonExt btnUndoChanges;
+		protected final GuiButtonExt btnDefault;
+		private GuiTextField textFieldValue;
+		
+		public ConfigEntry (GuiConfigEntries parent, String label, Long value) {
+			this.parent = parent;
+			this.label = label;
+			
+			this.btnUndoChanges = new GuiButtonExt(0, 0, 0, 18, 18, UNDO_CHAR);
+			this.btnDefault     = new GuiButtonExt(0, 0, 0, 18, 18, RESET_CHAR);
+			
+			this.textFieldValue = new GuiTextField(this.parent.mc.fontRenderer, this.parent.controlX + 1, 0, this.parent.controlWidth - 3, 16);
+			this.textFieldValue.setMaxStringLength(10000);
+			this.textFieldValue.setText(value.toString());
 		}
-
+		
 		@Override
-		public void drawEntry(int p_148279_1_, int p_148279_2_, int p_148279_3_, int p_148279_4_, int p_148279_5_, Tessellator p_148279_6_, int p_148279_7_, int p_148279_8_, boolean p_148279_9_) {
-			// TODO Auto-generated method stub
+		public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, Tessellator tessellator, int mouseX, int mouseY, boolean isSelected) {
+			
+			EnumChatFormatting color = EnumChatFormatting.GRAY;
+			color = (!isValidValue()) ? EnumChatFormatting.RED   : color;
+			color = (!isChanged())    ? EnumChatFormatting.WHITE : color;
+			
+			this.parent.mc.fontRenderer.drawString(color+this.label, this.parent.labelX, y + slotHeight / 2 - this.parent.mc.fontRenderer.FONT_HEIGHT / 2, 16777215);
+			
+
+			this.btnUndoChanges.xPosition = this.parent.scrollBarX - 44;
+			this.btnUndoChanges.yPosition = y;
+			this.btnUndoChanges.enabled = this.isChanged ();
+			this.btnUndoChanges.drawButton(this.parent.mc, mouseX, mouseY);
+
+			this.btnDefault.xPosition = this.parent.scrollBarX - 22;
+			this.btnDefault.yPosition = y;
+			this.btnDefault.enabled = this.isDefault();
+			this.btnDefault.drawButton(this.parent.mc, mouseX, mouseY);
+			
+			this.textFieldValue.xPosition = this.parent.controlX + 2;
+			this.textFieldValue.yPosition = y + 1;
+			this.textFieldValue.width = this.parent.controlWidth - 4;
+			this.textFieldValue.drawTextBox();
 			
 		}
-
+		
+		public int getEntryRightBound() {
+			return this.parent.resetX + 40;
+		}
+		
+		public boolean isChanged() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+		
+		public boolean isDefault() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+		
+		public boolean isValidValue() {
+			return true;
+		}
+		
 		@Override
 		public boolean mousePressed(int p_148278_1_, int p_148278_2_, int p_148278_3_, int p_148278_4_, int p_148278_5_, int p_148278_6_) {
 			// TODO Auto-generated method stub
@@ -85,6 +209,8 @@ public class GuiConfigEntries extends GuiListExtended {
 			// TODO Auto-generated method stub
 			
 		}
+		
+		protected abstract void onSave ();
 		
 	}
 	

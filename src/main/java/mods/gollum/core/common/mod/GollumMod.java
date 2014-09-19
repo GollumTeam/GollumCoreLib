@@ -121,7 +121,32 @@ public abstract class GollumMod {
 			
 		}
 	}
-	
+
+	public I18n i18n() {
+		I18n i18n = null;
+		
+		try {
+			Field f = this.getClass().getDeclaredField("i18n");
+			f.setAccessible(true);
+			i18n = (I18n) f.get(this);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return i18n;
+	}
+
+	public Logger log() {
+		Logger log = null;
+		
+		try {
+			Field f = this.getClass().getDeclaredField("log");
+			f.setAccessible(true);
+			log = (Logger) f.get(this);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return log;
+	}
 	
 	public void handler (FMLPreInitializationEvent event) {
 		
