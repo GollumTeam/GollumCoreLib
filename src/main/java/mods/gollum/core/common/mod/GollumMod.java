@@ -5,7 +5,7 @@ import java.lang.reflect.Field;
 import java.util.Map;
 
 import mods.gollum.core.ModGollumCoreLib;
-import mods.gollum.core.client.gui.ConfigModGuiFactory;
+import mods.gollum.core.client.gui.config.ConfigModGuiFactory;
 import mods.gollum.core.common.context.ModContext;
 import mods.gollum.core.common.i18n.I18n;
 import mods.gollum.core.common.log.Logger;

@@ -3,7 +3,7 @@ package mods.gollum.core.common.config;
 import mods.gollum.core.common.context.ModContext;
 
 
-public abstract class Config<T> {
+public abstract class Config<T> implements Cloneable {
 	
 	private String fileName;
 	private String relativePath = "";
@@ -33,5 +33,16 @@ public abstract class Config<T> {
 		ConfigLoader configLoader = new ConfigLoader(this);
 		configLoader.loadConfig();
 		return (T) this;
+	}
+	@SuppressWarnings("unchecked")
+	@Override
+	public Object clone() {
+		Config<T> cloned = null;
+		try {
+			cloned = (Config<T>) super.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
+		return cloned;
 	}
 }

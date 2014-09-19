@@ -1,4 +1,4 @@
-package mods.gollum.core.client.gui;
+package mods.gollum.core.client.gui.config;
 
 import static cpw.mods.fml.client.config.GuiUtils.RESET_CHAR;
 import static cpw.mods.fml.client.config.GuiUtils.UNDO_CHAR;
@@ -11,6 +11,8 @@ import java.util.List;
 import org.lwjgl.input.Keyboard;
 
 import mods.gollum.core.ModGollumCoreLib;
+import mods.gollum.core.common.config.ConfigLoader;
+import mods.gollum.core.common.config.ConfigLoader.ConfigLoad;
 import mods.gollum.core.common.mod.GollumMod;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -29,6 +31,8 @@ public class ConfigModConfigGui extends GuiScreen {
 	
 	GollumMod mod;
 	GuiScreen parentScreen;
+
+	public GuiConfigEntries entryList;
 	
 	private GuiUnicodeGlyphButton btnUndoAll;
 	private GuiUnicodeGlyphButton btnDefaultAll;
@@ -63,6 +67,8 @@ public class ConfigModConfigGui extends GuiScreen {
 	public void initGui() {
 		super.initGui();
 		
+		Keyboard.enableRepeatEvents(true);
+		
 		int undoGlyphWidth = mc.fontRenderer.getStringWidth(UNDO_CHAR) * 2;
 		int resetGlyphWidth = mc.fontRenderer.getStringWidth(RESET_CHAR) * 2;
 		int doneWidth = Math.max(mc.fontRenderer.getStringWidth(I18n.format("gui.done")) + 20, 100);
@@ -94,6 +100,14 @@ public class ConfigModConfigGui extends GuiScreen {
 		
 		this.undoHoverChecker = new HoverChecker(this.btnUndoAll, 800);
 		this.resetHoverChecker = new HoverChecker(this.btnDefaultAll, 800);
+		
+		
+		this.entryList = new GuiConfigEntries(this, mc, ConfigLoader.configLoaded.get(this.mod));
+		this.entryList.initGui();
+	}
+
+	private void addEntries(ConfigLoad configLoad) {
+		
 	}
 
 	/**
@@ -164,7 +178,6 @@ public class ConfigModConfigGui extends GuiScreen {
 			
 			this.mc.displayGuiScreen(this.parentScreen);
 			
-			log.debug ("Undo");
 		} else
 		if (button.id == 2001) {
 			

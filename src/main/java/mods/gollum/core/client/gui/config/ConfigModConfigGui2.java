@@ -1,4 +1,4 @@
-package mods.gollum.core.client.gui;
+package mods.gollum.core.client.gui.config;
 
 import static mods.gollum.core.ModGollumCoreLib.log;
 
