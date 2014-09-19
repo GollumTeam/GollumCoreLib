@@ -16,7 +16,7 @@ import net.minecraft.client.gui.GuiListExtended;
 public class GuiConfigEntries extends GuiListExtended {
 	
 	private ArrayList<GuiConfigEntryString> entries;
-	private GuiConfigMod parent;
+	private GuiGollumConfig parent;
 	private Minecraft mc;
 	private ConfigLoad configLoad;
 
@@ -32,7 +32,7 @@ public class GuiConfigEntries extends GuiListExtended {
 	public int controlWidth;
 	public int scrollBarX;
 	
-	public GuiConfigEntries(GuiConfigMod parent, Minecraft mc, ConfigLoad configLoad) {
+	public GuiConfigEntries(GuiGollumConfig parent, Minecraft mc, ConfigLoad configLoad) {
 		
 		super(mc, parent.width, parent.height, 23, parent.height - 32, 20);
 		
