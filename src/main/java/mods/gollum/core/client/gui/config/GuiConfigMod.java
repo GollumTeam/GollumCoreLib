@@ -132,8 +132,13 @@ public class GuiConfigMod extends GuiScreen {
 		this.drawDefaultBackground();
 		
 		this.drawCenteredString(this.fontRendererObj, this.mod.getModName(), this.width / 2, 8, 16777215);
-
+		
+		
 		this.entryList.drawScreen(mouseX, mouseY, partialTicks);
+
+		this.btnDefaultAll.enabled = !this.entryList.isDefault ();
+		this.btnUndoAll.enabled = this.entryList.isChanged ();
+		
 		super.drawScreen(mouseX, mouseY, partialTicks);
 		
 		if (this.undoHoverChecker.checkHover(mouseX, mouseY)) {

@@ -84,7 +84,6 @@ public class GuiConfigEntries extends GuiListExtended {
 		this.initGui();
 	}
 	
-
 	protected void initGui() {
 		this.width  = parent.width;
 		this.height = parent.height;
@@ -132,6 +131,35 @@ public class GuiConfigEntries extends GuiListExtended {
 		
 	}
 	
+	@Override
+	public int getScrollBarX() {
+		return scrollBarX;
+	}
+	
+	@Override
+	public int getListWidth() {
+		return parent.width;
+	}
+
+
+	public boolean isDefault() {
+		for (ConfigEntry entry : this.entries) {
+			if (!entry.isDefault()) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public boolean isChanged() {
+		for (ConfigEntry entry : this.entries) {
+			if (entry.isChanged()) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public abstract class ConfigEntry implements IGuiListEntry {
 		
 		public GuiConfigEntries parent;
@@ -160,7 +188,7 @@ public class GuiConfigEntries extends GuiListExtended {
 			color = (!isValidValue()) ? EnumChatFormatting.RED   : color;
 			color = (!isChanged())    ? EnumChatFormatting.WHITE : color;
 			
-			this.parent.mc.fontRenderer.drawString(color+this.label, this.parent.labelX, y + slotHeight / 2 - this.parent.mc.fontRenderer.FONT_HEIGHT / 2, 16777215);
+			this.parent.mc.fontRenderer.drawString(color+this.label, this.parent.labelX, y + slotHeight / 2 - this.parent.mc.fontRenderer.FONT_HEIGHT / 2, 0x000000);
 			
 
 			this.btnUndoChanges.xPosition = this.parent.scrollBarX - 44;
@@ -191,7 +219,7 @@ public class GuiConfigEntries extends GuiListExtended {
 		
 		public boolean isDefault() {
 			// TODO Auto-generated method stub
-			return false;
+			return true;
 		}
 		
 		public boolean isValidValue() {
