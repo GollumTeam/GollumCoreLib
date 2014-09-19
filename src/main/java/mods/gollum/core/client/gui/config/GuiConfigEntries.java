@@ -198,7 +198,7 @@ public class GuiConfigEntries extends GuiListExtended {
 
 			this.btnDefault.xPosition = this.parent.scrollBarX - 22;
 			this.btnDefault.yPosition = y;
-			this.btnDefault.enabled = this.isDefault();
+			this.btnDefault.enabled = !this.isDefault();
 			this.btnDefault.drawButton(this.parent.mc, mouseX, mouseY);
 			
 			this.textFieldValue.xPosition = this.parent.controlX + 2;
