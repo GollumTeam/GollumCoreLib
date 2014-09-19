@@ -11,8 +11,11 @@ public class ConfigGollumCoreLib extends Config<ConfigGollumCoreLib> {
 	
 	@ConfigProp (info = "Log display level (DEBUG, INFO, MESSAGE, WARNING, SEVERE, NONE)")
 	public String level = "MESSAGE";
-	
+
 	@ConfigProp public int numberLogFilesUse = 3;
+	@ConfigProp public int test1 = 1;
+	@ConfigProp public int test2 = 3;
+	@ConfigProp public int test3 = 3;
 	@ConfigProp public boolean devTools = false;
 			
 	@ConfigProp (info = "Display version checker message")

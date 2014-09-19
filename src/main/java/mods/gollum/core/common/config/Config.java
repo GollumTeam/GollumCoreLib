@@ -7,11 +7,13 @@ public abstract class Config<T> implements Cloneable {
 	
 	private String fileName;
 	private String relativePath = "";
+	private boolean isMain = false;
 	
 	public Config() {
 		this(ModContext.instance().getCurrent().getModId());
+		this.isMain = true;
 	}
-	
+
 	public Config(String fileName) {
 		this.fileName = fileName;
 	}
@@ -44,5 +46,9 @@ public abstract class Config<T> implements Cloneable {
 			e.printStackTrace();
 		}
 		return cloned;
+	}
+	
+	public boolean isMain() {
+		return isMain;
 	}
 }

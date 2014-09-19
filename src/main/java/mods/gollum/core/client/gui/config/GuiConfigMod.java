@@ -27,7 +27,7 @@ import cpw.mods.fml.client.config.GuiUnicodeGlyphButton;
 import cpw.mods.fml.client.config.HoverChecker;
 import cpw.mods.fml.common.ModContainer;
 
-public class ConfigModConfigGui extends GuiScreen {
+public class GuiConfigMod extends GuiScreen {
 	
 	GollumMod mod;
 	GuiScreen parentScreen;
@@ -40,7 +40,7 @@ public class ConfigModConfigGui extends GuiScreen {
 	private HoverChecker undoHoverChecker;
 	private HoverChecker resetHoverChecker;
 	
-	public ConfigModConfigGui(GuiScreen parent) {
+	public GuiConfigMod(GuiScreen parent) {
 		
 		this.parentScreen = parent;
 		
@@ -124,6 +124,7 @@ public class ConfigModConfigGui extends GuiScreen {
 	@Override
 	public void updateScreen() {
 		super.updateScreen();
+		this.entryList.updateScreen();
 	}
 	
 	/**
@@ -134,7 +135,8 @@ public class ConfigModConfigGui extends GuiScreen {
 		this.drawDefaultBackground();
 		
 		this.drawCenteredString(this.fontRendererObj, this.mod.getModName(), this.width / 2, 8, 16777215);
-		
+
+		this.entryList.drawScreen(mouseX, mouseY, partialTicks);
 		super.drawScreen(mouseX, mouseY, partialTicks);
 		
 		if (this.undoHoverChecker.checkHover(mouseX, mouseY)) {
