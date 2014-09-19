@@ -13,6 +13,7 @@ import mods.gollum.core.common.mod.GollumMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import argo.jdom.JdomParser;
@@ -50,7 +51,9 @@ public class VersionChecker extends Thread {
 				}
 				if (message != null) {
 					player.addChatMessage(new ChatComponentText("-------------------------------"));
-					player.addChatMessage(new ChatComponentText(message));// TODO COLOR YElLOW
+					ChatComponentText text = new ChatComponentText(message);
+					text.getChatStyle().setColor(EnumChatFormatting.YELLOW);
+					player.addChatMessage(text);
 					player.addChatMessage(new ChatComponentText("-------------------------------"));
 				}
 				nagged = true;
