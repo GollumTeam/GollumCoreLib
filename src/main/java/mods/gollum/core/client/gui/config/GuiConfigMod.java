@@ -183,14 +183,18 @@ public class GuiConfigMod extends GuiScreen {
 	protected void actionPerformed(GuiButton button) {
 		if (button.id == 2000) {
 			
+
+			this.entryList.saveConfigElements();
+			
 			this.mc.displayGuiScreen(this.parentScreen);
+			
 			
 		} else
 		if (button.id == 2001) {
-			
+			this.entryList.setAllToDefault();
 		} else
 		if (button.id == 2002) {
-			
+			this.entryList.undoAllChanges();
 		}
 	}
 	
