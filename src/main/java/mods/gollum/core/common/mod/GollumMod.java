@@ -5,7 +5,7 @@ import java.lang.reflect.Field;
 import java.util.Map;
 
 import mods.gollum.core.ModGollumCoreLib;
-import mods.gollum.core.client.gui.TestModGuiFactory;
+import mods.gollum.core.client.gui.config.ConfigModGuiFactory;
 import mods.gollum.core.common.context.ModContext;
 import mods.gollum.core.common.i18n.I18n;
 import mods.gollum.core.common.log.Logger;
@@ -112,7 +112,7 @@ public abstract class GollumMod {
 				f.setAccessible(true);
 				Map<String, Object> descriptor = (Map<String, Object>)f.get(container);
 				if (!descriptor.containsKey("guiFactory")) {
-					descriptor.put ("guiFactory", TestModGuiFactory.class.getName());
+					descriptor.put ("guiFactory", ConfigModGuiFactory.class.getName());
 				}
 				
 			} catch (Exception e) {
