@@ -174,8 +174,8 @@ public class GuiConfigMod extends GuiScreen {
 	protected void keyTyped(char eventChar, int eventKey) {
 		if (eventKey == Keyboard.KEY_ESCAPE) {
 			this.mc.displayGuiScreen(parentScreen);
-//		} else { // TODO
-//			this.entryList.keyTyped(eventChar, eventKey);
+		} else { // TODO
+			this.entryList.keyTyped(eventChar, eventKey);
 		}
 	}
 	

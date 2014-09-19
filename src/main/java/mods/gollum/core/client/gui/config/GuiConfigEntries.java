@@ -8,6 +8,8 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.lwjgl.input.Keyboard;
+
 import cpw.mods.fml.client.config.GuiButtonExt;
 import cpw.mods.fml.client.config.GuiConfigEntries.IConfigEntry;
 import mods.gollum.core.common.config.ConfigProp;
@@ -139,6 +141,12 @@ public class GuiConfigEntries extends GuiListExtended {
 		}
 	}
 	
+	public void keyTyped(char eventChar, int eventKey) {
+		 for (ConfigEntry entry : this.entries) {
+			 entry.keyTyped(eventChar, eventKey);
+		}
+	}
+	
 	@Override
 	public int getScrollBarX() {
 		return scrollBarX;
@@ -173,6 +181,8 @@ public class GuiConfigEntries extends GuiListExtended {
 		public GuiConfigEntries parent;
 		public String label;
 		
+		private boolean isInit = false;
+		
 		protected final GuiButtonExt btnUndoChanges;
 		protected final GuiButtonExt btnDefault;
 		private GuiTextField textFieldValue;
@@ -187,8 +197,10 @@ public class GuiConfigEntries extends GuiListExtended {
 			this.textFieldValue = new GuiTextField(this.parent.mc.fontRenderer, this.parent.controlX + 1, 0, this.parent.controlWidth - 3, 16);
 			this.textFieldValue.setMaxStringLength(10000);
 			this.textFieldValue.setText(value.toString());
+			
+			
 		}
-		
+
 		@Override
 		public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, Tessellator tessellator, int mouseX, int mouseY, boolean isSelected) {
 			
@@ -212,9 +224,11 @@ public class GuiConfigEntries extends GuiListExtended {
 			this.textFieldValue.xPosition = this.parent.controlX + 2;
 			this.textFieldValue.yPosition = y + 1;
 			this.textFieldValue.width = this.parent.controlWidth - 4;
-			this.textFieldValue.setCursorPosition(this.textFieldValue.getCursorPosition()); // Fixe display text
 			this.textFieldValue.drawTextBox();
 			
+			// Fixe display text 
+			if (!isInit) { this.textFieldValue.setCursorPosition(this.textFieldValue.getCursorPosition()); isInit = true; }
+			this.textFieldValue.drawTextBox();
 		}
 		
 		public void updateCursorCounter() {
@@ -223,6 +237,13 @@ public class GuiConfigEntries extends GuiListExtended {
 		
 		public void mouseClicked(int x, int y, int mouseEvent) {
 			this.textFieldValue.mouseClicked(x, y, mouseEvent);
+		}
+		
+		public void keyTyped(char eventChar, int eventKey) {
+//			if (eventKey == Keyboard.KEY_LEFT || eventKey == Keyboard.KEY_RIGHT || eventKey == Keyboard.KEY_HOME || eventKey == Keyboard.KEY_END) {
+			
+			this.textFieldValue.textboxKeyTyped(eventChar, eventKey);
+			
 		}
 		
 		public int getEntryRightBound() {
