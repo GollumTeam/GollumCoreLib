@@ -160,7 +160,10 @@ public class GuiConfigMod extends GuiScreen {
 	 */
 	@Override
 	protected void mouseClicked(int x, int y, int mouseEvent) {
-		super.mouseClicked(x, y, mouseEvent);
+		if (mouseEvent != 0 || !this.entryList.func_148179_a(x, y, mouseEvent)) {
+			this.entryList.mouseClicked(x, y, mouseEvent);
+			super.mouseClicked(x, y, mouseEvent);
+		}
 	}
 	
 	/**

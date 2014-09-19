@@ -128,7 +128,15 @@ public class GuiConfigEntries extends GuiListExtended {
 	}
 
 	public void updateScreen() {
-		
+		for (ConfigEntry entry : this.entries) {
+			entry.updateCursorCounter();
+		}
+	}
+	
+	public void mouseClicked(int mouseX, int mouseY, int mouseEvent) {
+		for (ConfigEntry entry : this.entries) {
+			entry.mouseClicked(mouseX, mouseY, mouseEvent);
+		}
 	}
 	
 	@Override
@@ -186,11 +194,11 @@ public class GuiConfigEntries extends GuiListExtended {
 			
 			EnumChatFormatting color = EnumChatFormatting.GRAY;
 			color = (!isValidValue()) ? EnumChatFormatting.RED   : color;
-			color = (!isChanged())    ? EnumChatFormatting.WHITE : color;
+			color = (isChanged())     ? EnumChatFormatting.WHITE : color;
 			
 			this.parent.mc.fontRenderer.drawString(color+this.label, this.parent.labelX, y + slotHeight / 2 - this.parent.mc.fontRenderer.FONT_HEIGHT / 2, 0x000000);
 			
-
+			
 			this.btnUndoChanges.xPosition = this.parent.scrollBarX - 44;
 			this.btnUndoChanges.yPosition = y;
 			this.btnUndoChanges.enabled = this.isChanged ();
@@ -204,8 +212,17 @@ public class GuiConfigEntries extends GuiListExtended {
 			this.textFieldValue.xPosition = this.parent.controlX + 2;
 			this.textFieldValue.yPosition = y + 1;
 			this.textFieldValue.width = this.parent.controlWidth - 4;
+			this.textFieldValue.setCursorPosition(this.textFieldValue.getCursorPosition()); // Fixe display text
 			this.textFieldValue.drawTextBox();
 			
+		}
+		
+		public void updateCursorCounter() {
+			this.textFieldValue.updateCursorCounter();
+		}
+		
+		public void mouseClicked(int x, int y, int mouseEvent) {
+			this.textFieldValue.mouseClicked(x, y, mouseEvent);
 		}
 		
 		public int getEntryRightBound() {
@@ -227,10 +244,19 @@ public class GuiConfigEntries extends GuiListExtended {
 		}
 		
 		@Override
-		public boolean mousePressed(int p_148278_1_, int p_148278_2_, int p_148278_3_, int p_148278_4_, int p_148278_5_, int p_148278_6_) {
-			// TODO Auto-generated method stub
+		public boolean mousePressed(int index, int x, int y, int mouseEvent, int relativeX, int relativeY) {
+			if (this.btnDefault.mousePressed(this.parent.mc, x, y)) {
+				btnDefault.func_146113_a(mc.getSoundHandler());
+//				setToDefault(); // TODO
+				return true;
+			} else if (this.btnUndoChanges.mousePressed(this.parent.mc, x, y)) {
+				btnUndoChanges.func_146113_a(mc.getSoundHandler());
+//				undoChanges(); // TODO
+				return true;
+			}
 			return false;
 		}
+
 
 		@Override
 		public void mouseReleased(int p_148277_1_, int p_148277_2_, int p_148277_3_, int p_148277_4_, int p_148277_5_, int p_148277_6_) {
