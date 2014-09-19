@@ -6,6 +6,7 @@ import java.util.Map;
 
 import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.client.gui.config.ConfigModGuiFactory;
+import mods.gollum.core.common.config.Config;
 import mods.gollum.core.common.context.ModContext;
 import mods.gollum.core.common.i18n.I18n;
 import mods.gollum.core.common.log.Logger;
@@ -184,6 +185,25 @@ public abstract class GollumMod {
 		
 		// Set gollum gui config
 		initGuiConfig();
+		
+		// Creation de la config
+		try {
+			Field fieldConfig = this.getClass().getDeclaredField("config");
+			if (fieldConfig != null) {
+				fieldConfig.set(null, (fieldConfig.getType().newInstance()));
+				Config config = (Config) fieldConfig.get(null);
+				config.loadConfig();
+			}
+		} catch (NoSuchFieldException e) {
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		}
 		
 		this.preInit(event);
 		

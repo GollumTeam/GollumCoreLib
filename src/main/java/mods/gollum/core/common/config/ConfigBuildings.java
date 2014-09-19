@@ -4,7 +4,7 @@ import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.common.config.container.BuildingConfigType;
 
 
-public class ConfigBuildings extends Config<ConfigBuildings> {
+public class ConfigBuildings extends Config {
 	
 	public ConfigBuildings (String modId, BuildingConfigType buildings) {
 		super(modId);

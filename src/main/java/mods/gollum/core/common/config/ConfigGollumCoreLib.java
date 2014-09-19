@@ -3,7 +3,7 @@ package mods.gollum.core.common.config;
 import mods.gollum.core.ModGollumCoreLib;
 
 
-public class ConfigGollumCoreLib extends Config<ConfigGollumCoreLib> {
+public class ConfigGollumCoreLib extends Config {
 
 	public ConfigGollumCoreLib () {
 		this.setRelativePath(ModGollumCoreLib.MODID+"/");

@@ -92,7 +92,7 @@ public class ModGollumCoreLib extends GollumMod {
 		// Tandis que le loader de config est indépendant
 		
 		// Charge la configuration
-		this.config = new ConfigGollumCoreLib().loadConfig();
+		this.config = (ConfigGollumCoreLib) new ConfigGollumCoreLib().loadConfig();
 		
 		// Creation du logger
 		this.log = new Logger();
