@@ -75,8 +75,11 @@ public class GuiGollumConfig extends GuiConfig {
 						if (f.getType().isAssignableFrom(String.class)) {
 							type = Property.Type.STRING;
 						}
-						if (f.getType().isAssignableFrom(Long.TYPE) ||
-							f.getType().isAssignableFrom(Integer.TYPE) 
+						if (
+							f.getType().isAssignableFrom(Long.TYPE) ||
+							f.getType().isAssignableFrom(Integer.TYPE) ||
+							f.getType().isAssignableFrom(Long[].class) ||
+							f.getType().isAssignableFrom(Integer[].class)
 						) {
 							type = Property.Type.INTEGER;
 						}
@@ -89,9 +92,35 @@ public class GuiGollumConfig extends GuiConfig {
 							type = Property.Type.BOOLEAN;
 						}
 						
+						Object value = f.get(configLoad.config);
+						String[] values = null;
+						if (value instanceof Object[]) {
+							Object[] ar = ((Object[]) value);
+							values = new String[ar.length];
+							for (int i = 0; i < ar.length; i++) {
+								values[i] = ar[i].toString();
+							}
+						}
+						Object valueDefault = f.get(configLoad.configDefault);
+						String[] valuesDefault = null;
+						if (valueDefault instanceof Object[]) {
+							Object[] ar = ((Object[]) valueDefault);
+							valuesDefault = new String[ar.length];
+							for (int i = 0; i < ar.length; i++) {
+								valuesDefault[i] = ar[i].toString();
+							}
+						}
+						
 						if (type != null) {
-							Property prop = new Property(label, f.get(configLoad.config).toString(), type);
-							prop.setDefaultValue(f.get(configLoad.configDefault).toString());
+							Property prop = null;
+							if (values != null) {
+								prop = new Property(label, values, type);
+								prop.setDefaultValues(valuesDefault);
+							} else {
+								prop = new Property(label, value.toString(), type);
+								prop.setDefaultValue(valueDefault.toString());
+							}
+							
 							prop.comment = anno.info();
 							prop.setValidValues(anno.validValues());
 							prop.setRequiresMcRestart(anno.mcRestart());

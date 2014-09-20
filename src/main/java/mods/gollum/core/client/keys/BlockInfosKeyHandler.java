@@ -29,7 +29,6 @@ public class BlockInfosKeyHandler {
 			World world = Minecraft.getMinecraft().theWorld;
 			MovingObjectPosition mouse = Minecraft.getMinecraft().objectMouseOver;
 			
-			
 			if (player != null && world != null && mouse != null) {
 
 				int x = mouse.blockX;
