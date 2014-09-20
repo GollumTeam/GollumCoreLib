@@ -25,7 +25,7 @@ public class RegisteredObjects {
 	public Block getBlock (String registerName) {
 		
 		try {
-
+			
 			String modId = registerName.substring(0, registerName.indexOf(":"));
 			String name  = registerName.substring(registerName.indexOf(":")+1);
 			
@@ -36,8 +36,6 @@ public class RegisteredObjects {
 			} else {
 				// TODO A Analyser
 				return (Block)Block.blockRegistry.getObject(registerName);
-//				ItemStack s  = GameRegistry.findItemStack(modId, name, 1);
-//				return Block.blocksList[s.itemID];
 			}
 		} catch (Exception e) {
 		}
@@ -50,18 +48,18 @@ public class RegisteredObjects {
 	public Item getItem (String registerName) {
 		
 		try {
-			String modId = registerName.substring(0, registerName.indexOf(":"));
-			String name  = registerName.substring(registerName.indexOf(":")+1);
 			
+			String modId = "minecraft";
+			String name  = registerName;			
+			if (registerName.contains(":")) {	
+				modId = registerName.substring(0, registerName.indexOf(":"));
+				name  = registerName.substring(registerName.indexOf(":")+1);
+			}
 			if (modId.equals("minecraft")) {
-				
 				return (Item)Item.itemRegistry.getObject(name);
 				
 			} else {
-				// TODO A Analyser
 				return (Item)Item.itemRegistry.getObject(registerName);
-//				ItemStack s  = GameRegistry.findItemStack(modId, name, 1);
-//				return s.getItem();
 			}
 		} catch (Exception e) {
 		}
@@ -72,38 +70,20 @@ public class RegisteredObjects {
 	}
 	
 	public String getRegisterName (Block block) {
-		// TODO A Analyser
 		for (Object key: Block.blockRegistry.getKeys()) {
-			if (block == Item.itemRegistry.getObject(key)) {
+			if (block == Block.blockRegistry.getObject(key)) {
 				return (String) key;
 			}
 		}
-//		if (this.vanillaBlocks.contains(block)) {
-//			
-//			for (Entry<String, Block> entry: this.vanillaBlocks.entrySet()) {
-//				if (entry.getValue() == block) {
-//					return entry.getKey();
-//				}
-//			}
-//		}
 		return null;
 	}
 	
 	public String getRegisterName (Item item) {
-		// TODO A Analyser
 		for (Object key: Item.itemRegistry.getKeys()) {
 			if (item == Item.itemRegistry.getObject(key)) {
 				return (String) key;
 			}
 		}
-//		if (this.vanillaItems.contains(item)) {
-//			
-//			for (Entry<String, Item> entry: this.vanillaItems.entrySet()) {
-//				if (entry.getValue() == item) {
-//					return entry.getKey();
-//				}
-//			}
-//		}
 		return null;
 	}
 	

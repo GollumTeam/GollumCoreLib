@@ -1,5 +1,6 @@
 package mods.gollum.core.client.keys;
 
+import mods.gollum.core.tools.registered.RegisteredObjects;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
@@ -38,9 +39,9 @@ public class BlockInfosKeyHandler {
 				if (block != null) {
 					int metadata = world.getBlockMetadata (x, y, z);
 					
-					player.addChatMessage(new ChatComponentText("Block : pos="+x+"x"+y+"x"+z+", metadata="+EnumChatFormatting.RED+metadata+EnumChatFormatting.WHITE+", name="+block.getUnlocalizedName()));
+					player.addChatMessage(new ChatComponentText("Block : pos="+x+"x"+y+"x"+z+", metadata="+EnumChatFormatting.RED+metadata+EnumChatFormatting.WHITE+", rname="+RegisteredObjects.instance().getRegisterName(block)+", name="+block.getUnlocalizedName()));
 				} else {
-					player.addChatMessage(new ChatComponentText("Block : pos="+x+"x"+y+"x"+z+" id="+EnumChatFormatting.RED+0));
+					player.addChatMessage(new ChatComponentText("Block : pos="+x+"x"+y+"x"+z+" rname=minecraft:air"));
 				}
 			}
 		}
