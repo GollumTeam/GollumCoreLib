@@ -80,6 +80,14 @@ public class GuiGollumConfig extends GuiConfig {
 						) {
 							type = Property.Type.INTEGER;
 						}
+						if (f.getType().isAssignableFrom(Float.TYPE) ||
+							f.getType().isAssignableFrom(Double.TYPE) 
+						) {
+							type = Property.Type.DOUBLE;
+						}
+						if (f.getType().isAssignableFrom(Boolean.TYPE)) {
+							type = Property.Type.BOOLEAN;
+						}
 						
 						if (type != null) {
 							Property prop = new Property(label, f.get(configLoad.config).toString(), type);
@@ -187,9 +195,12 @@ public class GuiGollumConfig extends GuiConfig {
 				
 				f.setAccessible(true);
 				try {
-					if (f.getType().isAssignableFrom(String.class)) { f.set(this.configLoad.config, o.toString()                    ); }
-					if (f.getType().isAssignableFrom(Long.TYPE))    { f.set(this.configLoad.config, Long   .parseLong (o.toString())); }
-					if (f.getType().isAssignableFrom(Integer.TYPE)) { f.set(this.configLoad.config, Integer.parseInt  (o.toString())); }
+					if (f.getType().isAssignableFrom(String.class)) { f.set(this.configLoad.config, o.toString()                     );  }
+					if (f.getType().isAssignableFrom(Long.TYPE))    { f.set(this.configLoad.config, Long   .parseLong   (o.toString())); }
+					if (f.getType().isAssignableFrom(Integer.TYPE)) { f.set(this.configLoad.config, Integer.parseInt    (o.toString())); }
+					if (f.getType().isAssignableFrom(Double.TYPE))  { f.set(this.configLoad.config, Double .parseDouble (o.toString())); }
+					if (f.getType().isAssignableFrom(Float.TYPE))   { f.set(this.configLoad.config, Float  .parseFloat  (o.toString())); }
+					if (f.getType().isAssignableFrom(Boolean.TYPE)) { f.set(this.configLoad.config, Boolean.parseBoolean(o.toString())); }
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
