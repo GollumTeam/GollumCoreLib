@@ -9,11 +9,18 @@ public class ConfigGollumCoreLib extends Config {
 		this.setRelativePath(ModGollumCoreLib.MODID+"/");
 	}
 	
-	@ConfigProp (info = "Log display level (DEBUG, INFO, MESSAGE, WARNING, SEVERE, NONE)", validValues = { "DEBUG", "INFO", "MESSAGE", "WARNING", "SEVERE", "NONE" })
+	@ConfigProp (
+		info = "Log display level (DEBUG, INFO, MESSAGE, WARNING, SEVERE, NONE)",
+		validValues = { "DEBUG", "INFO", "MESSAGE", "WARNING", "SEVERE", "NONE" },
+		mcRestart = true
+	)
 	public String level = "MESSAGE";
 
-	@ConfigProp public int numberLogFilesUse = 3;
-	@ConfigProp public boolean devTools = false;
+	@ConfigProp(minValue = "0", mcRestart = true)
+	public int numberLogFilesUse = 3;
+	
+	@ConfigProp(mcRestart = true) 
+	public boolean devTools = false;
 			
 	@ConfigProp (info = "Display version checker message")
 	public boolean versionChecker = true;

@@ -73,7 +73,7 @@ public class GuiGollumConfig extends GuiConfig {
 						
 						// TODO généraliser aux autres champs
 						if (f.getType().isAssignableFrom(String.class)) {
-								type = Property.Type.STRING;
+							type = Property.Type.STRING;
 						}
 						if (f.getType().isAssignableFrom(Long.TYPE) ||
 							f.getType().isAssignableFrom(Integer.TYPE) 
@@ -86,13 +86,30 @@ public class GuiGollumConfig extends GuiConfig {
 							prop.setDefaultValue(f.get(configLoad.configDefault).toString());
 							prop.comment = anno.info();
 							prop.setValidValues(anno.validValues());
+							prop.setRequiresMcRestart(anno.mcRestart());
+							prop.setRequiresWorldRestart(anno.worldRestart());
+							
+							if (!anno.minValue ().equals("")) {
+								try {
+									prop.setMinValue(Integer.parseInt(anno.minValue ()));
+								} catch (Exception e) {
+									try { prop.setMinValue(Double.parseDouble(anno.minValue ())); } catch (Exception e2) {}
+								}
+							}
+							
+							if (!anno.maxValue ().equals("")) {
+								try {
+									prop.setMaxValue(Integer.parseInt(anno.maxValue ()));
+								} catch (Exception e) {
+									try { prop.setMaxValue(Double.parseDouble(anno.maxValue ())); } catch (Exception e2) {}
+								}
+							}
 							
 							ConfigElement<Integer> element = new ConfigElement<Integer>(prop);
 							
 							initFieldElements.put(f, element);
 							
 							fields.add(element);
-							
 						}
 						
 					}
