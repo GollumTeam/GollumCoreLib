@@ -7,7 +7,9 @@ import static mods.gollum.core.ModGollumCoreLib.log;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.lwjgl.input.Keyboard;
 
@@ -20,6 +22,7 @@ import mods.gollum.core.common.mod.GollumMod;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.util.ChatComponentText;
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.common.config.Configuration;
@@ -29,6 +32,8 @@ import cpw.mods.fml.client.config.GuiButtonExt;
 import cpw.mods.fml.client.config.GuiCheckBox;
 import cpw.mods.fml.client.config.GuiConfig;
 import cpw.mods.fml.client.config.GuiConfigEntries;
+import cpw.mods.fml.client.config.GuiMessageDialog;
+import cpw.mods.fml.client.config.GuiConfigEntries.IConfigEntry;
 import cpw.mods.fml.client.config.GuiUnicodeGlyphButton;
 import cpw.mods.fml.client.config.HoverChecker;
 import cpw.mods.fml.client.config.IConfigElement;
@@ -36,24 +41,22 @@ import cpw.mods.fml.common.ModContainer;
 
 public class GuiGollumConfig extends GuiConfig {
 	
+
+	private static HashMap<Field, ConfigElement> initFieldElements;
+
 	GollumMod mod;
-	
-//	public GuiConfigEntries entryList;
-	public cpw.mods.fml.client.config.GuiConfigEntries entryList;
-	
-	private GuiUnicodeGlyphButton btnUndoAll;
-	private GuiUnicodeGlyphButton btnDefaultAll;
-	
-	private HoverChecker undoHoverChecker;
-	private HoverChecker resetHoverChecker;
+	ConfigLoad configLoad;
+	private HashMap<Field, ConfigElement> fieldElements;
 	
 	public GuiGollumConfig(GuiScreen parent) {
 		
 		super(parent, getFields (parent), getModId (parent), false, false, getModName (parent));
 		
 		this.mod = this.getMod(parent);
+		configLoad = ConfigLoader.configLoaded.get(mod);
+		this.fieldElements = initFieldElements;
 		
-		log.debug ("Config mod : " + mod.getModId());
+		log.debug ("Config mod : " + mod.getModId() + " with "+this.fieldElements.size()+" fields.");
 		
 	}
 
@@ -63,6 +66,8 @@ public class GuiGollumConfig extends GuiConfig {
 		
 		GollumMod mod = getMod(parent);
 		ConfigLoad configLoad = ConfigLoader.configLoaded.get(mod);
+		initFieldElements = new HashMap<Field, ConfigElement>();
+		
 		if (configLoad != null) {
 
 			try {
@@ -86,7 +91,11 @@ public class GuiGollumConfig extends GuiConfig {
 							prop.setDefaultValue(f.get(configLoad.configDefault).toString());
 							prop.comment = anno.info();
 							
-							fields.add(new ConfigElement<Integer>(prop));
+							ConfigElement<Integer> element = new ConfigElement<Integer>(prop);
+							
+							initFieldElements.put(f, element);
+							
+							fields.add(element);
 							
 						}
 						
@@ -139,9 +148,6 @@ public class GuiGollumConfig extends GuiConfig {
 			e.printStackTrace();
 		}
 		
-//		
-//		Keyboard.enableRepeatEvents(true);
-//		
 		int undoGlyphWidth  = mc.fontRenderer.getStringWidth(UNDO_CHAR) * 2;
 		int resetGlyphWidth = mc.fontRenderer.getStringWidth(RESET_CHAR) * 2;
 		int doneWidth       = Math.max(mc.fontRenderer.getStringWidth(I18n.format("gui.done")) + 20, 100);
@@ -153,135 +159,43 @@ public class GuiGollumConfig extends GuiConfig {
 		((GuiButtonExt)this.buttonList.get(1)).xPosition = this.width / 2 - buttonWidthHalf + doneWidth + 5 + undoWidth + 5;
 		((GuiButtonExt)this.buttonList.get(2)).xPosition = this.width / 2 - buttonWidthHalf + doneWidth + 5;
 		
-//		
-//		this.buttonList.add(new GuiButtonExt(2000, , this.height - 29, doneWidth, 20, I18n.format("gui.done")));
-//		
-//		this.buttonList.add(btnDefaultAll = new GuiUnicodeGlyphButton(
-//			2001, 
-//			this.width / 2 - buttonWidthHalf + doneWidth + 5 + undoWidth + 5,
-//			this.height - 29, 
-//			resetWidth,
-//			20,
-//			" " + I18n.format("fml.configgui.tooltip.resetToDefault"), RESET_CHAR, 2.0F)
-//		);
-//		
-//		this.buttonList.add(btnUndoAll = new GuiUnicodeGlyphButton(
-//			2002, 
-//			this.width / 2 - buttonWidthHalf + doneWidth + 5,
-//			this.height - 29, 
-//			undoWidth, 
-//			20, 
-//			" " + I18n.format("fml.configgui.tooltip.undoChanges"), UNDO_CHAR, 2.0F)
-//		);
-//		
-//		this.undoHoverChecker = new HoverChecker(this.btnUndoAll, 800);
-//		this.resetHoverChecker = new HoverChecker(this.btnDefaultAll, 800);
-//		
-//		this.entryList = new GuiConfigEntries(this, mc, ConfigLoader.configLoaded.get(this.mod));
-//		this.entryList.initGui();
-//		this.entryList = new cpw.mods.fml.client.config.GuiConfigEntries(this, mc);
-
 	}
-//
-//	private void addEntries(ConfigLoad configLoad) {
-//		
-//	}
-//
-//	/**
-//	 * Called when the screen is unloaded. Used to disable keyboard repeat events
-//	 */
-//	@Override
-//	public void onGuiClosed() {
-//		super.onGuiClosed();
-//	}
-//	
-//	/**
-//	 * Called from the main game loop to update the screen.
-//	 */
-//	@Override
-//	public void updateScreen() {
-//		super.updateScreen();
-//		this.entryList.updateScreen();
-//	}
-//	
-//	/**
-//	 * Draws the screen and all the components in it.
-//	 */
-//	@Override
-//	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-//		this.drawDefaultBackground();
-//		
-//		this.drawCenteredString(this.fontRendererObj, this.mod.getModName(), this.width / 2, 8, 16777215);
-//		
-//		
-//		this.entryList.drawScreen(mouseX, mouseY, partialTicks);
-//
-//		this.btnDefaultAll.enabled = !this.entryList.isDefault ();
-//		this.btnUndoAll.enabled = this.entryList.isChanged ();
-//		
-//		super.drawScreen(mouseX, mouseY, partialTicks);
-//		
-//		if (this.undoHoverChecker.checkHover(mouseX, mouseY)) {
-//			this.drawToolTip(
-//				this.mc.fontRenderer.listFormattedStringToWidth(I18n.format("fml.configgui.tooltip.undoAll"), 300), 
-//				mouseX, mouseY
-//			);
-//		}
-//		if (this.resetHoverChecker.checkHover(mouseX, mouseY)) {
-//			this.drawToolTip(
-//				this.mc.fontRenderer.listFormattedStringToWidth(I18n.format("fml.configgui.tooltip.resetAll"), 300), 
-//				mouseX, mouseY
-//			);
-//		}
-//	}
-//	
-//	/**
-//	 * Called when the mouse is clicked.
-//	 */
-//	@Override
-//	protected void mouseClicked(int x, int y, int mouseEvent) {
-//		if (mouseEvent != 0 || !this.entryList.func_148179_a(x, y, mouseEvent)) {
-//			this.entryList.mouseClicked(x, y, mouseEvent);
-//			super.mouseClicked(x, y, mouseEvent);
-//		}
-//	}
-//	
-//	/**
-//	 * Fired when a key is typed. This is the equivalent of
-//	 * KeyListener.keyTyped(KeyEvent e).
-//	 */
-//	@Override
-//	protected void keyTyped(char eventChar, int eventKey) {
-//		if (eventKey == Keyboard.KEY_ESCAPE) {
-//			this.mc.displayGuiScreen(parentScreen);
-//		} else { // TODO
-//			this.entryList.keyTyped(eventChar, eventKey);
-//		}
-//	}
-//	
 	@Override
 	protected void actionPerformed(GuiButton button) {
 		if (button.id == 2000) {
-//			
-//
-//			this.entryList.saveConfigElements();
-//			
-			this.mc.displayGuiScreen(this.parentScreen);
-//			
-//			
+			
+			boolean requiresMcRestart = this.entryList.saveConfigElements();
+			
+			for (Entry<Field, ConfigElement> entry: this.fieldElements.entrySet()) {
+				Field         f  = entry.getKey();
+				ConfigElement el = entry.getValue();
+				
+				if (f.getType().isAssignableFrom(Integer.TYPE)) {
+					Object o = el.get();
+					
+					f.setAccessible(true);
+					try {
+						f.set(this.configLoad.config, Integer.parseInt (o.toString()));
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					
+					log.debug("save value "+f.getName()+" : "+o);
+				}
+			}
+			
+			new ConfigLoader(configLoad.config, false).writeConfig();
+			
+			if (requiresMcRestart) {
+				mc.displayGuiScreen(new GuiMessageDialog(parentScreen, "fml.configgui.gameRestartTitle", new ChatComponentText(I18n.format("fml.configgui.gameRestartRequired")), "fml.configgui.confirmRestartMessage"));
+			} else {
+				this.mc.displayGuiScreen(this.parentScreen);
+			}
+			
 		} else
 			
 			super.actionPerformed(button);
 			
-//		if (button.id == 2001) {
-//			this.entryList.setAllToDefault();
-//		} else
-//		if (button.id == 2002) {
-//			this.entryList.undoAllChanges();
 		}
-//	}
-//	
-//	public void drawToolTip(List stringList, int x, int y) {
-//		this.func_146283_a(stringList, x, y);
 //	}
 }
