@@ -4,38 +4,27 @@ import static cpw.mods.fml.client.config.GuiUtils.RESET_CHAR;
 import static cpw.mods.fml.client.config.GuiUtils.UNDO_CHAR;
 import static mods.gollum.core.ModGollumCoreLib.log;
 
-import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import org.lwjgl.input.Keyboard;
-
-import mods.gollum.core.ModGollumCoreLib;
-import mods.gollum.core.client.gui.config.elements.NumberConfigElement;
 import mods.gollum.core.common.config.ConfigLoader;
-import mods.gollum.core.common.config.ConfigProp;
 import mods.gollum.core.common.config.ConfigLoader.ConfigLoad;
+import mods.gollum.core.common.config.ConfigProp;
 import mods.gollum.core.common.mod.GollumMod;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ChatComponentText;
-import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.ConfigElement;
-import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import cpw.mods.fml.client.GuiModList;
 import cpw.mods.fml.client.config.GuiButtonExt;
 import cpw.mods.fml.client.config.GuiCheckBox;
 import cpw.mods.fml.client.config.GuiConfig;
-import cpw.mods.fml.client.config.GuiConfigEntries;
 import cpw.mods.fml.client.config.GuiMessageDialog;
-import cpw.mods.fml.client.config.GuiConfigEntries.IConfigEntry;
-import cpw.mods.fml.client.config.GuiUnicodeGlyphButton;
-import cpw.mods.fml.client.config.HoverChecker;
 import cpw.mods.fml.client.config.IConfigElement;
 import cpw.mods.fml.common.ModContainer;
 
@@ -79,17 +68,24 @@ public class GuiGollumConfig extends GuiConfig {
 					ConfigProp anno = f.getAnnotation(ConfigProp.class);
 					if (anno != null) {
 						
+						
+						Property.Type type = null;
+						
 						// TODO généraliser aux autres champs
-						if (
-							f.getType().isAssignableFrom(Integer.TYPE)
+						if (f.getType().isAssignableFrom(String.class)) {
+								type = Property.Type.STRING;
+						}
+						if (f.getType().isAssignableFrom(Long.TYPE) ||
+							f.getType().isAssignableFrom(Integer.TYPE) 
 						) {
-							Property prop = new Property(
-								label,
-								f.get(configLoad.config).toString(), 
-								Property.Type.INTEGER
-							);
+							type = Property.Type.INTEGER;
+						}
+						
+						if (type != null) {
+							Property prop = new Property(label, f.get(configLoad.config).toString(), type);
 							prop.setDefaultValue(f.get(configLoad.configDefault).toString());
 							prop.comment = anno.info();
+							prop.setValidValues(anno.validValues());
 							
 							ConfigElement<Integer> element = new ConfigElement<Integer>(prop);
 							
@@ -170,18 +166,19 @@ public class GuiGollumConfig extends GuiConfig {
 				Field         f  = entry.getKey();
 				ConfigElement el = entry.getValue();
 				
-				if (f.getType().isAssignableFrom(Integer.TYPE)) {
-					Object o = el.get();
-					
-					f.setAccessible(true);
-					try {
-						f.set(this.configLoad.config, Integer.parseInt (o.toString()));
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-					
-					log.debug("save value "+f.getName()+" : "+o);
+				Object o = el.get();
+				
+				f.setAccessible(true);
+				try {
+					if (f.getType().isAssignableFrom(String.class)) { f.set(this.configLoad.config, o.toString()                    ); }
+					if (f.getType().isAssignableFrom(Long.TYPE))    { f.set(this.configLoad.config, Long   .parseLong (o.toString())); }
+					if (f.getType().isAssignableFrom(Integer.TYPE)) { f.set(this.configLoad.config, Integer.parseInt  (o.toString())); }
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
+				
+				log.debug("save value "+f.getName()+" : "+o);
+				
 			}
 			
 			new ConfigLoader(configLoad.config, false).writeConfig();
@@ -192,10 +189,8 @@ public class GuiGollumConfig extends GuiConfig {
 				this.mc.displayGuiScreen(this.parentScreen);
 			}
 			
-		} else
-			
+		} else {
 			super.actionPerformed(button);
-			
 		}
-//	}
+	}
 }
