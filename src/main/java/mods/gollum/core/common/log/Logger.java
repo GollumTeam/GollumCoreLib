@@ -1,12 +1,20 @@
 package mods.gollum.core.common.log;
 
+
 import java.util.Hashtable;
-import java.util.logging.FileHandler;
-import java.util.logging.Handler;
-import java.util.logging.Level;
 
 import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.common.context.ModContext;
+
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.appender.RollingFileAppender;
+import org.apache.logging.log4j.core.appender.rolling.DefaultRolloverStrategy;
+import org.apache.logging.log4j.core.appender.rolling.OnStartupTriggeringPolicy;
+import org.apache.logging.log4j.core.appender.rolling.RolloverStrategy;
+import org.apache.logging.log4j.core.appender.rolling.TriggeringPolicy;
+import org.apache.logging.log4j.core.config.Configuration;
 
 public class Logger {
 	
@@ -22,9 +30,10 @@ public class Logger {
 	private static final LogFormatter formater = new LogFormatter();
 	
 	private static int level = LEVEL_INFO;
-	private static Handler fileHandler = null;
+	private static RollingFileAppender fileAppender = null;
 
-	private static Hashtable<String, java.util.logging.Logger> loggers = new Hashtable<String, java.util.logging.Logger>();
+	private static Hashtable<String, org.apache.logging.log4j.Logger> loggers = new Hashtable<String, org.apache.logging.log4j.Logger>();
+
 	
 	private String modId = null;
 	
@@ -94,31 +103,41 @@ public class Logger {
 		this.log (this.modId, LEVEL_SEVERE ,this.implode (msg));
 	}
 	
-	public static java.util.logging.Logger getLogger (String key) {
+	public static org.apache.logging.log4j.Logger getLogger (String key) {
 		
 		if (loggers.containsKey(key)) {
 			return loggers.get (key);
 		}
-		java.util.logging.Logger logger = java.util.logging.Logger.getLogger(key);
 		
-		if (fileHandler == null) {
+		org.apache.logging.log4j.Logger logger = LogManager.getLogger(key);
+		
+		LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
+		Configuration conf = ctx.getConfiguration();
+		
+		conf.getLoggerConfig(key).setLevel(Level.DEBUG);
+		
+		if (fileAppender == null) {
 			
 			try {
 				if (ModGollumCoreLib.config != null) {
 					// log file max size 2Mb, 3 rolling files, append-on-open
-					fileHandler = new FileHandler(FILE_NAME, 2000000, ModGollumCoreLib.config.numberLogFilesUse, true);
+					RolloverStrategy strategy = DefaultRolloverStrategy.createStrategy(new Integer(ModGollumCoreLib.config.numberLogFilesUse).toString(), null, null, null, conf);
+					TriggeringPolicy policy = OnStartupTriggeringPolicy.createPolicy();
+					fileAppender = RollingFileAppender.createAppender(FILE_NAME, "logs/%d"+ModGollumCoreLib.MODID+"{yyyy-MM-dd}-%i.log.gz", "true", FILE_NAME, "false", "true", policy, strategy, null, null, "false", "false", null, conf);
+					fileAppender.start();
+					
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-
-			if (fileHandler != null) {
-				fileHandler.setLevel(Level.INFO);
-				fileHandler.setFormatter(formater);
+			
+			if (fileAppender != null) {
 			}
 		}
-		if (fileHandler != null) {
-			logger.addHandler(fileHandler);
+		if (fileAppender != null) {
+			conf.getLoggerConfig(key).addAppender(fileAppender, Level.DEBUG, null);
+			ctx.updateLoggers(conf);
+			
 			loggers.put (key, logger);
 		}
 		
@@ -127,34 +146,33 @@ public class Logger {
 	
 	public static void log(String key, int level, Object msg) {
 		
-		java.util.logging.Logger log = getLogger (key);
-		log.setLevel(Level.INFO);
+		org.apache.logging.log4j.Logger log = getLogger (key);
 		
 		switch (level) {
 			
 			case LEVEL_SEVERE:
 				if (Logger.level <= LEVEL_SEVERE) {
-					log.log(Level.SEVERE, msg.toString());
+					log.error(msg.toString());
 				}
 				break;
 			case LEVEL_WARNING:
 				if (Logger.level <= LEVEL_WARNING) {
-					log.log(Level.WARNING, msg.toString());
+					log.warn(msg.toString());
 				}
 				break;
 			case LEVEL_MESSAGE:
 				if (Logger.level <= LEVEL_MESSAGE) {
-					log.log(Level.INFO, msg.toString());
+					log.trace (msg.toString());
 				}
 				break;
 			case LEVEL_INFO:
 				if (Logger.level <= LEVEL_INFO) {
-					log.log(Level.INFO, msg.toString());
+					log.info (msg.toString());
 				}
 				break;
 			case LEVEL_DEBUG:
 				if (Logger.level <= LEVEL_DEBUG) {
-					log.log(Level.INFO, msg.toString());
+					log.info (msg.toString());
 				}
 				break;
 	
