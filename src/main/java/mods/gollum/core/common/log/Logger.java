@@ -18,7 +18,7 @@ import org.apache.logging.log4j.core.config.Configuration;
 
 public class Logger {
 	
-	private final static String FILE_NAME = ModGollumCoreLib.MODID+".log";
+	private final static String FILE_NAME = "logs/"+ModGollumCoreLib.MODID+".log";
 	
 	public static final int LEVEL_DEBUG   = 0;
 	public static final int LEVEL_INFO    = 1;
