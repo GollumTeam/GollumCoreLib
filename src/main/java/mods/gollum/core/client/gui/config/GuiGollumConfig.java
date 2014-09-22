@@ -4,6 +4,7 @@ import static cpw.mods.fml.client.config.GuiUtils.RESET_CHAR;
 import static cpw.mods.fml.client.config.GuiUtils.UNDO_CHAR;
 import static mods.gollum.core.ModGollumCoreLib.log;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -72,42 +73,69 @@ public class GuiGollumConfig extends GuiConfig {
 						Property.Type type = null;
 						
 						// TODO généraliser aux autres champs
-						if (f.getType().isAssignableFrom(String.class)) {
+						if (
+							f.getType().isAssignableFrom(String.class) ||
+							f.getType().isAssignableFrom(String[].class)
+						) {
 							type = Property.Type.STRING;
 						}
 						if (
-							f.getType().isAssignableFrom(Long.TYPE) ||
-							f.getType().isAssignableFrom(Integer.TYPE) ||
-							f.getType().isAssignableFrom(Long[].class) ||
-							f.getType().isAssignableFrom(Integer[].class)
+							f.getType().isAssignableFrom(Long.TYPE      ) ||
+							f.getType().isAssignableFrom(Integer.TYPE   ) ||
+							f.getType().isAssignableFrom(Short.TYPE     ) ||
+							f.getType().isAssignableFrom(Byte.TYPE      ) ||
+							f.getType().isAssignableFrom(Long.class     ) ||
+							f.getType().isAssignableFrom(Integer.class  ) ||
+							f.getType().isAssignableFrom(Short.class    ) ||
+							f.getType().isAssignableFrom(Byte.class     ) ||
+							
+							f.getType().isAssignableFrom(long[].class   ) ||
+							f.getType().isAssignableFrom(int[].class    ) ||
+							f.getType().isAssignableFrom(short[].class  ) ||
+							f.getType().isAssignableFrom(byte[].class   ) ||
+							f.getType().isAssignableFrom(Long[].class   ) ||
+							f.getType().isAssignableFrom(Integer[].class) ||
+							f.getType().isAssignableFrom(Short[].class  ) ||
+							f.getType().isAssignableFrom(Byte[].class   )
 						) {
 							type = Property.Type.INTEGER;
 						}
-						if (f.getType().isAssignableFrom(Float.TYPE) ||
-							f.getType().isAssignableFrom(Double.TYPE) 
+						if (
+							f.getType().isAssignableFrom(Float.TYPE    ) ||
+							f.getType().isAssignableFrom(Double.TYPE   ) ||
+							f.getType().isAssignableFrom(Float.class   ) ||
+							f.getType().isAssignableFrom(Double.class  ) ||
+							
+							f.getType().isAssignableFrom(float[].class ) ||
+							f.getType().isAssignableFrom(double[].class) ||
+							f.getType().isAssignableFrom(Float[].class ) ||
+							f.getType().isAssignableFrom(Double[].class) 
 						) {
 							type = Property.Type.DOUBLE;
 						}
-						if (f.getType().isAssignableFrom(Boolean.TYPE)) {
+						if (
+							f.getType().isAssignableFrom(Boolean.TYPE   ) ||
+							f.getType().isAssignableFrom(Boolean.class  ) ||
+							
+							f.getType().isAssignableFrom(boolean[].class) ||
+							f.getType().isAssignableFrom(Boolean[].class)
+						) {
 							type = Property.Type.BOOLEAN;
 						}
 						
 						Object value = f.get(configLoad.config);
 						String[] values = null;
-						if (value instanceof Object[]) {
-							Object[] ar = ((Object[]) value);
-							values = new String[ar.length];
-							for (int i = 0; i < ar.length; i++) {
-								values[i] = ar[i].toString();
-							}
-						}
 						Object valueDefault = f.get(configLoad.configDefault);
 						String[] valuesDefault = null;
-						if (valueDefault instanceof Object[]) {
-							Object[] ar = ((Object[]) valueDefault);
-							valuesDefault = new String[ar.length];
-							for (int i = 0; i < ar.length; i++) {
-								valuesDefault[i] = ar[i].toString();
+						
+						if (value.getClass().isArray()) {
+							values = new String[Array.getLength(value)];
+							for (int i = 0; i < Array.getLength(value); i++) {
+								values[i] = Array.get(value, i).toString();
+							}
+							valuesDefault = new String[Array.getLength(valueDefault)];
+							for (int i = 0; i < Array.getLength(valueDefault); i++) {
+								valuesDefault[i] = Array.get(valueDefault, i).toString();
 							}
 						}
 						
@@ -224,12 +252,16 @@ public class GuiGollumConfig extends GuiConfig {
 				
 				f.setAccessible(true);
 				try {
-					if (f.getType().isAssignableFrom(String.class)) { f.set(this.configLoad.config, o.toString()                     );  }
-					if (f.getType().isAssignableFrom(Long.TYPE))    { f.set(this.configLoad.config, Long   .parseLong   (o.toString())); }
-					if (f.getType().isAssignableFrom(Integer.TYPE)) { f.set(this.configLoad.config, Integer.parseInt    (o.toString())); }
-					if (f.getType().isAssignableFrom(Double.TYPE))  { f.set(this.configLoad.config, Double .parseDouble (o.toString())); }
-					if (f.getType().isAssignableFrom(Float.TYPE))   { f.set(this.configLoad.config, Float  .parseFloat  (o.toString())); }
-					if (f.getType().isAssignableFrom(Boolean.TYPE)) { f.set(this.configLoad.config, Boolean.parseBoolean(o.toString())); }
+					
+					if (f.getType().isAssignableFrom(String.class)                                                ){ f.set(this.configLoad.config, o.toString()                      ); }
+					if (f.getType().isAssignableFrom(Long.class)    || f.getType().isAssignableFrom(Long.TYPE)    ){ f.set(this.configLoad.config, Long   .parseLong   (o.toString())); }
+					if (f.getType().isAssignableFrom(Integer.class) || f.getType().isAssignableFrom(Integer.TYPE) ){ f.set(this.configLoad.config, Integer.parseInt    (o.toString())); }
+					if (f.getType().isAssignableFrom(Short.class)   || f.getType().isAssignableFrom(Short.TYPE)   ){ f.set(this.configLoad.config, Short  .parseShort  (o.toString())); }
+					if (f.getType().isAssignableFrom(Byte.class)    || f.getType().isAssignableFrom(Byte.TYPE)    ){ f.set(this.configLoad.config, Byte   .parseByte   (o.toString())); }
+					if (f.getType().isAssignableFrom(Double.class)  || f.getType().isAssignableFrom(Double.TYPE)  ){ f.set(this.configLoad.config, Double .parseDouble (o.toString())); }
+					if (f.getType().isAssignableFrom(Float.class)   || f.getType().isAssignableFrom(Float.TYPE)   ){ f.set(this.configLoad.config, Float  .parseFloat  (o.toString())); }
+					if (f.getType().isAssignableFrom(Boolean.class) || f.getType().isAssignableFrom(Boolean.TYPE) ){ f.set(this.configLoad.config, Boolean.parseBoolean(o.toString())); }
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

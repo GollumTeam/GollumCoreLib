@@ -26,23 +26,36 @@ public class ConfigGollumCoreLib extends Config {
 	public boolean versionChecker = true;
 	
 	
-
-	@ConfigProp(group="Test") public int     int1 = 1;
-	@ConfigProp(group="Test") public Integer int2 = 2;
-	@ConfigProp(group="Test") public float   f3   = 3.5F;
-	@ConfigProp(group="Test") public Float   f4   = 4.5F;
-	@ConfigProp(group="Test") public double  d5   = 5.3D;
-	@ConfigProp(group="Test") public Double  d6   = 6.3D;
-	@ConfigProp(group="Test") public boolean b7   = true;
-	@ConfigProp(group="Test") public Boolean b8   = false;
-	@ConfigProp(group="Test") public int[]     arInt1 = new int[]    { 1    , 1    , 1     };
-	@ConfigProp(group="Test") public Integer[] arInt2 = new Integer[]{ 2    , 2    , 2     };
-	@ConfigProp(group="Test") public float[]   arF3   = new float[]  { 3.5F , 3.5F , 3.5F  };
-	@ConfigProp(group="Test") public Float[]   arF4   = new Float[]  { 4.5F , 4.5F , 4.5F  };
-	@ConfigProp(group="Test") public double[]  arD5   = new double[] { 5.3D , 5.3D , 5.3D  };
-	@ConfigProp(group="Test") public Double[]  arD6   = new Double[] { 6.3D , 6.3D , 6.3D  };
-	@ConfigProp(group="Test") public boolean[] arB7   = new boolean[]{ true , true , true  };
-	@ConfigProp(group="Test") public Boolean[] arB8   = new Boolean[]{ false, false, false };
+	
+	@ConfigProp(group="Test") public long    l1 = 1111;
+	@ConfigProp(group="Test") public Long    l2 = 2222L;
+	@ConfigProp(group="Test") public int     i1 = 111;
+	@ConfigProp(group="Test") public Integer i2 = 222;
+	@ConfigProp(group="Test") public short   s1 = 11;
+	@ConfigProp(group="Test") public Short   s2 = 22;
+	@ConfigProp(group="Test") public byte    b1 = 1;
+	@ConfigProp(group="Test") public Byte    b2 = 2;
+	@ConfigProp(group="Test") public float   f1 = 1.5F;
+	@ConfigProp(group="Test") public Float   f2 = 2.5F;
+	@ConfigProp(group="Test") public double  d1 = 1.3D;
+	@ConfigProp(group="Test") public Double  d2 = 2.3D;
+	@ConfigProp(group="Test") public boolean z1 = true;
+	@ConfigProp(group="Test") public Boolean z2 = false;
+	
+	@ConfigProp(group="Test") public long   [] lAr1 = new long   [] { 1111 , 1111 , 1111  };
+	@ConfigProp(group="Test") public Long   [] lAr2 = new Long   [] { 2222L, 2222L, 2222L };
+	@ConfigProp(group="Test") public int    [] iAr1 = new int    [] { 111  , 111  , 111   };
+	@ConfigProp(group="Test") public Integer[] iAr2 = new Integer[] { 222  , 222  , 222   };
+	@ConfigProp(group="Test") public short  [] sAr1 = new short  [] { 11   , 11   , 11    };
+	@ConfigProp(group="Test") public Short  [] sAr2 = new Short  [] { 22   , 22   , 22    };
+	@ConfigProp(group="Test") public byte   [] bAr1 = new byte   [] { 1    , 1    , 1     };
+	@ConfigProp(group="Test") public Byte   [] bAr2 = new Byte   [] { 2    , 2    , 2     };
+	@ConfigProp(group="Test") public float  [] fAr1 = new float  [] { 1.5F , 1.5F , 1.5F  };
+	@ConfigProp(group="Test") public Float  [] fAr2 = new Float  [] { 2.5F , 2.5F , 2.5F  };
+	@ConfigProp(group="Test") public double [] dAr1 = new double [] { 1.3D , 1.3D , 1.3D  };
+	@ConfigProp(group="Test") public Double [] dAr2 = new Double [] { 2.3D , 2.3D , 2.3D  };
+	@ConfigProp(group="Test") public boolean[] zAr1 = new boolean[] { true , true , true  };
+	@ConfigProp(group="Test") public Boolean[] zAr2 = new Boolean[] { false, false, false };
 	
 	
 }
