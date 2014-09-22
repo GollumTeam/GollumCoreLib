@@ -18,7 +18,6 @@ public class ConfigModGuiFactory implements IModGuiFactory {
 	@Override
 	public Class<? extends GuiScreen> mainConfigGuiClass() {
 		return GuiGollumConfig.class;
-//		return ConfigModConfigGui2.class;
 	}
 
 	@Override

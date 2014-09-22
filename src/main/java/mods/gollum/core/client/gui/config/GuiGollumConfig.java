@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
 import mods.gollum.core.common.config.ConfigLoader;
 import mods.gollum.core.common.config.ConfigLoader.ConfigLoad;
 import mods.gollum.core.common.config.ConfigProp;
+import mods.gollum.core.common.config.GollumProperty;
 import mods.gollum.core.common.mod.GollumMod;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -34,12 +35,11 @@ import cpw.mods.fml.common.ModContainer;
 public class GuiGollumConfig extends GuiConfig {
 	
 
-	private static HashMap<Field, IConfigElement> initFieldElements;
+	private static HashMap<Field, IConfigElement> fieldElements;
 
 	GollumMod mod;
 	ConfigLoad configLoad;
 	private String currentCategory = null;
-	private HashMap<Field, IConfigElement> fieldElements = new HashMap<Field, IConfigElement>();
 
 	
 	public GuiGollumConfig(GuiScreen parent) {
@@ -57,9 +57,7 @@ public class GuiGollumConfig extends GuiConfig {
 	
 	private void init (GuiScreen parent) {
 		this.mod              = this.getMod(parent);
-		configLoad            = ConfigLoader.configLoaded.get(mod);
-		
-		this.fieldElements = this.initFieldElements;
+		this.configLoad       = ConfigLoader.configLoaded.get(mod);
 		
 		log.debug ("Config mod : " + mod.getModId() + " with "+this.fieldElements.size()+" fields.");
 	}
@@ -70,7 +68,10 @@ public class GuiGollumConfig extends GuiConfig {
 		
 		GollumMod mod = getMod(parent);
 		ConfigLoad configLoad = ConfigLoader.configLoaded.get(mod);
-		initFieldElements = new HashMap<Field, IConfigElement>();
+		if (currentCategory == null) {
+			fieldElements = new HashMap<Field, IConfigElement>();
+		}
+		
 		
 		if (configLoad != null) {
 			
@@ -82,9 +83,7 @@ public class GuiGollumConfig extends GuiConfig {
 				HashMap<Field, IConfigElement> tmpFieldElements = new HashMap<Field, IConfigElement>();
 				for (String category : categories) {
 					fields.add(new DummyCategoryElement(category, mod.i18n().trans("config.category."+category), GollumCategoryEntry.class));
-					tmpFieldElements.putAll (initFieldElements);
 				}
-				initFieldElements = tmpFieldElements;
 				
 			} else {
 				
@@ -94,143 +93,16 @@ public class GuiGollumConfig extends GuiConfig {
 				
 				try {
 					for (Field f : configLoad.config.getClass().getDeclaredFields()) {
-						f.setAccessible(true);
 						
-						String label = mod.i18n().trans("config."+f.getName());
+						GollumProperty prop   = new GollumProperty (f, configLoad, currentCategory);
+						ConfigElement element = prop.createConfigElement ();
 						
-						ConfigProp anno = f.getAnnotation(ConfigProp.class);
-						if (anno != null && anno.group().equals (currentCategory)) {
-							
-							
-							Property.Type type = null;
-							
-							// TODO field IConfigClass
-							if (
-								f.getType().isAssignableFrom(String.class) ||
-								f.getType().isAssignableFrom(String[].class)
-							) {
-								type = Property.Type.STRING;
-							}
-							if (
-								f.getType().isAssignableFrom(Long.TYPE      ) ||
-								f.getType().isAssignableFrom(Integer.TYPE   ) ||
-								f.getType().isAssignableFrom(Short.TYPE     ) ||
-								f.getType().isAssignableFrom(Byte.TYPE      ) ||
-								f.getType().isAssignableFrom(Long.class     ) ||
-								f.getType().isAssignableFrom(Integer.class  ) ||
-								f.getType().isAssignableFrom(Short.class    ) ||
-								f.getType().isAssignableFrom(Byte.class     ) ||
-								
-								f.getType().isAssignableFrom(long[].class   ) ||
-								f.getType().isAssignableFrom(int[].class    ) ||
-								f.getType().isAssignableFrom(short[].class  ) ||
-								f.getType().isAssignableFrom(byte[].class   ) ||
-								f.getType().isAssignableFrom(Long[].class   ) ||
-								f.getType().isAssignableFrom(Integer[].class) ||
-								f.getType().isAssignableFrom(Short[].class  ) ||
-								f.getType().isAssignableFrom(Byte[].class   )
-							) {
-								type = Property.Type.INTEGER;
-							}
-							if (
-								f.getType().isAssignableFrom(Float.TYPE    ) ||
-								f.getType().isAssignableFrom(Double.TYPE   ) ||
-								f.getType().isAssignableFrom(Float.class   ) ||
-								f.getType().isAssignableFrom(Double.class  ) ||
-								
-								f.getType().isAssignableFrom(float[].class ) ||
-								f.getType().isAssignableFrom(double[].class) ||
-								f.getType().isAssignableFrom(Float[].class ) ||
-								f.getType().isAssignableFrom(Double[].class) 
-							) {
-								type = Property.Type.DOUBLE;
-							}
-							if (
-								f.getType().isAssignableFrom(Boolean.TYPE   ) ||
-								f.getType().isAssignableFrom(Boolean.class  ) ||
-								
-								f.getType().isAssignableFrom(boolean[].class) ||
-								f.getType().isAssignableFrom(Boolean[].class)
-							) {
-								type = Property.Type.BOOLEAN;
-							}
-							
-							Object value = f.get(configLoad.config);
-							String[] values = null;
-							Object valueDefault = f.get(configLoad.configDefault);
-							String[] valuesDefault = null;
-							
-							if (value.getClass().isArray()) {
-								values = new String[Array.getLength(value)];
-								for (int i = 0; i < Array.getLength(value); i++) {
-									values[i] = Array.get(value, i).toString();
-								}
-								valuesDefault = new String[Array.getLength(valueDefault)];
-								for (int i = 0; i < Array.getLength(valueDefault); i++) {
-									valuesDefault[i] = Array.get(valueDefault, i).toString();
-								}
-							}
-							
-							if (type != null) {
-								Property prop = null;
-								if (values != null) {
-									prop = new Property(label, values, type);
-									prop.setDefaultValues(valuesDefault);
-								} else {
-									prop = new Property(label, value.toString(), type);
-									prop.setDefaultValue(valueDefault.toString());
-								}
-								
-								prop.comment = anno.info();
-								prop
-									.setRequiresMcRestart(anno.mcRestart())
-									.setRequiresWorldRestart(anno.worldRestart())
-									.setIsListLengthFixed(anno.isListLengthFixed ())
-								;
-								
-								if (!anno.minValue ().equals("")) {
-									try {
-										prop.setMinValue(Integer.parseInt(anno.minValue ()));
-									} catch (Exception e) {
-										try { prop.setMinValue(Double.parseDouble(anno.minValue())); } catch (Exception e2) {}
-									}
-								}
-								
-								if (!anno.maxValue ().equals("")) {
-									try {
-										prop.setMaxValue(Integer.parseInt(anno.maxValue ()));
-									} catch (Exception e) {
-										try { prop.setMaxValue(Double.parseDouble(anno.maxValue())); } catch (Exception e2) {}
-									}
-								}
-								
-								if (!anno.maxListLength ().equals("")) {
-									try { prop.setMaxListLength(Integer.parseInt(anno.maxListLength())); } catch (Exception e) {}
-								}
-								if (!anno.pattern ().equals("")) {
-									try { prop.setValidationPattern(Pattern.compile(anno.pattern())); } catch (Exception e) {}
-								}
-								if (
-									anno.validValues ().length > 1 ||
-									(
-										anno.validValues ().length == 1 && 
-										!anno.validValues ()[0].equals("")
-									)
-								) {
-									prop.setValidValues(anno.validValues());
-								}
-								
-								
-								ConfigElement<Integer> element = new ConfigElement<Integer>(prop);
-								
-								initFieldElements.put(f, element);
-								
-								fields.add(element);
-							}
-							
+						if (element != null) {
+							fieldElements.put(f, element);
+							fields.add(element);
 						}
 					}
-				} catch (Throwable e)  {
+				} catch (Exception e)  {
 					e.printStackTrace();
 				}
 			}
@@ -308,6 +180,8 @@ public class GuiGollumConfig extends GuiConfig {
 				Field         f  = entry.getKey();
 				IConfigElement el = entry.getValue();
 				
+				log.warning ("Save "+f.getName ()+"="+el.get());
+				
 				this.setField(f, el);
 			}
 			
@@ -374,8 +248,6 @@ public class GuiGollumConfig extends GuiConfig {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		log.debug("save value "+f.getName()+" : "+o);
 	}
 	
 }

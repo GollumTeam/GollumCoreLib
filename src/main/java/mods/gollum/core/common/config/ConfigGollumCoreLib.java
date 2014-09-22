@@ -40,7 +40,7 @@ public class ConfigGollumCoreLib extends Config {
 	@ConfigProp(group="Test") public Double  d2 = 2.3D;
 	@ConfigProp(group="Test") public boolean z1 = true;
 	@ConfigProp(group="Test") public Boolean z2 = false;
-
+	
 	@ConfigProp(group="Test") public String [] sAr1 = new String [] { "AAA" , "BBB" , "CCC" };
 	@ConfigProp(group="Test") public long   [] lAr1 = new long   [] { 1111 , 1111 , 1111  };
 	@ConfigProp(group="Test") public Long   [] lAr2 = new Long   [] { 2222L, 2222L, 2222L };
