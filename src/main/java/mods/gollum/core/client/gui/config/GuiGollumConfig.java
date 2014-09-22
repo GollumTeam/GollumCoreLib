@@ -59,18 +59,9 @@ public class GuiGollumConfig extends GuiConfig {
 		this.mod              = this.getMod(parent);
 		configLoad            = ConfigLoader.configLoaded.get(mod);
 		
-		for (Entry<Field, IConfigElement> entry : this.initFieldElements.entrySet()){
-			this.addField(entry.getKey(), entry.getValue());
-		}
+		this.fieldElements = this.initFieldElements;
 		
 		log.debug ("Config mod : " + mod.getModId() + " with "+this.fieldElements.size()+" fields.");
-	}
-	
-	private void addField (Field f, IConfigElement el) {
-		this.fieldElements.put (f, el);
-		if (this.parentScreen instanceof GuiGollumConfig) {
-			((GuiGollumConfig) this.parentScreen).addField(f, el);
-		}
 	}
 	
 	private static List<IConfigElement> getFields(GuiScreen parent, String currentCategory) {
@@ -87,10 +78,14 @@ public class GuiGollumConfig extends GuiConfig {
 			
 			
 			if (categories.size() > 1 && currentCategory == null) {
-				
+
+				HashMap<Field, IConfigElement> tmpFieldElements = new HashMap<Field, IConfigElement>();
 				for (String category : categories) {
 					fields.add(new DummyCategoryElement(category, mod.i18n().trans("config.category."+category), GollumCategoryEntry.class));
+					tmpFieldElements.putAll (initFieldElements);
 				}
+				initFieldElements = tmpFieldElements;
+				
 			} else {
 				
 				if (currentCategory == null || currentCategory.equals("General")) {
