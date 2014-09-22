@@ -25,8 +25,6 @@ public class ConfigGollumCoreLib extends Config {
 	@ConfigProp (info = "Display version checker message")
 	public boolean versionChecker = true;
 	
-	
-
 	@ConfigProp(group="Test") public String  s1 = "AAA";
 	@ConfigProp(group="Test") public long    l1 = 1111;
 	@ConfigProp(group="Test") public Long    l2 = 2222L;

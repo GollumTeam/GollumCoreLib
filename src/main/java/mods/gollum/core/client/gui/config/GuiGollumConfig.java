@@ -64,26 +64,6 @@ public class GuiGollumConfig extends GuiConfig {
 		log.debug ("Config mod : " + mod.getModId() + " with "+this.fieldElements.size()+" fields.");
 	}
 	
-	private static ArrayList<String> getCategories(Config config) {
-		
-		ArrayList<String> categories = new ArrayList<String>();
-		categories.add("General");
-		
-		try {
-			for (Field f : config.getClass().getDeclaredFields()) {
-				f.setAccessible(true);
-				ConfigProp anno = f.getAnnotation(ConfigProp.class);
-				if (anno != null && !anno.group().equals("") && !categories.contains(anno.group())) {
-					categories.add(anno.group());
-				}
-			}
-		} catch (Throwable e)  {
-			e.printStackTrace();
-		}
-		
-		return categories;
-	}
-
 	private static List<IConfigElement> getFields(GuiScreen parent, String currentCategory) {
 		
 		ArrayList<IConfigElement> fields = new ArrayList<IConfigElement>();
@@ -94,7 +74,7 @@ public class GuiGollumConfig extends GuiConfig {
 		
 		if (configLoad != null) {
 			
-			ArrayList<String> categories = getCategories(configLoad.config);
+			ArrayList<String> categories = configLoad.getCategories();
 			
 			
 			if (categories.size() > 1 && currentCategory == null) {
@@ -104,7 +84,7 @@ public class GuiGollumConfig extends GuiConfig {
 				}
 			} else {
 				
-				if (currentCategory.equals("General")) {
+				if (currentCategory == null || currentCategory.equals("General")) {
 					currentCategory = "";
 				}
 				
@@ -269,7 +249,7 @@ public class GuiGollumConfig extends GuiConfig {
 			}
 		}
 		if (parent instanceof GuiGollumConfig) {
-			return ((GuiGollumConfig)parent).mod;
+			return getMod(((GuiGollumConfig) parent).parentScreen);
 		}
 		return null;
 	}

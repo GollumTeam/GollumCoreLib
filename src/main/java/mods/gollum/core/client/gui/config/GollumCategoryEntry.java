@@ -1,9 +1,6 @@
 package mods.gollum.core.client.gui.config;
 
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraftforge.common.ForgeModContainer;
-import net.minecraftforge.common.config.ConfigElement;
-import net.minecraftforge.common.config.Configuration;
 import cpw.mods.fml.client.config.GuiConfig;
 import cpw.mods.fml.client.config.GuiConfigEntries;
 import cpw.mods.fml.client.config.GuiConfigEntries.CategoryEntry;
