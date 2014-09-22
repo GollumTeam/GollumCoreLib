@@ -16,11 +16,13 @@ public @interface ConfigProp {
 	public abstract String group() default "";
 	
 	public abstract String[] validValues() default "";
-
+	
 	public abstract String minValue() default "";
 	public abstract String maxValue() default "";
-
+	
+	public abstract boolean isListLengthFixed() default false;
+	public abstract String  maxListLength()     default "";
+	
 	public abstract boolean mcRestart()    default false;
 	public abstract boolean worldRestart() default false;
-	
 }

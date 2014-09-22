@@ -154,6 +154,7 @@ public class GuiGollumConfig extends GuiConfig {
 							prop.setValidValues(anno.validValues());
 							prop.setRequiresMcRestart(anno.mcRestart());
 							prop.setRequiresWorldRestart(anno.worldRestart());
+							prop.setIsListLengthFixed(anno.isListLengthFixed ());
 							
 							if (!anno.minValue ().equals("")) {
 								try {
@@ -169,6 +170,10 @@ public class GuiGollumConfig extends GuiConfig {
 								} catch (Exception e) {
 									try { prop.setMaxValue(Double.parseDouble(anno.maxValue ())); } catch (Exception e2) {}
 								}
+							}
+							
+							if (!anno.maxListLength ().equals("")) {
+								try { prop.setMaxListLength(Integer.parseInt(anno.maxListLength ())); } catch (Exception e) {}
 							}
 							
 							ConfigElement<Integer> element = new ConfigElement<Integer>(prop);
