@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
-import mods.gollum.core.common.config.Config;
 import mods.gollum.core.common.config.ConfigLoader;
 import mods.gollum.core.common.config.ConfigLoader.ConfigLoad;
 import mods.gollum.core.common.config.ConfigProp;
@@ -35,12 +34,12 @@ import cpw.mods.fml.common.ModContainer;
 public class GuiGollumConfig extends GuiConfig {
 	
 
-	private static HashMap<Field, ConfigElement> initFieldElements;
+	private static HashMap<Field, IConfigElement> initFieldElements;
 
 	GollumMod mod;
 	ConfigLoad configLoad;
 	private String currentCategory = null;
-	private HashMap<Field, ConfigElement> fieldElements;
+	private HashMap<Field, IConfigElement> fieldElements = new HashMap<Field, IConfigElement>();
 
 	
 	public GuiGollumConfig(GuiScreen parent) {
@@ -57,11 +56,21 @@ public class GuiGollumConfig extends GuiConfig {
 	}
 	
 	private void init (GuiScreen parent) {
-		this.mod = this.getMod(parent);
-		configLoad = ConfigLoader.configLoaded.get(mod);
-		this.fieldElements = initFieldElements;
+		this.mod              = this.getMod(parent);
+		configLoad            = ConfigLoader.configLoaded.get(mod);
+		
+		for (Entry<Field, IConfigElement> entry : this.initFieldElements.entrySet()){
+			this.addField(entry.getKey(), entry.getValue());
+		}
 		
 		log.debug ("Config mod : " + mod.getModId() + " with "+this.fieldElements.size()+" fields.");
+	}
+	
+	private void addField (Field f, IConfigElement el) {
+		this.fieldElements.put (f, el);
+		if (this.parentScreen instanceof GuiGollumConfig) {
+			((GuiGollumConfig) this.parentScreen).addField(f, el);
+		}
 	}
 	
 	private static List<IConfigElement> getFields(GuiScreen parent, String currentCategory) {
@@ -70,7 +79,7 @@ public class GuiGollumConfig extends GuiConfig {
 		
 		GollumMod mod = getMod(parent);
 		ConfigLoad configLoad = ConfigLoader.configLoaded.get(mod);
-		initFieldElements = new HashMap<Field, ConfigElement>();
+		initFieldElements = new HashMap<Field, IConfigElement>();
 		
 		if (configLoad != null) {
 			
@@ -100,7 +109,7 @@ public class GuiGollumConfig extends GuiConfig {
 							
 							Property.Type type = null;
 							
-							// TODO généraliser aux autres champs
+							// TODO field IConfigClass
 							if (
 								f.getType().isAssignableFrom(String.class) ||
 								f.getType().isAssignableFrom(String[].class)
@@ -293,63 +302,20 @@ public class GuiGollumConfig extends GuiConfig {
 	protected void actionPerformed(GuiButton button) {
 		if (button.id == 2000) {
 			
+			if (this.currentCategory != null) {
+				this.mc.displayGuiScreen(this.parentScreen);
+				return;
+			}
+			
 			boolean requiresMcRestart = this.entryList.saveConfigElements();
 			
-			for (Entry<Field, ConfigElement> entry: this.fieldElements.entrySet()) {
+			for (Entry<Field, IConfigElement> entry: this.fieldElements.entrySet()) {
 				Field         f  = entry.getKey();
-				ConfigElement el = entry.getValue();
+				IConfigElement el = entry.getValue();
 				
-				Object o = null;
-				
-				f.setAccessible(true);
-				try {
-					
-					o = el.get();
-					
-					if (f.getType().isArray()) {
-						
-						Class subClass = f.getType().getComponentType();
-						
-						Object[] oList =  el.getList();
-						o = Array.newInstance(subClass, Array.getLength(oList));
-						for (int i = 0; i < oList.length; i++) {
-							
-							Object subO = oList[i];
-							
-							if (subClass.isAssignableFrom(String.class)                                             ) { subO = subO.toString()                      ; } else
-							if (subClass.isAssignableFrom(Long.class)    || subClass.isAssignableFrom(Long.TYPE)    ) { subO = Long   .parseLong   (subO.toString()); } else
-							if (subClass.isAssignableFrom(Integer.class) || subClass.isAssignableFrom(Integer.TYPE) ) { subO = Integer.parseInt    (subO.toString()); } else
-							if (subClass.isAssignableFrom(Short.class)   || subClass.isAssignableFrom(Short.TYPE)   ) { subO = Short  .parseShort  (subO.toString()); } else
-							if (subClass.isAssignableFrom(Byte.class)    || subClass.isAssignableFrom(Byte.TYPE)    ) { subO = Byte   .parseByte   (subO.toString()); } else
-							if (subClass.isAssignableFrom(Double.class)  || subClass.isAssignableFrom(Double.TYPE)  ) { subO = Double .parseDouble (subO.toString()); } else
-							if (subClass.isAssignableFrom(Float.class)   || subClass.isAssignableFrom(Float.TYPE)   ) { subO = Float  .parseFloat  (subO.toString()); } else
-							if (subClass.isAssignableFrom(Boolean.class) || subClass.isAssignableFrom(Boolean.TYPE) ) { subO = Boolean.parseBoolean(subO.toString()); }
-							
-							Array.set(o, i, subO);
-						}
-						
-						f.set(this.configLoad.config, o);
-						
-					} else {
-						
-						if (f.getType().isAssignableFrom(String.class)                                                ) { f.set(this.configLoad.config, o.toString()                      ); }
-						if (f.getType().isAssignableFrom(Long.class)    || f.getType().isAssignableFrom(Long.TYPE)    ) { f.set(this.configLoad.config, Long   .parseLong   (o.toString())); }
-						if (f.getType().isAssignableFrom(Integer.class) || f.getType().isAssignableFrom(Integer.TYPE) ) { f.set(this.configLoad.config, Integer.parseInt    (o.toString())); }
-						if (f.getType().isAssignableFrom(Short.class)   || f.getType().isAssignableFrom(Short.TYPE)   ) { f.set(this.configLoad.config, Short  .parseShort  (o.toString())); }
-						if (f.getType().isAssignableFrom(Byte.class)    || f.getType().isAssignableFrom(Byte.TYPE)    ) { f.set(this.configLoad.config, Byte   .parseByte   (o.toString())); }
-						if (f.getType().isAssignableFrom(Double.class)  || f.getType().isAssignableFrom(Double.TYPE)  ) { f.set(this.configLoad.config, Double .parseDouble (o.toString())); }
-						if (f.getType().isAssignableFrom(Float.class)   || f.getType().isAssignableFrom(Float.TYPE)   ) { f.set(this.configLoad.config, Float  .parseFloat  (o.toString())); }
-						if (f.getType().isAssignableFrom(Boolean.class) || f.getType().isAssignableFrom(Boolean.TYPE) ) { f.set(this.configLoad.config, Boolean.parseBoolean(o.toString())); }
-						
-					}
-					
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				
-				log.debug("save value "+f.getName()+" : "+o);
-				
+				this.setField(f, el);
 			}
+			
 			
 			new ConfigLoader(configLoad.config, false).writeConfig();
 			
@@ -362,6 +328,59 @@ public class GuiGollumConfig extends GuiConfig {
 		} else {
 			super.actionPerformed(button);
 		}
+	}
+
+	private void setField(Field f, IConfigElement el) {
+		
+		Object o = null;
+		
+		f.setAccessible(true);
+		try {
+			
+			o = el.get();
+			
+			if (f.getType().isArray()) {
+				
+				Class subClass = f.getType().getComponentType();
+				
+				Object[] oList =  el.getList();
+				o = Array.newInstance(subClass, Array.getLength(oList));
+				for (int i = 0; i < oList.length; i++) {
+					
+					Object subO = oList[i];
+					
+					if (subClass.isAssignableFrom(String.class)                                             ) { subO = subO.toString()                      ; } else
+					if (subClass.isAssignableFrom(Long.class)    || subClass.isAssignableFrom(Long.TYPE)    ) { subO = Long   .parseLong   (subO.toString()); } else
+					if (subClass.isAssignableFrom(Integer.class) || subClass.isAssignableFrom(Integer.TYPE) ) { subO = Integer.parseInt    (subO.toString()); } else
+					if (subClass.isAssignableFrom(Short.class)   || subClass.isAssignableFrom(Short.TYPE)   ) { subO = Short  .parseShort  (subO.toString()); } else
+					if (subClass.isAssignableFrom(Byte.class)    || subClass.isAssignableFrom(Byte.TYPE)    ) { subO = Byte   .parseByte   (subO.toString()); } else
+					if (subClass.isAssignableFrom(Double.class)  || subClass.isAssignableFrom(Double.TYPE)  ) { subO = Double .parseDouble (subO.toString()); } else
+					if (subClass.isAssignableFrom(Float.class)   || subClass.isAssignableFrom(Float.TYPE)   ) { subO = Float  .parseFloat  (subO.toString()); } else
+					if (subClass.isAssignableFrom(Boolean.class) || subClass.isAssignableFrom(Boolean.TYPE) ) { subO = Boolean.parseBoolean(subO.toString()); }
+					
+					Array.set(o, i, subO);
+				}
+				
+				f.set(this.configLoad.config, o);
+				
+			} else {
+				
+				if (f.getType().isAssignableFrom(String.class)                                                ) { f.set(this.configLoad.config, o.toString()                      ); }
+				if (f.getType().isAssignableFrom(Long.class)    || f.getType().isAssignableFrom(Long.TYPE)    ) { f.set(this.configLoad.config, Long   .parseLong   (o.toString())); }
+				if (f.getType().isAssignableFrom(Integer.class) || f.getType().isAssignableFrom(Integer.TYPE) ) { f.set(this.configLoad.config, Integer.parseInt    (o.toString())); }
+				if (f.getType().isAssignableFrom(Short.class)   || f.getType().isAssignableFrom(Short.TYPE)   ) { f.set(this.configLoad.config, Short  .parseShort  (o.toString())); }
+				if (f.getType().isAssignableFrom(Byte.class)    || f.getType().isAssignableFrom(Byte.TYPE)    ) { f.set(this.configLoad.config, Byte   .parseByte   (o.toString())); }
+				if (f.getType().isAssignableFrom(Double.class)  || f.getType().isAssignableFrom(Double.TYPE)  ) { f.set(this.configLoad.config, Double .parseDouble (o.toString())); }
+				if (f.getType().isAssignableFrom(Float.class)   || f.getType().isAssignableFrom(Float.TYPE)   ) { f.set(this.configLoad.config, Float  .parseFloat  (o.toString())); }
+				if (f.getType().isAssignableFrom(Boolean.class) || f.getType().isAssignableFrom(Boolean.TYPE) ) { f.set(this.configLoad.config, Boolean.parseBoolean(o.toString())); }
+				
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		log.debug("save value "+f.getName()+" : "+o);
 	}
 	
 }
