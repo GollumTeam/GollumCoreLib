@@ -59,18 +59,19 @@ public class ConfigGollumCoreLib extends Config {
 	@ConfigProp(group="Test") public boolean[] zAr1 = new boolean[] { true , true , true  };
 	@ConfigProp(group="Test") public Boolean[] zAr2 = new Boolean[] { false, false, false };
 	
-
 	@ConfigProp(
 		group="Test",
 		maxListLength = "5"
 	) 
 	public String [] sAr2 = new String [] { "AAA" , "BBB" , "CCC" };
+	
 	@ConfigProp(
 		group="Test",
 		isListLengthFixed = true,
 		pattern="\\d*"
 	) 
 	public String [] sAr3 = new String [] { "123" , "465" , "789" };
+	
 	@ConfigProp(
 		group="Test",
 		pattern="\\d*"
