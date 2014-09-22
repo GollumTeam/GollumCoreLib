@@ -5,10 +5,18 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.regex.Pattern;
 
+import mods.gollum.core.tools.simplejson.JsonAnnotation;
+
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ java.lang.annotation.ElementType.FIELD })
-
 public @interface ConfigProp {
+	
+	enum TYPE {
+		DEFAULT,
+		ITEM,
+		BLOCK,
+		MOD,
+	}
 	
 	public abstract String name() default "";
 	
@@ -26,6 +34,8 @@ public @interface ConfigProp {
 	
 	public abstract boolean mcRestart()    default false;
 	public abstract boolean worldRestart() default false;
-	
+
 	public abstract String pattern() default "";
+	
+	public abstract TYPE type() default TYPE.DEFAULT;
 }

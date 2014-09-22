@@ -1,5 +1,8 @@
 package mods.gollum.core.common.config.type;
 
+import mods.gollum.core.common.config.ConfigProp;
+import mods.gollum.core.common.config.ConfigProp.TYPE;
+import mods.gollum.core.common.config.JsonConfigProp;
 import mods.gollum.core.tools.registered.RegisteredObjects;
 import mods.gollum.core.tools.simplejson.Json;
 import mods.gollum.core.tools.simplejson.Json.EntryObject;
@@ -39,7 +42,7 @@ public class ItemStackConfigType implements IConfigJsonType {
 	@Override
 	public Json writeConfig() {
 		return Json.create (
-			new EntryObject ("registerName", this.registerName),
+			new EntryObject ("registerName", this.registerName).addComplement (new JsonConfigProp().type(TYPE.ITEM) ),
 			new EntryObject ("metadata"    , this.metadata),
 			new EntryObject ("number"      , this.number)
 		);

@@ -3,9 +3,9 @@ package mods.gollum.core.tools.simplejson;
 import argo.jdom.JsonNodeBuilder;
 import argo.jdom.JsonNodeBuilders;
 
-public class FloatConfigDom extends Json {
+public class FloatJson extends Json {
 	
-	public FloatConfigDom(float f) {
+	public FloatJson(float f) {
 		this.value = f;
 	}
 	

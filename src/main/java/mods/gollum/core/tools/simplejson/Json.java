@@ -1,6 +1,7 @@
 package mods.gollum.core.tools.simplejson;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Map.Entry;
 
 import com.google.gson.JsonNull;
@@ -9,36 +10,39 @@ import argo.jdom.JsonNode;
 import argo.jdom.JsonNodeBuilder;
 import argo.jdom.JsonNodeBuilders;
 import argo.jdom.JsonStringNode;
+import mods.gollum.core.common.config.JsonConfigProp;
 import mods.gollum.core.common.config.type.ItemStackConfigType;
+import mods.gollum.core.tools.simplejson.Json.EntryObject;
 
 public class Json {
 	
 	public Object value;
+	private ArrayList<JsonComplement> complements = new ArrayList<JsonComplement>();
 	
 	public static class EntryObject {
 		
 		public String key;
 		public Json dom;
-
+		
 		public EntryObject(String key, Object value) {
-			this.key = key;
-			this.dom = create(value);
 		}
-	}
 
-	public static NullJson create() {
-		return new NullJson();
+		public EntryObject addComplement(JsonComplement jsonComplement) {
+			this.dom.addComplement(jsonComplement);
+			return this;
+		}
 	}
 	
 	public static Json create(Json cd) { return create(cd.value());}
 	
+	public static NullJson   create()           { return new NullJson();       }
 	public static StringJson create(String str) { return new StringJson (str); }
 	public static LongJson   create(long l)     { return new LongJson (l);     }
-	public static IntConfigDom    create(int i)      { return new IntConfigDom (i);      }
+	public static IntJson    create(int i)      { return new IntJson (i);      }
 	public static ShortJson  create(short s)    { return new ShortJson (s);    }
 	public static ByteJson   create(byte b)     { return new ByteJson (b);     }	
-	public static DoubleConfigDom create(double d)   { return new DoubleConfigDom (d);   }
-	public static FloatConfigDom  create(float f)    { return new FloatConfigDom (f);    }
+	public static DoubleJson create(double d)   { return new DoubleJson (d);   }
+	public static FloatJson  create(float f)    { return new FloatJson (f);    }
 	public static BoolJson   create(boolean b)  { return new BoolJson (b);     }
 
 	public static ArrayJson create(Object... objs) { return createArray(objs); }
@@ -111,6 +115,23 @@ public class Json {
 	
 	public boolean equals (Json obj) {
 		return this.value() == obj.value();
+	}
+
+	public void addComplement(JsonComplement jsonComplement) {
+		this.complements.add(jsonComplement);
+	}
+	
+	public ArrayList<JsonComplement> getComplements() {
+		return this.complements;
+	}
+	
+	public JsonComplement getComplement(Class search) {
+		for (JsonComplement complement: this.complements) {
+			if (complement.getClass().isAssignableFrom(search)) {
+				return complement;
+			}
+		}
+		return null;
 	}
 	
 	/////////////////////

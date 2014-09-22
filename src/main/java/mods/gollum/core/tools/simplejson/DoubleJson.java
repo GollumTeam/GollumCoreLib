@@ -3,13 +3,12 @@ package mods.gollum.core.tools.simplejson;
 import argo.jdom.JsonNodeBuilder;
 import argo.jdom.JsonNodeBuilders;
 
-public class IntConfigDom extends Json {
+public class DoubleJson extends Json {
 	
-	public IntConfigDom(int i) {
-		this.value = i;
+	public DoubleJson(double d) {
+		this.value = d;
 	}
-	
-	public int intValue () { return (Integer)this.value; }
+	public double doubleValue () { return (Double)this.value; }
 	
 	/////////////////////
 	// Convert to json //
