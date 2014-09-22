@@ -8,16 +8,14 @@ import argo.jdom.JsonNodeBuilders;
 
 public class ArrayJson extends Json {
 	
-	public ArrayList<Json> values = new ArrayList<Json>();
-	
-	public Object value () {
-		return this.values;
+	public ArrayJson () {
+		 this.value = new ArrayList<Json>();
 	}
 	
-	public String strValue()    { return this.values.size()+""; }
-	public boolean boolValue()  { return this.values.size() > 0; }
+	public String strValue()    { return ((ArrayList<Json>)this.value).size()+""; }
+	public boolean boolValue()  { return ((ArrayList<Json>)this.value).size() > 0; }
 	
-	public Json child (int  i) { return (i < values.size())? values.get(i) : create(); }
+	public Json child (int  i) { return (i < ((ArrayList<Json>)value).size()) ? ((ArrayList<Json>)value).get(i) : create(); }
 	public Json child (String  key) { 
 		try  {
 			return child (Integer.parseInt(key));
@@ -26,20 +24,20 @@ public class ArrayJson extends Json {
 		return create(); 
 	}
 
-	public int size() { return this.values.size(); }
+	public int size() { return ((ArrayList<Json>)this.value).size(); }
 	
 	public void add(Json child) {
-		this.values.add(child);
+		((ArrayList<Json>)this.value).add(child);
 	}
 	
-	public boolean equals (ArrayJson obj) {
+	public boolean equals (Object obj) {
 		
-		if (this.size() != obj.size()) {
+		if (this.size() != ((ArrayJson)obj).size()) {
 			return false;
 		}
 		
 		for (int i = 0; i < this.size(); i++) {
-			if (!this.values.get(i).equals (obj.values.get(i))) {
+			if (!((ArrayList<Json>)this.value).get(i).equals (((ArrayList<Json>)((ArrayJson)obj).value).get(i))) {
 				return false;
 			}
 		}
@@ -54,8 +52,8 @@ public class ArrayJson extends Json {
 	public JsonNodeBuilder json() {
 		
 		JsonArrayNodeBuilder ar = JsonNodeBuilders.anArrayBuilder();
-		for (Json value : values) {
-			ar.withElement(value.json());
+		for (Json val : (ArrayList<Json>)this.value) {
+			ar.withElement(val.json());
 		}
 		return ar;
 	}

@@ -25,8 +25,14 @@ public class Json {
 		public Json dom;
 		
 		public EntryObject(String key, Object value) {
+			this(key, create(value));
 		}
-
+		
+		public EntryObject(String key, Json dom) {
+			this.key = key;
+			this.dom = dom;
+		}
+		
 		public EntryObject addComplement(JsonComplement jsonComplement) {
 			this.dom.addComplement(jsonComplement);
 			return this;
@@ -113,8 +119,9 @@ public class Json {
 		this.add (key, create (child));
 	}
 	
-	public boolean equals (Json obj) {
-		return this.value() == obj.value();
+	public boolean equals (Object obj) {
+		if (obj instanceof Json) { return this.value().equals(((Json)obj).value());	}
+		return false;
 	}
 
 	public void addComplement(JsonComplement jsonComplement) {

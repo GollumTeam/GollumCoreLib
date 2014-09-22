@@ -1,5 +1,6 @@
-package mods.gollum.core.client.gui.config;
+package mods.gollum.core.client.gui.config.entries;
 
+import mods.gollum.core.client.gui.config.GuiFieldConfig;
 import net.minecraft.client.gui.GuiScreen;
 import cpw.mods.fml.client.config.GuiConfig;
 import cpw.mods.fml.client.config.GuiConfigEntries;
@@ -14,6 +15,6 @@ public class GollumCategoryEntry extends CategoryEntry {
 
 	@Override
 	protected GuiScreen buildChildScreen() {
-		return new GuiGollumConfig(this.owningScreen, this.name);
+		return new GuiFieldConfig(this.owningScreen, this.name);
 	}
 }
