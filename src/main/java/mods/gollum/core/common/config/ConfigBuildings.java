@@ -1,7 +1,7 @@
 package mods.gollum.core.common.config;
 
 import mods.gollum.core.ModGollumCoreLib;
-import mods.gollum.core.common.config.container.BuildingConfigType;
+import mods.gollum.core.common.config.type.BuildingConfigType;
 
 
 public class ConfigBuildings extends Config {

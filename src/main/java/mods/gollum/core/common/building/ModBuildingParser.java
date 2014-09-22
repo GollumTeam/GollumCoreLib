@@ -6,8 +6,8 @@ import java.util.Map.Entry;
 
 import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.common.config.ConfigBuildings;
-import mods.gollum.core.common.config.container.BuildingConfigType;
-import mods.gollum.core.common.config.container.BuildingConfigType.Group;
+import mods.gollum.core.common.config.type.BuildingConfigType;
+import mods.gollum.core.common.config.type.BuildingConfigType.Group;
 import mods.gollum.core.common.resource.ResourceLoader;
 import argo.jdom.JdomParser;
 import argo.jdom.JsonRootNode;

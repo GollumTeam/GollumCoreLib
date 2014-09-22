@@ -1,15 +1,11 @@
-package mods.gollum.core.common.config.container;
+package mods.gollum.core.common.config.type;
 
-import java.util.List;
-
-import mods.gollum.core.common.config.IConfigJsonClass;
+import mods.gollum.core.common.config.dom.ConfigDom;
+import mods.gollum.core.common.config.dom.ConfigDom.EntryObject;
 import mods.gollum.core.tools.registered.RegisteredObjects;
 import net.minecraft.item.ItemStack;
-import argo.jdom.JsonNode;
-import argo.jdom.JsonNodeFactories;
-import argo.jdom.JsonRootNode;
 
-public class ItemStackConfigType implements IConfigJsonClass {
+public class ItemStackConfigType implements IConfigJsonType {
 	
 	private String registerName;
 	private int metadata;
@@ -34,21 +30,18 @@ public class ItemStackConfigType implements IConfigJsonClass {
 	}
 
 	@Override
-	public void readConfig(JsonNode json)  throws Exception {
-		
-		List<JsonNode> list = json.getElements();
-		
-		this.registerName = list.get(0).getText();
-		this.metadata     = Integer.parseInt (list.get(1).getNumberValue());
-		this.number       = Integer.parseInt (list.get(2).getNumberValue());
+	public void readConfig(ConfigDom dom)  throws Exception {
+		this.registerName = dom.child("registerName").strValue();
+		this.metadata     = dom.child("metadata")    .intValue();
+		this.number       = dom.child("number")      .intValue();
 	}
 
 	@Override
-	public JsonRootNode writeConfig() {
-		return JsonNodeFactories.array(
-			JsonNodeFactories.string(this.registerName),
-			JsonNodeFactories.number(this.metadata),
-			JsonNodeFactories.number(this.number)
+	public ConfigDom writeConfig() {
+		return ConfigDom.create (
+			new EntryObject ("registerName", this.registerName),
+			new EntryObject ("metadata"    , this.metadata),
+			new EntryObject ("number"      , this.number)
 		);
 	}
 	

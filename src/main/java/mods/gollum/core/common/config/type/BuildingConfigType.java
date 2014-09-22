@@ -1,4 +1,4 @@
-package mods.gollum.core.common.config.container;
+package mods.gollum.core.common.config.type;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,10 +6,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import mods.gollum.core.ModGollumCoreLib;
-import mods.gollum.core.common.config.IConfigJsonClass;
 import mods.gollum.core.common.config.IConfigMerge;
-import mods.gollum.core.common.config.container.BuildingConfigType.Group.Building;
-import mods.gollum.core.common.config.container.BuildingConfigType.Group.Building.Dimention;
+import mods.gollum.core.common.config.type.BuildingConfigType.Group.Building;
+import mods.gollum.core.common.config.type.BuildingConfigType.Group.Building.Dimention;
 import mods.gollum.core.tools.registered.RegisteredObjects;
 import net.minecraft.block.Block;
 import argo.jdom.JsonArrayNodeBuilder;

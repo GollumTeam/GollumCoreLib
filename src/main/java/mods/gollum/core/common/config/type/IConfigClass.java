@@ -1,4 +1,4 @@
-package mods.gollum.core.common.config;
+package mods.gollum.core.common.config.type;
 
 public interface IConfigClass {
 	

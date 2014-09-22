@@ -1,7 +1,6 @@
-package mods.gollum.core.common.config.container;
+package mods.gollum.core.common.config.type;
 
 import mods.gollum.core.ModGollumCoreLib;
-import mods.gollum.core.common.config.IConfigJsonClass;
 import argo.jdom.JsonNode;
 import argo.jdom.JsonNodeFactories;
 import argo.jdom.JsonRootNode;

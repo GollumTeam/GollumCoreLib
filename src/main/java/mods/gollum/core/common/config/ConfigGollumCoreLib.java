@@ -1,6 +1,7 @@
 package mods.gollum.core.common.config;
 
 import mods.gollum.core.ModGollumCoreLib;
+import mods.gollum.core.common.config.type.ItemStackConfigType;
 
 
 public class ConfigGollumCoreLib extends Config {
@@ -24,6 +25,8 @@ public class ConfigGollumCoreLib extends Config {
 			
 	@ConfigProp (info = "Display version checker message")
 	public boolean versionChecker = true;
+	
+	@ConfigProp(group="Test") public  ItemStackConfigType itemStack1 = new ItemStackConfigType("minecraft:planks", 10, 3);
 	
 	@ConfigProp(group="Test") public String  s1 = "AAA";
 	@ConfigProp(group="Test") public long    l1 = 1111;

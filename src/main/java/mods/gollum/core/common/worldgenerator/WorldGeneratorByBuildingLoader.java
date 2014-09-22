@@ -7,7 +7,7 @@ import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.common.building.Building;
 import mods.gollum.core.common.building.BuildingParser;
 import mods.gollum.core.common.building.ModBuildingParser;
-import mods.gollum.core.common.config.container.BuildingConfigType;
+import mods.gollum.core.common.config.type.BuildingConfigType;
 import cpw.mods.fml.common.Loader;
 
 public class WorldGeneratorByBuildingLoader {

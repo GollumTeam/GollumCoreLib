@@ -1,4 +1,4 @@
-package mods.gollum.core.common.config;
+package mods.gollum.core.common.config.type;
 
 import argo.jdom.JsonNode;
 import argo.jdom.JsonRootNode;
