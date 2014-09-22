@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.regex.Pattern;
 
 import argo.jdom.JsonNode;
 import mods.gollum.core.common.config.ConfigLoader;
@@ -151,16 +152,17 @@ public class GuiGollumConfig extends GuiConfig {
 							}
 							
 							prop.comment = anno.info();
-							prop.setValidValues(anno.validValues());
-							prop.setRequiresMcRestart(anno.mcRestart());
-							prop.setRequiresWorldRestart(anno.worldRestart());
-							prop.setIsListLengthFixed(anno.isListLengthFixed ());
+							prop
+								.setRequiresMcRestart(anno.mcRestart())
+								.setRequiresWorldRestart(anno.worldRestart())
+								.setIsListLengthFixed(anno.isListLengthFixed ())
+							;
 							
 							if (!anno.minValue ().equals("")) {
 								try {
 									prop.setMinValue(Integer.parseInt(anno.minValue ()));
 								} catch (Exception e) {
-									try { prop.setMinValue(Double.parseDouble(anno.minValue ())); } catch (Exception e2) {}
+									try { prop.setMinValue(Double.parseDouble(anno.minValue())); } catch (Exception e2) {}
 								}
 							}
 							
@@ -168,13 +170,26 @@ public class GuiGollumConfig extends GuiConfig {
 								try {
 									prop.setMaxValue(Integer.parseInt(anno.maxValue ()));
 								} catch (Exception e) {
-									try { prop.setMaxValue(Double.parseDouble(anno.maxValue ())); } catch (Exception e2) {}
+									try { prop.setMaxValue(Double.parseDouble(anno.maxValue())); } catch (Exception e2) {}
 								}
 							}
 							
 							if (!anno.maxListLength ().equals("")) {
-								try { prop.setMaxListLength(Integer.parseInt(anno.maxListLength ())); } catch (Exception e) {}
+								try { prop.setMaxListLength(Integer.parseInt(anno.maxListLength())); } catch (Exception e) {}
 							}
+							if (!anno.pattern ().equals("")) {
+								try { prop.setValidationPattern(Pattern.compile(anno.pattern())); } catch (Exception e) {}
+							}
+							if (
+								anno.validValues ().length > 1 ||
+								(
+									anno.validValues ().length == 1 && 
+									!anno.validValues ()[0].equals("")
+								)
+							) {
+								prop.setValidValues(anno.validValues());
+							}
+							
 							
 							ConfigElement<Integer> element = new ConfigElement<Integer>(prop);
 							

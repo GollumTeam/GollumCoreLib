@@ -3,6 +3,7 @@ package mods.gollum.core.common.config;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.regex.Pattern;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ java.lang.annotation.ElementType.FIELD })
@@ -25,4 +26,6 @@ public @interface ConfigProp {
 	
 	public abstract boolean mcRestart()    default false;
 	public abstract boolean worldRestart() default false;
+	
+	public abstract String pattern() default "";
 }

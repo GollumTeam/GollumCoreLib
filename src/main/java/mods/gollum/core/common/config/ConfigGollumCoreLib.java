@@ -67,7 +67,13 @@ public class ConfigGollumCoreLib extends Config {
 	public String [] sAr2 = new String [] { "AAA" , "BBB" , "CCC" };
 	@ConfigProp(
 		group="Test",
-		isListLengthFixed = true
+		isListLengthFixed = true,
+		pattern="\\d*"
 	) 
-	public String [] sAr3 = new String [] { "aaa" , "bbb" , "ccc" };
+	public String [] sAr3 = new String [] { "123" , "465" , "789" };
+	@ConfigProp(
+		group="Test",
+		pattern="\\d*"
+	) 
+	public String s2 = "123";
 }
