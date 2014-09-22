@@ -1,4 +1,4 @@
-package mods.gollum.core.common.config.dom;
+package mods.gollum.core.tools.simplejson;
 
 import java.lang.reflect.Array;
 import java.util.Map.Entry;
@@ -11,14 +11,14 @@ import argo.jdom.JsonNodeBuilders;
 import argo.jdom.JsonStringNode;
 import mods.gollum.core.common.config.type.ItemStackConfigType;
 
-public class ConfigDom {
+public class Json {
 	
 	public Object value;
 	
 	public static class EntryObject {
 		
 		public String key;
-		public ConfigDom dom;
+		public Json dom;
 
 		public EntryObject(String key, Object value) {
 			this.key = key;
@@ -26,44 +26,44 @@ public class ConfigDom {
 		}
 	}
 
-	public static NullConfigDom create() {
-		return new NullConfigDom();
+	public static NullJson create() {
+		return new NullJson();
 	}
 	
-	public static ConfigDom create(ConfigDom cd) { return create(cd.value());}
+	public static Json create(Json cd) { return create(cd.value());}
 	
-	public static StringConfigDom create(String str) { return new StringConfigDom (str); }
-	public static LongConfigDom   create(long l)     { return new LongConfigDom (l);     }
+	public static StringJson create(String str) { return new StringJson (str); }
+	public static LongJson   create(long l)     { return new LongJson (l);     }
 	public static IntConfigDom    create(int i)      { return new IntConfigDom (i);      }
-	public static ShortConfigDom  create(short s)    { return new ShortConfigDom (s);    }
-	public static ByteConfigDom   create(byte b)     { return new ByteConfigDom (b);     }	
+	public static ShortJson  create(short s)    { return new ShortJson (s);    }
+	public static ByteJson   create(byte b)     { return new ByteJson (b);     }	
 	public static DoubleConfigDom create(double d)   { return new DoubleConfigDom (d);   }
 	public static FloatConfigDom  create(float f)    { return new FloatConfigDom (f);    }
-	public static BoolConfigDom   create(boolean b)  { return new BoolConfigDom (b);     }
+	public static BoolJson   create(boolean b)  { return new BoolJson (b);     }
 
-	public static ArrayConfigDom create(Object... objs) { return createArray(objs); }
-	public static ArrayConfigDom createArray(Object... objs) {
-		ArrayConfigDom ar = new ArrayConfigDom ();
+	public static ArrayJson create(Object... objs) { return createArray(objs); }
+	public static ArrayJson createArray(Object... objs) {
+		ArrayJson ar = new ArrayJson ();
 		for (Object i : objs) {
 			ar.add(i);
 		}
 		return ar;
 	}
 
-	public static ObjectConfigDom create(EntryObject... objs) { return createObject(objs); }
-	public static ObjectConfigDom createObject(EntryObject... objs) {
+	public static ObjectJson create(EntryObject... objs) { return createObject(objs); }
+	public static ObjectJson createObject(EntryObject... objs) {
 		
-		ObjectConfigDom o = new ObjectConfigDom ();
+		ObjectJson o = new ObjectJson ();
 		for (EntryObject entry : objs) {
 			o.add(entry.key, entry.dom);
 		}
 		return o;
 	}
 	
-	public static ConfigDom create(Object o) {
+	public static Json create(Object o) {
 		
 		if (o.getClass().isArray()) {
-			ArrayConfigDom ar = new ArrayConfigDom ();
+			ArrayJson ar = new ArrayJson ();
 			for (int i = 0; i < Array.getLength(o); i++) {
 				ar.add(Array.get(o, i));
 			}
@@ -96,20 +96,20 @@ public class ConfigDom {
 	
 	public int size() { return 0; }
 
-	public ConfigDom child (int  i)      { return create(); }
-	public ConfigDom child (String  key) { return create(); }
+	public Json child (int  i)      { return create(); }
+	public Json child (String  key) { return create(); }
 
-	public void add(ConfigDom child) {}
+	public void add(Json child) {}
 	public void add(Object child) {
 		this.add(create (child));
 	}
 	
-	public void add(String key, ConfigDom child) {}
+	public void add(String key, Json child) {}
 	public void add(String key, Object child) {
 		this.add (key, create (child));
 	}
 	
-	public boolean equals (ConfigDom obj) {
+	public boolean equals (Json obj) {
 		return this.value() == obj.value();
 	}
 	
@@ -117,17 +117,17 @@ public class ConfigDom {
 	// Convert to json //
 	/////////////////////
 	
-	public static ConfigDom create (JsonNode json) {
+	public static Json create (JsonNode json) {
 		
 		if (json.isObjectNode()) {
-			ObjectConfigDom o = createObject();
+			ObjectJson o = createObject();
 			for (Entry<JsonStringNode, JsonNode> entry : json.getFields().entrySet()) {
 				o.add(entry.getKey().getText(), entry.getValue());
 			}
 			return o;
 		}
 		if (json.isArrayNode()) {
-			ArrayConfigDom ar = createArray ();
+			ArrayJson ar = createArray ();
 			for (JsonNode child: json.getElements()) {
 				ar.add(child);
 			}

@@ -1,4 +1,4 @@
-package mods.gollum.core.common.config.dom;
+package mods.gollum.core.tools.simplejson;
 
 import java.util.ArrayList;
 
@@ -6,9 +6,9 @@ import argo.jdom.JsonArrayNodeBuilder;
 import argo.jdom.JsonNodeBuilder;
 import argo.jdom.JsonNodeBuilders;
 
-public class ArrayConfigDom extends ConfigDom {
+public class ArrayJson extends Json {
 	
-	public ArrayList<ConfigDom> values = new ArrayList<ConfigDom>();
+	public ArrayList<Json> values = new ArrayList<Json>();
 	
 	public Object value () {
 		return this.values;
@@ -17,8 +17,8 @@ public class ArrayConfigDom extends ConfigDom {
 	public String strValue()    { return this.values.size()+""; }
 	public boolean boolValue()  { return this.values.size() > 0; }
 	
-	public ConfigDom child (int  i) { return (i < values.size())? values.get(i) : create(); }
-	public ConfigDom child (String  key) { 
+	public Json child (int  i) { return (i < values.size())? values.get(i) : create(); }
+	public Json child (String  key) { 
 		try  {
 			return child (Integer.parseInt(key));
 		} catch (Exception e) {
@@ -28,11 +28,11 @@ public class ArrayConfigDom extends ConfigDom {
 
 	public int size() { return this.values.size(); }
 	
-	public void add(ConfigDom child) {
+	public void add(Json child) {
 		this.values.add(child);
 	}
 	
-	public boolean equals (ArrayConfigDom obj) {
+	public boolean equals (ArrayJson obj) {
 		
 		if (this.size() != obj.size()) {
 			return false;
@@ -54,7 +54,7 @@ public class ArrayConfigDom extends ConfigDom {
 	public JsonNodeBuilder json() {
 		
 		JsonArrayNodeBuilder ar = JsonNodeBuilders.anArrayBuilder();
-		for (ConfigDom value : values) {
+		for (Json value : values) {
 			ar.withElement(value.json());
 		}
 		return ar;

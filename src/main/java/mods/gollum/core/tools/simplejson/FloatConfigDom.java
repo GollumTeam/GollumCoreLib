@@ -1,15 +1,15 @@
-package mods.gollum.core.common.config.dom;
+package mods.gollum.core.tools.simplejson;
 
 import argo.jdom.JsonNodeBuilder;
 import argo.jdom.JsonNodeBuilders;
 
-public class ByteConfigDom extends ConfigDom {
+public class FloatConfigDom extends Json {
 	
-	public ByteConfigDom(byte b) {
-		this.value = b;
+	public FloatConfigDom(float f) {
+		this.value = f;
 	}
 	
-	public byte byteValue () { return (Byte)this.value; }
+	public float floatValue () { return (Float)this.value; 	}
 	
 	/////////////////////
 	// Convert to json //

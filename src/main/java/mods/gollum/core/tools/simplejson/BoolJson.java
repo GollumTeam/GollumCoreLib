@@ -1,11 +1,11 @@
-package mods.gollum.core.common.config.dom;
+package mods.gollum.core.tools.simplejson;
 
 import argo.jdom.JsonNodeBuilder;
 import argo.jdom.JsonNodeBuilders;
 
-public class BoolConfigDom extends ConfigDom {
+public class BoolJson extends Json {
 	
-	public BoolConfigDom(boolean b) {
+	public BoolJson(boolean b) {
 		this.value = b;
 	}
 	

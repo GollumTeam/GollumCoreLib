@@ -1,11 +1,11 @@
 package mods.gollum.core.common.config.type;
 
-import mods.gollum.core.common.config.dom.ConfigDom;
+import mods.gollum.core.tools.simplejson.Json;
 
 public interface IConfigJsonType {
 	
-	public void readConfig (ConfigDom json) throws Exception;
+	public void readConfig (Json json) throws Exception;
 
-	public ConfigDom writeConfig();
+	public Json writeConfig();
 	
 }

@@ -1,11 +1,11 @@
-package mods.gollum.core.common.config.dom;
+package mods.gollum.core.tools.simplejson;
 
 import argo.jdom.JsonNodeBuilder;
 import argo.jdom.JsonNodeBuilders;
 
-public class ShortConfigDom extends ConfigDom {
+public class ShortJson extends Json {
 	
-	public ShortConfigDom(short s) {
+	public ShortJson(short s) {
 		this.value = s;
 	}
 	

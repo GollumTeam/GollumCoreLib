@@ -1,4 +1,4 @@
-package mods.gollum.core.common.config.dom;
+package mods.gollum.core.tools.simplejson;
 
 import java.util.ArrayList;
 
@@ -6,9 +6,9 @@ import argo.jdom.JsonNode;
 import argo.jdom.JsonNodeBuilder;
 import argo.jdom.JsonNodeBuilders;
 
-public class StringConfigDom extends ConfigDom {
+public class StringJson extends Json {
 
-	public StringConfigDom(String s) {
+	public StringJson(String s) {
 		this.value = s;
 	}
 	

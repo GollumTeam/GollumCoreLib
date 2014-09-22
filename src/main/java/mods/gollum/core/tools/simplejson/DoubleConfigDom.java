@@ -1,9 +1,9 @@
-package mods.gollum.core.common.config.dom;
+package mods.gollum.core.tools.simplejson;
 
 import argo.jdom.JsonNodeBuilder;
 import argo.jdom.JsonNodeBuilders;
 
-public class DoubleConfigDom extends ConfigDom {
+public class DoubleConfigDom extends Json {
 	
 	public DoubleConfigDom(double d) {
 		this.value = d;
