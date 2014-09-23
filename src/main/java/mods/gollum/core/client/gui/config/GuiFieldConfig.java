@@ -22,6 +22,8 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ChatComponentText;
 import cpw.mods.fml.client.GuiModList;
 import cpw.mods.fml.client.config.DummyConfigElement.DummyCategoryElement;
+import cpw.mods.fml.client.config.GuiConfigEntries.CategoryEntry;
+import cpw.mods.fml.client.config.GuiConfigEntries.IConfigEntry;
 import cpw.mods.fml.client.config.GuiButtonExt;
 import cpw.mods.fml.client.config.GuiCheckBox;
 import cpw.mods.fml.client.config.GuiConfig;

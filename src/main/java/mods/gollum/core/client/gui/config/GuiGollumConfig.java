@@ -68,25 +68,25 @@ public abstract class GuiGollumConfig extends GuiConfig {
 	@Override
 	public void initGui() {
 		super.initGui();
-		
-		try {
-			Field f = GuiConfig.class.getDeclaredField("chkApplyGlobally");
-			f.setAccessible(true);
-			((GuiCheckBox)f.get(this)).visible = false;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		int undoGlyphWidth  = mc.fontRenderer.getStringWidth(UNDO_CHAR) * 2;
-		int resetGlyphWidth = mc.fontRenderer.getStringWidth(RESET_CHAR) * 2;
-		int doneWidth       = Math.max(mc.fontRenderer.getStringWidth(I18n.format("gui.done")) + 20, 100);
-		int undoWidth       = mc.fontRenderer.getStringWidth(" " + I18n.format("fml.configgui.tooltip.undoChanges")) + undoGlyphWidth + 20;
-		int resetWidth      = mc.fontRenderer.getStringWidth(" " + I18n.format("fml.configgui.tooltip.resetToDefault")) + resetGlyphWidth + 20;
-		int buttonWidthHalf = (doneWidth + 5 + undoWidth + 5 + resetWidth + 5) / 2;
-
-		((GuiButtonExt)this.buttonList.get(0)).xPosition = this.width / 2 - buttonWidthHalf;
-		((GuiButtonExt)this.buttonList.get(1)).xPosition = this.width / 2 - buttonWidthHalf + doneWidth + 5 + undoWidth + 5;
-		((GuiButtonExt)this.buttonList.get(2)).xPosition = this.width / 2 - buttonWidthHalf + doneWidth + 5;
+//		
+//		try {
+//			Field f = GuiConfig.class.getDeclaredField("chkApplyGlobally");
+//			f.setAccessible(true);
+//			((GuiCheckBox)f.get(this)).visible = false;
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		
+//		int undoGlyphWidth  = mc.fontRenderer.getStringWidth(UNDO_CHAR) * 2;
+//		int resetGlyphWidth = mc.fontRenderer.getStringWidth(RESET_CHAR) * 2;
+//		int doneWidth       = Math.max(mc.fontRenderer.getStringWidth(I18n.format("gui.done")) + 20, 100);
+//		int undoWidth       = mc.fontRenderer.getStringWidth(" " + I18n.format("fml.configgui.tooltip.undoChanges")) + undoGlyphWidth + 20;
+//		int resetWidth      = mc.fontRenderer.getStringWidth(" " + I18n.format("fml.configgui.tooltip.resetToDefault")) + resetGlyphWidth + 20;
+//		int buttonWidthHalf = (doneWidth + 5 + undoWidth + 5 + resetWidth + 5) / 2;
+//		
+//		((GuiButtonExt)this.buttonList.get(0)).xPosition = this.width / 2 - buttonWidthHalf;
+//		((GuiButtonExt)this.buttonList.get(1)).xPosition = this.width / 2 - buttonWidthHalf + doneWidth + 5 + undoWidth + 5;
+//		((GuiButtonExt)this.buttonList.get(2)).xPosition = this.width / 2 - buttonWidthHalf + doneWidth + 5;
 		
 	}
 	
