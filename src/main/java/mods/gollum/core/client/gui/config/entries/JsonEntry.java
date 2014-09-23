@@ -19,7 +19,6 @@ public class JsonEntry extends ButtonEntry {
 	protected final Json defaultValue;
 	protected final Json beforeValue;
 	protected Json currentValue;
-//	protected Map<Object, String> selectableValues;
 
 	public JsonEntry(GuiConfig parent, GuiConfigEntries entryList, IConfigElement<String> configElement) {
 		super(parent, entryList, configElement);
@@ -28,19 +27,11 @@ public class JsonEntry extends ButtonEntry {
 		beforeValue   = (Json)configElement.get();
 		currentValue  = (Json)configElement.get();
 		
-//		this.selectableValues = new HashMap<Object, String>();
-//		this.selectableValues.put("cool", "Display cool");
-		
 		updateValueButtonText();
 	}
 
 	@Override
 	public void updateValueButtonText() {
-//		if (this.selectableValues.containsKey(currentValue)) {
-//			this.btnValue.displayString = this.selectableValues.get(currentValue);
-//		} else {
-//			this.btnValue.displayString = currentValue.toString();
-//		}
 		this.btnValue.displayString = "JSON ELEMENT TODO"; //  TODO
 	}
 
@@ -50,10 +41,6 @@ public class JsonEntry extends ButtonEntry {
 		Json dv = (Json)this.configElement.getDefault();
 		
 		mc.displayGuiScreen(new GuiJsonConfig(this.owningScreen, this.name, currentValue, defaultValue));
-		
-//		mc.displayGuiScreen(new GuiSelectString(this.owningScreen,
-//				configElement, slotIndex, selectableValues, currentValue,
-//				enabled()));
 	}
 
 	public void setValueFromChildScreen(Json newValue) {
@@ -110,14 +97,4 @@ public class JsonEntry extends ButtonEntry {
 	public String[] getCurrentValues() {
 		return new String[] { getCurrentValue() };
 	}
-
-//	public JsonEntry(GuiConfig owningScreen, GuiConfigEntries owningEntryList, IConfigElement jsonElement) {
-//		super(owningScreen, owningEntryList, jsonElement);
-//	}
-//
-//	@Override
-//	protected GuiScreen buildChildScreen() {
-//
-
-//	}
 }

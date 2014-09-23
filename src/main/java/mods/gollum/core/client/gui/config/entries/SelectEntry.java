@@ -36,6 +36,9 @@ public abstract class SelectEntry extends ButtonEntry {
 	@Override
 	public void updateValueButtonText() {
 		this.btnValue.displayString = currentValue.toString();
+		if (this.selectableValues.containsKey(currentValue)) {
+			this.btnValue.displayString = this.selectableValues.get(currentValue);
+		}
 	}
 
 	@Override

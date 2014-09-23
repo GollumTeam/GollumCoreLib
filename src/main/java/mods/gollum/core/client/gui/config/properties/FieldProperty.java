@@ -74,7 +74,7 @@ public class FieldProperty extends GollumProperty {
 				if (f.getType().isAssignableFrom(Character.TYPE) || f.getType().isAssignableFrom(Character.class)) {
 					this.setLimitChar();
 				}
-				
+
 				this.markUnchange();
 				
 				this.isValid = true;
@@ -82,6 +82,9 @@ public class FieldProperty extends GollumProperty {
 			}
 			
 			if (IConfigJsonType.class.isAssignableFrom(f.getType())) {
+				
+				this.markUnchange();
+				
 				this.isValid = true;
 				this.isNative = false;
 			}
@@ -153,9 +156,13 @@ public class FieldProperty extends GollumProperty {
 	public IConfigElement createCustomConfigElement() {
 		try {
 			if (f.get(this.configLoad.config) instanceof IConfigJsonType) {
+				
 				Json value = ((IConfigJsonType)f.get(this.configLoad.config)).writeConfig();
 				Json defaultValue = ((IConfigJsonType)f.get(this.configLoad.config)).writeConfig();
-				return new CustomElement(JsonEntry.class, f.getName(), this.mod.i18n().trans("config."+f.getName()), value, defaultValue);
+				// TODO set Value
+				
+				this.setName(f.getName());
+				return new CustomElement(JsonEntry.class, this, value, defaultValue);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

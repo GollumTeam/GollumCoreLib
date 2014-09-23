@@ -25,7 +25,7 @@ public abstract class GollumProperty extends Property {
 
 	protected boolean isValid     = false;
 	protected boolean isNative = false;
-	protected GollumMod mod;
+	public GollumMod mod;
 	protected ConfigProp anno;
 	private Type type;
 	
@@ -165,11 +165,11 @@ public abstract class GollumProperty extends Property {
 			if (this.isNative) {
 				
 				if (this.anno.type() == ConfigProp.Type.ITEM) {
-					return new CustomElement(ItemEntry.class, this.getName(), this.mod.i18n().trans("config."+this.getName()), this.getString(), this.getDefault());
+					return new CustomElement(ItemEntry.class, this);
 				} else 
 				
 				if (this.anno.type() == ConfigProp.Type.BLOCK) {
-					return new CustomElement(BlockEntry.class, this.getName(), this.mod.i18n().trans("config."+this.getName()), this.getString(), this.getDefault());
+					return new CustomElement(BlockEntry.class, this);
 				} else {
 					
 					return new ConfigElement(this);
