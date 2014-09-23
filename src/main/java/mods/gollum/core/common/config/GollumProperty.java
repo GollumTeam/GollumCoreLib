@@ -40,14 +40,29 @@ public class GollumProperty extends Property {
 				Object valueDefault = f.get(configLoad.configDefault);
 				String[] valuesDefault = null;
 				
+				if (f.getType().isAssignableFrom(Character.TYPE) || f.getType().isAssignableFrom(Character.class)) { // Fixe affichage
+					value        = (byte)((Character)value).charValue();
+					valueDefault = (byte)((Character)valueDefault).charValue();
+				}
+				
 				if (value.getClass().isArray()) {
 					values = new String[Array.getLength(value)];
 					for (int i = 0; i < Array.getLength(value); i++) {
-						values[i] = Array.get(value, i).toString();
+						
+						Object o = Array.get(value, i);
+						if (f.getType().isAssignableFrom(char[].class) || f.getType().isAssignableFrom(Character[].class)) { // Fixe affichage
+							o = (byte)((Character)o).charValue();
+						}
+						values[i] = o.toString();
 					}
 					valuesDefault = new String[Array.getLength(valueDefault)];
 					for (int i = 0; i < Array.getLength(valueDefault); i++) {
-						valuesDefault[i] = Array.get(valueDefault, i).toString();
+						
+						Object o = Array.get(valueDefault, i);
+						if (f.getType().isAssignableFrom(char[].class) || f.getType().isAssignableFrom(Character[].class)) { // Fixe affichage
+							o = (byte)((Character)o).charValue();
+						}
+						valuesDefault[i] = o.toString();
 					}
 				}
 				
@@ -113,7 +128,15 @@ public class GollumProperty extends Property {
 					this.setValidValues(anno.validValues());
 				}
 				
-				// Limit short float byte
+				// Limit short byte char
+				if (f.getType().isAssignableFrom(Short.TYPE) || f.getType().isAssignableFrom(Short.class)) {
+					if (Long.parseLong(this.getMinValue()) < -32768L) {
+						this.setMinValue(-32768);
+					}
+					if (Long.parseLong(this.getMaxValue()) > 32767) {
+						this.setMaxValue(32767);
+					}
+				}
 				if (f.getType().isAssignableFrom(Byte.TYPE) || f.getType().isAssignableFrom(Byte.class)) {
 					if (Long.parseLong(this.getMinValue()) < -128L) {
 						this.setMinValue(-128);
@@ -122,12 +145,12 @@ public class GollumProperty extends Property {
 						this.setMaxValue(127);
 					}
 				}
-				if (f.getType().isAssignableFrom(Short.TYPE) || f.getType().isAssignableFrom(Short.class)) {
-					if (Long.parseLong(this.getMinValue()) < -32768L) {
-						this.setMinValue(-32768);
+				if (f.getType().isAssignableFrom(Character.TYPE) || f.getType().isAssignableFrom(Character.class)) {
+					if (Long.parseLong(this.getMinValue()) < 0) {
+						this.setMinValue(0);
 					}
-					if (Long.parseLong(this.getMaxValue()) > 32767) {
-						this.setMaxValue(32767);
+					if (Long.parseLong(this.getMaxValue()) > 15L) {
+						this.setMaxValue(15);
 					}
 				}
 				
@@ -167,23 +190,27 @@ public class GollumProperty extends Property {
 			type = Property.Type.STRING;
 		}
 		if (
-			f.getType().isAssignableFrom(Long.TYPE      ) ||
-			f.getType().isAssignableFrom(Integer.TYPE   ) ||
-			f.getType().isAssignableFrom(Short.TYPE     ) ||
-			f.getType().isAssignableFrom(Byte.TYPE      ) ||
-			f.getType().isAssignableFrom(Long.class     ) ||
-			f.getType().isAssignableFrom(Integer.class  ) ||
-			f.getType().isAssignableFrom(Short.class    ) ||
-			f.getType().isAssignableFrom(Byte.class     ) ||
+			f.getType().isAssignableFrom(Long.TYPE        ) ||
+			f.getType().isAssignableFrom(Integer.TYPE     ) ||
+			f.getType().isAssignableFrom(Short.TYPE       ) ||
+			f.getType().isAssignableFrom(Byte.TYPE        ) ||
+			f.getType().isAssignableFrom(Character.TYPE   ) ||
+			f.getType().isAssignableFrom(Long.class       ) ||
+			f.getType().isAssignableFrom(Integer.class    ) ||
+			f.getType().isAssignableFrom(Short.class      ) ||
+			f.getType().isAssignableFrom(Byte.class       ) ||
+			f.getType().isAssignableFrom(Character.class  ) ||
 			
-			f.getType().isAssignableFrom(long[].class   ) ||
-			f.getType().isAssignableFrom(int[].class    ) ||
-			f.getType().isAssignableFrom(short[].class  ) ||
-			f.getType().isAssignableFrom(byte[].class   ) ||
-			f.getType().isAssignableFrom(Long[].class   ) ||
-			f.getType().isAssignableFrom(Integer[].class) ||
-			f.getType().isAssignableFrom(Short[].class  ) ||
-			f.getType().isAssignableFrom(Byte[].class   )
+			f.getType().isAssignableFrom(long[].class     ) ||
+			f.getType().isAssignableFrom(int[].class      ) ||
+			f.getType().isAssignableFrom(short[].class    ) ||
+			f.getType().isAssignableFrom(byte[].class     ) ||
+			f.getType().isAssignableFrom(char[].class     ) ||
+			f.getType().isAssignableFrom(Long[].class     ) ||
+			f.getType().isAssignableFrom(Integer[].class  ) ||
+			f.getType().isAssignableFrom(Short[].class    ) ||
+			f.getType().isAssignableFrom(Byte[].class     ) ||
+			f.getType().isAssignableFrom(Character[].class)
 		) {
 			type = Property.Type.INTEGER;
 		}

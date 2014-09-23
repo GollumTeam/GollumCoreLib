@@ -11,7 +11,7 @@ import net.minecraft.item.ItemStack;
 public class ItemStackConfigType implements IConfigJsonType {
 	
 	private String registerName;
-	private int metadata;
+	private char metadata;
 	private int number;
 	
 	public ItemStackConfigType() throws Exception {
@@ -29,13 +29,13 @@ public class ItemStackConfigType implements IConfigJsonType {
 	public ItemStackConfigType(String registerName, int number, int metadata) {
 		this.registerName = registerName;
 		this.number = number;
-		this.metadata = metadata;
+		this.metadata = (char)(metadata & 0x000000FF);
 	}
 
 	@Override
 	public void readConfig(Json dom)  throws Exception {
 		this.registerName = dom.child("registerName").strValue();
-		this.metadata     = dom.child("metadata")    .intValue();
+		this.metadata     = dom.child("metadata")    .charValue();
 		this.number       = dom.child("number")      .intValue();
 	}
 
