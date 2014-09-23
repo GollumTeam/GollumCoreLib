@@ -62,7 +62,7 @@ public class GollumProperty extends Property {
 						if (f.getType().isAssignableFrom(char[].class) || f.getType().isAssignableFrom(Character[].class)) { // Fixe affichage
 							o = (byte)((Character)o).charValue();
 						}
-						valuesDefault[i] = o.toString();
+						valuesDefault[i] = Array.get(o, i).toString();
 					}
 				}
 				
