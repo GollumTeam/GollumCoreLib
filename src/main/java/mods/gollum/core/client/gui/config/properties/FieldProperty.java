@@ -2,14 +2,13 @@ package mods.gollum.core.client.gui.config.properties;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
-import java.util.regex.Pattern;
 
-import mods.gollum.core.client.gui.config.JsonElement;
+import mods.gollum.core.client.gui.config.CustomElement;
+import mods.gollum.core.client.gui.config.entries.JsonEntry;
 import mods.gollum.core.common.config.ConfigLoader.ConfigLoad;
 import mods.gollum.core.common.config.ConfigProp;
 import mods.gollum.core.common.config.type.IConfigJsonType;
 import mods.gollum.core.tools.simplejson.Json;
-import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.common.config.Property;
 import cpw.mods.fml.client.config.IConfigElement;
 
@@ -153,9 +152,11 @@ public class FieldProperty extends GollumProperty {
 	@Override
 	public IConfigElement createCustomConfigElement() {
 		try {
-			Json value = ((IConfigJsonType)f.get(this.configLoad.config)).writeConfig();
-			Json defaultValue = ((IConfigJsonType)f.get(this.configLoad.config)).writeConfig();
-			return new JsonElement(f.getName(), this.configLoad.mod.i18n().trans("config."+f.getName()), value, defaultValue);
+			if (f.get(this.configLoad.config) instanceof IConfigJsonType) {
+				Json value = ((IConfigJsonType)f.get(this.configLoad.config)).writeConfig();
+				Json defaultValue = ((IConfigJsonType)f.get(this.configLoad.config)).writeConfig();
+				return new CustomElement(JsonEntry.class, f.getName(), this.mod.i18n().trans("config."+f.getName()), value, defaultValue);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

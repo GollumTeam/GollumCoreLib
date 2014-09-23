@@ -1,6 +1,8 @@
 package mods.gollum.core.tools.registered;
 
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
 import mods.gollum.core.ModGollumCoreLib;
@@ -20,6 +22,28 @@ public class RegisteredObjects {
 		}
 		
 		return instance;
+	}
+
+	public HashMap<String, Block> getBlocksList() {
+		HashMap<String, Block>list = new HashMap<String, Block>();
+		
+		for (Object o : Block.blockRegistry) {
+			Block b = (Block)o;
+			list.put (this.getRegisterName(b), b);
+		}
+		
+		return list;
+	}
+
+	public HashMap<String, Item> getItemsList() {
+		HashMap<String, Item>list = new HashMap<String, Item>();
+		
+		for (Object o : Item.itemRegistry) {
+			Item i = (Item)o;
+			list.put (this.getRegisterName(i), i);
+		}
+		
+		return list;
 	}
 	
 	public Block getBlock (String registerName) {

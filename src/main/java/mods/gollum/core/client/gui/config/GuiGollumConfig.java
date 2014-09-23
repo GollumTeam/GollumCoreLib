@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
+import org.lwjgl.input.Keyboard;
+
 import mods.gollum.core.client.gui.config.entries.GollumCategoryEntry;
 import mods.gollum.core.client.gui.config.properties.FieldProperty;
 import mods.gollum.core.common.config.ConfigLoader;
@@ -26,6 +28,7 @@ import cpw.mods.fml.client.config.DummyConfigElement.DummyCategoryElement;
 import cpw.mods.fml.client.config.GuiButtonExt;
 import cpw.mods.fml.client.config.GuiCheckBox;
 import cpw.mods.fml.client.config.GuiConfig;
+import cpw.mods.fml.client.config.GuiConfigEntries;
 import cpw.mods.fml.client.config.GuiMessageDialog;
 import cpw.mods.fml.client.config.IConfigElement;
 import cpw.mods.fml.common.ModContainer;

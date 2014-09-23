@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 @Target({ java.lang.annotation.ElementType.FIELD })
 public @interface ConfigProp {
 	
-	enum TYPE {
+	enum Type {
 		DEFAULT,
 		ITEM,
 		BLOCK,
@@ -35,5 +35,5 @@ public @interface ConfigProp {
 
 	public abstract String pattern() default "";
 	
-	public abstract TYPE type() default TYPE.DEFAULT;
+	public abstract Type type() default Type.DEFAULT;
 }

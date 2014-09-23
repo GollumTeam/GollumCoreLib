@@ -4,11 +4,15 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.regex.Pattern;
 
-import mods.gollum.core.client.gui.config.JsonElement;
+import mods.gollum.core.client.gui.config.CustomElement;
+import mods.gollum.core.client.gui.config.entries.BlockEntry;
 import mods.gollum.core.client.gui.config.entries.GollumCategoryEntry;
+import mods.gollum.core.client.gui.config.entries.ItemEntry;
+import mods.gollum.core.client.gui.config.entries.JsonEntry;
 import mods.gollum.core.common.config.ConfigLoader;
 import mods.gollum.core.common.config.ConfigProp;
 import mods.gollum.core.common.config.ConfigLoader.ConfigLoad;
+import mods.gollum.core.common.config.ConfigProp.Type;
 import mods.gollum.core.common.config.type.IConfigJsonType;
 import mods.gollum.core.common.mod.GollumMod;
 import mods.gollum.core.tools.simplejson.Json;
@@ -22,16 +26,22 @@ public abstract class GollumProperty extends Property {
 	protected boolean isValid     = false;
 	protected boolean isNative = false;
 	protected GollumMod mod;
-	private ConfigLoad configLoad;
-	private Field f;
-	
+	protected ConfigProp anno;
+	private Type type;
 	
 	public GollumProperty(GollumMod mod, Type type) {
 		super ("", "", type);
 		this.mod = mod;
+		this.type = type;
 	}
 	
 	protected void init (String name, ConfigProp anno, Object value, String[] values, Object valueDefault, String[] valuesDefault) {
+		
+		this.anno = anno;
+		
+		if (anno.type() == ConfigProp.Type.MOD) {
+			this.type = Type.MOD_ID; 
+		}
 		this.setName(name);
 		this.comment = anno.info();
 		this
@@ -127,7 +137,11 @@ public abstract class GollumProperty extends Property {
 			this.setMaxValue(15);
 		}
 	}
-
+	
+	public Type getType() {
+		return this.type;
+	}
+	
 	public boolean isValid() {
 		return isValid;
 	}
@@ -149,7 +163,17 @@ public abstract class GollumProperty extends Property {
 	public IConfigElement createConfigElement() {
 		if (this.isValid()) {
 			if (this.isNative) {
-				return new ConfigElement(this);
+				
+				if (this.anno.type() == ConfigProp.Type.ITEM) {
+					return new CustomElement(ItemEntry.class, this.getName(), this.mod.i18n().trans("config."+this.getName()), this.getString(), this.getDefault());
+				} else 
+				
+				if (this.anno.type() == ConfigProp.Type.BLOCK) {
+					return new CustomElement(BlockEntry.class, this.getName(), this.mod.i18n().trans("config."+this.getName()), this.getString(), this.getDefault());
+				} else {
+					
+					return new ConfigElement(this);
+				}
 			} else {
 				return this.createCustomConfigElement();
 			}

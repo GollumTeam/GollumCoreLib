@@ -5,7 +5,7 @@ import static mods.gollum.core.ModGollumCoreLib.log;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 
-import mods.gollum.core.client.gui.config.JsonElement;
+import mods.gollum.core.client.gui.config.CustomElement;
 import mods.gollum.core.common.config.ConfigProp;
 import mods.gollum.core.common.config.ConfigLoader.ConfigLoad;
 import mods.gollum.core.common.config.JsonConfigProp;

@@ -1,6 +1,7 @@
 package mods.gollum.core.common.config;
 
 import mods.gollum.core.ModGollumCoreLib;
+import mods.gollum.core.common.config.ConfigProp.Type;
 import mods.gollum.core.common.config.type.ItemStackConfigType;
 
 
@@ -25,6 +26,15 @@ public class ConfigGollumCoreLib extends Config {
 			
 	@ConfigProp (info = "Display version checker message")
 	public boolean versionChecker = true;
+
+	@ConfigProp(group="Test", type=Type.ITEM)
+	public String item = "minecraft:iron_axe";
+	
+	@ConfigProp(group="Test", type=Type.BLOCK)
+	public String block = "minecraft:tnt";
+	
+	@ConfigProp(group="Test", type=Type.MOD)
+	public String mod = ModGollumCoreLib.MODID;
 	
 	@ConfigProp(group="Test") public  ItemStackConfigType itemStack1 = new ItemStackConfigType("minecraft:planks", 10, 3);
 	

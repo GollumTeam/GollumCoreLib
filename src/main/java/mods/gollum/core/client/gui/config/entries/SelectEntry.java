@@ -1,6 +1,7 @@
 package mods.gollum.core.client.gui.config.entries;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import mods.gollum.core.client.gui.config.GuiFieldConfig;
@@ -14,49 +15,35 @@ import cpw.mods.fml.client.config.GuiSelectString;
 import cpw.mods.fml.client.config.GuiConfigEntries.CategoryEntry;
 import cpw.mods.fml.client.config.IConfigElement;
 
-public class JsonEntry extends ButtonEntry {
+public abstract class SelectEntry extends ButtonEntry {
+	protected final String        beforeValue;
+	protected Object              currentValue;
+	protected Map<Object, String> selectableValues;
 
-	protected final Json defaultValue;
-	protected final Json beforeValue;
-	protected Json currentValue;
-//	protected Map<Object, String> selectableValues;
-
-	public JsonEntry(GuiConfig parent, GuiConfigEntries entryList, IConfigElement<String> configElement) {
-		super(parent, entryList, configElement);
+	public SelectEntry(GuiConfig owningScreen, GuiConfigEntries owningEntryList, IConfigElement<String> configElement) {
 		
-		defaultValue  = (Json)this.configElement.getDefault();
-		beforeValue   = (Json)configElement.get();
-		currentValue  = (Json)configElement.get();
+		super(owningScreen, owningEntryList, configElement);
+		beforeValue = configElement.get().toString();
+		currentValue = configElement.get().toString();
 		
-//		this.selectableValues = new HashMap<Object, String>();
-//		this.selectableValues.put("cool", "Display cool");
+		this.selectableValues = getOptions();
 		
 		updateValueButtonText();
 	}
 
+	protected abstract Map<Object, String> getOptions();
+
 	@Override
 	public void updateValueButtonText() {
-//		if (this.selectableValues.containsKey(currentValue)) {
-//			this.btnValue.displayString = this.selectableValues.get(currentValue);
-//		} else {
-//			this.btnValue.displayString = currentValue.toString();
-//		}
-		this.btnValue.displayString = "JSON ELEMENT TODO"; //  TODO
+		this.btnValue.displayString = currentValue.toString();
 	}
 
 	@Override
 	public void valueButtonPressed(int slotIndex) {
-		Json d  = (Json)this.configElement.get();
-		Json dv = (Json)this.configElement.getDefault();
-		
-		mc.displayGuiScreen(new GuiJsonConfig(this.owningScreen, this.name, currentValue, defaultValue));
-		
-//		mc.displayGuiScreen(new GuiSelectString(this.owningScreen,
-//				configElement, slotIndex, selectableValues, currentValue,
-//				enabled()));
+		mc.displayGuiScreen(new GuiSelectString(this.owningScreen, configElement, slotIndex, selectableValues, currentValue, enabled()));
 	}
 
-	public void setValueFromChildScreen(Json newValue) {
+	public void setValueFromChildScreen(Object newValue) {
 		if (enabled() && currentValue != null ? !currentValue.equals(newValue) : newValue != null) {
 			currentValue = newValue;
 			updateValueButtonText();
@@ -65,13 +52,16 @@ public class JsonEntry extends ButtonEntry {
 
 	@Override
 	public boolean isDefault() {
-		return defaultValue.equals(currentValue);
+		if (configElement.getDefault() != null)
+			return configElement.getDefault().equals(currentValue);
+		else
+			return currentValue == null;
 	}
 
 	@Override
 	public void setToDefault() {
 		if (enabled()) {
-			this.currentValue = defaultValue;
+			this.currentValue = configElement.getDefault().toString();
 			updateValueButtonText();
 		}
 	}
@@ -110,14 +100,4 @@ public class JsonEntry extends ButtonEntry {
 	public String[] getCurrentValues() {
 		return new String[] { getCurrentValue() };
 	}
-
-//	public JsonEntry(GuiConfig owningScreen, GuiConfigEntries owningEntryList, IConfigElement jsonElement) {
-//		super(owningScreen, owningEntryList, jsonElement);
-//	}
-//
-//	@Override
-//	protected GuiScreen buildChildScreen() {
-//
-
-//	}
 }

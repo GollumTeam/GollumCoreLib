@@ -18,7 +18,7 @@ public class JsonConfigProp implements ConfigProp, JsonComplement {
 	private boolean  mcRestart         = false;
 	private boolean  worldRestart      = false;
 	private String   pattern           = "";
-	private TYPE     type              = TYPE.DEFAULT;
+	private Type     type              = Type.DEFAULT;
 
 	@Override public String   name()              { return this.name; };
 	@Override public String   info()              { return this.info; };
@@ -31,7 +31,7 @@ public class JsonConfigProp implements ConfigProp, JsonComplement {
 	@Override public boolean  mcRestart()         { return this.mcRestart; };
 	@Override public boolean  worldRestart()      { return this.worldRestart; };
 	@Override public String   pattern()           { return this.pattern; };
-	@Override public TYPE     type()              { return this.type; }
+	@Override public Type     type()              { return this.type; }
 
 	public JsonConfigProp name              (String   name             ) { this.name              = name             ; return this; }
 	public JsonConfigProp info              (String   info             ) { this.info              = info             ; return this; }
@@ -44,7 +44,7 @@ public class JsonConfigProp implements ConfigProp, JsonComplement {
 	public JsonConfigProp mcRestart         (boolean  mcRestart        ) { this.mcRestart         = mcRestart        ; return this; }
 	public JsonConfigProp worldRestart      (boolean  worldRestart     ) { this.worldRestart      = worldRestart     ; return this; }
 	public JsonConfigProp pattern           (String   pattern          ) { this.pattern           = pattern          ; return this; }
-	public JsonConfigProp type              (TYPE     type             ) { this.type              = type             ; return this; }
+	public JsonConfigProp type              (Type     type             ) { this.type              = type             ; return this; }
 	
 	@Override
 	public Class<? extends Annotation> annotationType() {
