@@ -33,14 +33,18 @@ import cpw.mods.fml.common.ModContainer;
 public class GuiJsonConfig extends GuiGollumConfig {
 	
 	public GuiJsonConfig(GuiConfig parent, String name, Json value, Json defaultValue) {
-		super(parent, getFields (value), parent.title);
+		super(parent, getFields (value, defaultValue), parent.title);
 		
 		this.titleLine2 = parent.titleLine2 + " > "+name;
 	}
 	
-	private static List<IConfigElement> getFields(Json value) {
+	private static List<IConfigElement> getFields(Json value, Json defaultValue) {
 		
 		ArrayList<IConfigElement> fields = new ArrayList<IConfigElement>();
+		
+//		if (value.) {
+//			
+//		}
 		
 		return fields;
 	}
