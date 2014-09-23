@@ -12,9 +12,9 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import mods.gollum.core.client.gui.config.entries.GollumCategoryEntry;
+import mods.gollum.core.client.gui.config.properties.FieldProperty;
 import mods.gollum.core.common.config.ConfigLoader;
 import mods.gollum.core.common.config.ConfigLoader.ConfigLoad;
-import mods.gollum.core.common.config.GollumProperty;
 import mods.gollum.core.common.mod.GollumMod;
 import mods.gollum.core.tools.simplejson.Json;
 import net.minecraft.client.gui.GuiButton;

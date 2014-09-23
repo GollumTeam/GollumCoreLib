@@ -2,6 +2,9 @@ package mods.gollum.core.tools.simplejson;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Map.Entry;
 
 import com.google.gson.JsonNull;
@@ -26,12 +29,13 @@ public class Json {
 		SHORT,
 		BYTE,
 		CHAR,
+		DOUBLE,
 		FLOAT,
 		BOOLEAN
 	}
 	
-	public Object value;
-	private ArrayList<JsonComplement> complements = new ArrayList<JsonComplement>();
+	protected Object value;
+	protected ArrayList<JsonComplement> complements = new ArrayList<JsonComplement>();
 	
 	public static class EntryObject {
 		
@@ -125,6 +129,9 @@ public class Json {
 
 	public Json child (int  i)      { return create(); }
 	public Json child (String  key) { return create(); }
+	
+	public Collection<Json> allChild () { return new ArrayList<Json>(); }
+	public Set<Entry<String, Json>> allChildWithKey ()  { return new HashSet<Entry<String, Json>>(); }
 
 	public void add(Json child) {}
 	public void add(Object child) {
@@ -164,6 +171,22 @@ public class Json {
 		return null;
 	}
 	
+	public TYPE getType () {
+		return TYPE.NULL;
+	}
+
+	public boolean isNull   () { return this.getType() == TYPE.NULL;   }
+	public boolean isArray  () { return this.getType() == TYPE.ARRAY;   }
+	public boolean isObject () { return this.getType() == TYPE.OBJECT;  }
+	public boolean isString () { return this.getType() == TYPE.STRING;  }
+	public boolean isLong   () { return this.getType() == TYPE.LONG;    }
+	public boolean isInt    () { return this.getType() == TYPE.INT;     }
+	public boolean isShort  () { return this.getType() == TYPE.SHORT;   }
+	public boolean isByte   () { return this.getType() == TYPE.BYTE;    }
+	public boolean isChar   () { return this.getType() == TYPE.CHAR;    }
+	public boolean isDouble () { return this.getType() == TYPE.DOUBLE;  }
+	public boolean isFloat  () { return this.getType() == TYPE.FLOAT;   }
+	public boolean isBool   () { return this.getType() == TYPE.BOOLEAN; }
 	
 	/////////////////////
 	// Convert to json //

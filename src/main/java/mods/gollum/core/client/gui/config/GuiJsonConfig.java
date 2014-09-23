@@ -12,9 +12,10 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import mods.gollum.core.client.gui.config.entries.GollumCategoryEntry;
+import mods.gollum.core.client.gui.config.properties.FieldProperty;
+import mods.gollum.core.client.gui.config.properties.JsonProperty;
 import mods.gollum.core.common.config.ConfigLoader;
 import mods.gollum.core.common.config.ConfigLoader.ConfigLoad;
-import mods.gollum.core.common.config.GollumProperty;
 import mods.gollum.core.common.mod.GollumMod;
 import mods.gollum.core.tools.simplejson.Json;
 import net.minecraft.client.gui.GuiButton;
@@ -33,18 +34,28 @@ import cpw.mods.fml.common.ModContainer;
 public class GuiJsonConfig extends GuiGollumConfig {
 	
 	public GuiJsonConfig(GuiConfig parent, String name, Json value, Json defaultValue) {
-		super(parent, getFields (value, defaultValue), parent.title);
+		super(parent, getFields (parent, value, defaultValue), parent.title);
 		
 		this.titleLine2 = parent.titleLine2 + " > "+name;
 	}
 	
-	private static List<IConfigElement> getFields(Json value, Json defaultValue) {
+	private static List<IConfigElement> getFields(GuiConfig parent, Json value, Json defaultValue) {
 		
 		ArrayList<IConfigElement> fields = new ArrayList<IConfigElement>();
 		
-//		if (value.) {
-//			
-//		}
+		if (value.isObject()) {
+			
+			for(Entry<String, Json> entry : value.allChildWithKey()) {
+				
+				JsonProperty prop      = new JsonProperty (getMod(parent), entry.getKey(), entry.getValue(), defaultValue.child(entry.getKey()));
+				IConfigElement element = prop.createConfigElement ();
+				
+				if (element != null) {
+					fields.add(element);
+				}
+			}
+						
+		}
 		
 		return fields;
 	}

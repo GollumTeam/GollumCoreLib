@@ -1,8 +1,13 @@
 package mods.gollum.core.tools.simplejson;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map.Entry;
+import java.util.Set;
 
+import mods.gollum.core.tools.simplejson.Json.TYPE;
 import argo.jdom.JsonArrayNodeBuilder;
 import argo.jdom.JsonNodeBuilder;
 import argo.jdom.JsonNodeBuilders;
@@ -19,7 +24,10 @@ public class ObjectJson extends Json {
 
 	public Json child (int  i)      { return child (i+""); }
 	public Json child (String  key) { return (((HashMap<String, Json>)this.value).containsKey(key))? ((HashMap<String, Json>)this.value).get(key) : create(); }
-
+	
+	public Collection<Json> allChild () { return ((HashMap<String, Json>)this.value).values(); }
+	public Set<Entry<String, Json>> allChildWithKey ()  { return ((HashMap<String, Json>)this.value).entrySet(); }
+	
 	public int size() { return ((HashMap<String, Json>)this.value).size(); }
 	
 	public void add(String key, Json child) {
@@ -48,6 +56,10 @@ public class ObjectJson extends Json {
 			}
 		}
 		return true;
+	}
+	
+	public TYPE getType () {
+		return TYPE.OBJECT;
 	}
 	
 	/////////////////////

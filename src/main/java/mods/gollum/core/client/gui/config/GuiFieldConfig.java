@@ -12,9 +12,9 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import mods.gollum.core.client.gui.config.entries.GollumCategoryEntry;
+import mods.gollum.core.client.gui.config.properties.FieldProperty;
 import mods.gollum.core.common.config.ConfigLoader;
 import mods.gollum.core.common.config.ConfigLoader.ConfigLoad;
-import mods.gollum.core.common.config.GollumProperty;
 import mods.gollum.core.common.mod.GollumMod;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -94,7 +94,7 @@ public class GuiFieldConfig extends GuiGollumConfig {
 				try {
 					for (Field f : configLoad.config.getClass().getDeclaredFields()) {
 						
-						GollumProperty prop   = new GollumProperty (f, configLoad, currentCategory);
+						FieldProperty prop   = new FieldProperty (f, configLoad, currentCategory);
 						IConfigElement element = prop.createConfigElement ();
 						
 						if (element != null) {

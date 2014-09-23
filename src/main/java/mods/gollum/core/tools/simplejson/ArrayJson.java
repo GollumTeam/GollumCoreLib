@@ -1,6 +1,11 @@
 package mods.gollum.core.tools.simplejson;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import argo.jdom.JsonArrayNodeBuilder;
 import argo.jdom.JsonNodeBuilder;
@@ -24,6 +29,19 @@ public class ArrayJson extends Json {
 		return create(); 
 	}
 
+	public Collection<Json> allChild () { return ((ArrayList<Json>)this.value); }
+	public Set<Entry<String, Json>> allChildWithKey ()  {
+		HashSet<Entry<String, Json>> h = new HashSet<Entry<String, Json>>(); 
+		
+		int i = 0;
+		for(Json val : ((ArrayList<Json>)this.value)) {
+			h.add(new AbstractMap.SimpleEntry<String, Json>(i+"", val));
+			i++;
+		}
+		
+		return h;
+	}
+	
 	public int size() { return ((ArrayList<Json>)this.value).size(); }
 	
 	public void add(Json child) {
@@ -43,6 +61,10 @@ public class ArrayJson extends Json {
 		}
 		
 		return true;
+	}
+	
+	public TYPE getType () {
+		return TYPE.ARRAY;
 	}
 	
 	/////////////////////
