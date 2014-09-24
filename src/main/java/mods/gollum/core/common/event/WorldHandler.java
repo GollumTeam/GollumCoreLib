@@ -30,7 +30,6 @@ public class WorldHandler {
 		
 		if (!event.world.isRemote) {
 			
-			
 			for (Thread thread : Builder.currentBuilds) {
 				if (thread.isAlive()) {
 					try {

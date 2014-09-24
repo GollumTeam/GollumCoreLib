@@ -1,6 +1,7 @@
 package mods.gollum.core.client.gui.config;
 
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -23,7 +24,10 @@ public class CustomElement implements IConfigElement {
 	private Class< ? extends IConfigEntry> classEntry;
 	private Object value;
 	private Object defaultValue;
+	private Object[] values;
+	private Object[] defaultValues;
 	private GollumProperty property;
+	private boolean isArray = false;
 	
 	public CustomElement(Class< ? extends IConfigEntry> classEntry, GollumProperty property) {
 		super();
@@ -35,6 +39,14 @@ public class CustomElement implements IConfigElement {
 		
 	}
 
+	public CustomElement(Class< ? extends IConfigEntry> classEntry, GollumProperty property, Object[] values, Object[] defaultValues) {
+		this.property      = property;
+		this.classEntry    = classEntry;
+		this.values        = values;
+		this.defaultValues = defaultValues;
+		this.isArray = true;
+	}
+	
 	public CustomElement(Class< ? extends IConfigEntry> classEntry, GollumProperty property, Object value, Object defaultValue) {
 
 		this.property     = property;
@@ -80,7 +92,7 @@ public class CustomElement implements IConfigElement {
 
 	@Override
 	public List getChildElements() {
-		return null; // TODO
+		return null;
 	}
 
 	@Override
@@ -98,12 +110,12 @@ public class CustomElement implements IConfigElement {
 
 	@Override
 	public boolean isList() {
-		return false; // TODO
+		return this.isArray;
 	}
 
 	@Override
 	public boolean isListLengthFixed() {
-		return false; // TODO
+		return property.isListLengthFixed();
 	}
 
 	@Override
@@ -123,15 +135,26 @@ public class CustomElement implements IConfigElement {
 
 	@Override
 	public Object[] getDefaults() {
-		return null; //
+		return this.defaultValues; //
 	}
 
 	@Override
 	public void setToDefault() {
-		if (this.defaultValue instanceof Json) {
-			this.value = ((Json)this.defaultValue).clone();
+		if (this.isArray) {
+			this.values = Arrays.copyOf(this.defaultValues, this.defaultValues.length);
+			
+			if (this.defaultValue instanceof Json[]) {
+				
+				for (int i = 0; i < ((Json[])this.defaultValue).length; i++) {
+					((Json[])this.values)[i] = (Json) ((Json[])this.defaultValues)[i].clone();
+				}
+			}
 		} else {
-			this.value = this.defaultValue;
+			if (this.defaultValue instanceof Json) {
+				this.value = ((Json)this.defaultValue).clone();
+			} else {
+				this.value = this.defaultValue;
+			}
 		}
 	}
 
@@ -157,7 +180,16 @@ public class CustomElement implements IConfigElement {
 
 	@Override
 	public Object[] getList() {
-		return null;// TODO 
+		
+		Object[] list = Arrays.copyOf(this.values, this.values.length);
+		
+		if (this.values instanceof Json[]) {
+			
+			for (int i = 0; i < ((Json[])this.values).length; i++) {
+				((Json[])list)[i] = (Json) ((Json[])this.values)[i].clone();
+			}
+		}
+		return list;
 	}
 
 	@Override
@@ -167,7 +199,15 @@ public class CustomElement implements IConfigElement {
 
 	@Override
 	public void set(Object[] aVal) {
-		// TODO
+		
+		this.values = Arrays.copyOf(aVal, this.values.length);
+		
+		if (aVal instanceof Json[]) {
+			
+			for (int i = 0; i < ((Json[])this.values).length; i++) {
+				((Json[])this.values)[i] = (Json) ((Json[])aVal)[i].clone();
+			}
+		}
 	}
 
 	@Override

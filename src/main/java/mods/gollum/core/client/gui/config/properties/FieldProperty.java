@@ -81,7 +81,10 @@ public class FieldProperty extends GollumProperty {
 				this.isNative = true;
 			}
 			
-			if (IConfigJsonType.class.isAssignableFrom(f.getType())) {
+			if (
+				IConfigJsonType.class.isAssignableFrom(f.getType()) ||
+				IConfigJsonType[].class.isAssignableFrom(f.getType())
+			) {
 				
 				this.markUnchange();
 				
@@ -155,14 +158,37 @@ public class FieldProperty extends GollumProperty {
 	@Override
 	public IConfigElement createCustomConfigElement() {
 		try {
-			if (f.get(this.configLoad.config) instanceof IConfigJsonType) {
+			
+			Object o  = f.get(this.configLoad.config);
+			Object oD = f.get(this.configLoad.configDefault);
+			
+			if (o instanceof IConfigJsonType) {
 				
-				Json value = ((IConfigJsonType)f.get(this.configLoad.config)).writeConfig();
-				Json defaultValue = ((IConfigJsonType)f.get(this.configLoad.configDefault)).writeConfig();
-				// TODO set Value
+				Json value        = ((IConfigJsonType)o ).writeConfig();
+				Json defaultValue = ((IConfigJsonType)oD).writeConfig();
 				
 				this.setName(f.getName());
 				return new CustomElement(JsonEntry.class, this, value, defaultValue);
+			}
+
+			if (f.get(this.configLoad.config) instanceof IConfigJsonType[]) {
+				
+				IConfigJsonType[] oAr  = (IConfigJsonType[])o;
+				IConfigJsonType[] oDAr = (IConfigJsonType[])oD;
+				
+				Json[] values        = new Json[oAr .length];
+				Json[] defaultValues = new Json[oDAr.length];
+				
+				for (int i = 0; i < oAr.length; i++) {
+					values[i] = oAr[i].writeConfig();
+				}
+				for (int i = 0; i < oAr.length; i++) {
+					defaultValues[i] = oDAr[i].writeConfig();
+				}
+				
+				this.setName(f.getName());
+				return new CustomElement(JsonEntry.class, this, values, defaultValues);
+
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

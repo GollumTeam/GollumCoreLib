@@ -20,7 +20,6 @@ public class ClientProxyGolumCoreLib extends CommonProxyGolumCoreLib {
 		
 		MinecraftForge.EVENT_BUS.register(new SoundRegistry());
 		
-		// TODO Vérifier à traduire
 		if (ModGollumCoreLib.config.devTools) {
 			
 			KeyBinding keyBinding = new KeyBinding (ModGollumCoreLib.MODID.toLowerCase()+".key.blockinfos", Keyboard.KEY_F4, "key.categories.misc");

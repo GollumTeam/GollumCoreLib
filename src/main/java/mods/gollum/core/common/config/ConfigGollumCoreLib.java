@@ -38,8 +38,9 @@ public class ConfigGollumCoreLib extends Config {
 	
 	@ConfigProp(group="Test", type=Type.MOD)
 	public String mod = ModGollumCoreLib.MODID;
-	
+
 	@ConfigProp(group="Test") public  ItemStackConfigType itemStack1 = new ItemStackConfigType("minecraft:planks", 10, 3);
+	@ConfigProp(group="Test") public  ItemStackConfigType[] itemStackAr1 = new ItemStackConfigType[] { new ItemStackConfigType("minecraft:planks", 10, 3), new ItemStackConfigType("minecraft:planks", 10, 3) };
 	
 	@ConfigProp(group="Test") public String    s1 = "AAA";
 	@ConfigProp(group="Test") public long      l1 = 11111;
