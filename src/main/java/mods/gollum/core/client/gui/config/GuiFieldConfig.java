@@ -128,7 +128,7 @@ public class GuiFieldConfig extends GuiGollumConfig {
 			Field         f  = entry.getKey();
 			IConfigElement el = entry.getValue();
 			
-			log.warning ("Save "+f.getName ()+"="+el.get());
+			log.debug ("Save "+f.getName ()+"="+el.get());
 			
 			this.setField(f, el);
 		}

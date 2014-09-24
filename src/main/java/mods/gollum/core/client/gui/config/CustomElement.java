@@ -16,6 +16,7 @@ import mods.gollum.core.common.config.type.IConfigJsonType;
 import mods.gollum.core.tools.simplejson.Json;
 import cpw.mods.fml.client.config.ConfigGuiType;
 import cpw.mods.fml.client.config.DummyConfigElement.DummyCategoryElement;
+import cpw.mods.fml.client.config.GuiConfigEntries.ArrayEntry;
 import cpw.mods.fml.client.config.GuiConfigEntries.IConfigEntry;
 import cpw.mods.fml.client.config.IConfigElement;
 
@@ -57,7 +58,7 @@ public class CustomElement implements IConfigElement {
 	
 	@Override
 	public Class<? extends IConfigEntry> getConfigEntryClass() {
-		return this.classEntry;
+		return (this.isArray) ? ArrayEntry.class : this.classEntry;
 	}
 
 	@Override
@@ -67,7 +68,7 @@ public class CustomElement implements IConfigElement {
 
 	@Override
 	public Class getArrayEntryClass() {
-		return null; // TODO
+		return (this.isArray) ? ArrayEntry.class : this.classEntry;
 	}
 
 	@Override
