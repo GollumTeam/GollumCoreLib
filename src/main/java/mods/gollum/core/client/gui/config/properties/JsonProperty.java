@@ -12,7 +12,7 @@ import mods.gollum.core.common.config.JsonConfigProp;
 import mods.gollum.core.common.config.type.IConfigJsonType;
 import mods.gollum.core.common.mod.GollumMod;
 import mods.gollum.core.tools.simplejson.Json;
-import mods.gollum.core.tools.simplejson.JsonComplement;
+import mods.gollum.core.tools.simplejson.IJsonComplement;
 import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.common.config.Property.Type;

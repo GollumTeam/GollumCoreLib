@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -13,15 +15,15 @@ import argo.jdom.JsonNodeBuilder;
 import argo.jdom.JsonNodeBuilders;
 import argo.jdom.JsonObjectNodeBuilder;
 
-public class ObjectJson extends Json {
+public class JsonObject extends Json {
 	
-	ObjectJson () {
+	JsonObject () {
 		this.value = new HashMap<String, Json>();
 	}
 	
 	public String strValue()    { return ((HashMap<String, Json>)this.value).size()+""; }
 	public boolean boolValue()  { return ((HashMap<String, Json>)this.value).size() > 0; }
-
+	
 	public Json child (int  i)      { return child (i+""); }
 	public Json child (String  key) { return (((HashMap<String, Json>)this.value).containsKey(key))? ((HashMap<String, Json>)this.value).get(key) : create(); }
 	
@@ -37,19 +39,25 @@ public class ObjectJson extends Json {
 		((HashMap<String, Json>)this.value).put(key, child);
 	}
 	
+	public boolean containKey (int i)      { return this.containKey(i+""); }
+	public boolean containKey (String key) { return ((HashMap<String, Json>)this.value).containsKey(key); }
+	
+	public boolean contain (Json json) { return ((HashMap<String, Json>)this.value).containsValue (json); }
+	
+	
 	public boolean equals (Object obj) {
 		
-		if (obj instanceof ObjectJson) {
+		if (obj instanceof JsonObject) {
 			
-			if (this.size() != ((ObjectJson)obj).size()) {
+			if (this.size() != ((JsonObject)obj).size()) {
 				return false;
 			}
 			
 			for (Entry<String, Json> entry : ((HashMap<String, Json>)this.value).entrySet()) {
 				
 				if (
-					!((HashMap<String, Json>)((ObjectJson)obj).value).containsKey(entry.getKey()) ||
-					!((HashMap<String, Json>)this.value).get(entry.getKey()).equals (((HashMap<String, Json>)((ObjectJson)obj).value).get(entry.getKey()))
+					!((HashMap<String, Json>)((JsonObject)obj).value).containsKey(entry.getKey()) ||
+					!((HashMap<String, Json>)this.value).get(entry.getKey()).equals (((HashMap<String, Json>)((JsonObject)obj).value).get(entry.getKey()))
 				) {
 					return false;
 				}
@@ -60,6 +68,19 @@ public class ObjectJson extends Json {
 	
 	public TYPE getType () {
 		return TYPE.OBJECT;
+	}
+	
+	public void setValue(Object value) {
+		if (value instanceof Map) {
+			HashMap<String, Json> tmpMap = new HashMap<String, Json>();
+			for (Entry<Object, Object> entry : ((Map<Object, Object>)value).entrySet()) {
+				if (!(entry.getKey() instanceof String) || !(entry.getValue() instanceof Json)) {
+					return;
+				}
+				tmpMap.put((String) entry.getKey(), (Json) entry.getValue());
+			}
+			this.value = tmpMap;
+		}
 	}
 	
 	/////////////////////

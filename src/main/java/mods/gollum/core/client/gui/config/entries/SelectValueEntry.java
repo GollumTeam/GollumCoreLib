@@ -1,28 +1,22 @@
 package mods.gollum.core.client.gui.config.entries;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
-import mods.gollum.core.client.gui.config.GuiFieldConfig;
-import mods.gollum.core.client.gui.config.GuiJsonConfig;
-import mods.gollum.core.tools.simplejson.Json;
-import net.minecraft.client.gui.GuiScreen;
 import cpw.mods.fml.client.config.GuiConfig;
 import cpw.mods.fml.client.config.GuiConfigEntries;
-import cpw.mods.fml.client.config.GuiConfigEntries.ButtonEntry;
 import cpw.mods.fml.client.config.GuiSelectString;
-import cpw.mods.fml.client.config.GuiConfigEntries.CategoryEntry;
 import cpw.mods.fml.client.config.IConfigElement;
 
-public abstract class SelectEntry extends ButtonEntry {
+public abstract class SelectValueEntry extends cpw.mods.fml.client.config.GuiConfigEntries.SelectValueEntry {
+	
 	protected final String        beforeValue;
 	protected Object              currentValue;
 	protected Map<Object, String> selectableValues;
 
-	public SelectEntry(GuiConfig owningScreen, GuiConfigEntries owningEntryList, IConfigElement<String> configElement) {
+	public SelectValueEntry(GuiConfig owningScreen, GuiConfigEntries owningEntryList, IConfigElement<String> configElement) {
+		super(owningScreen, owningEntryList, configElement, new HashMap<Object, String>());
 		
-		super(owningScreen, owningEntryList, configElement);
 		beforeValue = configElement.get().toString();
 		currentValue = configElement.get().toString();
 		
@@ -35,9 +29,11 @@ public abstract class SelectEntry extends ButtonEntry {
 
 	@Override
 	public void updateValueButtonText() {
-		this.btnValue.displayString = currentValue.toString();
-		if (this.selectableValues.containsKey(currentValue)) {
-			this.btnValue.displayString = this.selectableValues.get(currentValue);
+		if (this.currentValue != null) {
+			this.btnValue.displayString = this.currentValue.toString();
+			if (this.selectableValues.containsKey(currentValue)) {
+				this.btnValue.displayString = this.selectableValues.get(this.currentValue);
+			}
 		}
 	}
 

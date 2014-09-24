@@ -6,6 +6,7 @@ import mods.gollum.core.common.config.JsonConfigProp;
 import mods.gollum.core.tools.registered.RegisteredObjects;
 import mods.gollum.core.tools.simplejson.Json;
 import mods.gollum.core.tools.simplejson.Json.EntryObject;
+import mods.gollum.core.tools.simplejson.IJsonObjectDisplay;
 import net.minecraft.item.ItemStack;
 
 public class ItemStackConfigType implements IConfigJsonType {
@@ -33,7 +34,7 @@ public class ItemStackConfigType implements IConfigJsonType {
 	}
 
 	@Override
-	public void readConfig(Json dom)  throws Exception {
+	public void readConfig(Json dom) {
 		this.registerName = dom.child("registerName").strValue();
 		this.metadata     = dom.child("metadata")    .charValue();
 		this.number       = dom.child("number")      .intValue();
@@ -42,10 +43,17 @@ public class ItemStackConfigType implements IConfigJsonType {
 	@Override
 	public Json writeConfig() {
 		return Json.create (
-			new EntryObject ("registerName", this.registerName).addComplement (new JsonConfigProp().type(Type.ITEM) ),
+			new EntryObject ("registerName", this.registerName).addComplement (new JsonConfigProp().type(Type.ITEM)),
 			new EntryObject ("metadata"    , this.metadata),
-			new EntryObject ("number"      , this.number)
-		);
+			new EntryObject ("number"      , this.number).addComplement (new JsonConfigProp().minValue("0").maxValue("64").type(Type.SLIDER))
+		).addComplement(new IJsonObjectDisplay () {
+
+			@Override
+			public String display(Json json) {
+				return json.child("number").intValue()+" "+json.child("registerName").strValue()+":"+json.child("number").intValue();
+			}
+			
+		});
 	}
 	
 	public ItemStack getItemStak () {

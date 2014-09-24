@@ -27,6 +27,9 @@ public class ConfigGollumCoreLib extends Config {
 	@ConfigProp (info = "Display version checker message")
 	public boolean versionChecker = true;
 
+	@ConfigProp(group="Test", type=Type.SLIDER)
+	public byte slider = 20;
+	
 	@ConfigProp(group="Test", type=Type.ITEM)
 	public String item = "minecraft:iron_axe";
 	

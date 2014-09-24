@@ -158,7 +158,7 @@ public class FieldProperty extends GollumProperty {
 			if (f.get(this.configLoad.config) instanceof IConfigJsonType) {
 				
 				Json value = ((IConfigJsonType)f.get(this.configLoad.config)).writeConfig();
-				Json defaultValue = ((IConfigJsonType)f.get(this.configLoad.config)).writeConfig();
+				Json defaultValue = ((IConfigJsonType)f.get(this.configLoad.configDefault)).writeConfig();
 				// TODO set Value
 				
 				this.setName(f.getName());

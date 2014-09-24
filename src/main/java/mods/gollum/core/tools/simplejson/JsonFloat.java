@@ -4,17 +4,24 @@ import mods.gollum.core.tools.simplejson.Json.TYPE;
 import argo.jdom.JsonNodeBuilder;
 import argo.jdom.JsonNodeBuilders;
 
-public class ShortJson extends Json {
+public class JsonFloat extends Json {
 	
-	public ShortJson(short s) {
-		this.value = s;
+	public JsonFloat(float f) {
+		this.value = f;
 	}
 	
-	@Override
-	public short shortValue()  { return (Short)this.value; }
+	public float floatValue () { return (Float)this.value; 	}
 	
 	public TYPE getType () {
-		return TYPE.SHORT;
+		return TYPE.FLOAT;
+	}
+	
+	public void setValue(Object value) {
+		try {
+			this.value = Float.parseFloat(value.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/////////////////////

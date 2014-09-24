@@ -32,7 +32,7 @@ public class JsonEntry extends ButtonEntry {
 
 	@Override
 	public void updateValueButtonText() {
-		this.btnValue.displayString = "JSON ELEMENT TODO"; //  TODO
+		this.btnValue.displayString = currentValue.toString(); 
 	}
 
 	@Override
@@ -40,7 +40,7 @@ public class JsonEntry extends ButtonEntry {
 		Json d  = (Json)this.configElement.get();
 		Json dv = (Json)this.configElement.getDefault();
 		
-		mc.displayGuiScreen(new GuiJsonConfig(this.owningScreen, this.name, currentValue, defaultValue));
+		mc.displayGuiScreen(new GuiJsonConfig(this.owningScreen, this, currentValue, defaultValue));
 	}
 
 	public void setValueFromChildScreen(Json newValue) {
@@ -91,6 +91,10 @@ public class JsonEntry extends ButtonEntry {
 	@Override
 	public String getCurrentValue() {
 		return this.currentValue.toString();
+	}
+	
+	public Json getValue() {
+		return this.currentValue;
 	}
 
 	@Override

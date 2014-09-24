@@ -19,6 +19,7 @@ import mods.gollum.core.tools.simplejson.Json;
 import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.common.config.Property;
 import cpw.mods.fml.client.config.ConfigGuiType;
+import cpw.mods.fml.client.config.GuiConfigEntries.NumberSliderEntry;
 import cpw.mods.fml.client.config.IConfigElement;
 
 public abstract class GollumProperty extends Property {
@@ -166,12 +167,17 @@ public abstract class GollumProperty extends Property {
 				
 				if (this.anno.type() == ConfigProp.Type.ITEM) {
 					return new CustomElement(ItemEntry.class, this);
-				} else 
+				} else
 				
 				if (this.anno.type() == ConfigProp.Type.BLOCK) {
 					return new CustomElement(BlockEntry.class, this);
-				} else {
-					
+				}  else 
+				
+				if (this.anno.type() == ConfigProp.Type.SLIDER) {
+					return new CustomElement(NumberSliderEntry.class, this);
+				} else 
+				
+				{
 					return new ConfigElement(this);
 				}
 			} else {

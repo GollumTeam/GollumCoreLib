@@ -4,16 +4,24 @@ import mods.gollum.core.tools.simplejson.Json.TYPE;
 import argo.jdom.JsonNodeBuilder;
 import argo.jdom.JsonNodeBuilders;
 
-public class IntJson extends Json {
+public class JsonByte extends Json {
 	
-	public IntJson(int i) {
-		this.value = i;
+	public JsonByte(byte b) {
+		this.value = b;
 	}
 	
-	public int intValue () { return (Integer)this.value; }
+	public byte byteValue () { return (Byte)this.value; }
 	
 	public TYPE getType () {
-		return TYPE.INT;
+		return TYPE.BYTE;
+	}
+	
+	public void setValue(Object value) {
+		try {
+			this.value = Byte.parseByte(value.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/////////////////////

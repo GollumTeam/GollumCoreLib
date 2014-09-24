@@ -15,7 +15,9 @@ import mods.gollum.core.client.gui.config.entries.GollumCategoryEntry;
 import mods.gollum.core.client.gui.config.properties.FieldProperty;
 import mods.gollum.core.common.config.ConfigLoader;
 import mods.gollum.core.common.config.ConfigLoader.ConfigLoad;
+import mods.gollum.core.common.config.type.IConfigJsonType;
 import mods.gollum.core.common.mod.GollumMod;
+import mods.gollum.core.tools.simplejson.Json;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
@@ -179,15 +181,20 @@ public class GuiFieldConfig extends GuiGollumConfig {
 				
 			} else {
 				
-				if (f.getType().isAssignableFrom(String.class)                                                    ) { f.set(this.configLoad.config, o.toString()                      ); }
-				if (f.getType().isAssignableFrom(Long.class)      || f.getType().isAssignableFrom(Long.TYPE)      ) { f.set(this.configLoad.config, Long   .parseLong   (o.toString())); }
-				if (f.getType().isAssignableFrom(Integer.class)   || f.getType().isAssignableFrom(Integer.TYPE)   ) { f.set(this.configLoad.config, Integer.parseInt    (o.toString())); }
-				if (f.getType().isAssignableFrom(Short.class)     || f.getType().isAssignableFrom(Short.TYPE)     ) { f.set(this.configLoad.config, Short  .parseShort  (o.toString())); }
-				if (f.getType().isAssignableFrom(Byte.class)      || f.getType().isAssignableFrom(Byte.TYPE)      ) { f.set(this.configLoad.config, Byte   .parseByte   (o.toString())); }
-				if (f.getType().isAssignableFrom(Character.class) || f.getType().isAssignableFrom(Character.TYPE) ) { f.set(this.configLoad.config, (char) ((Byte.parseByte (o.toString())) & 0x00FF)); }
-				if (f.getType().isAssignableFrom(Double.class)    || f.getType().isAssignableFrom(Double.TYPE)    ) { f.set(this.configLoad.config, Double .parseDouble (o.toString())); }
-				if (f.getType().isAssignableFrom(Float.class)     || f.getType().isAssignableFrom(Float.TYPE)     ) { f.set(this.configLoad.config, Float  .parseFloat  (o.toString())); }
-				if (f.getType().isAssignableFrom(Boolean.class)   || f.getType().isAssignableFrom(Boolean.TYPE)   ) { f.set(this.configLoad.config, Boolean.parseBoolean(o.toString())); }
+				if (f.getType().isAssignableFrom(String.class)                                                    ) { f.set(this.configLoad.config, o.toString()                      ); } else
+				if (f.getType().isAssignableFrom(Long.class)      || f.getType().isAssignableFrom(Long.TYPE)      ) { f.set(this.configLoad.config, Long   .parseLong   (o.toString())); } else
+				if (f.getType().isAssignableFrom(Integer.class)   || f.getType().isAssignableFrom(Integer.TYPE)   ) { f.set(this.configLoad.config, Integer.parseInt    (o.toString())); } else
+				if (f.getType().isAssignableFrom(Short.class)     || f.getType().isAssignableFrom(Short.TYPE)     ) { f.set(this.configLoad.config, Short  .parseShort  (o.toString())); } else
+				if (f.getType().isAssignableFrom(Byte.class)      || f.getType().isAssignableFrom(Byte.TYPE)      ) { f.set(this.configLoad.config, Byte   .parseByte   (o.toString())); } else
+				if (f.getType().isAssignableFrom(Character.class) || f.getType().isAssignableFrom(Character.TYPE) ) { f.set(this.configLoad.config, (char) ((Byte.parseByte (o.toString())) & 0x00FF)); } else
+				if (f.getType().isAssignableFrom(Double.class)    || f.getType().isAssignableFrom(Double.TYPE)    ) { f.set(this.configLoad.config, Double .parseDouble (o.toString())); } else
+				if (f.getType().isAssignableFrom(Float.class)     || f.getType().isAssignableFrom(Float.TYPE)     ) { f.set(this.configLoad.config, Float  .parseFloat  (o.toString())); } else
+				if (f.getType().isAssignableFrom(Boolean.class)   || f.getType().isAssignableFrom(Boolean.TYPE)   ) { f.set(this.configLoad.config, Boolean.parseBoolean(o.toString())); } else
+				
+				if (IConfigJsonType.class.isAssignableFrom(f.getType()) && o instanceof Json) { 
+					IConfigJsonType configJson = (IConfigJsonType)f.get(this.configLoad.config);
+					configJson.readConfig((Json) o);
+				}
 				
 			}
 			

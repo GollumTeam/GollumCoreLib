@@ -20,7 +20,7 @@ import cpw.mods.fml.client.config.GuiSelectString;
 import cpw.mods.fml.client.config.GuiConfigEntries.CategoryEntry;
 import cpw.mods.fml.client.config.IConfigElement;
 
-public class ItemEntry extends SelectEntry {
+public class ItemEntry extends SelectValueEntry {
 
 	public ItemEntry(GuiConfig owningScreen, GuiConfigEntries owningEntryList, IConfigElement<String> configElement) {
 		super(owningScreen, owningEntryList, configElement);

@@ -4,7 +4,7 @@ import mods.gollum.core.tools.simplejson.Json;
 
 public interface IConfigJsonType {
 	
-	public void readConfig (Json json) throws Exception;
+	public void readConfig (Json json);
 
 	public Json writeConfig();
 	

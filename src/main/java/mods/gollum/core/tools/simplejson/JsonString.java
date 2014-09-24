@@ -1,19 +1,24 @@
 package mods.gollum.core.tools.simplejson;
 
+import java.util.ArrayList;
+
 import mods.gollum.core.tools.simplejson.Json.TYPE;
+import argo.jdom.JsonNode;
 import argo.jdom.JsonNodeBuilder;
 import argo.jdom.JsonNodeBuilders;
 
-public class FloatJson extends Json {
-	
-	public FloatJson(float f) {
-		this.value = f;
+public class JsonString extends Json {
+
+	public JsonString(String s) {
+		this.value = s;
 	}
 	
-	public float floatValue () { return (Float)this.value; 	}
-	
 	public TYPE getType () {
-		return TYPE.FLOAT;
+		return TYPE.STRING;
+	}
+	
+	public void setValue(Object value) {
+		this.value = value.toString();
 	}
 	
 	/////////////////////
@@ -21,6 +26,6 @@ public class FloatJson extends Json {
 	/////////////////////
 	
 	public JsonNodeBuilder json() {
-		return JsonNodeBuilders.aNumberBuilder(value+"");
+		return JsonNodeBuilders.aStringBuilder(this.value.toString());
 	}
 }

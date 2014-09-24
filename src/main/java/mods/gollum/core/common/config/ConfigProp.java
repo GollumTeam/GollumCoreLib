@@ -14,6 +14,7 @@ public @interface ConfigProp {
 		ITEM,
 		BLOCK,
 		MOD,
+		SLIDER,
 	}
 	
 	public abstract String name() default "";

@@ -1,6 +1,10 @@
 package mods.gollum.core.common.config;
 
+import java.lang.reflect.Field;
+
+import mods.gollum.core.common.config.type.IConfigJsonType;
 import mods.gollum.core.common.context.ModContext;
+import mods.gollum.core.tools.simplejson.Json;
 
 
 public abstract class Config implements Cloneable {
@@ -36,13 +40,14 @@ public abstract class Config implements Cloneable {
 		configLoader.loadConfig();
 		return this;
 	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object clone() {
 		Config cloned = null;
 		try {
 			cloned = (Config) super.clone();
-		} catch (CloneNotSupportedException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return cloned;

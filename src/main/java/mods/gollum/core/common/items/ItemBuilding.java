@@ -122,6 +122,11 @@ public class ItemBuilding extends HItem {
 		
 		return name;
 	}
+
+	@Override
+	public String getItemStackDisplayName(ItemStack itemStack) {
+		return this.getUnlocalizedNameInefficiently(itemStack);
+	}
 	
 	@SideOnly(Side.CLIENT)
 	@Override

@@ -4,20 +4,21 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
-import com.google.gson.JsonNull;
-
+import argo.format.CompactJsonFormatter;
+import argo.format.PrettyJsonFormatter;
 import argo.jdom.JsonNode;
 import argo.jdom.JsonNodeBuilder;
 import argo.jdom.JsonNodeBuilders;
+import argo.jdom.JsonNodeFactories;
+import argo.jdom.JsonRootNode;
 import argo.jdom.JsonStringNode;
-import mods.gollum.core.common.config.JsonConfigProp;
-import mods.gollum.core.common.config.type.ItemStackConfigType;
-import mods.gollum.core.tools.simplejson.Json.EntryObject;
 
-public class Json {
+public class Json implements Cloneable {
 	
 	enum TYPE {
 		NULL,
@@ -35,7 +36,7 @@ public class Json {
 	}
 	
 	protected Object value;
-	protected ArrayList<JsonComplement> complements = new ArrayList<JsonComplement>();
+	protected ArrayList<IJsonComplement> complements = new ArrayList<IJsonComplement>();
 	
 	public static class EntryObject {
 		
@@ -51,7 +52,7 @@ public class Json {
 			this.dom = dom;
 		}
 		
-		public EntryObject addComplement(JsonComplement jsonComplement) {
+		public EntryObject addComplement(IJsonComplement jsonComplement) {
 			this.dom.addComplement(jsonComplement);
 			return this;
 		}
@@ -59,40 +60,52 @@ public class Json {
 	
 	public static Json create(Json json) { return create(json.value()).addComplements(json.getComplements());}
 	
-	public static NullJson   create()           { return new NullJson();       }
-	public static StringJson create(String str) { return new StringJson (str); }
-	public static LongJson   create(long l)     { return new LongJson (l);     }
-	public static IntJson    create(int i)      { return new IntJson (i);      }
-	public static ShortJson  create(short s)    { return new ShortJson (s);    }
-	public static ByteJson   create(byte b)     { return new ByteJson (b);     }
-	public static CharJson   create(char c)     { return new CharJson (c);     }
-	public static DoubleJson create(double d)   { return new DoubleJson (d);   }
-	public static FloatJson  create(float f)    { return new FloatJson (f);    }
-	public static BoolJson   create(boolean b)  { return new BoolJson (b);     }
+	public static JsonNull   create()           { return new JsonNull();       }
+	public static JsonString create(String str) { return new JsonString (str); }
+	public static JsonLong   create(long l)     { return new JsonLong (l);     }
+	public static JsonInt    create(int i)      { return new JsonInt (i);      }
+	public static JsonShort  create(short s)    { return new JsonShort (s);    }
+	public static JsonByte   create(byte b)     { return new JsonByte (b);     }
+	public static JsonChar   create(char c)     { return new JsonChar (c);     }
+	public static JsonDouble create(double d)   { return new JsonDouble (d);   }
+	public static JsonFloat  create(float f)    { return new JsonFloat (f);    }
+	public static JsonBool   create(boolean b)  { return new JsonBool (b);     }
 
-	public static ArrayJson create(Object... objs) { return createArray(objs); }
-	public static ArrayJson createArray(Object... objs) {
-		ArrayJson ar = new ArrayJson ();
+	public static JsonArray create(Object... objs) { return createArray(objs); }
+	public static JsonArray createArray(Object... objs) {
+		JsonArray ar = new JsonArray ();
 		for (Object i : objs) {
 			ar.add(i);
 		}
 		return ar;
 	}
 
-	public static ObjectJson create(EntryObject... objs) { return createObject(objs); }
-	public static ObjectJson createObject(EntryObject... objs) {
+	public static JsonObject create(EntryObject... objs) { return createObject(objs); }
+	public static JsonObject createObject(EntryObject... objs) {
 		
-		ObjectJson o = new ObjectJson ();
+		JsonObject o = new JsonObject ();
 		for (EntryObject entry : objs) {
 			o.add(entry.key, entry.dom);
 		}
 		return o;
 	}
 	
+	public static JsonObject create(Map map) {
+		JsonObject json = createObject();
+		json.setValue(map);
+		return json;
+	}
+	
+	public static JsonArray create(List list) {
+		JsonArray json = createArray();
+		json.setValue(list);
+		return json;
+	}
+	
 	public static Json create(Object o) {
 		
 		if (o.getClass().isArray()) {
-			ArrayJson ar = new ArrayJson ();
+			JsonArray ar = new JsonArray ();
 			for (int i = 0; i < Array.getLength(o); i++) {
 				ar.add(Array.get(o, i));
 			}
@@ -110,6 +123,8 @@ public class Json {
 		if (o instanceof Double    || o.getClass().isAssignableFrom(Double.TYPE   )) { return create (((Double)   o).doubleValue());  }
 		if (o instanceof Float     || o.getClass().isAssignableFrom(Float.TYPE    )) { return create (((Float)    o).floatValue());   }
 		if (o instanceof Boolean   || o.getClass().isAssignableFrom(Boolean.TYPE  )) { return create (((Boolean)  o).booleanValue()); }
+		if (o instanceof Map       || o.getClass().isAssignableFrom(Boolean.TYPE  )) { return create ((Map)o);                        }
+		if (o instanceof List      || o.getClass().isAssignableFrom(Boolean.TYPE  )) { return create ((List)o);                       }
 		
 		return create(o.toString());
 	}
@@ -132,7 +147,11 @@ public class Json {
 	
 	public Collection<Json> allChild () { return new ArrayList<Json>(); }
 	public Set<Entry<String, Json>> allChildWithKey ()  { return new HashSet<Entry<String, Json>>(); }
-
+	
+	public boolean contain (Json json)      { return false; };
+	public boolean containKey (int i)      { return false; };
+	public boolean containKey (String key) { return false; };
+	
 	public void add(Json child) {}
 	public void add(Object child) {
 		this.add(create (child));
@@ -148,23 +167,23 @@ public class Json {
 		return false;
 	}
 
-	public Json addComplement(JsonComplement jsonComplement) {
+	public Json addComplement(IJsonComplement jsonComplement) {
 		this.complements.add(jsonComplement);
 		return this;
 	}
 
-	private Json addComplements(ArrayList<JsonComplement> complements) {
+	private Json addComplements(ArrayList<IJsonComplement> complements) {
 		this.complements.addAll(complements);
 		return this;
 	}
 	
-	public ArrayList<JsonComplement> getComplements() {
+	public ArrayList<IJsonComplement> getComplements() {
 		return this.complements;
 	}
 	
-	public JsonComplement getComplement(Class search) {
-		for (JsonComplement complement: this.complements) {
-			if (complement.getClass().isAssignableFrom(search)) {
+	public IJsonComplement getComplement(Class search) {
+		for (IJsonComplement complement: this.complements) {
+			if (search.isAssignableFrom(complement.getClass())) {
 				return complement;
 			}
 		}
@@ -173,6 +192,10 @@ public class Json {
 	
 	public TYPE getType () {
 		return TYPE.NULL;
+	}
+	
+	public void setValue(Object value) {
+		this.value = value;
 	}
 
 	public boolean isNull   () { return this.getType() == TYPE.NULL;   }
@@ -188,6 +211,35 @@ public class Json {
 	public boolean isFloat  () { return this.getType() == TYPE.FLOAT;   }
 	public boolean isBool   () { return this.getType() == TYPE.BOOLEAN; }
 	
+	public Object clone () {
+		return create (this);
+		
+	}
+	
+	public String toString() {
+		IJsonObjectDisplay display = (IJsonObjectDisplay)this.getComplement(IJsonObjectDisplay.class);
+		if (display != null) {
+			return display.display(this);
+		}
+		return toString(false);
+	}
+	
+	public String toString (boolean pretty) {
+		JsonRootNode json = JsonNodeFactories.object(
+			JsonNodeFactories.field("root", this.json().build())
+		);
+		String out;
+		if (pretty) {
+			out = new PrettyJsonFormatter().format(json);
+		} else {
+			out = new CompactJsonFormatter().format(json);
+		}
+		out = out.substring(1).trim().substring("\"root\":".length()).trim();
+		out = out.substring(0, out.length() - ("}".length()));
+		
+		return out;
+	}
+	
 	/////////////////////
 	// Convert to json //
 	/////////////////////
@@ -195,14 +247,14 @@ public class Json {
 	public static Json create (JsonNode json) {
 		
 		if (json.isObjectNode()) {
-			ObjectJson o = createObject();
+			JsonObject o = createObject();
 			for (Entry<JsonStringNode, JsonNode> entry : json.getFields().entrySet()) {
 				o.add(entry.getKey().getText(), entry.getValue());
 			}
 			return o;
 		}
 		if (json.isArrayNode()) {
-			ArrayJson ar = createArray ();
+			JsonArray ar = createArray ();
 			for (JsonNode child: json.getElements()) {
 				ar.add(child);
 			}

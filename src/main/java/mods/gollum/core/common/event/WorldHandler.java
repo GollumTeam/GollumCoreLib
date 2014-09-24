@@ -4,18 +4,32 @@ import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.common.building.Builder;
 import net.minecraft.util.IProgressUpdate;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.event.world.ChunkDataEvent.Save;
 import net.minecraftforge.event.world.WorldEvent.Unload;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 
 public class WorldHandler {
 	
+	boolean mustBeSave = false;
+	
+	@SubscribeEvent
+	public void onSave (Save event) {
+		
+		if (!event.world.isRemote) {
+			for (Thread thread : Builder.currentBuilds) {
+				if (thread.isAlive()) {
+					mustBeSave = true;
+				}
+			}
+		}
+	}
+	
 	@SubscribeEvent
 	public void onUnload (Unload event) {
 		
 		if (!event.world.isRemote) {
 			
-			boolean mustBeSave = false;
 			
 			for (Thread thread : Builder.currentBuilds) {
 				if (thread.isAlive()) {
@@ -38,6 +52,9 @@ public class WorldHandler {
 				}
 			}
 			Builder.currentBuilds.clear ();
+
+			mustBeSave = false;
+			
 			ModGollumCoreLib.log.debug("=========== UnloadEvent ===========");
 		}
 	}

@@ -4,15 +4,24 @@ import mods.gollum.core.tools.simplejson.Json.TYPE;
 import argo.jdom.JsonNodeBuilder;
 import argo.jdom.JsonNodeBuilders;
 
-public class DoubleJson extends Json {
+public class JsonInt extends Json {
 	
-	public DoubleJson(double d) {
-		this.value = d;
+	public JsonInt(int i) {
+		this.value = i;
 	}
-	public double doubleValue () { return (Double)this.value; }
+	
+	public int intValue () { return (Integer)this.value; }
 	
 	public TYPE getType () {
-		return TYPE.DOUBLE;
+		return TYPE.INT;
+	}
+	
+	public void setValue(Object value) {
+		try {
+			this.value = Integer.parseInt(value.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/////////////////////

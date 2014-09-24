@@ -4,9 +4,9 @@ import mods.gollum.core.tools.simplejson.Json.TYPE;
 import argo.jdom.JsonNodeBuilder;
 import argo.jdom.JsonNodeBuilders;
 
-public class CharJson extends Json {
+public class JsonChar extends Json {
 	
-	public CharJson(char c) {
+	public JsonChar(char c) {
 		this.value = c;
 	}
 	
@@ -14,6 +14,14 @@ public class CharJson extends Json {
 	
 	public TYPE getType () {
 		return TYPE.CHAR;
+	}
+	
+	public void setValue(Object value) {
+		try {
+			this.value = (char) (Byte.parseByte(value.toString()) & 0x00FF);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/////////////////////

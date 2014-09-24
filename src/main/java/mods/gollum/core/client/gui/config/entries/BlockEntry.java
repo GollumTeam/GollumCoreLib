@@ -18,7 +18,7 @@ import cpw.mods.fml.client.config.GuiSelectString;
 import cpw.mods.fml.client.config.GuiConfigEntries.CategoryEntry;
 import cpw.mods.fml.client.config.IConfigElement;
 
-public class BlockEntry extends SelectEntry {
+public class BlockEntry extends SelectValueEntry {
 
 	public BlockEntry(GuiConfig owningScreen, GuiConfigEntries owningEntryList, IConfigElement<String> configElement) {
 		super(owningScreen, owningEntryList, configElement);

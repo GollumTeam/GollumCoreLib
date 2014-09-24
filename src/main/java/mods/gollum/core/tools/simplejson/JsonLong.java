@@ -4,9 +4,9 @@ import mods.gollum.core.tools.simplejson.Json.TYPE;
 import argo.jdom.JsonNodeBuilder;
 import argo.jdom.JsonNodeBuilders;
 
-public class LongJson extends Json {
+public class JsonLong extends Json {
 	
-	public LongJson(long l) {
+	public JsonLong(long l) {
 		this.value = l;
 	}
 	
@@ -15,6 +15,14 @@ public class LongJson extends Json {
 	
 	public TYPE getType () {
 		return TYPE.LONG;
+	}
+	
+	public void setValue(Object value) {
+		try {
+			this.value = Long.parseLong(value.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/////////////////////

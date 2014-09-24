@@ -4,9 +4,9 @@ import mods.gollum.core.tools.simplejson.Json.TYPE;
 import argo.jdom.JsonNodeBuilder;
 import argo.jdom.JsonNodeBuilders;
 
-public class BoolJson extends Json {
+public class JsonBool extends Json {
 	
-	public BoolJson(boolean b) {
+	public JsonBool(boolean b) {
 		this.value = b;
 	}
 	
@@ -14,6 +14,14 @@ public class BoolJson extends Json {
 	
 	public TYPE getType () {
 		return TYPE.BOOLEAN;
+	}
+	
+	public void setValue(Object value) {
+		try {
+			this.value = Boolean.parseBoolean(value.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/////////////////////

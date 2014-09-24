@@ -79,9 +79,9 @@ public class RegisteredObjects {
 				modId = registerName.substring(0, registerName.indexOf(":"));
 				name  = registerName.substring(registerName.indexOf(":")+1);
 			}
+			
 			if (modId.equals("minecraft")) {
 				return (Item)Item.itemRegistry.getObject(name);
-				
 			} else {
 				return (Item)Item.itemRegistry.getObject(registerName);
 			}
