@@ -1,22 +1,14 @@
-package mods.gollum.core.client.gui.config;
+package mods.gollum.core.client.gui.config.element;
 
-import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import net.minecraftforge.common.config.ConfigElement;
-import net.minecraftforge.common.config.Property;
-import mods.gollum.core.client.gui.config.entries.BlockEntry;
-import mods.gollum.core.client.gui.config.entries.ItemEntry;
-import mods.gollum.core.client.gui.config.entries.JsonEntry;
+import mods.gollum.core.client.gui.config.entries.entry.ArrayCustomEntry;
 import mods.gollum.core.client.gui.config.properties.GollumProperty;
-import mods.gollum.core.common.config.ConfigLoader.ConfigLoad;
-import mods.gollum.core.common.config.type.IConfigJsonType;
 import mods.gollum.core.tools.simplejson.Json;
+import net.minecraftforge.common.config.Property;
 import cpw.mods.fml.client.config.ConfigGuiType;
-import cpw.mods.fml.client.config.DummyConfigElement.DummyCategoryElement;
-import cpw.mods.fml.client.config.GuiConfigEntries.ArrayEntry;
 import cpw.mods.fml.client.config.GuiConfigEntries.IConfigEntry;
 import cpw.mods.fml.client.config.IConfigElement;
 
@@ -58,7 +50,7 @@ public class CustomElement implements IConfigElement {
 	
 	@Override
 	public Class<? extends IConfigEntry> getConfigEntryClass() {
-		return (this.isArray) ? ArrayEntry.class : this.classEntry;
+		return (this.isArray) ? ArrayCustomEntry.class : this.classEntry;
 	}
 
 	@Override
@@ -68,7 +60,7 @@ public class CustomElement implements IConfigElement {
 
 	@Override
 	public Class getArrayEntryClass() {
-		return (this.isArray) ? ArrayEntry.class : this.classEntry;
+		return this.classEntry;
 	}
 
 	@Override
@@ -121,7 +113,7 @@ public class CustomElement implements IConfigElement {
 
 	@Override
 	public int getMaxListLength() {
-		return 0;
+		return property.getMaxListLength();
 	}
 
 	@Override
@@ -136,7 +128,7 @@ public class CustomElement implements IConfigElement {
 
 	@Override
 	public Object[] getDefaults() {
-		return this.defaultValues; //
+		return this.defaultValues;
 	}
 
 	@Override

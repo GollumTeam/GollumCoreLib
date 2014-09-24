@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import mods.gollum.core.client.gui.config.entries.GollumCategoryEntry;
+import mods.gollum.core.client.gui.config.entries.entry.GollumCategoryEntry;
 import mods.gollum.core.client.gui.config.properties.FieldProperty;
 import mods.gollum.core.common.config.ConfigLoader;
 import mods.gollum.core.common.config.ConfigLoader.ConfigLoad;

@@ -1,4 +1,4 @@
-package mods.gollum.core.client.gui.config.entries;
+package mods.gollum.core.client.gui.config.entries.entry;
 
 import mods.gollum.core.client.gui.config.GuiFieldConfig;
 import net.minecraft.client.gui.GuiScreen;

@@ -1,4 +1,4 @@
-package mods.gollum.core.client.gui.config.entries;
+package mods.gollum.core.client.gui.config.entries.entry;
 
 import java.util.HashMap;
 import java.util.Map;

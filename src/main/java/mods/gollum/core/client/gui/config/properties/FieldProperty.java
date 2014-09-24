@@ -3,8 +3,8 @@ package mods.gollum.core.client.gui.config.properties;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 
-import mods.gollum.core.client.gui.config.CustomElement;
-import mods.gollum.core.client.gui.config.entries.JsonEntry;
+import mods.gollum.core.client.gui.config.element.CustomElement;
+import mods.gollum.core.client.gui.config.entries.entry.JsonEntry;
 import mods.gollum.core.common.config.ConfigLoader.ConfigLoad;
 import mods.gollum.core.common.config.ConfigProp;
 import mods.gollum.core.common.config.type.IConfigJsonType;

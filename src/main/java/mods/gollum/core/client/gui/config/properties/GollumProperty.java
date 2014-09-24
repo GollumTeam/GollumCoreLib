@@ -4,11 +4,11 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.regex.Pattern;
 
-import mods.gollum.core.client.gui.config.CustomElement;
-import mods.gollum.core.client.gui.config.entries.BlockEntry;
-import mods.gollum.core.client.gui.config.entries.GollumCategoryEntry;
-import mods.gollum.core.client.gui.config.entries.ItemEntry;
-import mods.gollum.core.client.gui.config.entries.JsonEntry;
+import mods.gollum.core.client.gui.config.element.CustomElement;
+import mods.gollum.core.client.gui.config.entries.entry.BlockEntry;
+import mods.gollum.core.client.gui.config.entries.entry.GollumCategoryEntry;
+import mods.gollum.core.client.gui.config.entries.entry.ItemEntry;
+import mods.gollum.core.client.gui.config.entries.entry.JsonEntry;
 import mods.gollum.core.common.config.ConfigLoader;
 import mods.gollum.core.common.config.ConfigProp;
 import mods.gollum.core.common.config.ConfigLoader.ConfigLoad;
