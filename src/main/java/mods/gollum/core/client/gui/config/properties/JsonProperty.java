@@ -6,6 +6,7 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 
 import mods.gollum.core.client.gui.config.element.CustomElement;
+import mods.gollum.core.client.gui.config.entries.entry.JsonEntry;
 import mods.gollum.core.common.config.ConfigProp;
 import mods.gollum.core.common.config.ConfigLoader.ConfigLoad;
 import mods.gollum.core.common.config.JsonConfigProp;
@@ -20,8 +21,14 @@ import cpw.mods.fml.client.config.IConfigElement;
 
 public class JsonProperty extends GollumProperty {
 	
+	Json json;
+	Json defaultJson;
+	
 	public JsonProperty(GollumMod mod, String name, Json json, Json defaultJson) {
 		super (mod, getType(json));
+
+		this.json        = json;
+		this.defaultJson = defaultJson;
 		
 		if (this.getType() != null) {
 			
@@ -32,8 +39,8 @@ public class JsonProperty extends GollumProperty {
 			Object valueDefault = defaultJson.value();
 			
 			if (json.isChar()) { // Fixe affichage
-				value        = (byte)((Character)value).charValue();
-				valueDefault = (byte)((Character)valueDefault).charValue();
+				value        = (value        != null) ? (byte)((Character)value)       .charValue() : 0;
+				valueDefault = (valueDefault != null) ? (byte)((Character)valueDefault).charValue() : 0;
 			}
 			
 			this.init(name, anno, value, null, valueDefault, null);
@@ -49,6 +56,13 @@ public class JsonProperty extends GollumProperty {
 			this.isNative = true;
 		}
 		
+		if (json.isObject()) {
+			
+			this.markUnchange();
+			
+			this.isValid = true;
+			this.isNative = false;
+		}
 	}
 	
 	private static Type getType(Json json) {
@@ -81,7 +95,11 @@ public class JsonProperty extends GollumProperty {
 	
 	@Override
 	public IConfigElement createCustomConfigElement() {
-		log.warning("createCustomConfigElement isn't umplement on JsonField");
+		
+		if (this.json.isObject()) {
+			this.setName("");
+			return new CustomElement(JsonEntry.class, this, json.clone(), defaultJson.clone());
+		}
 		return null;
 	}
 

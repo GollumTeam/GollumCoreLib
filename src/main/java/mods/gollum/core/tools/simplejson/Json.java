@@ -104,6 +104,10 @@ public class Json implements Cloneable {
 	
 	public static Json create(Object o) {
 		
+		if (o == null) {
+			return create();
+		}
+		
 		if (o.getClass().isArray()) {
 			JsonArray ar = new JsonArray ();
 			for (int i = 0; i < Array.getLength(o); i++) {
@@ -148,9 +152,9 @@ public class Json implements Cloneable {
 	public Collection<Json> allChild () { return new ArrayList<Json>(); }
 	public Set<Entry<String, Json>> allChildWithKey ()  { return new HashSet<Entry<String, Json>>(); }
 	
-	public boolean contain (Json json)      { return false; };
-	public boolean containKey (int i)      { return false; };
-	public boolean containKey (String key) { return false; };
+	public boolean contains (Json json)      { return false; };
+	public boolean containsKey (int i)      { return false; };
+	public boolean containsKey (String key) { return false; };
 	
 	public void add(Json child) {}
 	public void add(Object child) {
@@ -163,7 +167,12 @@ public class Json implements Cloneable {
 	}
 	
 	public boolean equals (Object obj) {
-		if (obj instanceof Json) { return this.value().equals(((Json)obj).value());	}
+		if (obj instanceof Json) { 
+			if (((Json)obj).value() == null || this.value() == null) {
+				return this.value() == ((Json)obj).value();
+			}
+			return this.value().equals(((Json)obj).value());
+		}
 		return false;
 	}
 

@@ -3,7 +3,6 @@ package mods.gollum.core.client.gui.config.entries.entry;
 import mods.gollum.core.client.gui.config.GuiEditCustomArray;
 import cpw.mods.fml.client.config.GuiConfig;
 import cpw.mods.fml.client.config.GuiConfigEntries;
-import cpw.mods.fml.client.config.GuiEditArray;
 import cpw.mods.fml.client.config.GuiConfigEntries.ArrayEntry;
 import cpw.mods.fml.client.config.IConfigElement;
 

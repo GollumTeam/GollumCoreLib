@@ -25,7 +25,7 @@ public class JsonObject extends Json {
 	public boolean boolValue()  { return ((HashMap<String, Json>)this.value).size() > 0; }
 	
 	public Json child (int  i)      { return child (i+""); }
-	public Json child (String  key) { return (((HashMap<String, Json>)this.value).containsKey(key))? ((HashMap<String, Json>)this.value).get(key) : create(); }
+	public Json child (String  key) { return this.containsKey(key) ? ((HashMap<String, Json>)this.value).get(key) : create(); }
 	
 	public Collection<Json> allChild () { return ((HashMap<String, Json>)this.value).values(); }
 	public Set<Entry<String, Json>> allChildWithKey ()  { return ((HashMap<String, Json>)this.value).entrySet(); }
@@ -39,10 +39,10 @@ public class JsonObject extends Json {
 		((HashMap<String, Json>)this.value).put(key, child);
 	}
 	
-	public boolean containKey (int i)      { return this.containKey(i+""); }
-	public boolean containKey (String key) { return ((HashMap<String, Json>)this.value).containsKey(key); }
+	public boolean containsKey (int i)      { return this.containsKey(i+""); }
+	public boolean containsKey (String key) { return ((HashMap<String, Json>)this.value).containsKey(key); }
 	
-	public boolean contain (Json json) { return ((HashMap<String, Json>)this.value).containsValue (json); }
+	public boolean contains (Json json) { return ((HashMap<String, Json>)this.value).containsValue (json); }
 	
 	
 	public boolean equals (Object obj) {

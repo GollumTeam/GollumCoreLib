@@ -1,19 +1,11 @@
 package mods.gollum.core.client.gui.config.entries.entry;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import mods.gollum.core.client.gui.config.GuiFieldConfig;
 import mods.gollum.core.client.gui.config.GuiJsonConfig;
 import mods.gollum.core.client.gui.config.entries.GuiEditArrayCustomEntries;
 import mods.gollum.core.tools.simplejson.Json;
-import net.minecraft.client.gui.GuiScreen;
 import cpw.mods.fml.client.config.GuiConfig;
 import cpw.mods.fml.client.config.GuiConfigEntries;
 import cpw.mods.fml.client.config.GuiConfigEntries.ButtonEntry;
-import cpw.mods.fml.client.config.GuiEditArrayEntries;
-import cpw.mods.fml.client.config.GuiSelectString;
-import cpw.mods.fml.client.config.GuiConfigEntries.CategoryEntry;
 import cpw.mods.fml.client.config.IConfigElement;
 
 public class JsonEntry extends ButtonEntry {

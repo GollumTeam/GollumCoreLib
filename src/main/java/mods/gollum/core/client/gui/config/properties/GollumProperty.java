@@ -68,8 +68,8 @@ public abstract class GollumProperty extends Property {
 		} else {
 			this.setValues(new String[0]);
 			this.setDefaultValues(new String[0]);
-			this.setValue(value.toString());
-			this.setDefaultValue(valueDefault.toString());
+			this.setValue(value+"");
+			this.setDefaultValue(valueDefault+"");
 
 			try {
 				Field fIsList = Property.class.getDeclaredField("isList");
@@ -137,6 +137,17 @@ public abstract class GollumProperty extends Property {
 		if (Long.parseLong(this.getMaxValue()) > 15L) {
 			this.setMaxValue(15);
 		}
+	}
+	
+	public String getDefault() {
+		return (!super.getDefault().equals("")) ? super.getDefault() : getNullValue()+"";
+	}
+	
+	private Object getNullValue() {
+		if (type == Type.BOOLEAN) { return false; }
+		if (type == Type.DOUBLE)  { return 0; }
+		if (type == Type.INTEGER) { return 0; }
+		return "";
 	}
 	
 	public Type getType() {

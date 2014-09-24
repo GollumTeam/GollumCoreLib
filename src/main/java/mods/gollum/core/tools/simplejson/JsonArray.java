@@ -22,7 +22,7 @@ public class JsonArray extends Json {
 	public String strValue()    { return ((List<Json>)this.value).size()+""; }
 	public boolean boolValue()  { return ((List<Json>)this.value).size() > 0; }
 	
-	public Json child (int  i) { return (i < ((List<Json>)value).size()) ? ((List<Json>)value).get(i) : create(); }
+	public Json child (int  i) { return this.containsKey(i) ? ((List<Json>)value).get(i) : create(); }
 	public Json child (String  key) { 
 		try  {
 			return child (Integer.parseInt(key));
@@ -50,16 +50,16 @@ public class JsonArray extends Json {
 		((List<Json>)this.value).add(child);
 	}
 	
-	public boolean containKey (int i)      { return i < ((List<Json>)value).size(); }
-	public boolean containKey (String key) { 
+	public boolean containsKey (int i)      { return i < ((List<Json>)value).size(); }
+	public boolean containsKey (String key) { 
 		try  {
-			return containKey (Integer.parseInt(key));
+			return containsKey (Integer.parseInt(key));
 		} catch (Exception e) {
 		}
 		return false; 
 	}
 	
-	public boolean contain (Json json) { return ((List<Json>)this.value).contains(json); }
+	public boolean contains (Json json) { return ((List<Json>)this.value).contains(json); }
 	
 	
 	public boolean equals (Object obj) {

@@ -78,7 +78,7 @@ public class GuiJsonConfig extends GuiGollumConfig {
 				
 				Json newValue = null;
 				
-				if (value.containKey(entry.getName())) {
+				if (value.containsKey(entry.getName())) {
 					newValue = (Json) value.child(entry.getName()).clone();
 				} else {
 					// TODO no implment add new value

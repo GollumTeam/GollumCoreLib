@@ -123,7 +123,12 @@ public class CustomElement implements IConfigElement {
 
 	@Override
 	public Object getDefault() {
-		return this.defaultValue;
+
+		if (this.getType() == ConfigGuiType.BOOLEAN) { try { return Boolean.parseBoolean(this.defaultValue+""); } catch (Exception e) {} return false; }
+		if (this.getType() == ConfigGuiType.DOUBLE)  { try { return Double .parseDouble (this.defaultValue+""); } catch (Exception e) {} return 0; }
+		if (this.getType() == ConfigGuiType.INTEGER) { try { return Integer.parseInt    (this.defaultValue+""); } catch (Exception e) {} return 0; }
+		
+		return this.defaultValue != null ? this.defaultValue : this.getNullElement ();
 	}
 
 	@Override
@@ -168,7 +173,14 @@ public class CustomElement implements IConfigElement {
 
 	@Override
 	public Object get() {
-		return this.value;
+		return this.value != null ? this.value : this.getNullElement ();
+	}
+
+	private Object getNullElement() {
+		if (this.getType() == ConfigGuiType.BOOLEAN) { return false; }
+		if (this.getType() == ConfigGuiType.DOUBLE)  { return 0; }
+		if (this.getType() == ConfigGuiType.INTEGER) { return 0; }
+		return "";
 	}
 
 	@Override
