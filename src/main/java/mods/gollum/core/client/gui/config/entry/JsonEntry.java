@@ -16,8 +16,8 @@ import cpw.mods.fml.client.config.IConfigElement;
 
 public class JsonEntry extends ButtonEntry implements IGollumConfigEntry {
 
-	protected final Json defaultValue;
-	protected final Json beforeValue;
+	protected Json defaultValue;
+	protected Json beforeValue;
 	protected Json currentValue;
 	
 	protected EditCustomArrayEntryLogic logic = new EditCustomArrayEntryLogic(this);
@@ -25,11 +25,15 @@ public class JsonEntry extends ButtonEntry implements IGollumConfigEntry {
 	public JsonEntry(GuiConfig parent, GuiConfigEntries entryList, IConfigElement<String> configElement) {
 		super(parent, entryList, configElement);
 		
+		this.init();
+		
+		updateValueButtonText();
+	}
+	
+	public void init() {
 		defaultValue  = (Json)this.configElement.getDefault();
 		beforeValue   = (Json)configElement.get();
 		currentValue  = (Json)configElement.get();
-		
-		updateValueButtonText();
 	}
 	
 	@Override
@@ -64,10 +68,7 @@ public class JsonEntry extends ButtonEntry implements IGollumConfigEntry {
 
 	@Override
 	public void valueButtonPressed(int slotIndex) {
-		Json d  = (Json)this.configElement.get();
-		Json dv = (Json)this.configElement.getDefault();
-		
-		mc.displayGuiScreen(new GuiJsonConfig(this.owningScreen, this, currentValue, defaultValue));
+		mc.displayGuiScreen(new GuiJsonConfig(this.owningScreen, this, this.currentValue, this.defaultValue));
 	}
 
 	public void setValueFromChildScreen(Object newValue) {
@@ -85,7 +86,7 @@ public class JsonEntry extends ButtonEntry implements IGollumConfigEntry {
 	@Override
 	public void setToDefault() {
 		if (enabled()) {
-			this.currentValue = defaultValue;
+			this.currentValue = (Json) defaultValue.clone();
 			updateValueButtonText();
 		}
 	}
@@ -101,18 +102,9 @@ public class JsonEntry extends ButtonEntry implements IGollumConfigEntry {
 	@Override
 	public void undoChanges() {
 		if (enabled()) {
-			currentValue = beforeValue;
+			currentValue = (Json) beforeValue.clone();
 			updateValueButtonText();
 		}
-	}
-
-	@Override
-	public boolean saveConfigElement() {
-		if (enabled() && isChanged()) {
-			this.configElement.set(currentValue);
-			return configElement.requiresMcRestart();
-		}
-		return false;
 	}
 
 	@Override
@@ -127,5 +119,14 @@ public class JsonEntry extends ButtonEntry implements IGollumConfigEntry {
 	@Override
 	public String[] getCurrentValues() {
 		return new String[] { getCurrentValue() };
+	}
+
+	@Override
+	public boolean saveConfigElement() {
+		if (enabled() && isChanged()) {
+			this.configElement.set(currentValue);
+			return configElement.requiresMcRestart();
+		}
+		return false;
 	}
 }

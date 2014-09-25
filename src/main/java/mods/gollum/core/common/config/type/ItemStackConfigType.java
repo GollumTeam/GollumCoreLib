@@ -12,7 +12,7 @@ import net.minecraft.item.ItemStack;
 public class ItemStackConfigType implements IConfigJsonType {
 	
 	private String registerName;
-	private char metadata;
+	private int metadata;
 	private int number;
 	
 	public ItemStackConfigType() throws Exception {
@@ -30,7 +30,7 @@ public class ItemStackConfigType implements IConfigJsonType {
 	public ItemStackConfigType(String registerName, int number, int metadata) {
 		this.registerName = registerName;
 		this.number = number;
-		this.metadata = (char)(metadata & 0x000000FF);
+		this.metadata = metadata;
 	}
 
 	@Override
@@ -46,14 +46,7 @@ public class ItemStackConfigType implements IConfigJsonType {
 			new EntryObject ("registerName", this.registerName).addComplement (new JsonConfigProp().type(Type.ITEM)),
 			new EntryObject ("metadata"    , this.metadata),
 			new EntryObject ("number"      , this.number).addComplement (new JsonConfigProp().minValue("0").maxValue("64").type(Type.SLIDER))
-		).addComplement(new IJsonObjectDisplay () {
-
-			@Override
-			public String display(Json json) {
-				return json.child("number").intValue()+" "+json.child("registerName").strValue()+":"+json.child("metadata").intValue();
-			}
-			
-		});
+		);
 	}
 	
 	public ItemStack getItemStak () {
@@ -66,5 +59,10 @@ public class ItemStackConfigType implements IConfigJsonType {
 			this.metadata == obj.metadata &&
 			this.number   == obj.number
 		;
+	}
+	
+	@Override
+	public String toString() {
+		return this.number+" "+this.registerName+":"+this.metadata;
 	}
 }

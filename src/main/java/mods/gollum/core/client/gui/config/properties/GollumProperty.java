@@ -4,8 +4,11 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.regex.Pattern;
 
+import scala.actors.threadpool.Arrays;
 import mods.gollum.core.client.gui.config.element.CustomElement;
+import mods.gollum.core.client.gui.config.entry.ArrayCustomEntry;
 import mods.gollum.core.client.gui.config.entry.BlockEntry;
+import mods.gollum.core.client.gui.config.entry.ConfigJsonTypeEntry;
 import mods.gollum.core.client.gui.config.entry.GollumCategoryEntry;
 import mods.gollum.core.client.gui.config.entry.ItemEntry;
 import mods.gollum.core.client.gui.config.entry.JsonEntry;
@@ -96,7 +99,7 @@ public abstract class GollumProperty extends Property {
 		return type;
 	}
 	
-	protected void initNative(ConfigProp anno, Class clazz, Object value, Object valueDefault, String name) {
+	protected void init(ConfigProp anno, Class clazz, Object value, Object valueDefault, String name) {
 		
 		if (this.getType() != null && anno != null) {
 			
@@ -129,7 +132,7 @@ public abstract class GollumProperty extends Property {
 				}
 			}
 			
-			this.initNativeDatas(name, anno, value, values, valueDefault, valuesDefault);
+			this.initDatas(name, anno, value, values, valueDefault, valuesDefault);
 			
 			// Limit short byte char
 			if (clazz.isAssignableFrom(Short.TYPE) || clazz.isAssignableFrom(Short.class)) {
@@ -148,9 +151,22 @@ public abstract class GollumProperty extends Property {
 			this.isNative = true;
 			
 		}
+		
+
+		if (
+			IConfigJsonType  .class.isAssignableFrom(clazz) ||
+			Json             .class.isAssignableFrom(clazz) ||
+			IConfigJsonType[].class.isAssignableFrom(clazz)
+		) {
+			
+			this.markUnchange();
+			
+			this.isValid = true;
+			this.isNative = false;
+		}
 	}
 	
-	protected void initNativeDatas (String name, ConfigProp anno, Object value, String[] values, Object valueDefault, String[] valuesDefault) {
+	protected void initDatas (String name, ConfigProp anno, Object value, String[] values, Object valueDefault, String[] valuesDefault) {
 		
 		this.anno = anno;
 		
@@ -309,6 +325,44 @@ public abstract class GollumProperty extends Property {
 				return this.createCustomConfigElement();
 			}
 		}
+		return null;
+	}
+	
+	protected Class getClassEntryForObject (Object o) {
+		
+		if (o instanceof Json           ) { return JsonEntry          .class; }
+		if (o instanceof IConfigJsonType) { return ConfigJsonTypeEntry.class; }
+		
+		if (o instanceof Object[]) {
+			
+			Class subType = o.getClass().getComponentType();
+			
+			if (Object[]       .class.isAssignableFrom(subType)) { return ArrayCustomEntry   .class; }
+			if (Json           .class.isAssignableFrom(subType)) { return JsonEntry          .class; }
+			if (IConfigJsonType.class.isAssignableFrom(subType)) { return ConfigJsonTypeEntry.class; }
+			
+			return ConfigJsonTypeEntry.class;
+		}
+		return null;
+	}
+	
+	protected CustomElement buildCustomConfigElement(Object o, Object oD) {
+		
+		Class classEntry = this.getClassEntryForObject(o);
+			
+		if (classEntry != null) {
+			
+			if (o instanceof Object[]) {
+				Object[] oAr  = Arrays.copyOf((Object[])o , ((Object[])o).length);
+				Object[] oDAr = Arrays.copyOf((Object[])oD, ((Object[])o).length);
+				return new CustomElement(classEntry, this, oAr, oDAr);
+			}
+			
+			return new CustomElement(classEntry, this, o, oD);
+		}
+		
+		
+		
 		return null;
 	}
 	

@@ -4,6 +4,7 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 
 import mods.gollum.core.client.gui.config.element.CustomElement;
+import mods.gollum.core.client.gui.config.entry.ConfigJsonTypeEntry;
 import mods.gollum.core.client.gui.config.entry.JsonEntry;
 import mods.gollum.core.common.config.ConfigLoader.ConfigLoad;
 import mods.gollum.core.common.config.ConfigProp;
@@ -29,57 +30,22 @@ public class FieldProperty extends GollumProperty {
 		
 		if (anno != null && anno.group().equals (currentCategory)) {
 			
-			initNative(anno, f.getType(), f.get(configLoad.config), f.get(configLoad.configDefault), f.getName());
+			init(anno, f.getType(), f.get(configLoad.config), f.get(configLoad.configDefault), f.getName());
 			
-			if (
-				IConfigJsonType  .class.isAssignableFrom(f.getType()) ||
-				IConfigJsonType[].class.isAssignableFrom(f.getType())
-			) {
-				
-				this.markUnchange();
-				
-				this.isValid = true;
-				this.isNative = false;
-			}
 		}
 		
 	}
 	
 	@Override
-	public IConfigElement createCustomConfigElement() {
+	public IConfigElement createCustomConfigElement() { // TODO factorisé miexu que ca
 		try {
 			
 			Object o  = f.get(this.configLoad.config);
 			Object oD = f.get(this.configLoad.configDefault);
+			setName(this.f.getName());
 			
-			if (o instanceof IConfigJsonType) {
-				
-				Json value        = ((IConfigJsonType)o ).writeConfig();
-				Json defaultValue = ((IConfigJsonType)oD).writeConfig();
-				
-				this.setName(f.getName());
-				return new CustomElement(JsonEntry.class, this, value, defaultValue);
-			}
+			return buildCustomConfigElement(o, oD);
 			
-			if (f.get(this.configLoad.config) instanceof IConfigJsonType[]) {
-				
-				IConfigJsonType[] oAr  = (IConfigJsonType[])o;
-				IConfigJsonType[] oDAr = (IConfigJsonType[])oD;
-				
-				Json[] values        = new Json[oAr .length];
-				Json[] defaultValues = new Json[oDAr.length];
-				
-				for (int i = 0; i < oAr.length; i++) {
-					values[i] = oAr[i].writeConfig();
-				}
-				for (int i = 0; i < oAr.length; i++) {
-					defaultValues[i] = oDAr[i].writeConfig();
-				}
-				
-				this.setName(f.getName());
-				return new CustomElement(JsonEntry.class, this, values, defaultValues);
-
-			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

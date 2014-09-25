@@ -44,7 +44,7 @@ public class JsonProperty extends GollumProperty {
 				valueDefault = (valueDefault != null) ? (byte)((Character)valueDefault).charValue() : 0;
 			}
 			
-			this.initNativeDatas(name, anno, value, null, valueDefault, null);
+			this.initDatas(name, anno, value, null, valueDefault, null);
 			
 			// Limit short byte char
 			if (json.isShort()) { this.setLimitShort(); }
