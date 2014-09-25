@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import mods.gollum.core.client.gui.config.entries.entry.ArrayCustomEntry;
+import mods.gollum.core.client.gui.config.entry.ArrayCustomEntry;
 import mods.gollum.core.client.gui.config.properties.GollumProperty;
 import mods.gollum.core.tools.simplejson.Json;
 import net.minecraftforge.common.config.Property;

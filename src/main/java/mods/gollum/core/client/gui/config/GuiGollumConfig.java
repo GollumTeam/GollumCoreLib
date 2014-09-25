@@ -13,8 +13,8 @@ import java.util.Map.Entry;
 
 import org.lwjgl.input.Keyboard;
 
-import mods.gollum.core.client.gui.config.entries.entry.GollumCategoryEntry;
-import mods.gollum.core.client.gui.config.entries.entry.IGollumConfigEntry;
+import mods.gollum.core.client.gui.config.entry.GollumCategoryEntry;
+import mods.gollum.core.client.gui.config.entry.IGollumConfigEntry;
 import mods.gollum.core.client.gui.config.properties.FieldProperty;
 import mods.gollum.core.common.config.ConfigLoader;
 import mods.gollum.core.common.config.ConfigLoader.ConfigLoad;

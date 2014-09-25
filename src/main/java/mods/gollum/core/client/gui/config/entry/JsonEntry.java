@@ -1,10 +1,10 @@
-package mods.gollum.core.client.gui.config.entries.entry;
+package mods.gollum.core.client.gui.config.entry;
 
 import java.awt.Color;
 
 import mods.gollum.core.client.gui.config.GuiEditCustomArray;
 import mods.gollum.core.client.gui.config.GuiJsonConfig;
-import mods.gollum.core.client.gui.config.entries.entry.logic.EditCustomArrayEntryLogic;
+import mods.gollum.core.client.gui.config.entry.logic.EditCustomArrayEntryLogic;
 import mods.gollum.core.tools.simplejson.Json;
 import net.minecraft.client.renderer.Tessellator;
 import cpw.mods.fml.client.config.GuiButtonExt;

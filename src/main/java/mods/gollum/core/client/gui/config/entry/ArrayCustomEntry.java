@@ -1,4 +1,4 @@
-package mods.gollum.core.client.gui.config.entries.entry;
+package mods.gollum.core.client.gui.config.entry;
 
 import net.minecraft.client.resources.I18n;
 import mods.gollum.core.client.gui.config.GuiEditCustomArray;

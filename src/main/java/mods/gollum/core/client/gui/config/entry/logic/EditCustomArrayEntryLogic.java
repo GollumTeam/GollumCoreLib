@@ -1,4 +1,4 @@
-package mods.gollum.core.client.gui.config.entries.entry.logic;
+package mods.gollum.core.client.gui.config.entry.logic;
 
 import static mods.gollum.core.ModGollumCoreLib.log;
 
@@ -18,7 +18,7 @@ public class EditCustomArrayEntryLogic {
 	private Minecraft mc;
 	
 	protected ListEntryBase entry;
-	
+
 	protected GuiButtonExt btnAdd;
 	protected GuiButtonExt btnRemove;
 	
@@ -27,11 +27,11 @@ public class EditCustomArrayEntryLogic {
 		this.mc = Minecraft.getMinecraft();
 		
 		this.entry      = entry;
-		this.btnAdd    = new GuiButtonExt(0, 0, 0, 18, 18, "+");
-		this.btnRemove = new GuiButtonExt(0, 0, 0, 18, 18, "x");
+		this.btnAdd     = new GuiButtonExt(0, 0, 0, 18, 18, "+");
+		this.btnRemove  = new GuiButtonExt(0, 0, 0, 18, 18, "x");
 		
-		this.btnAdd   .packedFGColour = GuiUtils.getColorCode('2', true);
-		this.btnRemove.packedFGColour = GuiUtils.getColorCode('c', true);
+		this.btnAdd    .packedFGColour = GuiUtils.getColorCode('2', true);
+		this.btnRemove .packedFGColour = GuiUtils.getColorCode('c', true);
 		
 	}
 	
@@ -47,19 +47,13 @@ public class EditCustomArrayEntryLogic {
 	}
 	
 	protected GuiConfigEntries getOwningEntryList () {
-		try {
-			Field f = ListEntryBase.class.getDeclaredField("owningEntryList");
-			f.setAccessible(true);
-			return (GuiConfigEntries) f.get(this.entry);
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-		return null;
+		return this.getOwningScreen().entryList;
 	}
 	
 	public boolean parentIsArray () {
 		return this.getOwningScreen() instanceof GuiEditCustomArray;
 	}
+	
 	
 	public void drawEntryBefore () {
 
@@ -68,9 +62,9 @@ public class EditCustomArrayEntryLogic {
 			this.getOwningEntryList().scrollBarX -= 44;
 		}
 	}
-
+	
 	public void drawEntryAfter(int x, int y,int mouseX, int mouseY) {
-
+		
 		if (this.parentIsArray()) {
 			
 			this.getOwningEntryList().scrollBarX += 44;
@@ -83,30 +77,29 @@ public class EditCustomArrayEntryLogic {
 			this.btnRemove.xPosition = this.getOwningEntryList().scrollBarX - 22;
 			this.btnRemove.yPosition = y;
 			this.btnRemove.drawButton(this.mc, mouseX, mouseY);
+			
 		}
 	}
 
 	public boolean mousePressed(int index, int x, int y) {
-
-		if (this.btnAdd.mousePressed(this.mc, x, y)) {
+		
+		if (this.parentIsArray()) {
 			
-			btnAdd.func_146113_a(this.mc.getSoundHandler());
-//			owningEntryList.addNewEntry(index);
-//			owningEntryList.recalculateState();
+			if (this.btnAdd.mousePressed(this.mc, x, y)) {
+				
+				btnAdd.func_146113_a(this.mc.getSoundHandler());
+				((GuiEditCustomArray) this.getOwningScreen()).addNewEntry(index);
+				
+				return true;
+			} else 
+			if (this.btnRemove.mousePressed(this.mc, x, y)) {
+				
+				btnRemove.func_146113_a(this.mc.getSoundHandler());
+				((GuiEditCustomArray) this.getOwningScreen()).removeEntry(index);
+				
+				return true;
+			}
 			
-			log.debug ("More pressed");
-			
-			return true;
-		} else 
-		if (this.btnRemove.mousePressed(this.mc, x, y)) {
-			
-			btnRemove.func_146113_a(this.mc.getSoundHandler());
-//			owningEntryList.removeEntry(index);
-//			owningEntryList.recalculateState();
-			
-			log.debug ("Minus pressed");
-			
-			return true;
 		}
 		
 		return false;

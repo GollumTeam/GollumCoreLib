@@ -15,8 +15,8 @@ import akka.dispatch.sysmsg.Create;
 
 import com.ibm.icu.text.DisplayContext.Type;
 
-import mods.gollum.core.client.gui.config.entries.entry.GollumCategoryEntry;
-import mods.gollum.core.client.gui.config.entries.entry.JsonEntry;
+import mods.gollum.core.client.gui.config.entry.GollumCategoryEntry;
+import mods.gollum.core.client.gui.config.entry.JsonEntry;
 import mods.gollum.core.client.gui.config.properties.FieldProperty;
 import mods.gollum.core.client.gui.config.properties.JsonProperty;
 import mods.gollum.core.common.config.ConfigLoader;

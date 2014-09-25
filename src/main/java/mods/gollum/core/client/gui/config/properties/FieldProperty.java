@@ -4,7 +4,7 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 
 import mods.gollum.core.client.gui.config.element.CustomElement;
-import mods.gollum.core.client.gui.config.entries.entry.JsonEntry;
+import mods.gollum.core.client.gui.config.entry.JsonEntry;
 import mods.gollum.core.common.config.ConfigLoader.ConfigLoad;
 import mods.gollum.core.common.config.ConfigProp;
 import mods.gollum.core.common.config.type.IConfigJsonType;
