@@ -13,10 +13,6 @@ public class GuiEditCustomArray extends GuiGollumConfig {
 	public GuiEditCustomArray(GuiConfig parent, IConfigElement configElement, ArrayCustomEntry entry, Object[] values, Object[] defaultValues) {
 		super(parent, getFields(parent, values, defaultValues), entry);
 		
-
-		this.entryList.controlX   += 22;
-		this.entryList.scrollBarX += 22;
-		
 //		try {
 //			this.setFinalStatic (GuiConfig.class.getDeclaredField("entryList"), new GuiConfigEntries(this, mc)); 
 //			this.setFinalStatic (GuiConfig.class.getDeclaredField("initEntries"), entryList.listEntries); 
@@ -36,6 +32,14 @@ public class GuiEditCustomArray extends GuiGollumConfig {
 //		
 //		modifiersField.setInt(field, field.getModifiers() | Modifier.FINAL);
 //	}
+	
+	@Override
+	public void initGui() {
+		super.initGui();
+		
+		this.entryList.controlX   += 22;
+		this.entryList.scrollBarX += 22;
+	}
 	
 	private static List<IConfigElement> getFields(GuiConfig parent, Object[] values, Object[] defaultValues) {
 		ArrayList<IConfigElement> fields = new ArrayList<IConfigElement>();
