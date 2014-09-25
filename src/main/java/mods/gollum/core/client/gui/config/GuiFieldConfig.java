@@ -53,7 +53,7 @@ public class GuiFieldConfig extends GuiGollumConfig {
 		
 		this.init(parent);
 		
-		this.titleLine2 = category;
+		this.titleLine2      = category;
 		this.currentCategory = category;
 	}
 	

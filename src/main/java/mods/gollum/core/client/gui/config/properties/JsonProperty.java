@@ -25,6 +25,7 @@ public class JsonProperty extends GollumProperty {
 	Json defaultJson;
 	
 	public JsonProperty(GollumMod mod, String name, Json json, Json defaultJson) {
+		
 		super (mod, getType(json));
 
 		this.json        = json;
@@ -43,7 +44,7 @@ public class JsonProperty extends GollumProperty {
 				valueDefault = (valueDefault != null) ? (byte)((Character)valueDefault).charValue() : 0;
 			}
 			
-			this.init(name, anno, value, null, valueDefault, null);
+			this.initNativeDatas(name, anno, value, null, valueDefault, null);
 			
 			// Limit short byte char
 			if (json.isShort()) { this.setLimitShort(); }
@@ -68,7 +69,7 @@ public class JsonProperty extends GollumProperty {
 	private static Type getType(Json json) {
 		
 		Type type = null;
-
+		
 		if (json.isString()) {
 			type = Property.Type.STRING;
 		}

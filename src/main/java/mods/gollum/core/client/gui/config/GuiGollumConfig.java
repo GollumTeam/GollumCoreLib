@@ -14,6 +14,7 @@ import java.util.Map.Entry;
 import org.lwjgl.input.Keyboard;
 
 import mods.gollum.core.client.gui.config.entries.entry.GollumCategoryEntry;
+import mods.gollum.core.client.gui.config.entries.entry.IGollumConfigEntry;
 import mods.gollum.core.client.gui.config.properties.FieldProperty;
 import mods.gollum.core.common.config.ConfigLoader;
 import mods.gollum.core.common.config.ConfigLoader.ConfigLoad;
@@ -30,15 +31,26 @@ import cpw.mods.fml.client.config.GuiCheckBox;
 import cpw.mods.fml.client.config.GuiConfig;
 import cpw.mods.fml.client.config.GuiConfigEntries;
 import cpw.mods.fml.client.config.GuiMessageDialog;
+import cpw.mods.fml.client.config.GuiUnicodeGlyphButton;
+import cpw.mods.fml.client.config.HoverChecker;
 import cpw.mods.fml.client.config.IConfigElement;
 import cpw.mods.fml.common.ModContainer;
 
 public abstract class GuiGollumConfig extends GuiConfig {
 	
+	protected IGollumConfigEntry entry = null;
+	
+	public GuiGollumConfig(GuiConfig parent, List<IConfigElement> fields, IGollumConfigEntry entry) {
+		this(parent, fields, parent.title);
+		
+		this.titleLine2 = parent.titleLine2 + " > "+entry.getName();
+		this.entry      = entry;
+	}
+	
 	public GuiGollumConfig(GuiScreen parent, List<IConfigElement> configElements, String title) {
 		super(parent, configElements, getModId (parent), false, false, title);
 	}
-	
+
 	protected static GollumMod getMod(GuiScreen parent) {
 		if (parent instanceof GuiModList) {
 			try {
@@ -63,6 +75,31 @@ public abstract class GuiGollumConfig extends GuiConfig {
 	
 	protected static String getModName(GuiScreen parent) {
 		return getMod(parent).getModName();
+	}
+	
+	
+	/**
+	 * Adds the buttons (and other controls) to the screen in question.
+	 */
+	@Override
+	public void initGui() {
+		
+		int startBt = this.buttonList.size();
+		
+		super.initGui();
+		
+		int undoGlyphWidth = mc.fontRenderer.getStringWidth(UNDO_CHAR) * 2;
+		int resetGlyphWidth = mc.fontRenderer.getStringWidth(RESET_CHAR) * 2;
+		int doneWidth = Math.max(mc.fontRenderer.getStringWidth(I18n.format("gui.done")) + 20, 100);
+		int undoWidth = mc.fontRenderer.getStringWidth(" " + I18n.format("fml.configgui.tooltip.undoChanges")) + undoGlyphWidth + 20;
+		int resetWidth = mc.fontRenderer.getStringWidth(" " + I18n.format("fml.configgui.tooltip.resetToDefault")) + resetGlyphWidth + 20;
+		int buttonWidthHalf = (doneWidth + 5 + undoWidth + 5 + resetWidth + 5) / 2;
+		
+		((GuiButtonExt)this.buttonList.get(startBt  )).xPosition = this.width / 2 - buttonWidthHalf;;
+		((GuiButtonExt)this.buttonList.get(startBt+2)).xPosition = this.width / 2 - buttonWidthHalf + doneWidth + 5;
+		((GuiButtonExt)this.buttonList.get(startBt+1)).xPosition = this.width / 2 - buttonWidthHalf + doneWidth + 5 + undoWidth + 5;
+		((GuiCheckBox )this.buttonList.get(startBt+3)).visible   = false;
+		((GuiCheckBox )this.buttonList.get(startBt+3)).setIsChecked(true);
 	}
 	
 	@Override

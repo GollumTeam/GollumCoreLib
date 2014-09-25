@@ -39,14 +39,9 @@ import cpw.mods.fml.client.config.IConfigElement;
 import cpw.mods.fml.common.ModContainer;
 
 public class GuiJsonConfig extends GuiGollumConfig {
-
-	JsonEntry entry;
 	
 	public GuiJsonConfig(GuiConfig parent, JsonEntry entry, Json value, Json defaultValue) {
-		super(parent, getFields (parent, value, defaultValue), parent.title);
-		
-		this.entry      = entry;
-		this.titleLine2 = parent.titleLine2 + " > "+entry.getName();
+		super(parent, getFields (parent, value, defaultValue), entry);
 	}
 	
 	private static List<IConfigElement> getFields(GuiConfig parent, Json value, Json defaultValue) {
@@ -71,7 +66,7 @@ public class GuiJsonConfig extends GuiGollumConfig {
 	}
 
 	public void saveChanges() {
-		Json value = (Json) this.entry.getValue().clone();
+		Json value = (Json) ((JsonEntry)this.entry).getValue().clone();
 		if (value.isObject()) {
 			
 			for (IConfigEntry entry : this.entryList.listEntries) {

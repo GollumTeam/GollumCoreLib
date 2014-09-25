@@ -10,7 +10,8 @@ public class JsonChar extends Json {
 		this.value = c;
 	}
 	
-	public char charValue () { return (Character)this.value; }
+	public char charValue ()  { return (Character)this.value; }
+	public String  strValue() { return ((int)charValue())+""; }
 	
 	public TYPE getType () {
 		return TYPE.CHAR;

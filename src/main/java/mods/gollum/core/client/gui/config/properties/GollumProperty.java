@@ -36,7 +36,121 @@ public abstract class GollumProperty extends Property {
 		this.type = type;
 	}
 	
-	protected void init (String name, ConfigProp anno, Object value, String[] values, Object valueDefault, String[] valuesDefault) {
+	protected static Type getType(Class clazz) {
+		
+		Type type = null;
+		
+		if (
+			clazz.isAssignableFrom(String.class) ||
+			clazz.isAssignableFrom(String[].class)
+		) {
+			type = Property.Type.STRING;
+		}
+		if (
+			clazz.isAssignableFrom(Long.TYPE        ) ||
+			clazz.isAssignableFrom(Integer.TYPE     ) ||
+			clazz.isAssignableFrom(Short.TYPE       ) ||
+			clazz.isAssignableFrom(Byte.TYPE        ) ||
+			clazz.isAssignableFrom(Character.TYPE   ) ||
+			clazz.isAssignableFrom(Long.class       ) ||
+			clazz.isAssignableFrom(Integer.class    ) ||
+			clazz.isAssignableFrom(Short.class      ) ||
+			clazz.isAssignableFrom(Byte.class       ) ||
+			clazz.isAssignableFrom(Character.class  ) ||
+			
+			clazz.isAssignableFrom(long[].class     ) ||
+			clazz.isAssignableFrom(int[].class      ) ||
+			clazz.isAssignableFrom(short[].class    ) ||
+			clazz.isAssignableFrom(byte[].class     ) ||
+			clazz.isAssignableFrom(char[].class     ) ||
+			clazz.isAssignableFrom(Long[].class     ) ||
+			clazz.isAssignableFrom(Integer[].class  ) ||
+			clazz.isAssignableFrom(Short[].class    ) ||
+			clazz.isAssignableFrom(Byte[].class     ) ||
+			clazz.isAssignableFrom(Character[].class)
+		) {
+			type = Property.Type.INTEGER;
+		}
+		if (
+			clazz.isAssignableFrom(Float.TYPE    ) ||
+			clazz.isAssignableFrom(Double.TYPE   ) ||
+			clazz.isAssignableFrom(Float.class   ) ||
+			clazz.isAssignableFrom(Double.class  ) ||
+			
+			clazz.isAssignableFrom(float[].class ) ||
+			clazz.isAssignableFrom(double[].class) ||
+			clazz.isAssignableFrom(Float[].class ) ||
+			clazz.isAssignableFrom(Double[].class) 
+		) {
+			type = Property.Type.DOUBLE;
+		}
+		if (
+			clazz.isAssignableFrom(Boolean.TYPE   ) ||
+			clazz.isAssignableFrom(Boolean.class  ) ||
+			
+			clazz.isAssignableFrom(boolean[].class) ||
+			clazz.isAssignableFrom(Boolean[].class)
+		) {
+			type = Property.Type.BOOLEAN;
+		}
+		return type;
+	}
+	
+	protected void initNative(ConfigProp anno, Class clazz, Object value, Object valueDefault, String name) {
+		
+		if (this.getType() != null && anno != null) {
+			
+			String[] values = null;
+			String[] valuesDefault = null;
+			
+			if (clazz.isAssignableFrom(Character.TYPE) || clazz.isAssignableFrom(Character.class)) { // Fixe affichage
+				value        = (byte)((Character)value).charValue();
+				valueDefault = (byte)((Character)valueDefault).charValue();
+			}
+			
+			if (value.getClass().isArray()) {
+				values = new String[Array.getLength(value)];
+				for (int i = 0; i < Array.getLength(value); i++) {
+					
+					Object o = Array.get(value, i);
+					if (clazz.isAssignableFrom(char[].class) || clazz.isAssignableFrom(Character[].class)) { // Fixe affichage
+						o = (byte)((Character)o).charValue();
+					}
+					values[i] = o.toString();
+				}
+				valuesDefault = new String[Array.getLength(valueDefault)];
+				for (int i = 0; i < Array.getLength(valueDefault); i++) {
+					
+					Object o = Array.get(valueDefault, i);
+					if (clazz.isAssignableFrom(char[].class) || clazz.isAssignableFrom(Character[].class)) { // Fixe affichage
+						o = (byte)((Character)o).charValue();
+					}
+					valuesDefault[i] = o.toString();
+				}
+			}
+			
+			this.initNativeDatas(name, anno, value, values, valueDefault, valuesDefault);
+			
+			// Limit short byte char
+			if (clazz.isAssignableFrom(Short.TYPE) || clazz.isAssignableFrom(Short.class)) {
+				this.setLimitShort();
+			}
+			if (clazz.isAssignableFrom(Byte.TYPE) || clazz.isAssignableFrom(Byte.class)) {
+				this.setLimitByte();
+			}
+			if (clazz.isAssignableFrom(Character.TYPE) || clazz.isAssignableFrom(Character.class)) {
+				this.setLimitChar();
+			}
+			
+			this.markUnchange();
+			
+			this.isValid = true;
+			this.isNative = true;
+			
+		}
+	}
+	
+	protected void initNativeDatas (String name, ConfigProp anno, Object value, String[] values, Object valueDefault, String[] valuesDefault) {
 		
 		this.anno = anno;
 		

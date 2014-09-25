@@ -50,7 +50,7 @@ public class ItemStackConfigType implements IConfigJsonType {
 
 			@Override
 			public String display(Json json) {
-				return json.child("number").intValue()+" "+json.child("registerName").strValue()+":"+json.child("number").intValue();
+				return json.child("number").intValue()+" "+json.child("registerName").strValue()+":"+json.child("metadata").intValue();
 			}
 			
 		});

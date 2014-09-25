@@ -13,11 +13,12 @@ import net.minecraft.client.Minecraft;
 import cpw.mods.fml.client.config.GuiConfigEntries;
 import cpw.mods.fml.client.config.IConfigElement;
 
+@Deprecated
 public class GuiEditArrayCustomEntries extends GuiConfigEntries {
 
 //	public GuiEditArrayCustomEntries(GuiEditCustomArray parent, Minecraft mc, IConfigElement configElement, Object[] beforeValues, Object[] currentValues) {
 //		super(parent, mc, configElement, beforeValues, currentValues);
-		// TODO Auto-generated constructor stub
+//		 TODO Auto-generated constructor stub
 //	}
 	
 	GuiEditCustomArray parent;
@@ -27,7 +28,7 @@ public class GuiEditArrayCustomEntries extends GuiConfigEntries {
 	Object[] currentValues;
 	
 	public GuiEditArrayCustomEntries(GuiEditCustomArray parent, Minecraft mc, IConfigElement configElement) {
-		super(parent.parentScreen, mc);
+		super(parent, mc);
 		
 		this.configElement = configElement;
 		this.beforeValues  = configElement.getList();
