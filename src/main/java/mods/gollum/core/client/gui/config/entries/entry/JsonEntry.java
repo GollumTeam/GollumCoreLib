@@ -1,15 +1,11 @@
 package mods.gollum.core.client.gui.config.entries.entry;
 
-import static cpw.mods.fml.client.config.GuiUtils.RESET_CHAR;
-import static cpw.mods.fml.client.config.GuiUtils.UNDO_CHAR;
-
 import java.awt.Color;
 
-import net.minecraft.client.renderer.Tessellator;
 import mods.gollum.core.client.gui.config.GuiEditCustomArray;
 import mods.gollum.core.client.gui.config.GuiJsonConfig;
-import mods.gollum.core.client.gui.config.entries.GuiEditArrayCustomEntries;
 import mods.gollum.core.tools.simplejson.Json;
+import net.minecraft.client.renderer.Tessellator;
 import cpw.mods.fml.client.config.GuiButtonExt;
 import cpw.mods.fml.client.config.GuiConfig;
 import cpw.mods.fml.client.config.GuiConfigEntries;
