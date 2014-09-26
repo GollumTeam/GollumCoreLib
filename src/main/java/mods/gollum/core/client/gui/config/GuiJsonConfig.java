@@ -61,6 +61,19 @@ public class GuiJsonConfig extends GuiGollumConfig {
 			}
 						
 		}
+
+		if (value.isArray()) {
+			
+			for(Entry<String, Json> entry : value.allChildWithKey()) {
+				
+				JsonProperty prop      = new JsonProperty (getMod(parent), entry.getKey(), entry.getValue(), defaultValue.child(entry.getKey()));
+				IConfigElement element = prop.createConfigElement ();
+				
+				if (element != null) {
+					fields.add(element);
+				}
+			}
+		}
 		
 		return fields;
 	}
@@ -84,6 +97,24 @@ public class GuiJsonConfig extends GuiGollumConfig {
 				value.add(entry.getName(), newValue);
 			}
 		}
+		if (value.isArray()) {
+			
+			for (IConfigEntry entry : this.entryList.listEntries) {
+				
+				Json newValue = null;
+				
+				if (value.containsKey(entry.getName())) {
+					newValue = (Json) value.child(entry.getName()).clone();
+				} else {
+					// TODO no implment add new value
+					newValue = Json.create("");
+				}
+				
+				newValue.setValue(entry.getCurrentValue());
+				value.add(entry.getName(), newValue);
+			}
+		}
+		
 		this.entry.setValueFromChildScreen(value);
 	}
 	

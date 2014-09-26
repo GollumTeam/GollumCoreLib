@@ -34,11 +34,27 @@ public class ConfigGollumCoreLib extends Config {
 	//////////////////
 	
 	
+	// JsonObject
 	@ConfigProp(group="Test")
 	public Json json1 = Json.create(
 		new Json.EntryObject("field1", Json.create("Test")),
 		new Json.EntryObject("field2", Json.create(1)),
 		new Json.EntryObject("field3", Json.create(1.5))
+	);
+
+	// JsonArray
+	@ConfigProp(group="Test")
+	public Json json2 = Json.create(
+		Json.create("Test1"),
+		Json.create("Test2"),
+		Json.create("Test3")
+	);
+	
+	@ConfigProp(group="Test")
+	public Json json3 = Json.create(
+		Json.create(1),
+		Json.create(2),
+		Json.create(3)
 	);
 	
 	
