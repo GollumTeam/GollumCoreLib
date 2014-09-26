@@ -17,7 +17,7 @@ public class ConfigGollumCoreLib extends Config {
 		mcRestart = true
 	)
 	public String level = "MESSAGE";
-
+	
 	@ConfigProp(minValue = "0", mcRestart = true)
 	public int numberLogFilesUse = 3;
 	
@@ -26,7 +26,16 @@ public class ConfigGollumCoreLib extends Config {
 			
 	@ConfigProp (info = "Display version checker message")
 	public boolean versionChecker = true;
-
+	
+	
+	//////////////////
+	// Test exemple //
+	//////////////////
+	
+	
+	
+	
+	
 	@ConfigProp(group="Test", type=Type.SLIDER)
 	public byte slider = 20;
 	

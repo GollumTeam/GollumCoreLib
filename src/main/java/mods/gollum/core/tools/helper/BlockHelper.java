@@ -65,7 +65,7 @@ public class BlockHelper implements IBlockHelper {
 	 */
 	public void register () {
 		this.parent.setBlockName(this.registerName);
-		GameRegistry.registerBlock (this.parent , this.itemBlockClass , this.getRegisterName (), mod.getModId());
+		GameRegistry.registerBlock (this.parent , this.itemBlockClass , this.getRegisterName ());
 	}
 	
 	/**
