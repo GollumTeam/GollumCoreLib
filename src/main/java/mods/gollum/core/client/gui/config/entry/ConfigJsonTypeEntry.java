@@ -64,4 +64,15 @@ public class ConfigJsonTypeEntry extends JsonEntry {
 		}
 		return false;
 	}
+
+	public Object getValue() {
+		try {
+			IConfigJsonType newValue = (IConfigJsonType)this.beforeConfigType.getClass().newInstance();
+			newValue.readConfig(this.currentValue);
+			return newValue;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }

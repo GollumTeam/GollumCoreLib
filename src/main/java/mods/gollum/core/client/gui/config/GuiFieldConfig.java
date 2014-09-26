@@ -125,7 +125,7 @@ public class GuiFieldConfig extends GuiGollumConfig {
 		boolean requiresMcRestart = this.entryList.saveConfigElements();
 		
 		for (Entry<Field, IConfigElement> entry: this.fieldElements.entrySet()) {
-			Field         f  = entry.getKey();
+			Field          f  = entry.getKey();
 			IConfigElement el = entry.getValue();
 			
 			log.debug ("Save "+f.getName ()+"="+el.get());

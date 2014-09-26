@@ -111,11 +111,15 @@ public class JsonEntry extends ButtonEntry implements IGollumConfigEntry {
 	public String getCurrentValue() {
 		return this.currentValue.toString();
 	}
-	
-	public Json getValue() {
-		return this.currentValue;
+
+	public Object getValue() {
+		return this.currentValue.clone();
 	}
 
+	public Json getJsonValue() {
+		return this.currentValue;
+	}
+	
 	@Override
 	public String[] getCurrentValues() {
 		return new String[] { getCurrentValue() };

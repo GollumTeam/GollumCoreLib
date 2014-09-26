@@ -66,7 +66,7 @@ public class GuiJsonConfig extends GuiGollumConfig {
 	}
 
 	public void saveChanges() {
-		Json value = (Json) ((JsonEntry)this.entry).getValue().clone();
+		Json value = (Json) ((JsonEntry)this.entry).getJsonValue().clone();
 		if (value.isObject()) {
 			
 			for (IConfigEntry entry : this.entryList.listEntries) {

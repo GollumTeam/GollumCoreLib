@@ -4,7 +4,6 @@ import java.lang.annotation.Annotation;
 
 import mods.gollum.core.tools.simplejson.IJsonComplement;
 
-
 public class JsonConfigProp implements ConfigProp, IJsonComplement {
 
 	private String   name              = "";

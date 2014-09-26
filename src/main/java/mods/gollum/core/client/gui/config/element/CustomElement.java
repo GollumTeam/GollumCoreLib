@@ -205,7 +205,7 @@ public class CustomElement implements IConfigElement {
 	@Override
 	public void set(Object[] aVal) {
 		
-		this.values = Arrays.copyOf(aVal, this.values.length);
+		this.values = Arrays.copyOf(aVal, aVal.length);
 		
 		if (aVal instanceof Json[]) {
 			

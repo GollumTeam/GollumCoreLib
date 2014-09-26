@@ -27,14 +27,20 @@ import cpw.mods.fml.client.config.GuiEditArrayEntries.StringEntry;
 
 public class GuiEditCustomArray extends GuiGollumConfig {
 	
-	protected ArrayList<Class> valuesType = new ArrayList<Class>();
+//	protected ArrayList<Class> valuesType;
+	protected Object[] values;
+	protected Object[] defaultValues;
 	
 	public GuiEditCustomArray(GuiConfig parent, IConfigElement configElement, int slotIndex, ArrayCustomEntry entry, Object[] values, Object[] defaultValues) {
-		super(parent, getFields(parent, values, defaultValues), entry);
+		super(parent, getFields(parent, entry, values, defaultValues), entry);
 		
-		for(Object value : values) {
-			this.valuesType.add(value.getClass());
-		}
+//		this.valuesType    = new ArrayList<Class>();
+		this.values        = values;
+		this.defaultValues = defaultValues;
+		
+//		for(Object value : values) {
+//			this.valuesType.add(value.getClass());
+//		}
 	}
 	
 	@Override
@@ -44,6 +50,14 @@ public class GuiEditCustomArray extends GuiGollumConfig {
 		super.initGui();
 		
 		if (needsRefresh) {
+			
+			for(int i = this.defaultValues.length; i < this.values.length; i++) {
+				
+				Object deafultValue = ((ArrayCustomEntry)this.entry).createNewLine ();
+				
+				this.addNewEntry(i, this.values[i], deafultValue);
+			}
+			
 			this.entryList.listEntries.add(new AddButtonEntry (this));
 			super.initGui();
 		}
@@ -53,16 +67,18 @@ public class GuiEditCustomArray extends GuiGollumConfig {
 		
 	}
 	
-	private static List<IConfigElement> getFields(GuiConfig parent, Object[] values, Object[] defaultValues) {
+	private static List<IConfigElement> getFields(GuiConfig parent, ArrayCustomEntry entry, Object[] values, Object[] defaultValues) {
 		ArrayList<IConfigElement> fields = new ArrayList<IConfigElement>();
 		
 		for(int i = 0; i < values.length; i++) {
 			
-			ValueProperty prop      = new ValueProperty(getMod(parent), values[i], defaultValues[i]);
-			IConfigElement element = prop.createConfigElement ();
-			
-			if (element != null) {
-				fields.add(element);
+			if (i < defaultValues.length) {
+				ValueProperty prop     = new ValueProperty(getMod(parent), values[i], defaultValues[i]);
+				IConfigElement element = prop.createConfigElement ();
+
+				if (element != null) {
+					fields.add(element);
+				}
 			}
 		}
 		
@@ -74,29 +90,17 @@ public class GuiEditCustomArray extends GuiGollumConfig {
 		List tmp = new ArrayList<Object>();
 		
 		for (IConfigEntry entry : this.entryList.listEntries) {
-			Object newValue = entry.getCurrentValue();
-			if (entry instanceof ConfigJsonTypeEntry) {
-				
-			}
 			
+			Object newValue = entry.getCurrentValue();
+			
+			if (entry instanceof JsonEntry) {
+				newValue = ((JsonEntry)entry).getValue();
+			}else
+			if (entry instanceof ConfigJsonTypeEntry) {
+				newValue = ((ConfigJsonTypeEntry)entry).getValue();
+			}
 			if (newValue != null) {
-				if (newValue instanceof Json) {
-					newValue = ((Json) newValue).clone();
-				} else
-				if (newValue instanceof IConfigJsonType) {
-					try {
-						
-						IConfigJsonType configJsonType = (IConfigJsonType)newValue;
-						IConfigJsonType copy           = (IConfigJsonType)newValue.getClass().newInstance();
-						
-						copy.readConfig(configJsonType.writeConfig());
-						
-						newValue = copy;
-					
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
+				log.debug("Save line : "+newValue);
 				tmp.add(newValue);
 			}
 		}
@@ -116,13 +120,18 @@ public class GuiEditCustomArray extends GuiGollumConfig {
 		
 		log.debug ("More pressed");
 
-		Object o  = ((ArrayCustomEntry)this.entry).createNewSubEntry ();
-		Object oD = ((ArrayCustomEntry)this.entry).createNewSubEntry ();
+		Object o  = ((ArrayCustomEntry)this.entry).createNewLine ();
+		Object oD = ((ArrayCustomEntry)this.entry).createNewLine ();
+		
+		this.addNewEntry(index, o, oD);
+	}
+	
+	public void addNewEntry (int index, Object value, Object defaultValue) {
 		
 		IConfigEntry newEntry = null;
 		
-		if (o != null && oD != null) {
-			ValueProperty  prop      = new ValueProperty(this.mod, o, oD);
+		if (value != null && defaultValue != null) {
+			ValueProperty  prop      = new ValueProperty(this.mod, value, defaultValue);
 			IConfigElement element = prop.createConfigElement ();
 			if (element != null) {
 				try {
@@ -144,7 +153,6 @@ public class GuiEditCustomArray extends GuiGollumConfig {
 			this.entryList.listEntries.add(index, newEntry);
 		}
 	}
-	
 	
 	public void removeEntry(int index) {
 

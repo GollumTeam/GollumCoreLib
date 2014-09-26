@@ -24,18 +24,20 @@ public class ArrayCustomEntry extends ArrayEntry implements IGollumConfigEntry {
 	
 	@Override
 	public void setValueFromChildScreen(Object newValue) {
+		
 		if (enabled() && newValue != null && newValue.getClass().isArray()) {
 			this.currentValues = (Object[]) newValue;
 			updateValueButtonText();
 		}
+		
 	}
 	
-	public Object createNewSubEntry() {
+	public Object createNewLine() {
 		
-		Class subType = currentValues.getClass().getComponentType();
+		Class subType = this.configElement.getDefaults().getClass().getComponentType();
 		
 		log.debug ("Add : "+subType.getName());
-		g// TODO other type for add
+		// TODO other type for add
 		if (ItemStackConfigType.class.isAssignableFrom(subType)) {
 			try {
 				return subType.newInstance();
