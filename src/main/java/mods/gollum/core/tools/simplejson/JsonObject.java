@@ -87,11 +87,11 @@ public class JsonObject extends Json {
 	// Convert to json //
 	/////////////////////
 	
-	public JsonNodeBuilder json() {
+	public JsonNodeBuilder argoJson() {
 		
 		JsonObjectNodeBuilder o = JsonNodeBuilders.anObjectBuilder();
 		for (Entry<String, Json> entry : ((HashMap<String, Json>)this.value).entrySet()) {
-			o.withField(entry.getKey(), entry.getValue().json());
+			o.withField(entry.getKey(), entry.getValue().argoJson());
 		}
 		return o;
 	}

@@ -1,8 +1,9 @@
 package mods.gollum.core.client.gui.config.entry;
 
 import static mods.gollum.core.ModGollumCoreLib.log;
-
 import mods.gollum.core.client.gui.config.GuiEditCustomArray;
+import mods.gollum.core.common.config.type.ItemStackConfigType;
+import mods.gollum.core.tools.simplejson.Json;
 import cpw.mods.fml.client.config.GuiConfig;
 import cpw.mods.fml.client.config.GuiConfigEntries;
 import cpw.mods.fml.client.config.GuiConfigEntries.ArrayEntry;
@@ -22,17 +23,27 @@ public class ArrayCustomEntry extends ArrayEntry implements IGollumConfigEntry {
 	}
 	
 	@Override
-	public void setValueFromChildScreen(Object value) {
-		// TODO Auto-generated method stub
+	public void setValueFromChildScreen(Object newValue) {
+		if (enabled() && newValue != null && newValue.getClass().isArray()) {
+			this.currentValues = (Object[]) newValue;
+			updateValueButtonText();
+		}
 	}
 	
 	public Object createNewSubEntry() {
-		log.debug (currentValues.getClass().getComponentType().getName());
-		return null;
-	}
-	
-	public Class getSubEntryClass() {
-		// TODO Auto-generated method stub
+		
+		Class subType = currentValues.getClass().getComponentType();
+		
+		log.debug ("Add : "+subType.getName());
+		g// TODO other type for add
+		if (ItemStackConfigType.class.isAssignableFrom(subType)) {
+			try {
+				return subType.newInstance();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
 		return null;
 	}
 }

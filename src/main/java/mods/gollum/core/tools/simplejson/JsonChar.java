@@ -29,7 +29,7 @@ public class JsonChar extends Json {
 	// Convert to json //
 	/////////////////////
 	
-	public JsonNodeBuilder json() {
+	public JsonNodeBuilder argoJson() {
 		return JsonNodeBuilders.aNumberBuilder(((byte)((Character)value).charValue())+"");
 	}
 }

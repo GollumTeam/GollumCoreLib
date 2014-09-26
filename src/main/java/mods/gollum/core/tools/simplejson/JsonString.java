@@ -25,7 +25,7 @@ public class JsonString extends Json {
 	// Convert to json //
 	/////////////////////
 	
-	public JsonNodeBuilder json() {
+	public JsonNodeBuilder argoJson() {
 		return JsonNodeBuilders.aStringBuilder(this.value.toString());
 	}
 }

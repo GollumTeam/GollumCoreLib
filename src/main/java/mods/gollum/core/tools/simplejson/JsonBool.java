@@ -28,7 +28,7 @@ public class JsonBool extends Json {
 	// Convert to json //
 	/////////////////////
 	
-	public JsonNodeBuilder json() {
+	public JsonNodeBuilder argoJson() {
 		return ((Boolean)value) ? JsonNodeBuilders.aTrueBuilder() : JsonNodeBuilders.aFalseBuilder();
 	}
 }

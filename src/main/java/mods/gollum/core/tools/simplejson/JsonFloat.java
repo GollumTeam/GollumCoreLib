@@ -28,7 +28,7 @@ public class JsonFloat extends Json {
 	// Convert to json //
 	/////////////////////
 	
-	public JsonNodeBuilder json() {
+	public JsonNodeBuilder argoJson() {
 		return JsonNodeBuilders.aNumberBuilder(value+"");
 	}
 }

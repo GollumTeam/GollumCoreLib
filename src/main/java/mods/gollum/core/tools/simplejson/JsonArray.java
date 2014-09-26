@@ -98,11 +98,11 @@ public class JsonArray extends Json {
 	// Convert to json //
 	/////////////////////
 	
-	public JsonNodeBuilder json() {
+	public JsonNodeBuilder argoJson() {
 		
 		JsonArrayNodeBuilder ar = JsonNodeBuilders.anArrayBuilder();
 		for (Json val : (List<Json>)this.value) {
-			ar.withElement(val.json());
+			ar.withElement(val.argoJson());
 		}
 		return ar;
 	}

@@ -7,6 +7,7 @@ import mods.gollum.core.tools.registered.RegisteredObjects;
 import mods.gollum.core.tools.simplejson.Json;
 import mods.gollum.core.tools.simplejson.Json.EntryObject;
 import mods.gollum.core.tools.simplejson.IJsonObjectDisplay;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 public class ItemStackConfigType implements IConfigJsonType {
@@ -16,7 +17,7 @@ public class ItemStackConfigType implements IConfigJsonType {
 	private int number;
 	
 	public ItemStackConfigType() throws Exception {
-		this ("", 0, 0);
+		this(RegisteredObjects.instance().getRegisterName(Items.apple));
 	}
 	
 	public ItemStackConfigType(String registerName) {
@@ -45,7 +46,7 @@ public class ItemStackConfigType implements IConfigJsonType {
 		return Json.create (
 			new EntryObject ("registerName", this.registerName).addComplement (new JsonConfigProp().type(Type.ITEM)),
 			new EntryObject ("metadata"    , this.metadata),
-			new EntryObject ("number"      , this.number).addComplement (new JsonConfigProp().minValue("0").maxValue("64").type(Type.SLIDER))
+			new EntryObject ("number"      , this.number).addComplement (new JsonConfigProp().minValue("1").maxValue("64").type(Type.SLIDER))
 		);
 	}
 	
@@ -53,12 +54,17 @@ public class ItemStackConfigType implements IConfigJsonType {
 		return new ItemStack (RegisteredObjects.instance().getItem(registerName), number, metadata);
 	}
 
-	public boolean equals (ItemStackConfigType obj) {
-		return
-			this.registerName.equals(obj.registerName) &&
-			this.metadata == obj.metadata &&
-			this.number   == obj.number
-		;
+	public boolean equals (Object obj) {
+		
+		if (obj instanceof ItemStackConfigType) {
+			return
+				this.registerName.equals(((ItemStackConfigType)obj).registerName) &&
+				this.metadata == ((ItemStackConfigType)obj).metadata &&
+				this.number   == ((ItemStackConfigType)obj).number
+			;
+		}
+		
+		return false;
 	}
 	
 	@Override

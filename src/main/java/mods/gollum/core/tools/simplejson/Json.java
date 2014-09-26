@@ -235,7 +235,7 @@ public class Json implements Cloneable {
 	
 	public String toString (boolean pretty) {
 		JsonRootNode json = JsonNodeFactories.object(
-			JsonNodeFactories.field("root", this.json().build())
+			JsonNodeFactories.field("root", this.argoJson().build())
 		);
 		String out;
 		if (pretty) {
@@ -276,7 +276,7 @@ public class Json implements Cloneable {
 		return create();
 	}
 	
-	public JsonNodeBuilder json() {
+	public JsonNodeBuilder argoJson() {
 		return JsonNodeBuilders.aNullBuilder();
 	}
 	

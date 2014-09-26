@@ -3,13 +3,18 @@ package mods.gollum.core.client.gui.config;
 import static mods.gollum.core.ModGollumCoreLib.log;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.lwjgl.input.Keyboard;
 
 import mods.gollum.core.client.gui.config.entry.AddButtonEntry;
 import mods.gollum.core.client.gui.config.entry.ArrayCustomEntry;
+import mods.gollum.core.client.gui.config.entry.ConfigJsonTypeEntry;
+import mods.gollum.core.client.gui.config.entry.JsonEntry;
 import mods.gollum.core.client.gui.config.properties.ValueProperty;
+import mods.gollum.core.common.config.type.IConfigJsonType;
+import mods.gollum.core.tools.simplejson.Json;
 import cpw.mods.fml.client.config.ConfigGuiType;
 import cpw.mods.fml.client.config.GuiConfig;
 import cpw.mods.fml.client.config.GuiConfigEntries;
@@ -22,8 +27,14 @@ import cpw.mods.fml.client.config.GuiEditArrayEntries.StringEntry;
 
 public class GuiEditCustomArray extends GuiGollumConfig {
 	
+	protected ArrayList<Class> valuesType = new ArrayList<Class>();
+	
 	public GuiEditCustomArray(GuiConfig parent, IConfigElement configElement, int slotIndex, ArrayCustomEntry entry, Object[] values, Object[] defaultValues) {
 		super(parent, getFields(parent, values, defaultValues), entry);
+		
+		for(Object value : values) {
+			this.valuesType.add(value.getClass());
+		}
 	}
 	
 	@Override
@@ -58,6 +69,49 @@ public class GuiEditCustomArray extends GuiGollumConfig {
 		return fields;
 	}
 	
+	public void saveChanges() {
+		
+		List tmp = new ArrayList<Object>();
+		
+		for (IConfigEntry entry : this.entryList.listEntries) {
+			Object newValue = entry.getCurrentValue();
+			if (entry instanceof ConfigJsonTypeEntry) {
+				
+			}
+			
+			if (newValue != null) {
+				if (newValue instanceof Json) {
+					newValue = ((Json) newValue).clone();
+				} else
+				if (newValue instanceof IConfigJsonType) {
+					try {
+						
+						IConfigJsonType configJsonType = (IConfigJsonType)newValue;
+						IConfigJsonType copy           = (IConfigJsonType)newValue.getClass().newInstance();
+						
+						copy.readConfig(configJsonType.writeConfig());
+						
+						newValue = copy;
+					
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+				tmp.add(newValue);
+			}
+		}
+		
+		this.entry.setValueFromChildScreen(tmp.toArray());
+	}
+	
+	protected boolean doneAction() {
+		
+		this.saveChanges();
+		
+		this.mc.displayGuiScreen(this.parentScreen);
+		return true;
+	}
+	
 	public void addNewEntry(int index) {
 		
 		log.debug ("More pressed");
@@ -77,7 +131,7 @@ public class GuiEditCustomArray extends GuiGollumConfig {
 						GuiConfig.class,
 						GuiConfigEntries.class,
 						IConfigElement.class
-					).newInstance(this, this, element);
+					).newInstance(this, this.entryList, element);
 					
 				} catch(Exception e) {
 					e.printStackTrace();
@@ -86,26 +140,12 @@ public class GuiEditCustomArray extends GuiGollumConfig {
 			
 		}
 		
-		// TODO faire les tabelau classique
-		
 		if (newEntry != null) {
 			this.entryList.listEntries.add(index, newEntry);
 		}
-		
-//        if (configElement.isList() && configElement.getType() == ConfigGuiType.BOOLEAN)
-//            listEntries.add(index, new BooleanEntry(this.owningGui, this, this.configElement, Boolean.valueOf(true)));
-//        else if (configElement.isList() && configElement.getType() == ConfigGuiType.INTEGER)
-//            listEntries.add(index, new IntegerEntry(this.owningGui, this, this.configElement, 0));
-//        else if (configElement.isList() && configElement.getType() == ConfigGuiType.DOUBLE)
-//            listEntries.add(index, new DoubleEntry(this.owningGui, this, this.configElement, 0.0D));
-//        else if (configElement.isList())
-//            listEntries.add(index, new StringEntry(this.owningGui, this, this.configElement, ""));
-//        this.canAddMoreEntries = !configElement.isListLengthFixed() 
-//                && (configElement.getMaxListLength() == -1 || this.listEntries.size() - 1 < configElement.getMaxListLength());
-//        keyTyped((char) Keyboard.CHAR_NONE, Keyboard.KEY_END);
 	}
 	
-
+	
 	public void removeEntry(int index) {
 
 		log.debug ("Minus pressed");
@@ -114,5 +154,5 @@ public class GuiEditCustomArray extends GuiGollumConfig {
 //		this.canAddMoreEntries = !configElement.isListLengthFixed() 
 //			&& (configElement.getMaxListLength() == -1 || this.listEntries.size() - 1 < configElement.getMaxListLength());
 //		keyTyped((char) Keyboard.CHAR_NONE, Keyboard.KEY_END);
-    }
+	}
 }

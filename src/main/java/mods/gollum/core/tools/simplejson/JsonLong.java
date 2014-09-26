@@ -29,7 +29,7 @@ public class JsonLong extends Json {
 	// Convert to json //
 	/////////////////////
 	
-	public JsonNodeBuilder json() {
+	public JsonNodeBuilder argoJson() {
 		return JsonNodeBuilders.aNumberBuilder(value+"");
 	}
 }
