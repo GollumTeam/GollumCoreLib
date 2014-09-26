@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.resources.I18n;
+
 import org.lwjgl.input.Keyboard;
 
 import mods.gollum.core.client.gui.config.entry.AddButtonEntry;
@@ -26,21 +29,36 @@ import cpw.mods.fml.client.config.GuiEditArrayEntries.IntegerEntry;
 import cpw.mods.fml.client.config.GuiEditArrayEntries.StringEntry;
 
 public class GuiEditCustomArray extends GuiGollumConfig {
-	
-//	protected ArrayList<Class> valuesType;
+
 	protected Object[] values;
+	protected Object[] undoValues;
 	protected Object[] defaultValues;
 	
 	public GuiEditCustomArray(GuiConfig parent, IConfigElement configElement, int slotIndex, ArrayCustomEntry entry, Object[] values, Object[] defaultValues) {
 		super(parent, getFields(parent, entry, values, defaultValues), entry);
-		
-//		this.valuesType    = new ArrayList<Class>();
+
 		this.values        = values;
+		this.undoValues    = entry.getBeforeValues();
 		this.defaultValues = defaultValues;
+	}
+	
+	private static List<IConfigElement> getFields(GuiConfig parent, ArrayCustomEntry entry, Object[] values, Object[] defaultValues) {
+		ArrayList<IConfigElement> fields = new ArrayList<IConfigElement>();
 		
-//		for(Object value : values) {
-//			this.valuesType.add(value.getClass());
-//		}
+		for(int i = 0; i < values.length; i++) {
+
+			if (i < defaultValues.length && defaultValues[i] != null) {
+				
+				ValueProperty prop     = new ValueProperty(getMod(parent), values[i], defaultValues[i]);
+				IConfigElement element = prop.createConfigElement ();
+				
+				if (element != null) {
+					fields.add(element);
+				}
+			}
+		}
+		
+		return fields;
 	}
 	
 	@Override
@@ -51,11 +69,13 @@ public class GuiEditCustomArray extends GuiGollumConfig {
 		
 		if (needsRefresh) {
 			
-			for(int i = this.defaultValues.length; i < this.values.length; i++) {
+			for(int i = 0; i < this.values.length; i++) {
 				
-				Object deafultValue = ((ArrayCustomEntry)this.entry).createNewLine ();
-				
-				this.addNewEntry(i, this.values[i], deafultValue);
+				if (i >= this.defaultValues.length || this.defaultValues[i] == null) {
+					Object defaultValue = ((ArrayCustomEntry)this.entry).createNewLine ();
+					
+					this.addNewEntry(i, this.values[i], defaultValue);
+				}
 			}
 			
 			this.entryList.listEntries.add(new AddButtonEntry (this));
@@ -66,27 +86,64 @@ public class GuiEditCustomArray extends GuiGollumConfig {
 		this.entryList.scrollBarX += 22;
 		
 	}
-	
-	private static List<IConfigElement> getFields(GuiConfig parent, ArrayCustomEntry entry, Object[] values, Object[] defaultValues) {
-		ArrayList<IConfigElement> fields = new ArrayList<IConfigElement>();
+	@Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		
-		for(int i = 0; i < values.length; i++) {
-			
-			if (i < defaultValues.length) {
-				ValueProperty prop     = new ValueProperty(getMod(parent), values[i], defaultValues[i]);
-				IConfigElement element = prop.createConfigElement ();
-
-				if (element != null) {
-					fields.add(element);
-				}
-			}
+		
+		super.drawScreen(mouseX, mouseY, partialTicks);
+		
+		Object[] currentValues = this.getCurrentsValues();
+		
+		this.btnUndo .enabled = (this.entryList.areAnyEntriesEnabled(true) && this.entryList.hasChangedEntry(true)      ) || !Arrays.deepEquals(this.undoValues   , currentValues);
+		this.btnReset.enabled = (this.entryList.areAnyEntriesEnabled(true) && !this.entryList.areAllEntriesDefault(true)) || !Arrays.deepEquals(this.defaultValues, currentValues);
+		this.btnUndo .drawButton(this.mc, mouseX, mouseY);
+		this.btnReset.drawButton(this.mc, mouseX, mouseY);
+		
+		this.entryList.drawScreenPost(mouseX, mouseY, partialTicks);
+		if (this.undoHoverChecker.checkHover(mouseX, mouseY)) {
+			this.drawToolTip(this.mc.fontRenderer.listFormattedStringToWidth(I18n.format("fml.configgui.tooltip.undoAll"), 300), mouseX, mouseY);
 		}
-		
-		return fields;
+		if (this.resetHoverChecker.checkHover(mouseX, mouseY)) {
+			this.drawToolTip(this.mc.fontRenderer.listFormattedStringToWidth(I18n.format("fml.configgui.tooltip.resetAll"), 300), mouseX, mouseY);
+		}
+		if (this.checkBoxHoverChecker.checkHover(mouseX, mouseY)) {
+			this.drawToolTip(this.mc.fontRenderer.listFormattedStringToWidth(I18n.format("fml.configgui.tooltip.applyGlobally"), 300), mouseX, mouseY);
+		}
 	}
 	
-	public void saveChanges() {
-		
+	@Override
+	protected void actionPerformed(GuiButton button) {
+		if (button.id == 2000) {
+			
+			if (doneAction ()) {
+				return;
+			}
+			
+		} else if (button.id == 2001) {
+			this.values = Arrays.copyOf(this.defaultValues, this.defaultValues.length);
+			this.rebuildAllEntries ();
+		} else if (button.id == 2002) {
+			this.values = Arrays.copyOf(this.undoValues, this.undoValues.length);
+			this.rebuildAllEntries ();
+		}
+	}
+	
+	public void rebuildAllEntries () {
+		this.entryList.listEntries.clear();
+		for (int i = 0; i < this.values.length; i++) {
+			
+			Object defaultValue = null; 
+			if (i < this.defaultValues.length) {
+				defaultValue = this.defaultValues[i];
+			} else {
+				defaultValue = ((ArrayCustomEntry)this.entry).createNewLine ();
+			}
+			this.addNewEntry(i, this.values[i], defaultValue);
+		}
+	}
+	
+	public Object[] getCurrentsValues () {
+
 		List tmp = new ArrayList<Object>();
 		
 		for (IConfigEntry entry : this.entryList.listEntries) {
@@ -100,12 +157,15 @@ public class GuiEditCustomArray extends GuiGollumConfig {
 				newValue = ((ConfigJsonTypeEntry)entry).getValue();
 			}
 			if (newValue != null) {
-				log.debug("Save line : "+newValue);
 				tmp.add(newValue);
 			}
 		}
 		
-		this.entry.setValueFromChildScreen(tmp.toArray());
+		return tmp.toArray();
+	}
+	
+	public void saveChanges() {
+		this.entry.setValueFromChildScreen(this.getCurrentsValues());
 	}
 	
 	protected boolean doneAction() {
@@ -159,8 +219,5 @@ public class GuiEditCustomArray extends GuiGollumConfig {
 		log.debug ("Minus pressed");
 		
 		this.entryList.listEntries.remove(index);
-//		this.canAddMoreEntries = !configElement.isListLengthFixed() 
-//			&& (configElement.getMaxListLength() == -1 || this.listEntries.size() - 1 < configElement.getMaxListLength());
-//		keyTyped((char) Keyboard.CHAR_NONE, Keyboard.KEY_END);
 	}
 }

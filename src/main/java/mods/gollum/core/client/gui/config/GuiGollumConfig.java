@@ -15,6 +15,7 @@ import cpw.mods.fml.client.GuiModList;
 import cpw.mods.fml.client.config.GuiButtonExt;
 import cpw.mods.fml.client.config.GuiCheckBox;
 import cpw.mods.fml.client.config.GuiConfig;
+import cpw.mods.fml.client.config.HoverChecker;
 import cpw.mods.fml.client.config.IConfigElement;
 import cpw.mods.fml.common.ModContainer;
 
@@ -22,6 +23,15 @@ public abstract class GuiGollumConfig extends GuiConfig {
 
 	protected GollumMod mod;
 	protected IGollumConfigEntry entry = null;
+	
+	protected GuiButtonExt btnDone;
+	protected GuiButtonExt btnUndo;
+	protected GuiButtonExt btnReset;
+	protected GuiCheckBox  checkBox;
+	
+	protected HoverChecker undoHoverChecker     = null;
+	protected HoverChecker resetHoverChecker    = null;
+	protected HoverChecker checkBoxHoverChecker = null;
 	
 	public GuiGollumConfig(GuiConfig parent, List<IConfigElement> fields, IGollumConfigEntry entry) {
 		this(parent, fields, parent.title);
@@ -87,12 +97,29 @@ public abstract class GuiGollumConfig extends GuiConfig {
 		int undoWidth = mc.fontRenderer.getStringWidth(" " + I18n.format("fml.configgui.tooltip.undoChanges")) + undoGlyphWidth + 20;
 		int resetWidth = mc.fontRenderer.getStringWidth(" " + I18n.format("fml.configgui.tooltip.resetToDefault")) + resetGlyphWidth + 20;
 		int buttonWidthHalf = (doneWidth + 5 + undoWidth + 5 + resetWidth + 5) / 2;
+
+		this.btnDone  = ((GuiButtonExt)this.buttonList.get(startBt  ));
+		this.btnUndo  = ((GuiButtonExt)this.buttonList.get(startBt+2));
+		this.btnReset = ((GuiButtonExt)this.buttonList.get(startBt+1));
+		this.checkBox = ((GuiCheckBox) this.buttonList.get(startBt+3));
 		
-		((GuiButtonExt)this.buttonList.get(startBt  )).xPosition = this.width / 2 - buttonWidthHalf;;
-		((GuiButtonExt)this.buttonList.get(startBt+2)).xPosition = this.width / 2 - buttonWidthHalf + doneWidth + 5;
-		((GuiButtonExt)this.buttonList.get(startBt+1)).xPosition = this.width / 2 - buttonWidthHalf + doneWidth + 5 + undoWidth + 5;
-		((GuiCheckBox )this.buttonList.get(startBt+3)).visible   = false;
-		((GuiCheckBox )this.buttonList.get(startBt+3)).setIsChecked(true);
+		this.btnDone.xPosition  = this.width / 2 - buttonWidthHalf;;
+		this.btnUndo.xPosition  = this.width / 2 - buttonWidthHalf + doneWidth + 5;
+		this.btnReset.xPosition = this.width / 2 - buttonWidthHalf + doneWidth + 5 + undoWidth + 5;
+		this.checkBox.visible   = false;
+		this.checkBox.setIsChecked(true);
+		
+		try {
+			Field f;
+			f = GuiConfig.class.getDeclaredField("undoHoverChecker")    ; f.setAccessible(true);
+			this.undoHoverChecker     = (HoverChecker) f.get(this);
+			f = GuiConfig.class.getDeclaredField("resetHoverChecker")   ; f.setAccessible(true);
+			this.resetHoverChecker    = (HoverChecker) f.get(this);
+			f = GuiConfig.class.getDeclaredField("checkBoxHoverChecker"); f.setAccessible(true);
+			this.checkBoxHoverChecker = (HoverChecker) f.get(this);
+		} catch (Exception e) {
+			e.getStackTrace();
+		}
 	}
 	
 	@Override

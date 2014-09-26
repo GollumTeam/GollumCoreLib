@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 
 import mods.gollum.core.client.gui.config.entry.ArrayCustomEntry;
 import mods.gollum.core.client.gui.config.properties.GollumProperty;
+import mods.gollum.core.common.config.type.IConfigJsonType;
 import mods.gollum.core.tools.simplejson.Json;
 import net.minecraftforge.common.config.Property;
 import cpw.mods.fml.client.config.ConfigGuiType;
@@ -147,9 +148,32 @@ public class CustomElement implements IConfigElement {
 					((Json[])this.values)[i] = (Json) ((Json[])this.defaultValues)[i].clone();
 				}
 			}
+			if (this.defaultValue instanceof IConfigJsonType[]) {
+				
+				for (int i = 0; i < ((IConfigJsonType[])this.defaultValue).length; i++) {
+					try {
+						IConfigJsonType tmp = (IConfigJsonType) ((IConfigJsonType[])this.defaultValue)[i].getClass().newInstance();
+						tmp.readConfig(((IConfigJsonType)((IConfigJsonType[])this.defaultValue)[i]).writeConfig());
+						
+						((IConfigJsonType[])this.values)[i] = tmp;
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+			
 		} else {
 			if (this.defaultValue instanceof Json) {
 				this.value = ((Json)this.defaultValue).clone();
+			} else
+			if (this.defaultValue instanceof IConfigJsonType) {
+				try {
+					IConfigJsonType tmp = (IConfigJsonType)this.defaultValue.getClass().newInstance();
+					tmp.readConfig(((IConfigJsonType)this.defaultValue).writeConfig());
+					this.value = tmp;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			} else {
 				this.value = this.defaultValue;
 			}

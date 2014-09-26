@@ -107,7 +107,7 @@ public abstract class GollumProperty extends Property {
 			String[] valuesDefault = null;
 			
 			if (clazz.isAssignableFrom(Character.TYPE) || clazz.isAssignableFrom(Character.class)) { // Fixe affichage
-				value        = (byte)((Character)value).charValue();
+				value        = (byte)((Character)value)       .charValue();
 				valueDefault = (byte)((Character)valueDefault).charValue();
 			}
 			
@@ -353,8 +353,8 @@ public abstract class GollumProperty extends Property {
 		if (classEntry != null) {
 			
 			if (o instanceof Object[]) {
-				Object[] oAr  = Arrays.copyOf((Object[])o , ((Object[])o).length);
-				Object[] oDAr = Arrays.copyOf((Object[])oD, ((Object[])o).length);
+				Object[] oAr  = Arrays.copyOf((Object[])o , ((Object[])o) .length);
+				Object[] oDAr = Arrays.copyOf((Object[])oD, ((Object[])oD).length);
 				return new CustomElement(classEntry, this, oAr, oDAr);
 			}
 			

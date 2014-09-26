@@ -48,4 +48,8 @@ public class ArrayCustomEntry extends ArrayEntry implements IGollumConfigEntry {
 		
 		return null;
 	}
+	
+	public Object[] getBeforeValues () {
+		return this.beforeValues;
+	}
 }
