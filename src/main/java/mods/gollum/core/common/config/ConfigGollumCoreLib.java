@@ -3,6 +3,7 @@ package mods.gollum.core.common.config;
 import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.common.config.ConfigProp.Type;
 import mods.gollum.core.common.config.type.ItemStackConfigType;
+import mods.gollum.core.tools.simplejson.Json;
 
 
 public class ConfigGollumCoreLib extends Config {
@@ -33,7 +34,12 @@ public class ConfigGollumCoreLib extends Config {
 	//////////////////
 	
 	
-	
+	@ConfigProp(group="Test")
+	public Json json1 = Json.create(
+		new Json.EntryObject("field1", Json.create("Test")),
+		new Json.EntryObject("field2", Json.create(1)),
+		new Json.EntryObject("field3", Json.create(1.5))
+	);
 	
 	
 	@ConfigProp(group="Test", type=Type.SLIDER)

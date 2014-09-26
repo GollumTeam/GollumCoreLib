@@ -31,7 +31,7 @@ public class ValueProperty extends GollumProperty {
 		this.value = value;
 		this.defaultValue = defaultValue;
 		if (value != null && this.defaultValue != null) {
-			JsonConfigProp anno = new JsonConfigProp(); // TODO Reconstruire l'annotation
+			JsonConfigProp anno = new JsonConfigProp(); // TODO Rebuild annotation
 		
 			init(anno, value.getClass(), value, defaultValue, "");
 		}

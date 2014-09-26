@@ -37,7 +37,7 @@ public class FieldProperty extends GollumProperty {
 	}
 	
 	@Override
-	public IConfigElement createCustomConfigElement() { // TODO factorisé miexu que ca
+	public IConfigElement createCustomConfigElement() {
 		try {
 			
 			Object o  = f.get(this.configLoad.config);

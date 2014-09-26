@@ -58,7 +58,6 @@ public class RegisteredObjects {
 				return (Block)Block.blockRegistry.getObject(name);
 				
 			} else {
-				// TODO A Analyser
 				return (Block)Block.blockRegistry.getObject(registerName);
 			}
 		} catch (Exception e) {

@@ -85,7 +85,6 @@ public class AddButtonEntry implements IConfigEntry {
 
 	@Override
 	public void mouseClicked(int x, int y, int mouseEvent) {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
