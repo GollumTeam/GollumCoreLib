@@ -24,6 +24,10 @@ public class JsonInt extends Json {
 		}
 	}
 	
+	public void clear() {
+		this.value = 0;
+	}
+	
 	/////////////////////
 	// Convert to json //
 	/////////////////////

@@ -24,6 +24,10 @@ public class JsonByte extends Json {
 		}
 	}
 	
+	public void clear() {
+		this.value = (byte)0;
+	}
+	
 	/////////////////////
 	// Convert to json //
 	/////////////////////

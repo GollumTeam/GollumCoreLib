@@ -25,6 +25,10 @@ public class JsonChar extends Json {
 		}
 	}
 	
+	public void clear() {
+		this.value = (char)0;
+	}
+	
 	/////////////////////
 	// Convert to json //
 	/////////////////////

@@ -21,6 +21,10 @@ public class JsonString extends Json {
 		this.value = value.toString();
 	}
 	
+	public void clear() {
+		this.value = "";
+	}
+	
 	/////////////////////
 	// Convert to json //
 	/////////////////////

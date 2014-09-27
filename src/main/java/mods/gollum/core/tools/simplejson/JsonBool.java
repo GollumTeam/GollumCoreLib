@@ -1,5 +1,7 @@
 package mods.gollum.core.tools.simplejson;
 
+import java.util.HashMap;
+
 import mods.gollum.core.tools.simplejson.Json.TYPE;
 import argo.jdom.JsonNodeBuilder;
 import argo.jdom.JsonNodeBuilders;
@@ -22,6 +24,10 @@ public class JsonBool extends Json {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void clear() {
+		this.value = false;
 	}
 	
 	/////////////////////

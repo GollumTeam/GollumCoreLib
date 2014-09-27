@@ -189,6 +189,9 @@ public class Json implements Cloneable {
 	public ArrayList<IJsonComplement> getComplements() {
 		return this.complements;
 	}
+
+	public void clear() {
+	}
 	
 	public IJsonComplement getComplement(Class search) {
 		for (IJsonComplement complement: this.complements) {

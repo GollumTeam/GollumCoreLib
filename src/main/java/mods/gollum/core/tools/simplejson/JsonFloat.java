@@ -24,6 +24,10 @@ public class JsonFloat extends Json {
 		}
 	}
 	
+	public void clear() {
+		this.value = 0.0F;
+	}
+	
 	/////////////////////
 	// Convert to json //
 	/////////////////////

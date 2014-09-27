@@ -59,9 +59,9 @@ public class GuiJsonConfig extends GuiGollumConfig {
 					fields.add(element);
 				}
 			}
-						
+			
 		}
-
+		
 		if (value.isArray()) {
 			
 			for(Entry<String, Json> entry : value.allChildWithKey()) {
@@ -99,19 +99,15 @@ public class GuiJsonConfig extends GuiGollumConfig {
 		}
 		if (value.isArray()) {
 			
-			for (IConfigEntry entry : this.entryList.listEntries) {
+			value.clear ();
+			
+			for (int i = 0; i < this.entryList.listEntries.size(); i++) {
 				
-				Json newValue = null;
-				
-				if (value.containsKey(entry.getName())) {
-					newValue = (Json) value.child(entry.getName()).clone();
-				} else {
-					// TODO no implment add new value
-					newValue = Json.create("");
-				}
+				IConfigEntry entry = this.entryList.listEntries.get(i);
+				Json newValue = (Json) value.child(entry.getName()).clone();
 				
 				newValue.setValue(entry.getCurrentValue());
-				value.add(entry.getName(), newValue);
+				value.add(newValue);
 			}
 		}
 		

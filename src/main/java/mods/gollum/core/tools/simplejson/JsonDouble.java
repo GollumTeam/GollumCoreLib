@@ -23,6 +23,10 @@ public class JsonDouble extends Json {
 		}
 	}
 	
+	public void clear() {
+		this.value = 0.0D;
+	}
+	
 	/////////////////////
 	// Convert to json //
 	/////////////////////

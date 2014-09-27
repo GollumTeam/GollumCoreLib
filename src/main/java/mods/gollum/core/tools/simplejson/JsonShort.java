@@ -25,6 +25,10 @@ public class JsonShort extends Json {
 		}
 	}
 	
+	public void clear() {
+		this.value = (short)0;
+	}
+	
 	/////////////////////
 	// Convert to json //
 	/////////////////////

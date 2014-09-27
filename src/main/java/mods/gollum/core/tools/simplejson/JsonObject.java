@@ -44,6 +44,9 @@ public class JsonObject extends Json {
 	
 	public boolean contains (Json json) { return ((HashMap<String, Json>)this.value).containsValue (json); }
 	
+	public void clear() {
+		((HashMap<String, Json>)this.value).clear();
+	}
 	
 	public boolean equals (Object obj) {
 		

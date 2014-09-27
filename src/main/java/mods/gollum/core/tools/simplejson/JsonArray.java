@@ -59,6 +59,10 @@ public class JsonArray extends Json {
 		return false; 
 	}
 	
+	public void clear() {
+		((List<Json>)this.value).clear();
+	}
+	
 	public boolean contains (Json json) { return ((List<Json>)this.value).contains(json); }
 	
 	

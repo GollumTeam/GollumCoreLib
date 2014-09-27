@@ -25,6 +25,10 @@ public class JsonLong extends Json {
 		}
 	}
 	
+	public void clear() {
+		this.value = 0L;
+	}
+	
 	/////////////////////
 	// Convert to json //
 	/////////////////////

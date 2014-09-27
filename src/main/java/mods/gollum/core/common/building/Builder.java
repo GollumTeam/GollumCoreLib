@@ -26,6 +26,7 @@ import mods.gollum.core.common.building.handler.BuildingBlockHandler;
 import mods.gollum.core.tools.registry.BuildingBlockRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.BlockDoor;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -176,6 +177,8 @@ public class Builder {
 				
 			}
 			
+			ArrayList<Unity3D> afters = new ArrayList<Unity3D>();
+			
 			for (Unity3D unity3D : building.unities) {
 				
 				Unity unity = unity3D.unity;
@@ -185,8 +188,12 @@ public class Builder {
 				int finalY = initY + unity3D.y(rotate);
 				int finalZ = initZ + unity3D.z(rotate)*dz;
 				
-				if (unity.block != null) {
-					world.removeTileEntity(finalX, finalY, finalZ);
+				world.removeTileEntity(finalX, finalY, finalZ);
+				
+				if (unity.block instanceof BlockDoor) {
+					afters.add(unity3D);
+					world.setBlockToAir (finalX, finalY, finalZ);
+				} else if (unity.block != null) {
 					world.setBlock(finalX, finalY, finalZ, unity.block, unity.metadata, 0);
 				} else {
 					world.setBlockToAir (finalX, finalY, finalZ);
@@ -197,6 +204,18 @@ public class Builder {
 				this.setExtra       (world, random, finalX, finalY, finalZ, unity.extra, initX, initY, initZ, rotate, building.maxX(rotate), building.maxZ(rotate));
 			}
 			
+			for (Unity3D unity3D : afters) {
+				
+				Unity unity = unity3D.unity;
+				
+				// Position réél dans le monde du block
+				int finalX = initX + unity3D.x(rotate)*dx;
+				int finalY = initY + unity3D.y(rotate);
+				int finalZ = initZ + unity3D.z(rotate)*dz;
+				
+				world.setBlock(finalX, finalY, finalZ, unity.block, unity.metadata, 0);
+				
+			}
 			
 			//////////////////////////////////
 			// Ajoute les blocks aléatoires //
