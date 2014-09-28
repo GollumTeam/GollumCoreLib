@@ -116,9 +116,10 @@ public class Json implements Cloneable {
 			return ar;
 		}
 
-		if (o instanceof String     ) { return create ((String)       o); }
-		if (o instanceof EntryObject) { return create ((EntryObject)  o); }
-		if (o instanceof JsonNode)    { return create ((JsonNode)     o); }
+		if (o instanceof String     ) { return create ((String)      o); }
+		if (o instanceof EntryObject) { return create ((EntryObject) o); }
+		if (o instanceof JsonNode)    { return create ((JsonNode)    o); }
+		if (o instanceof Json)        { return create ((Json)        o); }
 		if (o instanceof Long      || o.getClass().isAssignableFrom(Long.TYPE     )) { return create (((Long)     o).longValue());    }
 		if (o instanceof Integer   || o.getClass().isAssignableFrom(Integer.TYPE  )) { return create (((Integer)  o).intValue());     }
 		if (o instanceof Short     || o.getClass().isAssignableFrom(Short.TYPE    )) { return create (((Short)    o).shortValue());   }
