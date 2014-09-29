@@ -215,6 +215,9 @@ public class Builder {
 				
 				world.setBlock(finalX, finalY, finalZ, unity.block, unity.metadata, 0);
 				
+				this.setOrientation (world, finalX, finalY, finalZ, this.rotateOrientation(rotate, unity.orientation), rotate);
+				this.setContents    (world, random, finalX, finalY, finalZ, unity.contents);
+				this.setExtra       (world, random, finalX, finalY, finalZ, unity.extra, initX, initY, initZ, rotate, building.maxX(rotate), building.maxZ(rotate));
 			}
 			
 			//////////////////////////////////
