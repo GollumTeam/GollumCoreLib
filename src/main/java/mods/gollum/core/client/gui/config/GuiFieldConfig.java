@@ -205,4 +205,8 @@ public class GuiFieldConfig extends GuiGollumConfig {
 		}
 	}
 	
+	public boolean isArray() {
+		return true;
+	}
+	
 }

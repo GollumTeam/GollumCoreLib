@@ -2,6 +2,7 @@ package mods.gollum.core.client.gui.config.entry;
 
 import static mods.gollum.core.ModGollumCoreLib.log;
 import mods.gollum.core.client.gui.config.GuiEditCustomArray;
+import mods.gollum.core.client.gui.config.GuiGollumConfig;
 import net.minecraft.client.renderer.Tessellator;
 import cpw.mods.fml.client.config.GuiConfigEntries.IConfigEntry;
 import cpw.mods.fml.client.config.GuiButtonExt;
@@ -10,10 +11,10 @@ import cpw.mods.fml.client.config.IConfigElement;
 
 public class AddButtonEntry implements IConfigEntry {
 	
-	protected GuiEditCustomArray parent;
+	protected GuiGollumConfig parent;
 	protected GuiButtonExt btnAdd;
 	
-	public AddButtonEntry(GuiEditCustomArray parent) {
+	public AddButtonEntry(GuiGollumConfig parent) {
 		
 		this.parent = parent;
 		this.btnAdd = new GuiButtonExt(0, 0, 0, 18, 18, "+");

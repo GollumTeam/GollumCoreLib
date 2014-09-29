@@ -4,7 +4,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import mods.gollum.core.client.gui.config.entry.ArrayCustomEntry;
+import mods.gollum.core.client.gui.config.entry.ArrayEntry;
+import mods.gollum.core.client.gui.config.entry.DoubleEntry;
+import mods.gollum.core.client.gui.config.entry.IntegerEntry;
+import mods.gollum.core.client.gui.config.entry.StringEntry;
 import mods.gollum.core.client.gui.config.properties.GollumProperty;
 import mods.gollum.core.common.config.type.IConfigJsonType;
 import mods.gollum.core.tools.simplejson.Json;
@@ -28,42 +31,58 @@ public class CustomElement implements IConfigElement {
 		
 		this.property     = property;
 		this.classEntry   = classEntry;
-		this.value        = property.getString();
-		this.defaultValue = property.getDefault();
+		this.set(property.getString());
 		
 	}
-
+	
 	public CustomElement(Class< ? extends IConfigEntry> classEntry, GollumProperty property, Object[] values, Object[] defaultValues) {
 		this.property      = property;
 		this.classEntry    = classEntry;
 		this.values        = values;
+		for (int i = 0; i < this.values.length; i++) {
+			this.values[i] = this.formatValue(this.values[i]);
+		}
 		this.defaultValues = defaultValues;
+		for (int i = 0; i < this.values.length; i++) {
+			this.defaultValues[i] = this.formatValue(this.defaultValues[i]);
+		}
 		this.isArray = true;
 	}
 	
 	public CustomElement(Class< ? extends IConfigEntry> classEntry, GollumProperty property, Object value, Object defaultValue) {
-
+		
 		this.property     = property;
 		this.classEntry   = classEntry;
-		this.value        = value;
-		this.defaultValue = defaultValue;
+		this.value        = this.formatValue (value);
+		this.defaultValue = this.formatValue (defaultValue);
+	}
+	
+	private Object formatValue(Object value) {
+		
+		if (this.getType() == ConfigGuiType.INTEGER) { try { value = Integer.parseInt    (value+""); } catch (Exception e) { value = 0;     }}
+		if (this.getType() == ConfigGuiType.DOUBLE)  { try { value = Double .parseDouble (value+""); } catch (Exception e) { value = 0;     }}
+		if (this.getType() == ConfigGuiType.BOOLEAN) { try { value = Boolean.parseBoolean(value+""); } catch (Exception e) { value = false; }}
+		if (this.getType() == ConfigGuiType.STRING)  { value = value+""; }
+		if (value instanceof Json) { value = (Json) ((Json)value).clone(); }
+		
+		return value;
 	}
 	
 	@Override
 	public Class<? extends IConfigEntry> getConfigEntryClass() {
-		return (this.isArray) ? ArrayCustomEntry.class : this.classEntry;
+		return (this.isArray) ? ArrayEntry.class : this.classEntry;
 	}
-
-	@Override
-	public boolean isProperty() {
-		return true;
-	}
-
+	
 	@Override
 	public Class getArrayEntryClass() {
 		return this.classEntry;
 	}
-
+	
+	@Override
+	public boolean isProperty() {
+		return true;
+	}
+	
 	@Override
 	public String getName() {
 		return this.property.getName();
@@ -101,7 +120,6 @@ public class CustomElement implements IConfigElement {
 		;
 	}
 	
-
 	@Override
 	public boolean isList() {
 		return this.isArray;
@@ -223,19 +241,15 @@ public class CustomElement implements IConfigElement {
 
 	@Override
 	public void set(Object value) {
-		this.value = value;
+		this.value = this.formatValue(value);
 	}
 
 	@Override
 	public void set(Object[] aVal) {
 		
 		this.values = Arrays.copyOf(aVal, aVal.length);
-		
-		if (aVal instanceof Json[]) {
-			
-			for (int i = 0; i < ((Json[])this.values).length; i++) {
-				((Json[])this.values)[i] = (Json) ((Json[])aVal)[i].clone();
-			}
+		for (int i = 0; i < this.values.length; i++) {
+			this.values[i] = this.formatValue(this.values[i]);
 		}
 	}
 

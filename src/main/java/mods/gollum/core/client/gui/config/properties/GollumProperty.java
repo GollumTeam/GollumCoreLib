@@ -6,12 +6,16 @@ import java.util.regex.Pattern;
 
 import scala.actors.threadpool.Arrays;
 import mods.gollum.core.client.gui.config.element.CustomElement;
-import mods.gollum.core.client.gui.config.entry.ArrayCustomEntry;
+import mods.gollum.core.client.gui.config.entry.ArrayEntry;
 import mods.gollum.core.client.gui.config.entry.BlockEntry;
+import mods.gollum.core.client.gui.config.entry.BooleanEntry;
 import mods.gollum.core.client.gui.config.entry.ConfigJsonTypeEntry;
+import mods.gollum.core.client.gui.config.entry.DoubleEntry;
 import mods.gollum.core.client.gui.config.entry.GollumCategoryEntry;
+import mods.gollum.core.client.gui.config.entry.IntegerEntry;
 import mods.gollum.core.client.gui.config.entry.ItemEntry;
 import mods.gollum.core.client.gui.config.entry.JsonEntry;
+import mods.gollum.core.client.gui.config.entry.StringEntry;
 import mods.gollum.core.common.config.ConfigLoader;
 import mods.gollum.core.common.config.ConfigProp;
 import mods.gollum.core.common.config.ConfigLoader.ConfigLoad;
@@ -26,149 +30,74 @@ import cpw.mods.fml.client.config.GuiConfigEntries.NumberSliderEntry;
 import cpw.mods.fml.client.config.IConfigElement;
 
 public abstract class GollumProperty extends Property {
-
-	protected boolean isValid     = false;
-	protected boolean isNative = false;
+	
 	public GollumMod mod;
 	protected ConfigProp anno;
-	private Type type;
+	protected Type type;
+	protected Class clazz;
+	private boolean isValid = false;
 	
-	public GollumProperty(GollumMod mod, Type type) {
+	public GollumProperty(Class clazz, GollumMod mod, Type type) {
 		super ("", "", type);
 		this.mod = mod;
 		this.type = type;
+		this.clazz = clazz;
 	}
 	
-	protected static Type getType(Class clazz) {
+	protected void init(Object value, Object valueDefault, String name) {
 		
-		Type type = null;
-		
-		if (
-			clazz.isAssignableFrom(String.class) ||
-			clazz.isAssignableFrom(String[].class)
-		) {
-			type = Property.Type.STRING;
-		}
-		if (
-			clazz.isAssignableFrom(Long.TYPE        ) ||
-			clazz.isAssignableFrom(Integer.TYPE     ) ||
-			clazz.isAssignableFrom(Short.TYPE       ) ||
-			clazz.isAssignableFrom(Byte.TYPE        ) ||
-			clazz.isAssignableFrom(Character.TYPE   ) ||
-			clazz.isAssignableFrom(Long.class       ) ||
-			clazz.isAssignableFrom(Integer.class    ) ||
-			clazz.isAssignableFrom(Short.class      ) ||
-			clazz.isAssignableFrom(Byte.class       ) ||
-			clazz.isAssignableFrom(Character.class  ) ||
-			
-			clazz.isAssignableFrom(long[].class     ) ||
-			clazz.isAssignableFrom(int[].class      ) ||
-			clazz.isAssignableFrom(short[].class    ) ||
-			clazz.isAssignableFrom(byte[].class     ) ||
-			clazz.isAssignableFrom(char[].class     ) ||
-			clazz.isAssignableFrom(Long[].class     ) ||
-			clazz.isAssignableFrom(Integer[].class  ) ||
-			clazz.isAssignableFrom(Short[].class    ) ||
-			clazz.isAssignableFrom(Byte[].class     ) ||
-			clazz.isAssignableFrom(Character[].class)
-		) {
-			type = Property.Type.INTEGER;
-		}
-		if (
-			clazz.isAssignableFrom(Float.TYPE    ) ||
-			clazz.isAssignableFrom(Double.TYPE   ) ||
-			clazz.isAssignableFrom(Float.class   ) ||
-			clazz.isAssignableFrom(Double.class  ) ||
-			
-			clazz.isAssignableFrom(float[].class ) ||
-			clazz.isAssignableFrom(double[].class) ||
-			clazz.isAssignableFrom(Float[].class ) ||
-			clazz.isAssignableFrom(Double[].class) 
-		) {
-			type = Property.Type.DOUBLE;
-		}
-		if (
-			clazz.isAssignableFrom(Boolean.TYPE   ) ||
-			clazz.isAssignableFrom(Boolean.class  ) ||
-			
-			clazz.isAssignableFrom(boolean[].class) ||
-			clazz.isAssignableFrom(Boolean[].class)
-		) {
-			type = Property.Type.BOOLEAN;
-		}
-		return type;
-	}
-	
-	protected void init(ConfigProp anno, Class clazz, Object value, Object valueDefault, String name) {
-		
-		if (this.getType() != null && anno != null) {
-			
-			String[] values = null;
-			String[] valuesDefault = null;
-			
-			if (clazz.isAssignableFrom(Character.TYPE) || clazz.isAssignableFrom(Character.class)) { // Fixe affichage
-				value        = (byte)((Character)value)       .charValue();
-				valueDefault = (byte)((Character)valueDefault).charValue();
-			}
-			
-			if (value.getClass().isArray()) {
-				values = new String[Array.getLength(value)];
-				for (int i = 0; i < Array.getLength(value); i++) {
-					
-					Object o = Array.get(value, i);
-					if (clazz.isAssignableFrom(char[].class) || clazz.isAssignableFrom(Character[].class)) { // Fixe affichage
-						o = (byte)((Character)o).charValue();
-					}
-					values[i] = o.toString();
+		if (anno != null) {
+			if (this.getClassEntryForClass() != null) {
+				
+				String[] values = null;
+				String[] valuesDefault = null;
+				
+				if (clazz.isAssignableFrom(Character.TYPE) || clazz.isAssignableFrom(Character.class)) { // Fixe affichage
+					value        = (byte)((Character)value)       .charValue();
+					valueDefault = (byte)((Character)valueDefault).charValue();
 				}
-				valuesDefault = new String[Array.getLength(valueDefault)];
-				for (int i = 0; i < Array.getLength(valueDefault); i++) {
-					
-					Object o = Array.get(valueDefault, i);
-					if (clazz.isAssignableFrom(char[].class) || clazz.isAssignableFrom(Character[].class)) { // Fixe affichage
-						o = (byte)((Character)o).charValue();
+				
+				if (value.getClass().isArray()) {
+					values = new String[Array.getLength(value)];
+					for (int i = 0; i < Array.getLength(value); i++) {
+						
+						Object o = Array.get(value, i);
+						if (clazz.isAssignableFrom(char[].class) || clazz.isAssignableFrom(Character[].class)) { // Fixe affichage
+							o = (byte)((Character)o).charValue();
+						}
+						values[i] = o.toString();
 					}
-					valuesDefault[i] = o.toString();
+					valuesDefault = new String[Array.getLength(valueDefault)];
+					for (int i = 0; i < Array.getLength(valueDefault); i++) {
+						
+						Object o = Array.get(valueDefault, i);
+						if (clazz.isAssignableFrom(char[].class) || clazz.isAssignableFrom(Character[].class)) { // Fixe affichage
+							o = (byte)((Character)o).charValue();
+						}
+						valuesDefault[i] = o.toString();
+					}
 				}
+				
+				this.initDatas(name, anno, value, values, valueDefault, valuesDefault);
+				
+				// Limit short byte char
+				if (clazz.isAssignableFrom(Short.TYPE) || clazz.isAssignableFrom(Short.class)) {
+					this.setLimitShort();
+				}
+				if (clazz.isAssignableFrom(Byte.TYPE) || clazz.isAssignableFrom(Byte.class)) {
+					this.setLimitByte();
+				}
+				if (clazz.isAssignableFrom(Character.TYPE) || clazz.isAssignableFrom(Character.class)) {
+					this.setLimitChar();
+				}
+				
+				this.markUnchange();
+				this.isValid = true;
 			}
-			
-			this.initDatas(name, anno, value, values, valueDefault, valuesDefault);
-			
-			// Limit short byte char
-			if (clazz.isAssignableFrom(Short.TYPE) || clazz.isAssignableFrom(Short.class)) {
-				this.setLimitShort();
-			}
-			if (clazz.isAssignableFrom(Byte.TYPE) || clazz.isAssignableFrom(Byte.class)) {
-				this.setLimitByte();
-			}
-			if (clazz.isAssignableFrom(Character.TYPE) || clazz.isAssignableFrom(Character.class)) {
-				this.setLimitChar();
-			}
-			
-			this.markUnchange();
-			
-			this.isValid = true;
-			this.isNative = true;
-			
-		}
-		
-
-		if (
-			IConfigJsonType  .class.isAssignableFrom(clazz) ||
-			Json             .class.isAssignableFrom(clazz) ||
-			IConfigJsonType[].class.isAssignableFrom(clazz)
-		) {
-			
-			this.markUnchange();
-			
-			this.isValid = true;
-			this.isNative = false;
 		}
 	}
 	
 	protected void initDatas (String name, ConfigProp anno, Object value, String[] values, Object valueDefault, String[] valuesDefault) {
-		
-		this.anno = anno;
 		
 		if (anno.type() == ConfigProp.Type.MOD) {
 			this.type = Type.MOD_ID; 
@@ -281,11 +210,15 @@ public abstract class GollumProperty extends Property {
 	}
 	
 	public Type getType() {
+		if (Long           .class.isAssignableFrom(clazz) || Long     .TYPE.isAssignableFrom(clazz)) { return Type.INTEGER; }
+		if (Integer        .class.isAssignableFrom(clazz) || Integer  .TYPE.isAssignableFrom(clazz)) { return Type.INTEGER; }
+		if (Short          .class.isAssignableFrom(clazz) || Short    .TYPE.isAssignableFrom(clazz)) { return Type.INTEGER; }
+		if (Integer        .class.isAssignableFrom(clazz) || Byte     .TYPE.isAssignableFrom(clazz)) { return Type.INTEGER; }
+		if (Character      .class.isAssignableFrom(clazz) || Character.TYPE.isAssignableFrom(clazz)) { return Type.INTEGER; }
+		if (Double         .class.isAssignableFrom(clazz) || Double   .TYPE.isAssignableFrom(clazz)) { return Type.DOUBLE ; }
+		if (Float          .class.isAssignableFrom(clazz) || Float    .TYPE.isAssignableFrom(clazz)) { return Type.DOUBLE ; }
+		if (Boolean        .class.isAssignableFrom(clazz) || Boolean  .TYPE.isAssignableFrom(clazz)) { return Type.BOOLEAN; }
 		return this.type;
-	}
-	
-	public boolean isValid() {
-		return isValid;
 	}
 	
 	public void markUnchange () {
@@ -298,57 +231,48 @@ public abstract class GollumProperty extends Property {
 		}
 	}
 	
-	public boolean isNative() {
-		return isNative;
-	}
-	
 	public IConfigElement createConfigElement() {
-		if (this.isValid()) {
-			if (this.isNative) {
-				
-				if (this.anno.type() == ConfigProp.Type.ITEM) {
-					return new CustomElement(ItemEntry.class, this);
-				} else
-				
-				if (this.anno.type() == ConfigProp.Type.BLOCK) {
-					return new CustomElement(BlockEntry.class, this);
-				}  else 
-				
-				if (this.anno.type() == ConfigProp.Type.SLIDER) {
-					return new CustomElement(NumberSliderEntry.class, this);
-				} else 
-				
-				{
-					return new ConfigElement(this);
-				}
-			} else {
-				return this.createCustomConfigElement();
-			}
+		if (this.isValid) {
+			return this.buildConfigElement();
 		}
 		return null;
 	}
+
+
+	public abstract IConfigElement buildConfigElement();
 	
-	protected Class getClassEntryForObject (Object o) {
+	protected Class getClassEntryForClass () {
+
+		if (this.anno.type() == ConfigProp.Type.ITEM)      { return ItemEntry          .class; }
+		if (this.anno.type() == ConfigProp.Type.BLOCK)     { return BlockEntry         .class; }
+//		if (this.anno.type() == ConfigProp.Type.SLIDER)    { return SliderEntry        .class; }
+		if (Json           .class.isAssignableFrom(clazz)) { return JsonEntry          .class; }
+		if (IConfigJsonType.class.isAssignableFrom(clazz)) { return ConfigJsonTypeEntry.class; }
+		if (String         .class.isAssignableFrom(clazz)) { return StringEntry        .class; }
+		if (Long           .class.isAssignableFrom(clazz) || Long     .TYPE.isAssignableFrom(clazz)) { return IntegerEntry.class; }
+		if (Integer        .class.isAssignableFrom(clazz) || Integer  .TYPE.isAssignableFrom(clazz)) { return IntegerEntry.class; }
+		if (Short          .class.isAssignableFrom(clazz) || Short    .TYPE.isAssignableFrom(clazz)) { return IntegerEntry.class; }
+		if (Integer        .class.isAssignableFrom(clazz) || Byte     .TYPE.isAssignableFrom(clazz)) { return IntegerEntry.class; }
+		if (Character      .class.isAssignableFrom(clazz) || Character.TYPE.isAssignableFrom(clazz)) { return IntegerEntry.class; }
+		if (Double         .class.isAssignableFrom(clazz) || Double   .TYPE.isAssignableFrom(clazz)) { return DoubleEntry .class; }
+		if (Float          .class.isAssignableFrom(clazz) || Float    .TYPE.isAssignableFrom(clazz)) { return DoubleEntry .class; }
+		if (Boolean        .class.isAssignableFrom(clazz) || Boolean  .TYPE.isAssignableFrom(clazz)) { return BooleanEntry.class; }
 		
-		if (o instanceof Json           ) { return JsonEntry          .class; }
-		if (o instanceof IConfigJsonType) { return ConfigJsonTypeEntry.class; }
-		
-		if (o instanceof Object[]) {
+		if (clazz.isArray()) {
 			
-			Class subType = o.getClass().getComponentType();
-			
-			if (Object[]       .class.isAssignableFrom(subType)) { return ArrayCustomEntry   .class; }
+			Class subType = clazz.getComponentType();
+
 			if (Json           .class.isAssignableFrom(subType)) { return JsonEntry          .class; }
 			if (IConfigJsonType.class.isAssignableFrom(subType)) { return ConfigJsonTypeEntry.class; }
 			
-			return ConfigJsonTypeEntry.class;
+			return ArrayEntry.class;
 		}
 		return null;
 	}
 	
-	protected CustomElement buildCustomConfigElement(Object o, Object oD) {
+	protected CustomElement buildConfigElement(Object o, Object oD) {
 		
-		Class classEntry = this.getClassEntryForObject(o);
+		Class classEntry = this.getClassEntryForClass();
 			
 		if (classEntry != null) {
 			
@@ -358,6 +282,13 @@ public abstract class GollumProperty extends Property {
 				return new CustomElement(classEntry, this, oAr, oDAr);
 			}
 			
+			if (o instanceof Character || Character.TYPE.isAssignableFrom(o.getClass())) {
+				o = (byte)((Character)o).charValue();
+			}
+			if (oD instanceof Character || Character.TYPE.isAssignableFrom(oD.getClass())) {
+				oD = (byte)((Character)oD).charValue();
+			}
+			
 			return new CustomElement(classEntry, this, o, oD);
 		}
 		
@@ -365,6 +296,4 @@ public abstract class GollumProperty extends Property {
 		
 		return null;
 	}
-	
-	public abstract IConfigElement createCustomConfigElement ();
 }

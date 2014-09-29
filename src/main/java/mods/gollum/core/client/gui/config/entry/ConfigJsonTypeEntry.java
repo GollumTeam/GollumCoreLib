@@ -4,7 +4,7 @@ import java.awt.Color;
 
 import mods.gollum.core.client.gui.config.GuiEditCustomArray;
 import mods.gollum.core.client.gui.config.GuiJsonConfig;
-import mods.gollum.core.client.gui.config.entry.logic.EditCustomArrayEntryLogic;
+import mods.gollum.core.client.gui.config.entry.logic.GuiArrayButtonEntryLogic;
 import mods.gollum.core.common.config.type.IConfigJsonType;
 import mods.gollum.core.tools.simplejson.Json;
 import net.minecraft.client.renderer.Tessellator;

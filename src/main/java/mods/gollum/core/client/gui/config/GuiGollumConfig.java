@@ -2,11 +2,15 @@ package mods.gollum.core.client.gui.config;
 
 import static cpw.mods.fml.client.config.GuiUtils.RESET_CHAR;
 import static cpw.mods.fml.client.config.GuiUtils.UNDO_CHAR;
+import static mods.gollum.core.ModGollumCoreLib.log;
 
 import java.lang.reflect.Field;
 import java.util.List;
 
+import mods.gollum.core.client.gui.config.entry.AddButtonEntry;
+import mods.gollum.core.client.gui.config.entry.ArrayEntry;
 import mods.gollum.core.client.gui.config.entry.IGollumConfigEntry;
+import mods.gollum.core.client.gui.config.properties.ValueProperty;
 import mods.gollum.core.common.mod.GollumMod;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -15,8 +19,10 @@ import cpw.mods.fml.client.GuiModList;
 import cpw.mods.fml.client.config.GuiButtonExt;
 import cpw.mods.fml.client.config.GuiCheckBox;
 import cpw.mods.fml.client.config.GuiConfig;
+import cpw.mods.fml.client.config.GuiConfigEntries;
 import cpw.mods.fml.client.config.HoverChecker;
 import cpw.mods.fml.client.config.IConfigElement;
+import cpw.mods.fml.client.config.GuiConfigEntries.IConfigEntry;
 import cpw.mods.fml.common.ModContainer;
 
 public abstract class GuiGollumConfig extends GuiConfig {
@@ -87,9 +93,16 @@ public abstract class GuiGollumConfig extends GuiConfig {
 	@Override
 	public void initGui() {
 		
-		int startBt = this.buttonList.size();
+		int startBt          = this.buttonList.size();
+		boolean needsRefresh = this.needsRefresh;
 		
 		super.initGui();
+		
+		if (this.isArray()) {
+			this.entryList.labelX += 22;
+			this.entryList.scrollBarX += 22;
+			this.entryList.controlX += 22;
+		}
 		
 		int undoGlyphWidth = mc.fontRenderer.getStringWidth(UNDO_CHAR) * 2;
 		int resetGlyphWidth = mc.fontRenderer.getStringWidth(RESET_CHAR) * 2;
@@ -120,6 +133,13 @@ public abstract class GuiGollumConfig extends GuiConfig {
 		} catch (Exception e) {
 			e.getStackTrace();
 		}
+		
+		if (this.isArray()) {
+			
+			if (needsRefresh) {
+				this.entryList.listEntries.add(new AddButtonEntry (this));
+			}
+		}
 	}
 	
 	@Override
@@ -137,6 +157,18 @@ public abstract class GuiGollumConfig extends GuiConfig {
 	
 	protected boolean doneAction() {
 		this.mc.displayGuiScreen(this.parentScreen);
+		return true;
+	}
+	
+	public void addNewEntry(int index) {
+		log.debug ("More pressed");
+	}
+	
+	public void removeEntry(int index) {
+		log.debug ("Minus pressed");
+	}
+	
+	public boolean isArray() {
 		return true;
 	}
 }

@@ -12,7 +12,7 @@ import net.minecraft.client.resources.I18n;
 import org.lwjgl.input.Keyboard;
 
 import mods.gollum.core.client.gui.config.entry.AddButtonEntry;
-import mods.gollum.core.client.gui.config.entry.ArrayCustomEntry;
+import mods.gollum.core.client.gui.config.entry.ArrayEntry;
 import mods.gollum.core.client.gui.config.entry.ConfigJsonTypeEntry;
 import mods.gollum.core.client.gui.config.entry.JsonEntry;
 import mods.gollum.core.client.gui.config.properties.ValueProperty;
@@ -34,7 +34,7 @@ public class GuiEditCustomArray extends GuiGollumConfig {
 	protected Object[] undoValues;
 	protected Object[] defaultValues;
 	
-	public GuiEditCustomArray(GuiConfig parent, IConfigElement configElement, int slotIndex, ArrayCustomEntry entry, Object[] values, Object[] defaultValues) {
+	public GuiEditCustomArray(GuiConfig parent, IConfigElement configElement, int slotIndex, ArrayEntry entry, Object[] values, Object[] defaultValues) {
 		super(parent, getFields(parent, entry, values, defaultValues), entry);
 
 		this.values        = values;
@@ -42,7 +42,7 @@ public class GuiEditCustomArray extends GuiGollumConfig {
 		this.defaultValues = defaultValues;
 	}
 	
-	private static List<IConfigElement> getFields(GuiConfig parent, ArrayCustomEntry entry, Object[] values, Object[] defaultValues) {
+	private static List<IConfigElement> getFields(GuiConfig parent, ArrayEntry entry, Object[] values, Object[] defaultValues) {
 		ArrayList<IConfigElement> fields = new ArrayList<IConfigElement>();
 		
 		for(int i = 0; i < values.length; i++) {
@@ -72,20 +72,16 @@ public class GuiEditCustomArray extends GuiGollumConfig {
 			for(int i = 0; i < this.values.length; i++) {
 				
 				if (i >= this.defaultValues.length || this.defaultValues[i] == null) {
-					Object defaultValue = ((ArrayCustomEntry)this.entry).createNewLine ();
+					Object defaultValue = ((ArrayEntry)this.entry).createNewLine ();
 					
 					this.addNewEntry(i, this.values[i], defaultValue);
 				}
 			}
 			
-			this.entryList.listEntries.add(new AddButtonEntry (this));
 			super.initGui();
 		}
-		
-		this.entryList.controlX   += 22;
-		this.entryList.scrollBarX += 22;
-		
 	}
+	
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		
@@ -136,7 +132,7 @@ public class GuiEditCustomArray extends GuiGollumConfig {
 			if (i < this.defaultValues.length) {
 				defaultValue = this.defaultValues[i];
 			} else {
-				defaultValue = ((ArrayCustomEntry)this.entry).createNewLine ();
+				defaultValue = ((ArrayEntry)this.entry).createNewLine ();
 			}
 			this.addNewEntry(i, this.values[i], defaultValue);
 		}
@@ -180,8 +176,8 @@ public class GuiEditCustomArray extends GuiGollumConfig {
 		
 		log.debug ("More pressed");
 
-		Object o  = ((ArrayCustomEntry)this.entry).createNewLine ();
-		Object oD = ((ArrayCustomEntry)this.entry).createNewLine ();
+		Object o  = ((ArrayEntry)this.entry).createNewLine ();
+		Object oD = ((ArrayEntry)this.entry).createNewLine ();
 		
 		this.addNewEntry(index, o, oD);
 	}
@@ -219,5 +215,9 @@ public class GuiEditCustomArray extends GuiGollumConfig {
 		log.debug ("Minus pressed");
 		
 		this.entryList.listEntries.remove(index);
+	}
+	
+	public boolean isArray() {
+		return true;
 	}
 }

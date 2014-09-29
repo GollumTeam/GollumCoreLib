@@ -20,31 +20,31 @@ public class FieldProperty extends GollumProperty {
 	
 	
 	public FieldProperty(Field f, ConfigLoad configLoad, String currentCategory) throws Exception {
-		super (configLoad.mod, getType(f.getType()));
+		super (f.getType(), configLoad.mod, Type.STRING);
 		
 		this.configLoad = configLoad;
 		this.f = f;
 		
 		f.setAccessible(true);
-		ConfigProp anno = f.getAnnotation(ConfigProp.class);
+		this.anno = f.getAnnotation(ConfigProp.class);
 		
-		if (anno != null && anno.group().equals (currentCategory)) {
+		if (this.anno != null && this.anno.group().equals (currentCategory)) {
 			
-			init(anno, f.getType(), f.get(configLoad.config), f.get(configLoad.configDefault), f.getName());
+			init(f.get(configLoad.config), f.get(configLoad.configDefault), f.getName());
 			
 		}
 		
 	}
 	
 	@Override
-	public IConfigElement createCustomConfigElement() {
+	public IConfigElement buildConfigElement() {
 		try {
 			
 			Object o  = f.get(this.configLoad.config);
 			Object oD = f.get(this.configLoad.configDefault);
 			setName(this.f.getName());
 			
-			return buildCustomConfigElement(o, oD);
+			return buildConfigElement(o, oD);
 			
 		} catch (Exception e) {
 			e.printStackTrace();

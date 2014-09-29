@@ -5,7 +5,6 @@ import static mods.gollum.core.ModGollumCoreLib.log;
 import java.awt.Color;
 import java.lang.reflect.Field;
 
-import mods.gollum.core.client.gui.config.GuiEditCustomArray;
 import mods.gollum.core.client.gui.config.GuiGollumConfig;
 import net.minecraft.client.Minecraft;
 import cpw.mods.fml.client.config.GuiButtonExt;
@@ -13,16 +12,17 @@ import cpw.mods.fml.client.config.GuiConfigEntries;
 import cpw.mods.fml.client.config.GuiConfigEntries.ListEntryBase;
 import cpw.mods.fml.client.config.GuiUtils;
 
-public class EditCustomArrayEntryLogic {
+public class GuiArrayButtonEntryLogic {
 	
 	private Minecraft mc;
+	public GuiGollumConfig parent;
 	
 	protected ListEntryBase entry;
 
 	protected GuiButtonExt btnAdd;
 	protected GuiButtonExt btnRemove;
 	
-	public EditCustomArrayEntryLogic(ListEntryBase entry) {
+	public GuiArrayButtonEntryLogic(ListEntryBase entry) {
 		
 		this.mc = Minecraft.getMinecraft();
 		
@@ -36,28 +36,27 @@ public class EditCustomArrayEntryLogic {
 	}
 	
 	protected GuiGollumConfig getOwningScreen () {
-		try {
-			Field f = ListEntryBase.class.getDeclaredField("owningScreen");
-			f.setAccessible(true);
-			return (GuiGollumConfig) f.get(this.entry);
-		} catch(Exception e) {
-			e.printStackTrace();
+		if (this.parent == null) {
+			try {
+				Field f = ListEntryBase.class.getDeclaredField("owningScreen");
+				f.setAccessible(true);
+				this.parent = (GuiGollumConfig) f.get(this.entry);
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
 		}
-		return null;
+		return this.parent;
 	}
 	
 	protected GuiConfigEntries getOwningEntryList () {
 		return this.getOwningScreen().entryList;
 	}
 	
-	public boolean parentIsArray () {
-		return this.getOwningScreen() instanceof GuiEditCustomArray;
-	}
-	
 	
 	public void drawEntryBefore () {
-
-		if (this.parentIsArray()) {
+		
+		if (this.getOwningScreen().isArray()) {
+			this.getOwningScreen().entryList.labelX -= 44;
 			this.getOwningScreen().entryList.controlX -= 44;
 			this.getOwningEntryList().scrollBarX -= 44;
 		}
@@ -65,8 +64,9 @@ public class EditCustomArrayEntryLogic {
 	
 	public void drawEntryAfter(int x, int y,int mouseX, int mouseY) {
 		
-		if (this.parentIsArray()) {
+		if (this.getOwningScreen().isArray()) {
 			
+			this.getOwningScreen().entryList.labelX += 44;
 			this.getOwningEntryList().scrollBarX += 44;
 			this.getOwningScreen().entryList.controlX += 44;
 			
@@ -83,19 +83,19 @@ public class EditCustomArrayEntryLogic {
 
 	public boolean mousePressed(int index, int x, int y) {
 		
-		if (this.parentIsArray()) {
+		if (this.getOwningScreen().isArray()) {
 			
 			if (this.btnAdd.mousePressed(this.mc, x, y)) {
 				
 				btnAdd.func_146113_a(this.mc.getSoundHandler());
-				((GuiEditCustomArray) this.getOwningScreen()).addNewEntry(index);
+				this.getOwningScreen().addNewEntry(index);
 				
 				return true;
 			} else 
 			if (this.btnRemove.mousePressed(this.mc, x, y)) {
 				
 				btnRemove.func_146113_a(this.mc.getSoundHandler());
-				((GuiEditCustomArray) this.getOwningScreen()).removeEntry(index);
+				this.getOwningScreen().removeEntry(index);
 				
 				return true;
 			}

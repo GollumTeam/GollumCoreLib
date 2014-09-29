@@ -26,20 +26,21 @@ public class ValueProperty extends GollumProperty {
 	Object defaultValue;
 	
 	public ValueProperty(GollumMod mod, Object value, Object defaultValue) {
-		super (mod, getType(value.getClass()));
+		super (value.getClass(), mod, Type.STRING);
 		
 		this.value = value;
 		this.defaultValue = defaultValue;
-		if (value != null && this.defaultValue != null) {
-			JsonConfigProp anno = new JsonConfigProp(); // TODO Rebuild annotation
+		this.anno  = new JsonConfigProp(); // TODO Rebuild annotation
 		
-			init(anno, value.getClass(), value, defaultValue, "");
+		if (value != null && this.defaultValue != null) {
+			
+			init(value, defaultValue, "");
 		}
 	}
 	
 	@Override
-	public IConfigElement createCustomConfigElement() {
-		return buildCustomConfigElement(this.value, this.defaultValue);
+	public IConfigElement buildConfigElement() {
+		return buildConfigElement(this.value, this.defaultValue);
 	}
 
 

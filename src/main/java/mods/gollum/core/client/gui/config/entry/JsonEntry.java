@@ -4,7 +4,7 @@ import java.awt.Color;
 
 import mods.gollum.core.client.gui.config.GuiEditCustomArray;
 import mods.gollum.core.client.gui.config.GuiJsonConfig;
-import mods.gollum.core.client.gui.config.entry.logic.EditCustomArrayEntryLogic;
+import mods.gollum.core.client.gui.config.entry.logic.GuiArrayButtonEntryLogic;
 import mods.gollum.core.tools.simplejson.Json;
 import net.minecraft.client.renderer.Tessellator;
 import cpw.mods.fml.client.config.GuiButtonExt;
@@ -20,7 +20,7 @@ public class JsonEntry extends ButtonEntry implements IGollumConfigEntry {
 	protected Json beforeValue;
 	protected Json currentValue;
 	
-	protected EditCustomArrayEntryLogic logic = new EditCustomArrayEntryLogic(this);
+	protected GuiArrayButtonEntryLogic logic = new GuiArrayButtonEntryLogic(this);
 	
 	public JsonEntry(GuiConfig parent, GuiConfigEntries entryList, IConfigElement<String> configElement) {
 		super(parent, entryList, configElement);
@@ -50,7 +50,7 @@ public class JsonEntry extends ButtonEntry implements IGollumConfigEntry {
 	public boolean mousePressed(int index, int x, int y, int mouseEvent, int relativeX, int relativeY) {
 		return super.mousePressed(index, x, y, mouseEvent, relativeX, relativeY) ? true : this.logic.mousePressed(index, x, y);
 	}
-
+	
 	/**
 	 * Fired when the mouse button is released. Arguments: index, x, y,
 	 * mouseEvent, relativeX, relativeY
