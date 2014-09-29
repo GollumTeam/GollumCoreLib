@@ -19,7 +19,7 @@ public class ItemStackConfigType implements IConfigJsonType {
 	public ItemStackConfigType() throws Exception {
 		this(RegisteredObjects.instance().getRegisterName(Items.apple));
 	}
-	
+
 	public ItemStackConfigType(String registerName) {
 		this(registerName, 1);
 	}
@@ -33,7 +33,7 @@ public class ItemStackConfigType implements IConfigJsonType {
 		this.number = number;
 		this.metadata = metadata;
 	}
-
+	
 	@Override
 	public void readConfig(Json dom) {
 		this.registerName = dom.child("registerName").strValue();

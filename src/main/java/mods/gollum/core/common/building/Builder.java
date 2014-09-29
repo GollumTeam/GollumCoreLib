@@ -25,8 +25,13 @@ import mods.gollum.core.common.building.handler.BlockTrapDoorBuildingHandler;
 import mods.gollum.core.common.building.handler.BuildingBlockHandler;
 import mods.gollum.core.tools.registry.BuildingBlockRegistry;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockBed;
+import net.minecraft.block.BlockChest;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockDoor;
+import net.minecraft.block.BlockLever;
+import net.minecraft.block.BlockSign;
+import net.minecraft.block.BlockTorch;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -190,7 +195,15 @@ public class Builder {
 				
 				world.removeTileEntity(finalX, finalY, finalZ);
 				
-				if (unity.block instanceof BlockDoor) {
+				if (
+					unity.block instanceof BlockDoor  ||
+					unity.block instanceof BlockBed   ||
+					unity.block instanceof BlockChest ||
+					unity.block instanceof BlockTorch ||
+					unity.block instanceof BlockLever ||
+					unity.block instanceof BlockSign ||
+					unity.block instanceof Block
+				) {
 					afters.add(unity3D);
 					world.setBlockToAir (finalX, finalY, finalZ);
 				} else if (unity.block != null) {
