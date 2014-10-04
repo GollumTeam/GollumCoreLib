@@ -6,6 +6,7 @@ import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.common.building.Builder;
 import mods.gollum.core.common.building.Building.SubBuilding;
 import mods.gollum.core.common.building.BuildingParser;
+import mods.gollum.core.common.entities.BuidingEntity;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
@@ -54,7 +55,8 @@ public class CommandBuilding extends CommandBase {
 				sender.addChatMessage(new ChatComponentText("Rebuild last building "+subBuilding.building.modId+":"+subBuilding.building.name));
 				
 				subBuilding.building = new BuildingParser().parse(subBuilding.building.name, subBuilding.building.modId);
-				new Builder().build(sender.getEntityWorld(), subBuilding);
+				BuidingEntity entity = new BuidingEntity (sender.getEntityWorld(), subBuilding);
+				sender.getEntityWorld().spawnEntityInWorld(entity);
 				
 			} catch (Exception e) {
 				e.printStackTrace();

@@ -29,6 +29,10 @@ public class ConfigGollumCoreLib extends Config {
 	public boolean versionChecker = true;
 	
 	
+	@ConfigProp (info = "Block set by tick for building")
+	public int blockByTick = 20000;
+	
+	
 	//////////////////
 	// Test exemple //
 	//////////////////

@@ -11,7 +11,8 @@ import mods.gollum.core.common.command.CommandBuilding;
 import mods.gollum.core.common.config.ConfigGollumCoreLib;
 import mods.gollum.core.common.context.ModContext;
 import mods.gollum.core.common.creativetab.GollumCreativeTabs;
-import mods.gollum.core.common.event.WorldHandler;
+import mods.gollum.core.common.entities.BuidingEntity;
+import mods.gollum.core.common.facory.Mobactory;
 import mods.gollum.core.common.i18n.I18n;
 import mods.gollum.core.common.items.ItemBuilding;
 import mods.gollum.core.common.log.Logger;
@@ -33,6 +34,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 @Mod(
@@ -118,6 +120,8 @@ public class ModGollumCoreLib extends GollumMod {
 		// Initialisation des items
 		this.initItem ();
 		
+		EntityRegistry.registerModEntity(BuidingEntity.class, this.MODID+":Building", 1, this, 400, 5, false);
+		
 		BlockRegistry.instance().registerAll();
 		ItemRegistry.instance().registerAll();
 	}
@@ -134,7 +138,6 @@ public class ModGollumCoreLib extends GollumMod {
 		// Set de l'icon du tab creative
 		this.tabBuildingStaff.setIcon(this.itemBuilding);
 		
-		MinecraftForge.EVENT_BUS.register(new WorldHandler());
 	}
 
 	/** 3 **/

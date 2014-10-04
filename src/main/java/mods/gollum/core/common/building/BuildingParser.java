@@ -196,6 +196,8 @@ public class BuildingParser {
 			} catch (Exception e) {
 			}
 			
+//			building.sort(); 
+			
 			try {
 				Map<JsonStringNode, JsonNode> map = json.getNode ("buildings").getFields();
 				for (JsonStringNode key : map.keySet()) {
@@ -231,6 +233,7 @@ public class BuildingParser {
 							
 							Unity unity = this.parseBlockDescription(map.get(key));
 							subBuilding.building.set(x, y, building.maxZ() - z - 1, unity);
+//							subBuilding.building.sort();
 							subBuilding.synMax (building);
 						}
 						

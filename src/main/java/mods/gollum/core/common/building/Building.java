@@ -32,7 +32,7 @@ public class Building {
 		}
 		
 		public int x(int rotate) {
-			return (rotate == ROTATED_90 || rotate == ROTATED_270) ? building.maxZ(rotate) - z - 1 : x;
+			return (rotate == ROTATED_90 || rotate == ROTATED_270) ? building.maxX(rotate) - z - 1 : x;
 		}
 		public int y(int rotate) {
 			return y;
@@ -180,7 +180,7 @@ public class Building {
 	public int maxZ() { return maxZ; }
 	public int maxX(int rotate) { return (rotate == this.ROTATED_90 || rotate == this.ROTATED_270) ? maxZ : maxX; }
 	public int maxZ(int rotate) { return (rotate == this.ROTATED_90 || rotate == this.ROTATED_270) ? maxX : maxZ; }
-
+	
 	public void setNull (int x, int y, int z) {
 		
 		maxX = Math.max(maxX, x+1);
@@ -201,7 +201,11 @@ public class Building {
 			this.unities.add (new Unity3D(this, unity, x, y, z));
 		}
 	}
-	
+//
+//	public void sort () {
+//		Collections.sort(this.unities);
+//	}
+//	
 	public void addRandomBuildings(GroupSubBuildings groupSubBuildings) {
 		this.randomGroupSubBuildings.add(groupSubBuildings);
 	}

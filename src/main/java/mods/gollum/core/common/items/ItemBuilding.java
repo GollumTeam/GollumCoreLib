@@ -9,6 +9,7 @@ import mods.gollum.core.common.building.Builder;
 import mods.gollum.core.common.building.Building;
 import mods.gollum.core.common.building.Building.SubBuilding;
 import mods.gollum.core.common.building.BuildingParser;
+import mods.gollum.core.common.entities.BuidingEntity;
 import mods.gollum.core.tools.helper.items.HItem;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -29,8 +30,6 @@ public class ItemBuilding extends HItem {
 		return this.lastBuildings.get (lastBuildings.size() - i - 1);
 	}
 	
-	
-	private Builder builder = new Builder();
 	public ArrayList<String>   nameIndex     = null;
 	public ArrayList<Building> buildingIndex = null;
 	
@@ -92,7 +91,8 @@ public class ItemBuilding extends HItem {
 			
 			ModGollumCoreLib.log.debug("orientation = "+orientation);
 			this.lastBuildings.add(subBuilding);
-			builder.build(world, subBuilding);
+			BuidingEntity entity = new BuidingEntity(world, subBuilding);
+			world.spawnEntityInWorld(entity);
 			
 		}
 		

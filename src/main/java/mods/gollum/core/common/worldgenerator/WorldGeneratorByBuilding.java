@@ -9,6 +9,8 @@ import java.util.Random;
 import mods.gollum.core.common.building.Builder;
 import mods.gollum.core.common.building.Building;
 import mods.gollum.core.common.building.Building.DimentionSpawnInfos;
+import mods.gollum.core.common.building.Building.SubBuilding;
+import mods.gollum.core.common.entities.BuidingEntity;
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
@@ -19,8 +21,6 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 	
 	private final static int ARROUND_CHUNK_NOBUILDING = 6;
 	private static ArrayList<String> chunkHasABuilding = new ArrayList<String>();
-	
-	private Builder builder = new Builder();
 	
 	/**
 	 * Spawn global de tous les batiment de cette instance de worldGenerator
@@ -201,7 +201,14 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 					// N'est pas sauvegardé enc as d'arret du serveur mais ca devrais pas dérangé
 					WorldGeneratorByBuilding.chunkHasABuilding.add(chunkX+"x"+chunkZ);
 					
-					builder.build(world, building, rotate, initX, initY, initZ);
+					SubBuilding subBuilding = new SubBuilding();
+					subBuilding.building = building;
+					subBuilding.x = initX;
+					subBuilding.y = initY;
+					subBuilding.z = initZ;
+					subBuilding.orientation= rotate;
+					BuidingEntity entity = new BuidingEntity(world, subBuilding);
+					world.spawnEntityInWorld(entity);
 					
 					return true;
 				}
