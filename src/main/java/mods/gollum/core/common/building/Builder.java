@@ -3,8 +3,10 @@ package mods.gollum.core.common.building;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.concurrent.Semaphore;
 
-import mods.gollum.core.ModGollumCoreLib;
+import static mods.gollum.core.ModGollumCoreLib.log;
+
 import mods.gollum.core.common.building.Building.GroupSubBuildings;
 import mods.gollum.core.common.building.Building.ListSubBuildings;
 import mods.gollum.core.common.building.Building.SubBuilding;
@@ -145,342 +147,128 @@ public class Builder {
 		}
 		
 		public void run() {
-			Random random = world.rand;
 			
-			ModGollumCoreLib.log.info("Create building width matrix : "+building.name+" "+initX+" "+initY+" "+initZ);
-
-			initY = initY + building.height;
-			initY = (initY < 3) ? 3 : initY;
-			
-			int dx = -1; 
-			int dz = 1;
-			switch (rotate) {
-				case Building.ROTATED_90:
-					dx = -1; 
-					dz = -1;
-					break;
-				case Building.ROTATED_180:
-					dx = 1; 
-					dz = -1;
-					break;
-				case Building.ROTATED_270:
-					dx = 1; 
-					dz = 1;
-					break;
-				default: 
-					break;
-			}
-			
-			// Peut etre inutile
-			for (Unity3D unity3D : building.unities) {
+			try {
+				Random random = world.rand;
 				
-				// Position réél dans le monde du block
-				int finalX = initX + unity3D.x(rotate)*dx;
-				int finalY = initY + unity3D.y(rotate);
-				int finalZ = initZ + unity3D.z(rotate)*dz;
-				world.setBlock(finalX, finalY, finalZ, Blocks.stone, 0, 0);
+				log.info("Create building width matrix : "+building.name+" "+initX+" "+initY+" "+initZ);
+	
+				initY = initY + building.height;
+				initY = (initY < 3) ? 3 : initY;
 				
-			}
-			
-			ArrayList<Unity3D> afters = new ArrayList<Unity3D>();
-			
-			for (Unity3D unity3D : building.unities) {
-				
-				Unity unity = unity3D.unity;
-				
-				// Position réél dans le monde du block
-				int finalX = initX + unity3D.x(rotate)*dx;
-				int finalY = initY + unity3D.y(rotate);
-				int finalZ = initZ + unity3D.z(rotate)*dz;
-				
-				world.removeTileEntity(finalX, finalY, finalZ);
-				
-				if (
-					unity.block instanceof BlockDoor  ||
-					unity.block instanceof BlockBed   ||
-					unity.block instanceof BlockChest ||
-					unity.block instanceof BlockTorch ||
-					unity.block instanceof BlockLever ||
-					unity.block instanceof BlockSign ||
-					unity.block instanceof Block
-				) {
-					afters.add(unity3D);
-					world.setBlockToAir (finalX, finalY, finalZ);
-				} else if (unity.block != null) {
-					world.setBlock(finalX, finalY, finalZ, unity.block, unity.metadata, 0);
-				} else {
-					world.setBlockToAir (finalX, finalY, finalZ);
+				int dx = -1; 
+				int dz = 1;
+				switch (rotate) {
+					case Building.ROTATED_90:
+						dx = -1; 
+						dz = -1;
+						break;
+					case Building.ROTATED_180:
+						dx = 1; 
+						dz = -1;
+						break;
+					case Building.ROTATED_270:
+						dx = 1; 
+						dz = 1;
+						break;
+					default: 
+						break;
 				}
 				
-				this.setOrientation (world, finalX, finalY, finalZ, this.rotateOrientation(rotate, unity.orientation), rotate);
-				this.setContents    (world, random, finalX, finalY, finalZ, unity.contents);
-				this.setExtra       (world, random, finalX, finalY, finalZ, unity.extra, initX, initY, initZ, rotate, building.maxX(rotate), building.maxZ(rotate));
-			}
-			
-			for (Unity3D unity3D : afters) {
-				
-				Unity unity = unity3D.unity;
-				
-				// Position réél dans le monde du block
-				int finalX = initX + unity3D.x(rotate)*dx;
-				int finalY = initY + unity3D.y(rotate);
-				int finalZ = initZ + unity3D.z(rotate)*dz;
-				
-				world.setBlock(finalX, finalY, finalZ, unity.block, unity.metadata, 0);
-				
-				this.setOrientation (world, finalX, finalY, finalZ, this.rotateOrientation(rotate, unity.orientation), rotate);
-				this.setContents    (world, random, finalX, finalY, finalZ, unity.contents);
-				this.setExtra       (world, random, finalX, finalY, finalZ, unity.extra, initX, initY, initZ, rotate, building.maxX(rotate), building.maxZ(rotate));
-			}
-			
-			//////////////////////////////////
-			// Ajoute les blocks aléatoires //
-			//////////////////////////////////
-			
-			for(GroupSubBuildings group: building.getRandomGroupSubBuildings()) {
-				
-				ListSubBuildings randomBuilding = group.get(random.nextInt(group.size ()));
-				
-				for (SubBuilding subBuilding : randomBuilding) {
+				// Peut etre inutile
+				for (Unity3D unity3D : building.unities) {
 					
-					BuilderRunnable thread = new BuilderRunnable(world, subBuilding.building, rotate, initX+subBuilding.x*dx, initY+subBuilding.y, initZ+subBuilding.z*dz);
-					thread.run();
+					// Position réél dans le monde du block
+					int finalX = initX + unity3D.x(rotate)*dx;
+					int finalY = initY + unity3D.y(rotate);
+					int finalZ = initZ + unity3D.z(rotate)*dz;
+					synchronized (world) {
+						world.setBlock(finalX, finalY, finalZ, Blocks.stone, 0, 0);
+					}
 				}
+				
+				ArrayList<Unity3D> afters = new ArrayList<Unity3D>();
+				
+				for (Unity3D unity3D : building.unities) {
+					
+					Unity unity = unity3D.unity;
+					
+					// Position réél dans le monde du block
+					int finalX = initX + unity3D.x(rotate)*dx;
+					int finalY = initY + unity3D.y(rotate);
+					int finalZ = initZ + unity3D.z(rotate)*dz;
+					
+					world.removeTileEntity(finalX, finalY, finalZ);
+					
+					if (
+						unity.block instanceof BlockDoor  ||
+						unity.block instanceof BlockBed   ||
+						unity.block instanceof BlockChest ||
+						unity.block instanceof BlockTorch ||
+						unity.block instanceof BlockLever ||
+						unity.block instanceof BlockSign ||
+						unity.block instanceof Block
+					) {
+						afters.add(unity3D);
+						synchronized (world) {
+							world.setBlockToAir (finalX, finalY, finalZ);
+						}
+					} else if (unity.block != null) {
+						synchronized (world) {
+							world.setBlock(finalX, finalY, finalZ, unity.block, unity.metadata, 0);
+						}
+					} else {
+						synchronized (world) {
+							world.setBlockToAir (finalX, finalY, finalZ);
+						}
+					}
+					
+					this.setOrientation (world, finalX, finalY, finalZ, this.rotateOrientation(rotate, unity.orientation), rotate);
+					this.setContents    (world, random, finalX, finalY, finalZ, unity.contents);
+					this.setExtra       (world, random, finalX, finalY, finalZ, unity.extra, initX, initY, initZ, rotate, building.maxX(rotate), building.maxZ(rotate));
+				}
+				
+				for (Unity3D unity3D : afters) {
+					
+					Unity unity = unity3D.unity;
+					
+					// Position réél dans le monde du block
+					int finalX = initX + unity3D.x(rotate)*dx;
+					int finalY = initY + unity3D.y(rotate);
+					int finalZ = initZ + unity3D.z(rotate)*dz;
+					
+					synchronized (world) {
+						world.setBlock(finalX, finalY, finalZ, unity.block, unity.metadata, 0);
+					}
+					
+					this.setOrientation (world, finalX, finalY, finalZ, this.rotateOrientation(rotate, unity.orientation), rotate);
+					this.setContents    (world, random, finalX, finalY, finalZ, unity.contents);
+					this.setExtra       (world, random, finalX, finalY, finalZ, unity.extra, initX, initY, initZ, rotate, building.maxX(rotate), building.maxZ(rotate));
+				}
+				
+				//////////////////////////////////
+				// Ajoute les blocks aléatoires //
+				//////////////////////////////////
+				
+				for(GroupSubBuildings group: building.getRandomGroupSubBuildings()) {
+					
+					ListSubBuildings randomBuilding = group.get(random.nextInt(group.size ()));
+					
+					for (SubBuilding subBuilding : randomBuilding) {
+						
+						BuilderRunnable thread = new BuilderRunnable(world, subBuilding.building, rotate, initX+subBuilding.x*dx, initY+subBuilding.y, initZ+subBuilding.z*dz);
+						thread.run();
+					}
+				}
+				
+				log.info("End building width matrix : "+building.name+" "+initX+" "+initY+" "+initZ);
+				
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-//			
-//			////////////////////////////////////////////////
-//			// Vide 10 blocs au dessus de la construction //
-//			////////////////////////////////////////////////
-//			for (int x = 0; x < building.maxX(rotate); x++) {
-//				for (int y = building.maxY(); y < building.maxY()+10; y++) {
-//					for (int z = 0; z < building.maxZ(rotate); z++) {
-//						// Position réél dans le monde du block
-//						int finalX = initX + x*dx;
-//						int finalY = initY + y;
-//						int finalZ = initZ + z*dz;
-//						world.setBlock(finalX, finalY, finalZ, 0, 0, 2);
-//					}
-//				}
-//			}
-//			
-//			/////////////////////////////////////////////////////////////
-//			// Rempli en dessous du batiment pour pas que ca sois vide //
-//			/////////////////////////////////////////////////////////////
-//			
-//			for (int x = 0; x < building.maxX; x++) {
-//				for (int z = 0; z < building.maxZ; z++) {
-//					for (int y = -1; true; y--) {
-//						int finalX = initX + x*dx;
-//						int finalY = initY + y;
-//						int finalZ = initZ + z*dz;
-//						finalX = initX + x*dx;
-//						finalY = initY + y;
-//						finalZ = initZ + z*dz;
-//						if (!placeUnderBlock (world, finalX, finalY, finalZ, y)) {
-//							break;
-//						}
-//					}
-//				}
-//			}
-	//
-//			///////////////////////////////////////////////////////////////////////////////
-//			// Crée un escalier sur les block de remplissage pour que ca sois plus jolie //
-//			///////////////////////////////////////////////////////////////////////////////
-//			
-//			// Les bords
-//			for (int z = 0; z < building.maxZ; z++) {
-//				for (int x = -1 ; x >= -4; x--) {
-//					boolean first = true;
-//					for (int y = -1; true; y--) {
-//						
-//						if (x < y) {
-//							continue;
-//						}
-//						
-//						int finalX = initX + x*dx;
-//						int finalY = initY + y - building.height - 1;
-//						int finalZ = initZ + z*dz;
-//						if (!placeUnderBlock (world, finalX, finalY, finalZ, y)) {
-//							break;
-//						}
-//						first = false;
-//					}
-//					if (first) {
-//						break;
-//					}
-//				}
-//			}
-//			for (int z = 0; z < building.maxZ; z++) {
-//				for (int x = building.maxX ; x < building.maxX+4; x++) {
-//					boolean first = true;
-//					for (int y = -1; true; y--) {
-//						
-//						if (building.maxX - x <= y) {
-//							continue;
-//						}
-//						
-//						int finalX = initX + x;
-//						int finalY = initY + y - building.height - 1;
-//						int finalZ = initZ + z;
-//						if (!placeUnderBlock (world, finalX, finalY, finalZ, y)) {
-//							break;
-//						}
-//						first = false;
-//					}
-//					if (first) {
-//						break;
-//					}
-//				}
-//			}
-//			for (int x = 0; x < building.maxX; x++) {
-//				for (int z = -1 ; z >= -4; z--) {
-//					boolean first = true;
-//					for (int y = -1; true; y--) {
-//						
-//						if (z < y) {
-//							continue;
-//						}
-//						
-//						int finalX = initX + x;
-//						int finalY = initY + y - building.height - 1;
-//						int finalZ = initZ + z;
-//						if (!placeUnderBlock (world, finalX, finalY, finalZ, y)) {
-//							break;
-//						}
-//						first = false;
-//					}
-//					if (first) {
-//						break;
-//					}
-//				}
-//			}
-//			for (int x = 0; x < building.maxX; x++) {
-//				for (int z = building.maxZ ; z < building.maxZ+4; z++) {
-//					boolean first = true;
-//					for (int y = -1; true; y--) {
-//						
-//						if (building.maxZ - z <= y) {
-//							continue;
-//						}
-//						
-//						int finalX = initX + x;
-//						int finalY = initY + y - building.height - 1;
-//						int finalZ = initZ + z;
-//						if (!placeUnderBlock (world, finalX, finalY, finalZ, y)) {
-//							break;
-//						}
-//						first = false;
-//					}
-//					if (first) {
-//						break;
-//					}
-//				}
-//			}
-//			
-//			// Les angles
-//			for (int x = -1 ; x >= -4; x--) {
-//				for (int z = -1 ; z >= -4; z--) {
-//					for (int y = -1; true; y--) {
-//						if (Math.abs(x) + Math.abs(z) >= Math.abs(y) + 1) { continue; }
-//						if (Math.abs(x) + Math.abs(z) >= 5) { break; }
-//						
-//						int finalX = initX + x;
-//						int finalY = initY + y - building.height - 1;
-//						int finalZ = initZ + z;
-//						if (!placeUnderBlock (world, finalX, finalY, finalZ, y)) {
-//							break;
-//						}
-//					}
-//				}
-//			}
-//			for (int x = -1 ; x >= -4; x--) {
-//				for (int z = building.maxZ ; z < building.maxZ+4; z++) {
-//					for (int y = -1; true; y--) {
-//						if (Math.abs(x) + Math.abs(z - building.maxZ) >= Math.abs(y)) { continue; }
-//						if (Math.abs(x) + Math.abs(z - building.maxZ) >= 4) { break; }
-//						
-//						int finalX = initX + x;
-//						int finalY = initY + y - building.height - 1;
-//						int finalZ = initZ + z;
-//						if (!placeUnderBlock (world, finalX, finalY, finalZ, y)) {
-//							break;
-//						}
-//					}
-//				}
-//			}
-//			for (int x = building.maxX ; x < building.maxX+4; x++) {
-//				for (int z = -1 ; z >= -4; z--) {
-//					for (int y = -1; true; y--) {
-//						if (Math.abs(x - building.maxX) + Math.abs(z) >= Math.abs(y)) { continue; }
-//						if (Math.abs(x - building.maxX) + Math.abs(z) >= 4) { break; }
-//						
-//						int finalX = initX + x;
-//						int finalY = initY + y - building.height - 1;
-//						int finalZ = initZ + z;
-//						if (!placeUnderBlock (world, finalX, finalY, finalZ, y)) {
-//							break;
-//						}
-//					}
-//				}
-//			}
-//			for (int x = building.maxX ; x < building.maxX+4; x++) {
-//				for (int z = building.maxZ ; z < building.maxZ+4; z++) {
-//					for (int y = -1; true; y--) {
-//						if (Math.abs(x - building.maxX) + Math.abs(z - building.maxZ) >= Math.abs(y) - 1) { continue; }
-//						if (Math.abs(x - building.maxX) + Math.abs(z - building.maxZ) >= 3) { break; }
-//						
-//						int finalX = initX + x;
-//						int finalY = initY + y - building.height - 1;
-//						int finalZ = initZ + z;
-//						if (!placeUnderBlock (world, finalX, finalY, finalZ, y)) {
-//							break;
-//						}
-//					}
-//				}
-//			}
-//			
-			////////////////////////
-			// Notifie les blocks //
-			////////////////////////
-
-//			for (Unity3D unity3D : building.unities) {
-//				
-//				// Position réél dans le monde du block
-//				int finalX = initX + unity3D.x(rotate)*dx;
-//				int finalY = initY + unity3D.y(rotate);
-//				int finalZ = initZ + unity3D.z(rotate)*dz;
-//				world.markBlockForUpdate(finalX, finalY, finalZ);
-////				world.setBlockMetadataWithNotify (finalX, finalY, finalZ, world.getBlockMetadata (finalX, finalY, finalZ), 3);
-//				
-//			}
-			
-			ModGollumCoreLib.log.info("End building width matrix : "+building.name+" "+initX+" "+initY+" "+initZ);
 			
 		}
-	
-	//	
-	//	/**
-	//	 * Place des escalier
-	//	 */
-	//	private boolean placeUnderBlock (World world, int finalX, int finalY, int finalZ, int profondeur) {
-	//		if (
-	//			world.getBlockId(finalX, finalY, finalZ) != Block.grass.blockID   &&
-	//			world.getBlockId(finalX, finalY, finalZ) != Block.stone.blockID   &&
-	//			world.getBlockId(finalX, finalY, finalZ) != Block.dirt.blockID    &&
-	//			world.getBlockId(finalX, finalY, finalZ) != Block.bedrock.blockID &&
-	//			finalY > 0
-	//		) {
-	//			if (profondeur > -5) {
-	//				world.setBlock(finalX, finalY, finalZ, Block.grass.blockID, 0, 2);
-	//			} else {
-	//				world.setBlock(finalX, finalY, finalZ, Block.stone.blockID, 0, 2);
-	//			}
-	//			return true;
-	//		}
-	//		
-	//		return false;
-	//	}
-	//	
+		
 		/**
 		 * Retourne l'orientation retourner en fonction de la rotation
 		 * @param rotate
