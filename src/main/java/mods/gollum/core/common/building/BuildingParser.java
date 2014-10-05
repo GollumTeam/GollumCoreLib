@@ -302,12 +302,14 @@ public class BuildingParser {
 		Unity unity = new Unity();
 		try {
 			String blockStr    = type.getStringValue ("block");
-			String metadata    = "0"; try { metadata = type.getNumberValue ("metadata"); } catch (Exception e) { }
+			String metadata    = "0"   ; try { metadata    = type.getNumberValue ("metadata"); } catch (Exception e) { }
 			String orientation = "none"; try { orientation = type.getStringValue ("orientation"); } catch (Exception e) { }
-			JsonNode contents  = null; try { contents = type.getNode("contents"); } catch (Exception e) { }
+			boolean after      = false ; try { after       = type.getBooleanValue ("after"); } catch (Exception e) { }
+			JsonNode contents  = null  ; try { contents    = type.getNode("contents"); } catch (Exception e) { }
 			
 			unity.block       = RegisteredObjects.instance().getBlock(blockStr);
 			unity.metadata    = Integer.parseInt(metadata);
+			unity.after       = after;
 			
 			if (orientation.equals("none"))              { unity.orientation = Unity.ORIENTATION_NONE;              } else 
 			if (orientation.equals("up"))                { unity.orientation = Unity.ORIENTATION_UP;                } else 

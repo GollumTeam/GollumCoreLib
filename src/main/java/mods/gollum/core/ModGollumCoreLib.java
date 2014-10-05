@@ -1,10 +1,8 @@
 
 package mods.gollum.core;
 
-import java.lang.reflect.Field;
-import java.util.Map;
+import java.lang.reflect.Method;
 
-import mods.gollum.core.client.gui.config.ConfigModGuiFactory;
 import mods.gollum.core.common.CommonProxyGolumCoreLib;
 import mods.gollum.core.common.blocks.BlockProximitySpawn;
 import mods.gollum.core.common.command.CommandBuilding;
@@ -16,16 +14,17 @@ import mods.gollum.core.common.i18n.I18n;
 import mods.gollum.core.common.items.ItemBuilding;
 import mods.gollum.core.common.log.Logger;
 import mods.gollum.core.common.mod.GollumMod;
+import mods.gollum.core.common.reflection.WorldStub;
 import mods.gollum.core.common.tileentities.TileEntityBlockProximitySpawn;
 import mods.gollum.core.common.version.VersionChecker;
 import mods.gollum.core.common.worldgenerator.WorldGeneratorByBuilding;
 import mods.gollum.core.common.worldgenerator.WorldGeneratorByBuildingLoader;
 import mods.gollum.core.tools.registry.BlockRegistry;
 import mods.gollum.core.tools.registry.ItemRegistry;
+import mods.gollum.core.utils.reflection.Reflection;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
-import cpw.mods.fml.common.FMLModContainer;
 import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
@@ -120,6 +119,16 @@ public class ModGollumCoreLib extends GollumMod {
 		
 		BlockRegistry.instance().registerAll();
 		ItemRegistry.instance().registerAll();
+		
+		try {
+			
+			Method m = WorldServer.class.getDeclaredMethod(Reflection.getObfuscateName(WorldStub.class, "tickUpdates"), boolean.class);
+			Reflection.enableSynchronized (m);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 	/** 2 **/

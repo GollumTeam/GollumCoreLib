@@ -101,6 +101,7 @@ public class Building {
 		public Block block     = null;
 		public int metadata    = 0;
 		public int orientation = Unity.ORIENTATION_NONE;
+		public boolean after   = false;
 		public ArrayList<ArrayList<Content>> contents = new ArrayList();
 		public HashMap<String, String> extra = new HashMap<String, String>();
 		

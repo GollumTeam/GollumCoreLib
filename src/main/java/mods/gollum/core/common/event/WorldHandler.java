@@ -1,10 +1,17 @@
 package mods.gollum.core.common.event;
 
-import mods.gollum.core.ModGollumCoreLib;
+import static mods.gollum.core.ModGollumCoreLib.log;
+
+import java.lang.reflect.Field;
+
 import mods.gollum.core.common.building.Builder;
+import mods.gollum.core.common.reflection.EntityTrackerProxy;
+import mods.gollum.core.utils.reflection.Reflection;
+import net.minecraft.entity.EntityTracker;
 import net.minecraft.util.IProgressUpdate;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.world.ChunkDataEvent.Save;
+import net.minecraftforge.event.world.WorldEvent.Load;
 import net.minecraftforge.event.world.WorldEvent.Unload;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
@@ -12,6 +19,36 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 public class WorldHandler {
 	
 	boolean mustBeSave = false;
+	
+
+	@SubscribeEvent
+	public void onLoad (Load event) {
+		
+		if (!event.world.isRemote) {
+			
+			WorldServer worldServer = (WorldServer) event.world;
+			
+			EntityTracker tracker = worldServer.getEntityTracker();
+			if (!(tracker instanceof EntityTrackerProxy)) {
+				for (Field f : WorldServer.class.getDeclaredFields()) {
+					
+					if (f.getType() == EntityTracker.class) {
+						try {
+							Reflection.setFinalStatic(f, worldServer, new EntityTrackerProxy(worldServer, tracker));
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+					
+					
+					
+				}
+			}
+			
+			log.debug("Load");
+			
+		}
+	}
 	
 	@SubscribeEvent
 	public void onSave (Save event) {
@@ -33,7 +70,7 @@ public class WorldHandler {
 			for (Thread thread : Builder.currentBuilds) {
 				if (thread.isAlive()) {
 					try {
-						ModGollumCoreLib.log.message("Wait finish building");
+						log.message("Wait finish building");
 						thread.join();
 					} catch (InterruptedException e) {
 						e.printStackTrace();
@@ -42,19 +79,18 @@ public class WorldHandler {
 				mustBeSave = true;
 			}
 			if (mustBeSave) {
-				ModGollumCoreLib.log.message("Resave after building...");
+				log.message("Resave after building...");
 				try {
 					((WorldServer) event.world).saveAllChunks(true, (IProgressUpdate)null);
-					ModGollumCoreLib.log.message("Resave after building : DONE");
+					log.message("Resave after building : DONE");
 				} catch (Exception e) {
-					e.printStackTrace();
 				}
 			}
 			Builder.currentBuilds.clear ();
 
 			mustBeSave = false;
 			
-			ModGollumCoreLib.log.debug("=========== UnloadEvent ===========");
+			log.debug("=========== UnloadEvent ===========");
 		}
 	}
 	
