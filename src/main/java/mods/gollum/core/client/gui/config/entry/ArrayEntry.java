@@ -61,7 +61,8 @@ public class ArrayEntry extends cpw.mods.fml.client.config.GuiConfigEntries.Arra
 	
 	public Object createNewLine() {
 		
-		Class subType = this.configElement.getDefaults().getClass().getComponentType();
+		Class subType    = this.configElement.getDefaults().getClass().getComponentType();
+		Class entryClass = this.configElement.getArrayEntryClass();
 		
 		log.debug ("Add : "+subType.getName());
 		// TODO other type for add
@@ -71,7 +72,12 @@ public class ArrayEntry extends cpw.mods.fml.client.config.GuiConfigEntries.Arra
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		}
+		} else 
+		
+		if (StringEntry .class.isAssignableFrom(entryClass)) { return "";   } else 
+		if (IntegerEntry.class.isAssignableFrom(entryClass)) { return 0;    } else 
+		if (DoubleEntry .class.isAssignableFrom(entryClass)) { return 0.D;  } else 
+		if (BooleanEntry.class.isAssignableFrom(entryClass)) { return true; }
 		
 		return null;
 	}

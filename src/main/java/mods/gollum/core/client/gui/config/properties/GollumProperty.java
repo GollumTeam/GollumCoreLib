@@ -242,7 +242,7 @@ public abstract class GollumProperty extends Property {
 	public abstract IConfigElement buildConfigElement();
 	
 	protected Class getClassEntryForClass () {
-
+		
 		if (this.anno.type() == ConfigProp.Type.ITEM)      { return ItemEntry          .class; }
 		if (this.anno.type() == ConfigProp.Type.BLOCK)     { return BlockEntry         .class; }
 //		if (this.anno.type() == ConfigProp.Type.SLIDER)    { return SliderEntry        .class; }
@@ -261,9 +261,21 @@ public abstract class GollumProperty extends Property {
 		if (clazz.isArray()) {
 			
 			Class subType = clazz.getComponentType();
-
+			
+			if (this.anno.type() == ConfigProp.Type.ITEM)      { return ItemEntry          .class; }
+			if (this.anno.type() == ConfigProp.Type.BLOCK)     { return BlockEntry         .class; }
+//			if (this.anno.type() == ConfigProp.Type.SLIDER)    { return SliderEntry        .class; }
 			if (Json           .class.isAssignableFrom(subType)) { return JsonEntry          .class; }
 			if (IConfigJsonType.class.isAssignableFrom(subType)) { return ConfigJsonTypeEntry.class; }
+			if (String         .class.isAssignableFrom(subType)) { return StringEntry        .class; }
+			if (Long           .class.isAssignableFrom(subType) || Long     .TYPE.isAssignableFrom(subType)) { return IntegerEntry.class; }
+			if (Integer        .class.isAssignableFrom(subType) || Integer  .TYPE.isAssignableFrom(subType)) { return IntegerEntry.class; }
+			if (Short          .class.isAssignableFrom(subType) || Short    .TYPE.isAssignableFrom(subType)) { return IntegerEntry.class; }
+			if (Integer        .class.isAssignableFrom(subType) || Byte     .TYPE.isAssignableFrom(subType)) { return IntegerEntry.class; }
+			if (Character      .class.isAssignableFrom(subType) || Character.TYPE.isAssignableFrom(subType)) { return IntegerEntry.class; }
+			if (Double         .class.isAssignableFrom(subType) || Double   .TYPE.isAssignableFrom(subType)) { return DoubleEntry .class; }
+			if (Float          .class.isAssignableFrom(subType) || Float    .TYPE.isAssignableFrom(subType)) { return DoubleEntry .class; }
+			if (Boolean        .class.isAssignableFrom(subType) || Boolean  .TYPE.isAssignableFrom(subType)) { return BooleanEntry.class; }
 			
 			return ArrayEntry.class;
 		}

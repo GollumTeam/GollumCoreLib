@@ -73,7 +73,7 @@ public class ConfigGollumCoreLib extends Config {
 //	@ConfigProp(group="Test") public  ItemStackConfigType itemStack1 = new ItemStackConfigType("minecraft:planks", 10, 3);
 //	@ConfigProp(group="Test") public  ItemStackConfigType[] itemStackAr1 = new ItemStackConfigType[] { new ItemStackConfigType("minecraft:planks", 10, 3), new ItemStackConfigType("minecraft:planks", 10, 3) };
 //	
-//	@ConfigProp(group="Test") public String    s1 = "AAA";
+	@ConfigProp(group="Test") public String    s1 = "AAA";
 	@ConfigProp(group="Test") public long      l1 = 11111;
 	@ConfigProp(group="Test") public Long      l2 = 22223L;
 	@ConfigProp(group="Test") public int       i1 = 1111;
@@ -92,14 +92,14 @@ public class ConfigGollumCoreLib extends Config {
 	@ConfigProp(group="Test") public Boolean   z2 = false;
 	
 	@ConfigProp(group="Test") public String   [] sAr1 = new String   [] { "AAA" , "BBB" , "CCC"  };
-//	@ConfigProp(group="Test") public long     [] lAr1 = new long     [] { 11111 , 11111 , 11111  };
-//	@ConfigProp(group="Test") public Long     [] lAr2 = new Long     [] { 22222L, 22222L, 22222L };
-//	@ConfigProp(group="Test") public int      [] iAr1 = new int      [] { 1111  , 1111  , 1111   };
+	@ConfigProp(group="Test") public long     [] lAr1 = new long     [] { 11111 , 11111 , 11111  };
+	@ConfigProp(group="Test") public Long     [] lAr2 = new Long     [] { 22222L, 22222L, 22222L };
+	@ConfigProp(group="Test") public int      [] iAr1 = new int      [] { 1111  , 1111  , 1111   };
 	@ConfigProp(group="Test") public Integer  [] iAr2 = new Integer  [] { 2222  , 222   , 2222   };
-//	@ConfigProp(group="Test") public short    [] wAr1 = new short    [] { 111   , 111   , 111    };
-//	@ConfigProp(group="Test") public Short    [] wAr2 = new Short    [] { 222   , 222   , 222    };
-//	@ConfigProp(group="Test") public byte     [] bAr1 = new byte     [] { 11    , 11    , 11     };
-//	@ConfigProp(group="Test") public Byte     [] bAr2 = new Byte     [] { 22    , 22    , 22     };
+	@ConfigProp(group="Test") public short    [] wAr1 = new short    [] { 111   , 111   , 111    };
+	@ConfigProp(group="Test") public Short    [] wAr2 = new Short    [] { 222   , 222   , 222    };
+	@ConfigProp(group="Test") public byte     [] bAr1 = new byte     [] { 11    , 11    , 11     };
+	@ConfigProp(group="Test") public Byte     [] bAr2 = new Byte     [] { 22    , 22    , 22     };
 //	@ConfigProp(group="Test") public char     [] cAr1 = new char     [] { 1     , 1     , 1      };
 //	@ConfigProp(group="Test") public Character[] cAr2 = new Character[] { 2     , 2     , 2      };
 //	@ConfigProp(group="Test") public float    [] fAr1 = new float    [] { 1.5F  , 1.5F  , 1.5F   };

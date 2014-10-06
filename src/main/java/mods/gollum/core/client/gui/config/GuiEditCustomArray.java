@@ -187,8 +187,10 @@ public class GuiEditCustomArray extends GuiGollumConfig {
 		IConfigEntry newEntry = null;
 		
 		if (value != null && defaultValue != null) {
+			
 			ValueProperty  prop      = new ValueProperty(this.mod, value, defaultValue);
 			IConfigElement element = prop.createConfigElement ();
+			
 			if (element != null) {
 				try {
 					

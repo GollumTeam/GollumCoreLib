@@ -44,7 +44,9 @@ public class CustomElement implements IConfigElement {
 		}
 		this.defaultValues = defaultValues;
 		for (int i = 0; i < this.values.length; i++) {
-			this.defaultValues[i] = this.formatValue(this.defaultValues[i]);
+			if (i < this.defaultValues.length) {
+				this.defaultValues[i] = this.formatValue(this.defaultValues[i]);
+			}
 		}
 		this.isArray = true;
 	}

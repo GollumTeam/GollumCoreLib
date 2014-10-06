@@ -116,18 +116,12 @@ public class ModGollumCoreLib extends GollumMod {
 		
 		// Initialisation des items
 		this.initItem ();
+
+		// Initialisation des reflection sur vanilla
+		this.initReflection();
 		
 		BlockRegistry.instance().registerAll();
 		ItemRegistry.instance().registerAll();
-		
-		try {
-			
-			Method m = WorldServer.class.getDeclaredMethod(Reflection.getObfuscateName(WorldStub.class, "tickUpdates"), boolean.class);
-			Reflection.enableSynchronized (m);
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 		
 	}
 	
@@ -182,6 +176,23 @@ public class ModGollumCoreLib extends GollumMod {
 		// Création des items
 		this.itemBuilding = (ItemBuilding)new ItemBuilding("ItemBuilding").setCreativeTab(this.tabBuildingStaff);
 		
+	}
+	
+	/**
+	 * Initialisation des reflection sur vanilla
+	 */
+	private void initReflection() {
+		try {
+			
+			Reflection.enableSynchronized (WorldServer.class.getDeclaredMethod(Reflection.getObfuscateName(WorldStub.class, "scheduleBlockUpdateWithPriority"), WorldStub.class));
+			Reflection.enableSynchronized (WorldServer.class.getDeclaredMethod(Reflection.getObfuscateName(WorldStub.class, "tickUpdates"                    ), WorldStub.class));
+			Reflection.enableSynchronized (WorldServer.class.getDeclaredMethod(Reflection.getObfuscateName(WorldStub.class, "func_147446_b"                  ), WorldStub.class));
+			Reflection.enableSynchronized (WorldServer.class.getDeclaredMethod(Reflection.getObfuscateName(WorldStub.class, "getPendingBlockUpdates"         ), WorldStub.class));
+			Reflection.enableSynchronized (WorldServer.class.getDeclaredMethod(Reflection.getObfuscateName(WorldStub.class, "initialize"                     ), WorldStub.class));
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**
