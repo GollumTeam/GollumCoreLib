@@ -34,7 +34,7 @@ public class GuiEditCustomArray extends GuiGollumConfig {
 	protected Object[] undoValues;
 	protected Object[] defaultValues;
 	
-	public GuiEditCustomArray(GuiConfig parent, IConfigElement configElement, int slotIndex, ArrayEntry entry, Object[] values, Object[] defaultValues) {
+	public GuiEditCustomArray(GuiConfig parent, int slotIndex, ArrayEntry entry, Object[] values, Object[] defaultValues) {
 		super(parent, getFields(parent, entry, values, defaultValues), entry);
 
 		this.values        = values;

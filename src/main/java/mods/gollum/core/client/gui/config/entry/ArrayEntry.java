@@ -36,7 +36,7 @@ public class ArrayEntry extends cpw.mods.fml.client.config.GuiConfigEntries.Arra
 	
 	@Override
 	public void valueButtonPressed(int slotIndex) {
-		mc.displayGuiScreen(new GuiEditCustomArray(this.owningScreen, configElement, slotIndex, this, currentValues, this.configElement.getDefaults()));
+		mc.displayGuiScreen(new GuiEditCustomArray(this.owningScreen, slotIndex, this, currentValues, this.configElement.getDefaults()));
 	}
 	
 	/**

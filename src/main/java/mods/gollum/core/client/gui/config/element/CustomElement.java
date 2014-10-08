@@ -115,7 +115,7 @@ public class CustomElement implements IConfigElement {
 			property.getType() == Property.Type.DOUBLE  ? ConfigGuiType.DOUBLE  :
 			property.getType() == Property.Type.INTEGER ? ConfigGuiType.INTEGER :
 			property.getType() == Property.Type.COLOR   ? ConfigGuiType.COLOR   :
-			property.getType() == Property.Type.MOD_ID  ? ConfigGuiType.MOD_ID   : 
+			property.getType() == Property.Type.MOD_ID  ? ConfigGuiType.MOD_ID  : 
 			ConfigGuiType.STRING
 		;
 	}
