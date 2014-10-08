@@ -2,6 +2,7 @@ package mods.gollum.core.client.gui.config.properties;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 import scala.actors.threadpool.Arrays;
@@ -288,10 +289,18 @@ public abstract class GollumProperty extends Property {
 			
 		if (classEntry != null) {
 			
-			if (o instanceof Object[]) {
-				Object[] oAr  = Arrays.copyOf((Object[])o , ((Object[])o) .length);
-				Object[] oDAr = Arrays.copyOf((Object[])oD, ((Object[])oD).length);
-				return new CustomElement(classEntry, this, oAr, oDAr);
+			if (o.getClass().isArray()) {
+
+				ArrayList<Object> oAr  = new ArrayList<Object>();
+				ArrayList<Object> oDAr = new ArrayList<Object>();
+
+				for(int i = 0; i < Array.getLength(o); i++) {
+					oAr.add(Array.get(o, i));
+				}
+				for(int i = 0; i < Array.getLength(oD); i++) {
+					oDAr.add(Array.get(oD, i));
+				}
+				return new CustomElement(classEntry, this, oAr.toArray(), oDAr.toArray());
 			}
 			
 			if (o instanceof Character || Character.TYPE.isAssignableFrom(o.getClass())) {

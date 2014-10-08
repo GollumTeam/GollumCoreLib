@@ -24,7 +24,6 @@ public class CustomElement implements IConfigElement {
 	private Object[] values;
 	private Object[] defaultValues;
 	private GollumProperty property;
-	private boolean isArray = false;
 	
 	public CustomElement(Class< ? extends IConfigEntry> classEntry, GollumProperty property) {
 		super();
@@ -48,7 +47,6 @@ public class CustomElement implements IConfigElement {
 				this.defaultValues[i] = this.formatValue(this.defaultValues[i]);
 			}
 		}
-		this.isArray = true;
 	}
 	
 	public CustomElement(Class< ? extends IConfigEntry> classEntry, GollumProperty property, Object value, Object defaultValue) {
@@ -72,7 +70,7 @@ public class CustomElement implements IConfigElement {
 	
 	@Override
 	public Class<? extends IConfigEntry> getConfigEntryClass() {
-		return (this.isArray) ? ArrayEntry.class : this.classEntry;
+		return (this.isList()) ? ArrayEntry.class : this.classEntry;
 	}
 	
 	@Override
@@ -124,7 +122,7 @@ public class CustomElement implements IConfigElement {
 	
 	@Override
 	public boolean isList() {
-		return this.isArray;
+		return this.property.isList();
 	}
 
 	@Override
@@ -159,7 +157,7 @@ public class CustomElement implements IConfigElement {
 
 	@Override
 	public void setToDefault() {
-		if (this.isArray) {
+		if (this.isList()) {
 			this.values = Arrays.copyOf(this.defaultValues, this.defaultValues.length);
 			
 			if (this.defaultValue instanceof Json[]) {
