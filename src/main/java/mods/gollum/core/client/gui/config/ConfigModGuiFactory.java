@@ -1,7 +1,8 @@
-package mods.gollum.core.client.old.gui.config;
+package mods.gollum.core.client.gui.config;
 
 import java.util.Set;
 
+import mods.gollum.core.client.gui.config.GuiFieldConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import cpw.mods.fml.client.IModGuiFactory;
