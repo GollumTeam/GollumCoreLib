@@ -1,4 +1,4 @@
-package mods.gollum.core.client.gui.config;
+package mods.gollum.core.client.old.gui.config;
 
 import java.util.Set;
 

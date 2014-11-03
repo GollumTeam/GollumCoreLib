@@ -1,8 +1,8 @@
-package mods.gollum.core.client.gui.config.entry;
+package mods.gollum.core.client.old.gui.config.entry;
 
 import static mods.gollum.core.ModGollumCoreLib.log;
-import mods.gollum.core.client.gui.config.GuiEditCustomArray;
-import mods.gollum.core.client.gui.config.GuiGollumConfig;
+import mods.gollum.core.client.old.gui.config.GuiEditCustomArray;
+import mods.gollum.core.client.old.gui.config.GuiGollumConfig;
 import net.minecraft.client.renderer.Tessellator;
 import cpw.mods.fml.client.config.GuiConfigEntries.IConfigEntry;
 import cpw.mods.fml.client.config.GuiButtonExt;

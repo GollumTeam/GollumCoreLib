@@ -1,16 +1,16 @@
-package mods.gollum.core.client.gui.config.entry;
+package mods.gollum.core.client.old.gui.config.entry;
 
 import net.minecraft.client.renderer.Tessellator;
-import mods.gollum.core.client.gui.config.entry.logic.GuiArrayButtonEntryLogic;
+import mods.gollum.core.client.old.gui.config.entry.logic.GuiArrayButtonEntryLogic;
 import cpw.mods.fml.client.config.GuiConfig;
 import cpw.mods.fml.client.config.GuiConfigEntries;
 import cpw.mods.fml.client.config.IConfigElement;
 
-public class IntegerEntry extends cpw.mods.fml.client.config.GuiConfigEntries.IntegerEntry {
+public class DoubleEntry extends cpw.mods.fml.client.config.GuiConfigEntries.DoubleEntry {
 	
 	protected GuiArrayButtonEntryLogic logic = new GuiArrayButtonEntryLogic(this);
 	
-	public IntegerEntry(GuiConfig owningScreen, GuiConfigEntries owningEntryList, IConfigElement configElement) {
+	public DoubleEntry(GuiConfig owningScreen, GuiConfigEntries owningEntryList, IConfigElement configElement) {
 		super(owningScreen, owningEntryList, configElement);
 	}
 

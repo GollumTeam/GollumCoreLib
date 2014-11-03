@@ -1,11 +1,11 @@
-package mods.gollum.core.client.gui.config.properties;
+package mods.gollum.core.client.old.gui.config.properties;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 
-import mods.gollum.core.client.gui.config.element.CustomElement;
-import mods.gollum.core.client.gui.config.entry.ConfigJsonTypeEntry;
-import mods.gollum.core.client.gui.config.entry.JsonEntry;
+import mods.gollum.core.client.old.gui.config.element.CustomElement;
+import mods.gollum.core.client.old.gui.config.entry.ConfigJsonTypeEntry;
+import mods.gollum.core.client.old.gui.config.entry.JsonEntry;
 import mods.gollum.core.common.config.ConfigLoader.ConfigLoad;
 import mods.gollum.core.common.config.ConfigProp;
 import mods.gollum.core.common.config.type.IConfigJsonType;

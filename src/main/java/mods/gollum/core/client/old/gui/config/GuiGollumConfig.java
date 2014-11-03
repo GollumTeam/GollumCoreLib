@@ -1,4 +1,4 @@
-package mods.gollum.core.client.gui.config;
+package mods.gollum.core.client.old.gui.config;
 
 import static cpw.mods.fml.client.config.GuiUtils.RESET_CHAR;
 import static cpw.mods.fml.client.config.GuiUtils.UNDO_CHAR;
@@ -7,10 +7,10 @@ import static mods.gollum.core.ModGollumCoreLib.log;
 import java.lang.reflect.Field;
 import java.util.List;
 
-import mods.gollum.core.client.gui.config.entry.AddButtonEntry;
-import mods.gollum.core.client.gui.config.entry.ArrayEntry;
-import mods.gollum.core.client.gui.config.entry.IGollumConfigEntry;
-import mods.gollum.core.client.gui.config.properties.ValueProperty;
+import mods.gollum.core.client.old.gui.config.entry.AddButtonEntry;
+import mods.gollum.core.client.old.gui.config.entry.ArrayEntry;
+import mods.gollum.core.client.old.gui.config.entry.IGollumConfigEntry;
+import mods.gollum.core.client.old.gui.config.properties.ValueProperty;
 import mods.gollum.core.common.mod.GollumMod;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;

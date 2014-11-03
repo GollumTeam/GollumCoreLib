@@ -1,14 +1,14 @@
-package mods.gollum.core.client.gui.config.element;
+package mods.gollum.core.client.old.gui.config.element;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import mods.gollum.core.client.gui.config.entry.ArrayEntry;
-import mods.gollum.core.client.gui.config.entry.DoubleEntry;
-import mods.gollum.core.client.gui.config.entry.IntegerEntry;
-import mods.gollum.core.client.gui.config.entry.StringEntry;
-import mods.gollum.core.client.gui.config.properties.GollumProperty;
+import mods.gollum.core.client.old.gui.config.entry.ArrayEntry;
+import mods.gollum.core.client.old.gui.config.entry.DoubleEntry;
+import mods.gollum.core.client.old.gui.config.entry.IntegerEntry;
+import mods.gollum.core.client.old.gui.config.entry.StringEntry;
+import mods.gollum.core.client.old.gui.config.properties.GollumProperty;
 import mods.gollum.core.common.config.type.IConfigJsonType;
 import mods.gollum.core.tools.simplejson.Json;
 import net.minecraftforge.common.config.Property;

@@ -1,4 +1,4 @@
-package mods.gollum.core.client.gui.config;
+package mods.gollum.core.client.old.gui.config;
 
 import static cpw.mods.fml.client.config.GuiUtils.RESET_CHAR;
 import static cpw.mods.fml.client.config.GuiUtils.UNDO_CHAR;
@@ -15,10 +15,10 @@ import akka.dispatch.sysmsg.Create;
 
 import com.ibm.icu.text.DisplayContext.Type;
 
-import mods.gollum.core.client.gui.config.entry.GollumCategoryEntry;
-import mods.gollum.core.client.gui.config.entry.JsonEntry;
-import mods.gollum.core.client.gui.config.properties.FieldProperty;
-import mods.gollum.core.client.gui.config.properties.JsonProperty;
+import mods.gollum.core.client.old.gui.config.entry.GollumCategoryEntry;
+import mods.gollum.core.client.old.gui.config.entry.JsonEntry;
+import mods.gollum.core.client.old.gui.config.properties.FieldProperty;
+import mods.gollum.core.client.old.gui.config.properties.JsonProperty;
 import mods.gollum.core.common.config.ConfigLoader;
 import mods.gollum.core.common.config.ConfigLoader.ConfigLoad;
 import mods.gollum.core.common.mod.GollumMod;

@@ -1,11 +1,11 @@
-package mods.gollum.core.client.gui.config.entry.logic;
+package mods.gollum.core.client.old.gui.config.entry.logic;
 
 import static mods.gollum.core.ModGollumCoreLib.log;
 
 import java.awt.Color;
 import java.lang.reflect.Field;
 
-import mods.gollum.core.client.gui.config.GuiGollumConfig;
+import mods.gollum.core.client.old.gui.config.GuiGollumConfig;
 import net.minecraft.client.Minecraft;
 import cpw.mods.fml.client.config.GuiButtonExt;
 import cpw.mods.fml.client.config.GuiConfigEntries;

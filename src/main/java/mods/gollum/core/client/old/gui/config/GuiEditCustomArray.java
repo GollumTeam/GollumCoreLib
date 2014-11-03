@@ -1,4 +1,4 @@
-package mods.gollum.core.client.gui.config;
+package mods.gollum.core.client.old.gui.config;
 
 import static mods.gollum.core.ModGollumCoreLib.log;
 
@@ -11,11 +11,11 @@ import net.minecraft.client.resources.I18n;
 
 import org.lwjgl.input.Keyboard;
 
-import mods.gollum.core.client.gui.config.entry.AddButtonEntry;
-import mods.gollum.core.client.gui.config.entry.ArrayEntry;
-import mods.gollum.core.client.gui.config.entry.ConfigJsonTypeEntry;
-import mods.gollum.core.client.gui.config.entry.JsonEntry;
-import mods.gollum.core.client.gui.config.properties.ValueProperty;
+import mods.gollum.core.client.old.gui.config.entry.AddButtonEntry;
+import mods.gollum.core.client.old.gui.config.entry.ArrayEntry;
+import mods.gollum.core.client.old.gui.config.entry.ConfigJsonTypeEntry;
+import mods.gollum.core.client.old.gui.config.entry.JsonEntry;
+import mods.gollum.core.client.old.gui.config.properties.ValueProperty;
 import mods.gollum.core.common.config.type.IConfigJsonType;
 import mods.gollum.core.tools.simplejson.Json;
 import cpw.mods.fml.client.config.ConfigGuiType;

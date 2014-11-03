@@ -1,4 +1,4 @@
-package mods.gollum.core.client.gui.config.entry;
+package mods.gollum.core.client.old.gui.config.entry;
 
 import mods.gollum.core.tools.simplejson.Json;
 

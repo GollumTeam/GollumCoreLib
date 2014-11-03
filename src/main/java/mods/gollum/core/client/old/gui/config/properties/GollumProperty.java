@@ -1,4 +1,4 @@
-package mods.gollum.core.client.gui.config.properties;
+package mods.gollum.core.client.old.gui.config.properties;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -6,17 +6,17 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 import scala.actors.threadpool.Arrays;
-import mods.gollum.core.client.gui.config.element.CustomElement;
-import mods.gollum.core.client.gui.config.entry.ArrayEntry;
-import mods.gollum.core.client.gui.config.entry.BlockEntry;
-import mods.gollum.core.client.gui.config.entry.BooleanEntry;
-import mods.gollum.core.client.gui.config.entry.ConfigJsonTypeEntry;
-import mods.gollum.core.client.gui.config.entry.DoubleEntry;
-import mods.gollum.core.client.gui.config.entry.GollumCategoryEntry;
-import mods.gollum.core.client.gui.config.entry.IntegerEntry;
-import mods.gollum.core.client.gui.config.entry.ItemEntry;
-import mods.gollum.core.client.gui.config.entry.JsonEntry;
-import mods.gollum.core.client.gui.config.entry.StringEntry;
+import mods.gollum.core.client.old.gui.config.element.CustomElement;
+import mods.gollum.core.client.old.gui.config.entry.ArrayEntry;
+import mods.gollum.core.client.old.gui.config.entry.BlockEntry;
+import mods.gollum.core.client.old.gui.config.entry.BooleanEntry;
+import mods.gollum.core.client.old.gui.config.entry.ConfigJsonTypeEntry;
+import mods.gollum.core.client.old.gui.config.entry.DoubleEntry;
+import mods.gollum.core.client.old.gui.config.entry.GollumCategoryEntry;
+import mods.gollum.core.client.old.gui.config.entry.IntegerEntry;
+import mods.gollum.core.client.old.gui.config.entry.ItemEntry;
+import mods.gollum.core.client.old.gui.config.entry.JsonEntry;
+import mods.gollum.core.client.old.gui.config.entry.StringEntry;
 import mods.gollum.core.common.config.ConfigLoader;
 import mods.gollum.core.common.config.ConfigProp;
 import mods.gollum.core.common.config.ConfigLoader.ConfigLoad;

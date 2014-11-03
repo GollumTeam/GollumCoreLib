@@ -1,8 +1,8 @@
-package mods.gollum.core.client.gui.config.entry;
+package mods.gollum.core.client.old.gui.config.entry;
 
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.resources.I18n;
-import mods.gollum.core.client.gui.config.entry.logic.GuiArrayButtonEntryLogic;
+import mods.gollum.core.client.old.gui.config.entry.logic.GuiArrayButtonEntryLogic;
 import cpw.mods.fml.client.config.GuiConfig;
 import cpw.mods.fml.client.config.GuiConfigEntries;
 import cpw.mods.fml.client.config.GuiUtils;
