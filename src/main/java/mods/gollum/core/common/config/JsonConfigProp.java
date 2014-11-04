@@ -7,6 +7,7 @@ import mods.gollum.core.tools.simplejson.IJsonComplement;
 public class JsonConfigProp implements ConfigProp, IJsonComplement {
 
 	private String   name              = "";
+	private boolean  show              = true;
 	private String   info              = "info";
 	private String   group             = "";
 	private String[] validValues       = new String[0];
@@ -20,6 +21,7 @@ public class JsonConfigProp implements ConfigProp, IJsonComplement {
 	private Type     type              = Type.DEFAULT;
 
 	@Override public String   name()              { return this.name; };
+	@Override public boolean show()               { return this.show; }
 	@Override public String   info()              { return this.info; };
 	@Override public String   group()             { return this.group; };
 	@Override public String[] validValues()       { return this.validValues; };

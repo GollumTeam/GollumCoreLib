@@ -18,6 +18,8 @@ public @interface ConfigProp {
 	}
 	
 	public abstract String name() default "";
+
+	public abstract boolean show() default true;
 	
 	public abstract String info() default "";
 	

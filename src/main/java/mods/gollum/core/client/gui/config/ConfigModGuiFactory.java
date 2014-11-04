@@ -2,7 +2,7 @@ package mods.gollum.core.client.gui.config;
 
 import java.util.Set;
 
-import mods.gollum.core.client.gui.config.GuiFieldConfig;
+import mods.gollum.core.client.gui.config.GuiCategoryConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import cpw.mods.fml.client.IModGuiFactory;
@@ -18,7 +18,7 @@ public class ConfigModGuiFactory implements IModGuiFactory {
 
 	@Override
 	public Class<? extends GuiScreen> mainConfigGuiClass() {
-		return GuiFieldConfig.class;
+		return GuiCategoryConfig.class;
 	}
 
 	@Override

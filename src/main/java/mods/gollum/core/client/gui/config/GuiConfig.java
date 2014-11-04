@@ -4,8 +4,10 @@ import static cpw.mods.fml.client.config.GuiUtils.RESET_CHAR;
 import static cpw.mods.fml.client.config.GuiUtils.UNDO_CHAR;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
+import mods.gollum.core.client.gui.config.element.ConfigElement;
 import mods.gollum.core.common.mod.GollumMod;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -19,10 +21,11 @@ import cpw.mods.fml.client.config.GuiUnicodeGlyphButton;
 import cpw.mods.fml.client.config.HoverChecker;
 import cpw.mods.fml.common.ModContainer;
 
-
-
-public class GuiConfig extends GuiScreen {
-
+public abstract class GuiConfig extends GuiScreen {
+	
+	protected ArrayList<ConfigElement> configElements = new ArrayList<ConfigElement>();
+	protected GuiConfigEntries entryList;
+	
 	protected GuiButtonExt btDone;
 	protected GuiButtonExt btUndo;
 	protected GuiButtonExt btReset;
@@ -34,7 +37,9 @@ public class GuiConfig extends GuiScreen {
 	
 	protected GollumMod mod;
 	private String title;
-	private String titleLine2 = null;
+	public String titleLine2 = null;
+	
+	private boolean needsRefresh = true;
 	
 
 	public GuiConfig(GuiScreen parent) {
@@ -44,6 +49,8 @@ public class GuiConfig extends GuiScreen {
 		this.title  = this.mod.getModId();
 		
 	}
+	
+	protected abstract void initConfigElement ();
 	
 	private GollumMod getMod() {
 		if (this.parent instanceof GuiModList) {
@@ -70,6 +77,19 @@ public class GuiConfig extends GuiScreen {
 	public void initGui() {
 		
 		Keyboard.enableRepeatEvents(true);
+
+		// Init List
+		
+		if (this.entryList == null) {
+			this.initConfigElement();
+		}
+		
+		if (this.needsRefresh) {
+			this.entryList = new GuiConfigEntries(this, mc);
+			this.needsRefresh = false;
+		}
+		
+		// Init Button action
 		
 		int undoGlyphWidth  = mc.fontRenderer.getStringWidth(UNDO_CHAR)  * 2;
 		int resetGlyphWidth = mc.fontRenderer.getStringWidth(RESET_CHAR) * 2;
@@ -109,6 +129,8 @@ public class GuiConfig extends GuiScreen {
 		this.undoHoverChecker = new HoverChecker(this.btUndo, 800);
 		this.resetHoverChecker = new HoverChecker(this.btReset, 800);
 		
+		this.entryList.initGui();
+		
 	}
 	
 	@Override
@@ -127,6 +149,8 @@ public class GuiConfig extends GuiScreen {
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		
 		this.drawDefaultBackground();
+		
+		this.entryList.drawScreen(mouseX, mouseY, partialTicks);
 		
 		this.drawCenteredString(this.fontRendererObj, this.title, this.width / 2, 8, 16777215);
 		
