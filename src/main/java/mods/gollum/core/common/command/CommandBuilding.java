@@ -2,10 +2,10 @@ package mods.gollum.core.common.command;
 
 import java.util.List;
 
-import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.common.building.Builder;
 import mods.gollum.core.common.building.Building.SubBuilding;
 import mods.gollum.core.common.building.BuildingParser;
+import mods.gollum.core.inits.ModItems;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
@@ -50,7 +50,7 @@ public class CommandBuilding extends CommandBase {
 					last = Integer.parseInt(arguments[1]);
 				}
 				
-				SubBuilding subBuilding = ModGollumCoreLib.itemBuilding.getLastBuild (last);
+				SubBuilding subBuilding = ModItems.itemBuilding.getLastBuild (last);
 				sender.addChatMessage(new ChatComponentText("Rebuild last building "+subBuilding.building.modId+":"+subBuilding.building.name));
 				
 				subBuilding.building = new BuildingParser().parse(subBuilding.building.name, subBuilding.building.modId);

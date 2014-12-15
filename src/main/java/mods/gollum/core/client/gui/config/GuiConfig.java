@@ -35,7 +35,7 @@ public abstract class GuiConfig extends GuiScreen {
 	
 	protected GuiScreen parent;
 	
-	protected GollumMod mod;
+	public GollumMod mod;
 	private String title;
 	public String titleLine2 = null;
 	

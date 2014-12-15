@@ -7,6 +7,7 @@ import mods.gollum.core.client.gui.config.GuiConfigEntries;
 import mods.gollum.core.client.gui.config.element.ConfigElement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.EnumChatFormatting;
 
 public abstract class ConfigEntry {
@@ -17,6 +18,8 @@ public abstract class ConfigEntry {
 	
 	protected GuiButtonExt btUndo;
 	protected GuiButtonExt btReset;
+	
+	public boolean labelDisplay = true;
 
 	public ConfigEntry(Minecraft mc, GuiConfigEntries parent, ConfigElement configElement) {
 		this.mc            = mc;
@@ -28,11 +31,18 @@ public abstract class ConfigEntry {
 	}
 	
 	public int getLabelWidth() {
-		return 50; // TODO
+		if (!this.labelDisplay) {
+			return 0;
+		}
+		return mc.fontRenderer.getStringWidth(this.getLabel());
 	}
 	
 	public int getValueWidth() {
 		return 200; // TODO
+	}
+	
+	public String getLabel () {
+		return this.parent.parent.mod.i18n().trans("config."+this.configElement.getName());
 	}
 	
 	public boolean enabled() {
@@ -41,12 +51,15 @@ public abstract class ConfigEntry {
 	
 	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, Tessellator tessellator, int mouseX, int mouseY, boolean isSelected) {
 		
-//		String label = (!isValidValue ? EnumChatFormatting.RED.toString() :
-//            (isChanged ? EnumChatFormatting.WHITE.toString() : EnumChatFormatting.GRAY.toString()))
-//            + (isChanged ? EnumChatFormatting.ITALIC.toString() : "") + this.name;
+		if (this.labelDisplay) {
+			
+//			String label = (!isValidValue ? EnumChatFormatting.RED.toString() :
+//				(isChanged ? EnumChatFormatting.WHITE.toString() : EnumChatFormatting.GRAY.toString()))
+//			+ (isChanged ? EnumChatFormatting.ITALIC.toString() : "") + this.name;
 		
-		String label = "Label supe cool";
-		this.mc.fontRenderer.drawString(label, this.parent.labelX, y + slotHeight / 2 - this.mc.fontRenderer.FONT_HEIGHT / 2, 0xFFFFFF);
+			String label = this.getLabel();
+			this.mc.fontRenderer.drawString(label, this.parent.labelX, y + slotHeight / 2 - this.mc.fontRenderer.FONT_HEIGHT / 2, 0xFFFFFF);
+		}
 		
 		this.btUndo.xPosition = this.parent.scrollBarX - 44;
 		this.btUndo.yPosition = y;

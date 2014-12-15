@@ -13,7 +13,7 @@ import net.minecraft.client.renderer.Tessellator;
 public class GuiConfigEntries extends GuiSlot {
 
 	protected Minecraft mc;
-	protected GuiConfig parent;
+	public GuiConfig parent;
 		
 	private ArrayList<ConfigEntry> listEntries = new ArrayList<ConfigEntry>();
 	

@@ -31,7 +31,7 @@ public class AddButtonEntry implements IConfigEntry {
 		
 		
 	}
-
+	
 	@Override
 	public boolean mousePressed(int index, int x, int y, int mouseEvent, int relativeX, int relativeY) {
 		
