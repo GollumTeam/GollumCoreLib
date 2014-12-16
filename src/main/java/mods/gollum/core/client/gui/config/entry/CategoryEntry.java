@@ -1,6 +1,8 @@
 package mods.gollum.core.client.gui.config.entry;
 
+import static mods.gollum.core.ModGollumCoreLib.log;
 import mods.gollum.core.client.gui.config.GuiConfigEntries;
+import mods.gollum.core.client.gui.config.GuiFieldConfig;
 import mods.gollum.core.client.gui.config.element.ConfigElement;
 import net.minecraft.client.Minecraft;
 
@@ -11,6 +13,11 @@ public class CategoryEntry extends ButtonEntry {
 		
 		this.labelDisplay = false;
 		this.updateValueButtonText(this.getLabel());
+	}
+
+	@Override
+	public void valueButtonPressed(int slotIndex) {
+		this.mc.displayGuiScreen(new GuiFieldConfig(this));
 	}
 	
 }

@@ -7,10 +7,11 @@ import static mods.gollum.core.ModGollumCoreLib.log;
 import mods.gollum.core.client.gui.config.element.ConfigElement;
 import mods.gollum.core.client.gui.config.entry.ConfigEntry;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiListExtended;
 import net.minecraft.client.gui.GuiSlot;
 import net.minecraft.client.renderer.Tessellator;
 
-public class GuiConfigEntries extends GuiSlot {
+public class GuiConfigEntries extends GuiListExtended {
 
 	protected Minecraft mc;
 	public GuiConfig parent;
@@ -35,11 +36,15 @@ public class GuiConfigEntries extends GuiSlot {
 			if (configElement != null) {
 				if (configElement.getConfigProp().show()) {
 					try {
-						ConfigEntry configEntry = configElement.getEntryClass().getConstructor(Minecraft.class, GuiConfigEntries.class, ConfigElement.class).newInstance(this.mc, this, configElement);
-						log.debug("Create config entry : "+configElement.getName()+" : "+configElement.getEntryClass().getName());
-						
-						listEntries.add(configEntry);
-						
+						if (configElement.getEntryClass() != null) {
+							
+							ConfigEntry configEntry = configElement.getEntryClass().getConstructor(Minecraft.class, GuiConfigEntries.class, ConfigElement.class).newInstance(this.mc, this, configElement);
+							log.debug("Create config entry : "+configElement.getName()+" : "+configElement.getEntryClass().getName());
+							
+							listEntries.add(configEntry);
+						} else {
+							log.warning("ConfigElement "+configElement.getName()+" hasn't class entry");
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 						log.severe("Can create config entry : "+configElement.getName()+" : "+configElement.getEntryClass().getName());
@@ -73,8 +78,8 @@ public class GuiConfigEntries extends GuiSlot {
 		return this.listEntries.size();
 	}
 	
-	public ConfigEntry getListEntry(int index) {
-		return this.listEntries.get(index);
+	public IGuiListEntry getListEntry(int index) {
+		return (IGuiListEntry) this.listEntries.get(index);
 	}
 	
 	public int getMaxLabelSizeEntry () {
@@ -118,7 +123,6 @@ public class GuiConfigEntries extends GuiSlot {
 		
 		int viewWidth = maxLabel + 8 + (width / 2);
 
-//		this.labelX = (this.width / 2) - (viewWidth / 2);
 		this.labelX = (this.width / 2) - (viewWidth / 2);
 		this.controlX = this.labelX + maxLabel + 8;
 		this.resetX = (this.width / 2) + (viewWidth / 2) - 45;
@@ -126,4 +130,36 @@ public class GuiConfigEntries extends GuiSlot {
 		this.controlWidth = this.resetX - this.controlX - 5;
 	}
 	
+	/////////////
+	// Actions //
+	/////////////
+	
+	/**
+	 * This method is a pass-through for IConfigEntry objects that require keystrokes. Called from the parent GuiConfig screen.
+	 */
+	public void keyTyped(char eventChar, int eventKey) {
+		for (ConfigEntry entry : this.listEntries) {
+			entry.keyTyped(eventChar, eventKey);
+		}
+	}
+	
+	/**
+	 * This method is a pass-through for IConfigEntry objects that contain GuiTextField elements. Called from the parent GuiConfig
+	 * screen.
+	 */
+	public void mouseClicked(int mouseX, int mouseY, int mouseEvent) {
+		for (ConfigEntry entry : this.listEntries){
+			entry.mouseClicked(mouseX, mouseY, mouseEvent);
+		}
+	}
+
+	/**
+	 * This method is a pass-through for IConfigEntry objects that contain
+	 * GuiTextField elements. Called from the parent GuiConfig screen.
+	 */
+	public void updateScreen() {
+		for (ConfigEntry entry : this.listEntries) {
+			entry.updateCursorCounter();
+		}
+	}
 }

@@ -6,15 +6,16 @@ import cpw.mods.fml.client.config.GuiButtonExt;
 import mods.gollum.core.client.gui.config.GuiConfigEntries;
 import mods.gollum.core.client.gui.config.element.ConfigElement;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiListExtended.IGuiListEntry;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.EnumChatFormatting;
 
-public abstract class ConfigEntry {
+public abstract class ConfigEntry implements IGuiListEntry {
 	
 	protected Minecraft mc;
-	protected GuiConfigEntries parent;
-	protected ConfigElement configElement;
+	public    GuiConfigEntries parent;
+	public ConfigElement configElement;
 	
 	protected GuiButtonExt btUndo;
 	protected GuiButtonExt btReset;
@@ -83,15 +84,33 @@ public abstract class ConfigEntry {
 	/**
 	 * Returns true if the mouse has been pressed on this control.
 	 */
-	public boolean mousePressed(int p_148278_1_, int p_148278_2_, int p_148278_3_, int p_148278_4_, int p_148278_5_, int p_148278_6_) {
-		// TODO Auto-generated method stub
+	@Override
+	public boolean mousePressed(int index, int x, int y, int mouseEvent, int relativeX, int relativeY) {
+		if (this.btReset.mousePressed(this.mc, x, y)) {
+			btReset.func_146113_a(mc.getSoundHandler());
+//			this.setToDefault();
+			return true;
+		} else if (this.btUndo.mousePressed(this.mc, x, y)) {
+			btUndo.func_146113_a(mc.getSoundHandler());
+//			this.undoChanges();
+			return true;
+		}
 		return false;
 	}
 
 	/**
 	 * Fired when the mouse button is released. Arguments: index, x, y, mouseEvent, relativeX, relativeY
 	 */
-	public void mouseReleased(int p_148277_1_, int p_148277_2_, int p_148277_3_, int p_148277_4_, int p_148277_5_, int p_148277_6_) {
-		// TODO Auto-generated method stub
+	@Override
+	public void mouseReleased(int index, int x, int y, int mouseEvent, int relativeX, int relativeY) {
+	}
+	
+	public void keyTyped(char eventChar, int eventKey){
+	}
+
+	public void mouseClicked(int mouseX, int mouseY, int mouseEvent) {
+	}
+
+	public void updateCursorCounter() {
 	}
 }

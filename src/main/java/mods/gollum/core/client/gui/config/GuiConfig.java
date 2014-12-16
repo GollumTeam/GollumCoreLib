@@ -181,4 +181,49 @@ public abstract class GuiConfig extends GuiScreen {
 		this.func_146283_a(stringList, x, y);
 	}
 	
+	/**
+	 * Called when the mouse is clicked.
+	 */
+	@Override
+	protected void mouseClicked(int x, int y, int mouseEvent) {
+		if (mouseEvent != 0 || !this.entryList.func_148179_a(x, y, mouseEvent)) {
+			this.entryList.mouseClicked(x, y, mouseEvent);
+			super.mouseClicked(x, y, mouseEvent);
+		}
+	}
+
+	/**
+	 * Called when the mouse is moved or a mouse button is released. Signature:
+	 * (mouseX, mouseY, which) which==-1 is mouseMove, which==0 or which==1 is
+	 * mouseUp
+	 */
+	@Override
+	protected void mouseMovedOrUp(int x, int y, int mouseEvent) {
+		if (mouseEvent != 0 || !this.entryList.func_148181_b(x, y, mouseEvent)) {
+			super.mouseMovedOrUp(x, y, mouseEvent);
+		}
+	}
+
+	/**
+	 * Fired when a key is typed. This is the equivalent of
+	 * KeyListener.keyTyped(KeyEvent e).
+	 */
+	@Override
+	protected void keyTyped(char eventChar, int eventKey) {
+		if (eventKey == Keyboard.KEY_ESCAPE) {
+			this.mc.displayGuiScreen(this.parent);
+		} else {
+			this.entryList.keyTyped(eventChar, eventKey);
+		}
+	}
+
+	/**
+	 * Called from the main game loop to update the screen.
+	 */
+	@Override
+	public void updateScreen() {
+		super.updateScreen();
+		this.entryList.updateScreen();
+	}
+	
 }

@@ -33,6 +33,12 @@ public abstract class ButtonEntry extends ConfigEntry {
 		}
 	}
 	
+	/**
+	 * Called when the value button has been clicked.
+	 */
+	public abstract void valueButtonPressed(int slotIndex);
+	
+	
 	@Override
 	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, Tessellator tessellator, int mouseX, int mouseY, boolean isSelected) {
 		
@@ -44,4 +50,31 @@ public abstract class ButtonEntry extends ConfigEntry {
 		this.btnValue.enabled = this.enabled();
 		this.btnValue.drawButton(this.mc, mouseX, mouseY);
 	}
+	
+	/////////////
+	// ACTIONS //
+	/////////////
+	
+	/**
+	 * Returns true if the mouse has been pressed on this control.
+	 */
+	@Override
+	public boolean mousePressed(int index, int x, int y, int mouseEvent, int relativeX, int relativeY) {
+		if (this.btnValue.mousePressed(this.mc, x, y)) {
+			btnValue.func_146113_a(mc.getSoundHandler());
+			valueButtonPressed(index);
+			return true;
+		}
+		return super.mousePressed(index, x, y, mouseEvent, relativeX, relativeY);
+	}
+	
+	/**
+	 * Fired when the mouse button is released. Arguments: index, x, y, mouseEvent, relativeX, relativeY
+	 */
+	@Override
+	public void mouseReleased(int index, int x, int y, int mouseEvent, int relativeX, int relativeY) {
+		super.mouseReleased(index, x, y, mouseEvent, relativeX, relativeY);
+		this.btnValue.mouseReleased(x, y);
+	}
+	
 }
