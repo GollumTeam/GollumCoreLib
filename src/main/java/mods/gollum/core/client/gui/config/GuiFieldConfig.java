@@ -42,7 +42,7 @@ public class GuiFieldConfig extends GuiConfig {
 						category = "General";
 					}
 					if (this.category.equals(category)) {
-						this.configElements.add(new FieldElement(f, prop));
+						this.configElements.add(new FieldElement(f, prop, this.configLoad));
 					}
 				}
 			}

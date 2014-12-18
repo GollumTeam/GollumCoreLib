@@ -81,6 +81,19 @@ public class GuiConfigEntries extends GuiListExtended {
 	public IGuiListEntry getListEntry(int index) {
 		return (IGuiListEntry) this.listEntries.get(index);
 	}
+
+	@Override
+	public int getScrollBarX() {
+		return this.scrollBarX;
+	}
+	
+	/**
+	 * Gets the width of the list
+	 */
+	@Override
+	public int getListWidth() {
+		return this.width;
+	}
 	
 	public int getMaxLabelSizeEntry () {
 		int maxSizeEntry = 0;
@@ -129,17 +142,6 @@ public class GuiConfigEntries extends GuiListExtended {
 		this.scrollBarX = this.resetX + 45;
 		this.controlWidth = this.resetX - this.controlX - 5;
 		
-	}
-	
-	public int getScrollBarX() {
-		return this.scrollBarX;
-	}
-	
-	/**
-	 * Gets the width of the list
-	 */
-	public int getListWidth() {
-		return this.width;
 	}
 	
 	/**

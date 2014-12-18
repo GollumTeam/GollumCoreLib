@@ -7,6 +7,8 @@ import mods.gollum.core.common.config.ConfigProp;
 public abstract class ConfigElement {
 	
 	private String name;
+	protected Object value = null;
+	protected Object defaultValue = null;
 	
 	public ConfigElement (String name) {
 		this.name = name;
@@ -59,10 +61,40 @@ public abstract class ConfigElement {
 		return null;
 	}
 	
-	protected abstract Class getType ();
+	public abstract Class getType ();
 	
 	public String getName() {
 		return this.name;
+	}
+
+	/**
+	 * @return the value
+	 */
+	public Object getValue() {
+		return value;
+	}
+
+	/**
+	 * @return the defaultValue
+	 */
+	public Object getDefaultValue() {
+		return defaultValue;
+	}
+
+	/**
+	 * @param value the value to set
+	 */
+	public ConfigElement setValue(Object value) {
+		this.value = value;
+		return this;
+	}
+
+	/**
+	 * @param defaultValue the defaultValue to set
+	 */
+	public ConfigElement setDefaultValue(Object defaultValue) {
+		this.defaultValue = defaultValue;
+		return this;
 	}
 
 }

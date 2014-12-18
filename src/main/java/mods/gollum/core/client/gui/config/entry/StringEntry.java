@@ -21,8 +21,7 @@ public class StringEntry extends ConfigEntry {
 		
 		this.textFieldValue = new GuiTextField(this.mc.fontRenderer, this.parent.controlX + 1, 0, this.parent.controlWidth - 3, 16);
 		this.textFieldValue.setMaxStringLength(10000);
-//		this.textFieldValue.setText(configElement.get().toString());
-		this.textFieldValue.setText("The Value");
+		this.textFieldValue.setText(this.configElement.getValue().toString());
 	}
 	
 	@Override

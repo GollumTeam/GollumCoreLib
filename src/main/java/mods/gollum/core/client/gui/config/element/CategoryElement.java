@@ -20,7 +20,7 @@ public class CategoryElement extends ConfigElement {
 	}
 
 	@Override
-	protected Class getType() {
+	public Class getType() {
 		return null;
 	}
 
