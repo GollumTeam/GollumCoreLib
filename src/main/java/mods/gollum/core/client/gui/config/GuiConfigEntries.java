@@ -128,6 +128,28 @@ public class GuiConfigEntries extends GuiListExtended {
 		this.resetX = (this.width / 2) + (viewWidth / 2) - 45;
 		this.scrollBarX = this.resetX + 45;
 		this.controlWidth = this.resetX - this.controlX - 5;
+		
+	}
+	
+	public int getScrollBarX() {
+		return this.scrollBarX;
+	}
+	
+	/**
+	 * Gets the width of the list
+	 */
+	public int getListWidth() {
+		return this.width;
+	}
+	
+	/**
+	 * This method is a pass-through for IConfigEntry objects that contain
+	 * GuiTextField elements. Called from the parent GuiConfig screen.
+	 */
+	public void updateScreen() {
+		for (ConfigEntry entry : this.listEntries) {
+			entry.updateCursorCounter();
+		}
 	}
 	
 	/////////////
@@ -152,14 +174,5 @@ public class GuiConfigEntries extends GuiListExtended {
 			entry.mouseClicked(mouseX, mouseY, mouseEvent);
 		}
 	}
-
-	/**
-	 * This method is a pass-through for IConfigEntry objects that contain
-	 * GuiTextField elements. Called from the parent GuiConfig screen.
-	 */
-	public void updateScreen() {
-		for (ConfigEntry entry : this.listEntries) {
-			entry.updateCursorCounter();
-		}
-	}
+	
 }

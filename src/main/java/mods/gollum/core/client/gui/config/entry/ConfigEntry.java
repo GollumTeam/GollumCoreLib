@@ -2,6 +2,7 @@ package mods.gollum.core.client.gui.config.entry;
 
 import static cpw.mods.fml.client.config.GuiUtils.RESET_CHAR;
 import static cpw.mods.fml.client.config.GuiUtils.UNDO_CHAR;
+import static mods.gollum.core.ModGollumCoreLib.log;
 import cpw.mods.fml.client.config.GuiButtonExt;
 import mods.gollum.core.client.gui.config.GuiConfigEntries;
 import mods.gollum.core.client.gui.config.element.ConfigElement;
@@ -86,6 +87,7 @@ public abstract class ConfigEntry implements IGuiListEntry {
 	 */
 	@Override
 	public boolean mousePressed(int index, int x, int y, int mouseEvent, int relativeX, int relativeY) {
+		
 		if (this.btReset.mousePressed(this.mc, x, y)) {
 			btReset.func_146113_a(mc.getSoundHandler());
 //			this.setToDefault();
