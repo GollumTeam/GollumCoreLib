@@ -19,5 +19,15 @@ public class CategoryEntry extends ButtonEntry {
 	public void valueButtonPressed(int slotIndex) {
 		this.mc.displayGuiScreen(new GuiFieldConfig(this));
 	}
+
+	@Override
+	public Object getValue() {
+		return this.configElement.getValue();
+	}
+
+	@Override
+	public ConfigEntry setValue(Object value) {
+		return this;
+	}
 	
 }

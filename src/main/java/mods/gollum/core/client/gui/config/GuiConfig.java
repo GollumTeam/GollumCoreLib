@@ -138,7 +138,9 @@ public abstract class GuiConfig extends GuiScreen {
 		if (button.id == 2000) {
 			this.mc.displayGuiScreen(this.parent);
 		} else if (button.id == 2001) {
+			this.entryList.setToDefault ();
 		} else if (button.id == 2002) {
+			this.entryList.undoChanges ();
 		}
 	}
 	
@@ -164,8 +166,8 @@ public abstract class GuiConfig extends GuiScreen {
 			this.drawCenteredString(this.fontRendererObj, title2, this.width / 2, 18, 16777215);
 		}
 
-		this.btUndo.enabled = true; // this.btUndo.enabled  = this.entryList.areAnyEntriesEnabled(this.chkApplyGlobally.isChecked()) && this.entryList.hasChangedEntry(this.chkApplyGlobally.isChecked());
-		this.btReset.enabled = true; // this.btReset.enabled = this.entryList.areAnyEntriesEnabled(this.chkApplyGlobally.isChecked()) && !this.entryList.areAllEntriesDefault(this.chkApplyGlobally.isChecked());
+		this.btUndo.enabled  = this.entryList.isChanged();
+		this.btReset.enabled = !this.entryList.isDefault();
 		
 		super.drawScreen(mouseX, mouseY, partialTicks);
 		

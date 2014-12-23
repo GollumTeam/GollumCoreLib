@@ -144,6 +144,49 @@ public class GuiConfigEntries extends GuiListExtended {
 		
 	}
 	
+	public boolean isChanged() {
+		boolean changed = false;
+		
+		for(ConfigEntry entry : this.listEntries) {
+			if (entry.enabled() && entry.isChanged()) {
+				changed = true;
+				break;
+			}
+		}
+		
+		return changed;
+	}
+
+	public boolean isDefault() {
+		boolean isDefault = true;
+		
+		for(ConfigEntry entry : this.listEntries) {
+			if (entry.enabled() && !entry.isDefault()) {
+				isDefault = false;
+				break;
+			}
+		}
+		
+		return isDefault;
+	}
+	
+	public void setToDefault() {
+		for(ConfigEntry entry : this.listEntries) {
+			if (entry.enabled()) {
+				entry.setToDefault();
+			}
+		}
+	}
+
+	public void undoChanges() {
+		for(ConfigEntry entry : this.listEntries) {
+			if (entry.enabled()) {
+				entry.undoChanges();
+			}
+		}
+	}
+	
+	
 	/**
 	 * This method is a pass-through for IConfigEntry objects that contain
 	 * GuiTextField elements. Called from the parent GuiConfig screen.
@@ -176,5 +219,6 @@ public class GuiConfigEntries extends GuiListExtended {
 			entry.mouseClicked(mouseX, mouseY, mouseEvent);
 		}
 	}
+
 	
 }

@@ -47,10 +47,6 @@ public abstract class ConfigEntry implements IGuiListEntry {
 		return this.parent.parent.mod.i18n().trans("config."+this.configElement.getName());
 	}
 	
-	public boolean enabled() {
-		return this.mc.theWorld != null ? !this.configElement.getConfigProp().worldRestart() : true;
-	}
-	
 	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, Tessellator tessellator, int mouseX, int mouseY, boolean isSelected) {
 		
 		if (this.labelDisplay) {
@@ -73,13 +69,29 @@ public abstract class ConfigEntry implements IGuiListEntry {
 		this.btReset.enabled = this.enabled() && !this.isDefault();
 		this.btReset.drawButton(this.mc, mouseX, mouseY);
 	}
+
+	public abstract Object getValue();
+	
+	public abstract ConfigEntry setValue(Object value);
+	
+	public boolean enabled() {
+		return this.mc.theWorld != null ? !this.configElement.getConfigProp().worldRestart() : true;
+	}
 	
 	public boolean isChanged () {
-		return true; //  TODO
+		return !(configElement != null && configElement.getValue() != null && configElement.getValue().equals(this.getValue()));
 	}
 	
 	public boolean isDefault () {
-		return false; //  TODO
+		return configElement != null && configElement.getDefaultValue() != null && configElement.getDefaultValue().equals(this.getValue());
+	}
+	
+	public ConfigEntry setToDefault() {
+		return this.setValue(this.configElement.getDefaultValue());
+	}
+	
+	public ConfigEntry undoChanges() {
+		return this.setValue(this.configElement.getValue());
 	}
 	
 	/**
@@ -90,15 +102,16 @@ public abstract class ConfigEntry implements IGuiListEntry {
 		
 		if (this.btReset.mousePressed(this.mc, x, y)) {
 			btReset.func_146113_a(mc.getSoundHandler());
-//			this.setToDefault();
+			this.setToDefault();
 			return true;
 		} else if (this.btUndo.mousePressed(this.mc, x, y)) {
 			btUndo.func_146113_a(mc.getSoundHandler());
-//			this.undoChanges();
+			this.undoChanges();
 			return true;
 		}
 		return false;
 	}
+	
 
 	/**
 	 * Fired when the mouse button is released. Arguments: index, x, y, mouseEvent, relativeX, relativeY

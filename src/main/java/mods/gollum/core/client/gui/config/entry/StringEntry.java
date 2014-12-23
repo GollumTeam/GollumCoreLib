@@ -15,13 +15,14 @@ import net.minecraft.client.resources.I18n;
 public class StringEntry extends ConfigEntry {
 
 	protected GuiTextField textFieldValue;
+	private boolean first = true;
 	
 	public StringEntry(Minecraft mc, GuiConfigEntries parent, ConfigElement configElement) {
 		super(mc, parent, configElement);
 		
 		this.textFieldValue = new GuiTextField(this.mc.fontRenderer, this.parent.controlX + 1, 0, this.parent.controlWidth - 3, 16);
 		this.textFieldValue.setMaxStringLength(10000);
-		this.textFieldValue.setText(this.configElement.getValue().toString());
+		this.setValue(this.configElement.getValue().toString());
 	}
 	
 	@Override
@@ -29,11 +30,17 @@ public class StringEntry extends ConfigEntry {
 		
 		super.drawEntry(slotIndex, x, y, listWidth, slotHeight, tessellator, mouseX, mouseY, isSelected);
 		
+		if (this.first) {
+			this.first = false;
+			this.textFieldValue.setText(this.textFieldValue.getText());
+		}
+		
 		this.textFieldValue.xPosition = this.parent.controlX + 2;
 		this.textFieldValue.yPosition = y + 1;
 		this.textFieldValue.width = this.parent.controlWidth - 4;
 		this.textFieldValue.setEnabled(this.enabled());
 		this.textFieldValue.drawTextBox();
+		
 	}
 	
 	 @Override
@@ -49,6 +56,15 @@ public class StringEntry extends ConfigEntry {
 //					isValidValue = false;
 //			}
 		}
+	}
+	
+	public Object getValue() {
+		return textFieldValue.getText();
+	}
+	
+	public ConfigEntry setValue(Object value) {
+		this.textFieldValue.setText(value.toString());
+		return this;
 	}
 	
 	@Override

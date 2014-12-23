@@ -14,8 +14,9 @@ public class FieldElement extends ConfigElement {
 	
 	public FieldElement(Field f, ConfigProp prop, ConfigLoad configLoad) {
 		super(f.getName());
-		this.field = f;
-		this.prop = prop;
+		this.field      = f;
+		this.prop       = prop;
+		this.configLoad = configLoad;
 		
 		try {
 			this.value        = f.get(this.configLoad.config);
