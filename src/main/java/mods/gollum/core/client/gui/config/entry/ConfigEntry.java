@@ -47,6 +47,10 @@ public abstract class ConfigEntry implements IGuiListEntry {
 		return this.parent.parent.mod.i18n().trans("config."+this.configElement.getName());
 	}
 	
+	public String getName() {
+		return this.configElement.getName();
+	}
+	
 	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, Tessellator tessellator, int mouseX, int mouseY, boolean isSelected) {
 		
 		if (this.labelDisplay) {
@@ -128,4 +132,6 @@ public abstract class ConfigEntry implements IGuiListEntry {
 
 	public void updateCursorCounter() {
 	}
+
+	
 }

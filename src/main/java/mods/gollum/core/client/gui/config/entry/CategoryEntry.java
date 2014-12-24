@@ -7,12 +7,15 @@ import mods.gollum.core.client.gui.config.element.ConfigElement;
 import net.minecraft.client.Minecraft;
 
 public class CategoryEntry extends ButtonEntry {
-
+	
+	private Object value;
+	
 	public CategoryEntry(Minecraft mc, GuiConfigEntries parent, ConfigElement configElement) {
 		super(mc, parent, configElement);
 		
 		this.labelDisplay = false;
 		this.updateValueButtonText(this.getLabel());
+		this.value = this.configElement.getValue();;
 	}
 
 	@Override
@@ -22,11 +25,13 @@ public class CategoryEntry extends ButtonEntry {
 
 	@Override
 	public Object getValue() {
-		return this.configElement.getValue();
+		return this.value;
 	}
 
 	@Override
 	public ConfigEntry setValue(Object value) {
+		this.value = value;
+		log.debug("set value ", value);
 		return this;
 	}
 	

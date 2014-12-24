@@ -133,9 +133,12 @@ public abstract class GuiConfig extends GuiScreen {
 		
 	}
 	
+	public abstract void saveValue();
+	
 	@Override
 	protected void actionPerformed(GuiButton button) {
 		if (button.id == 2000) {
+			this.saveValue ();
 			this.mc.displayGuiScreen(this.parent);
 		} else if (button.id == 2001) {
 			this.entryList.setToDefault ();
@@ -193,7 +196,7 @@ public abstract class GuiConfig extends GuiScreen {
 			super.mouseClicked(x, y, mouseEvent);
 		}
 	}
-
+	
 	/**
 	 * Called when the mouse is moved or a mouse button is released. Signature:
 	 * (mouseX, mouseY, which) which==-1 is mouseMove, which==0 or which==1 is

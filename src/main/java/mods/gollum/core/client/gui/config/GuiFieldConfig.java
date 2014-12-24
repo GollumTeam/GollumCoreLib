@@ -51,5 +51,11 @@ public class GuiFieldConfig extends GuiConfig {
 		}
 		
 	}
+
+	@Override
+	public void saveValue() {
+		Object value = this.entryList.getValues();
+		this.parentEntry.setValue(value);
+	}
 	
 }

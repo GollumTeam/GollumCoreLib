@@ -27,5 +27,10 @@ public class GuiCategoryConfig extends GuiConfig {
 			configElements.add(new CategoryElement (category, this.configLoad));
 		}
 	}
+
+	@Override
+	public void saveValue() {
+		// TODO Auto-generated method stub
+	}
 	
 }

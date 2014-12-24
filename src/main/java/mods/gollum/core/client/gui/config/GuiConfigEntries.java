@@ -2,6 +2,7 @@ package mods.gollum.core.client.gui.config;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static mods.gollum.core.ModGollumCoreLib.log;
 import mods.gollum.core.client.gui.config.element.ConfigElement;
@@ -186,6 +187,15 @@ public class GuiConfigEntries extends GuiListExtended {
 		}
 	}
 	
+	public Object getValues() {
+		HashMap<String, Object> values = new HashMap<String, Object>();
+		for(ConfigEntry entry : this.listEntries) {
+			if (entry.enabled()) {
+				values.put(entry.getName(), entry.getValue());
+			}
+		}
+		return values;
+	}
 	
 	/**
 	 * This method is a pass-through for IConfigEntry objects that contain
@@ -220,5 +230,6 @@ public class GuiConfigEntries extends GuiListExtended {
 		}
 	}
 
+	
 	
 }
