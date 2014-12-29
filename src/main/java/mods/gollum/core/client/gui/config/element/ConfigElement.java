@@ -2,6 +2,7 @@ package mods.gollum.core.client.gui.config.element;
 
 import mods.gollum.core.client.gui.config.entry.ConfigEntry;
 import mods.gollum.core.client.gui.config.entry.StringEntry;
+import mods.gollum.core.common.config.ConfigLoader.ConfigLoad;
 import mods.gollum.core.common.config.ConfigProp;
 
 public abstract class ConfigElement {
