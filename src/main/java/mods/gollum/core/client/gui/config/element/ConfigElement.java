@@ -72,6 +72,14 @@ public abstract class ConfigElement {
 	 * @return the value
 	 */
 	public Object getValue() {
+		Object value = this.value;
+		
+		try {
+			Object cloned = value.getClass().getMethod("clone").invoke(value);
+			value = cloned;
+		} catch (Exception e) {
+		}
+		
 		return value;
 	}
 

@@ -6,6 +6,7 @@ import static mods.gollum.core.ModGollumCoreLib.log;
 import cpw.mods.fml.client.config.GuiButtonExt;
 import mods.gollum.core.client.gui.config.GuiConfigEntries;
 import mods.gollum.core.client.gui.config.element.ConfigElement;
+import mods.gollum.core.common.config.JsonConfigProp;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiListExtended.IGuiListEntry;
 import net.minecraft.client.renderer.Tessellator;
@@ -46,7 +47,7 @@ public abstract class ConfigEntry implements IGuiListEntry {
 	public String getLabel () {
 		return this.parent.parent.mod.i18n().trans("config."+this.configElement.getName());
 	}
-	
+
 	public String getName() {
 		return this.configElement.getName();
 	}
@@ -83,11 +84,23 @@ public abstract class ConfigEntry implements IGuiListEntry {
 	}
 	
 	public boolean isChanged () {
-		return !(configElement != null && configElement.getValue() != null && configElement.getValue().equals(this.getValue()));
+		return !(configElement != null && this.equals (configElement.getValue()));
 	}
 	
 	public boolean isDefault () {
-		return configElement != null && configElement.getDefaultValue() != null && configElement.getDefaultValue().equals(this.getValue());
+		return configElement != null && this.equals (configElement.getDefaultValue());
+	}
+
+	@Override
+	public boolean equals (Object value) {
+		if (value == null) {
+			return value == this.getValue();
+		}
+		if (value instanceof ConfigEntry) {
+			return ((ConfigEntry)value).getValue().equals(this.getValue());
+		}
+		
+		return value.equals(this.getValue());
 	}
 	
 	public ConfigEntry setToDefault() {
@@ -96,6 +109,10 @@ public abstract class ConfigEntry implements IGuiListEntry {
 	
 	public ConfigEntry undoChanges() {
 		return this.setValue(this.configElement.getValue());
+	}
+	
+	public boolean requiresMcRestart() {
+		return configElement.getConfigProp().mcRestart();
 	}
 	
 	/**

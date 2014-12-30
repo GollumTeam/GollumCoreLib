@@ -77,5 +77,9 @@ public class CategoryElement extends ConfigElement {
 		}
 		return null;
 	}
+	
+	public HashMap<String, ConfigProp> getProps() {
+		return this.props;
+	}
 
 }

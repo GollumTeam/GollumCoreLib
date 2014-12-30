@@ -13,6 +13,7 @@ public class TypedValueElement extends ConfigElement {
 	
 	public TypedValueElement(Class type, String name, Object value, Object defaultValue, ConfigProp prop) {
 		super(name);
+		this.type         = type;
 		this.value        = value;
 		this.defaultValue = defaultValue;
 		this.prop         = prop;

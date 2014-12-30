@@ -207,6 +207,16 @@ public class GuiConfigEntries extends GuiListExtended {
 		}
 	}
 	
+	public boolean requiresMcRestart() {
+		for (ConfigEntry entry : this.listEntries) {
+			if (entry.isChanged() && entry.requiresMcRestart()) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
 	/////////////
 	// Actions //
 	/////////////

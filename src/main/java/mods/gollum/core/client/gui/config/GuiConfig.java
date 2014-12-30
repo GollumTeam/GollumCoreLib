@@ -12,11 +12,13 @@ import mods.gollum.core.common.mod.GollumMod;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.util.ChatComponentText;
 
 import org.lwjgl.input.Keyboard;
 
 import cpw.mods.fml.client.GuiModList;
 import cpw.mods.fml.client.config.GuiButtonExt;
+import cpw.mods.fml.client.config.GuiMessageDialog;
 import cpw.mods.fml.client.config.GuiUnicodeGlyphButton;
 import cpw.mods.fml.client.config.HoverChecker;
 import cpw.mods.fml.common.ModContainer;
@@ -52,7 +54,7 @@ public abstract class GuiConfig extends GuiScreen {
 	
 	protected abstract void initConfigElement ();
 	
-	private GollumMod getMod() {
+	public GollumMod getMod() {
 		if (this.parent instanceof GuiModList) {
 			try {
 				Field f = parent.getClass().getDeclaredField("selectedMod");
@@ -135,11 +137,15 @@ public abstract class GuiConfig extends GuiScreen {
 	
 	public abstract void saveValue();
 	
+	public void displayParent() {
+		this.mc.displayGuiScreen(this.parent);
+	}
+	
 	@Override
 	protected void actionPerformed(GuiButton button) {
 		if (button.id == 2000) {
 			this.saveValue ();
-			this.mc.displayGuiScreen(this.parent);
+			this.displayParent();
 		} else if (button.id == 2001) {
 			this.entryList.setToDefault ();
 		} else if (button.id == 2002) {

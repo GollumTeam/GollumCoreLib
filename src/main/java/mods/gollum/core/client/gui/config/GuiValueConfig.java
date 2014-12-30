@@ -38,6 +38,13 @@ public class GuiValueConfig extends GuiConfig {
 			for (Entry<String, Object> entry : values.entrySet()) {
 				String name         = entry.getKey();
 				Object value        = entry.getValue();
+				
+				try {
+					Object cloned = value.getClass().getMethod("clone").invoke(value);
+					value = cloned;
+				} catch (Exception e) {
+				}
+				
 				Object defaultValue = dValues.get(name);
 				Class type          = ((CategoryElement)this.parentEntry.configElement).getType(name);
 				ConfigProp prop     = ((CategoryElement)this.parentEntry.configElement).getProp(name);
@@ -52,8 +59,26 @@ public class GuiValueConfig extends GuiConfig {
 
 	@Override
 	public void saveValue() {
-//		Object value = this.entryList.getValues();
-//		this.parentEntry.setValue(value);
+		
+		HashMap<String, Object> values    = (HashMap<String, Object>) this.parentEntry.getValue ();
+		HashMap<String, Object> newValues = (HashMap<String, Object>) this.entryList.getValues();
+		
+		for (Entry<String, Object> entry : values.entrySet()) {
+			if (newValues.containsKey(entry.getKey())) {
+				
+				Object value = newValues.get(entry.getKey());
+				
+				try {
+					Object cloned = value.getClass().getMethod("clone").invoke(value);
+					value = cloned;
+				} catch (Exception e) {
+				}
+				
+				values.put(entry.getKey(), value);
+			}
+		}
+		
+		this.parentEntry.setValue(values);
 	}
 	
 }
