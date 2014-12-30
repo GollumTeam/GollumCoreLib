@@ -140,7 +140,7 @@ public class HBlockPistonBase extends BlockPistonBase implements IBlockHelper {
 	@SideOnly(Side.CLIENT)
 	public IIcon getPistonExtensionTexture() {
 		if (helper.vanillaTexture) return super.getPistonExtensionTexture();
-		return this.iconSide;
+		return this.iconTop;
 	}
 	
 }

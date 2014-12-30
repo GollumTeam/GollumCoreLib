@@ -184,11 +184,11 @@ public class ModGollumCoreLib extends GollumMod {
 	private void initReflection() {
 		try {
 			
-			Reflection.enableSynchronized (WorldServer.class.getDeclaredMethod(Reflection.getObfuscateName(WorldStub.class, "scheduleBlockUpdateWithPriority"), WorldStub.class));
-			Reflection.enableSynchronized (WorldServer.class.getDeclaredMethod(Reflection.getObfuscateName(WorldStub.class, "tickUpdates"                    ), WorldStub.class));
-			Reflection.enableSynchronized (WorldServer.class.getDeclaredMethod(Reflection.getObfuscateName(WorldStub.class, "func_147446_b"                  ), WorldStub.class));
-			Reflection.enableSynchronized (WorldServer.class.getDeclaredMethod(Reflection.getObfuscateName(WorldStub.class, "getPendingBlockUpdates"         ), WorldStub.class));
-			Reflection.enableSynchronized (WorldServer.class.getDeclaredMethod(Reflection.getObfuscateName(WorldStub.class, "initialize"                     ), WorldStub.class));
+			Reflection.enableSynchronized (Reflection.getObfuscateMethod(WorldServer.class, WorldStub.class, "scheduleBlockUpdateWithPriority"));
+			Reflection.enableSynchronized (Reflection.getObfuscateMethod(WorldServer.class, WorldStub.class, "tickUpdates"                    ));
+			Reflection.enableSynchronized (Reflection.getObfuscateMethod(WorldServer.class, WorldStub.class, "func_147446_b"                  ));
+			Reflection.enableSynchronized (Reflection.getObfuscateMethod(WorldServer.class, WorldStub.class, "getPendingBlockUpdates"         ));
+			Reflection.enableSynchronized (Reflection.getObfuscateMethod(WorldServer.class, WorldStub.class, "initialize"                     ));
 			
 		} catch (Exception e) {
 			e.printStackTrace();
