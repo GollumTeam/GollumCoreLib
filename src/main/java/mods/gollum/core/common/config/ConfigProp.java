@@ -18,15 +18,17 @@ public @interface ConfigProp {
 	}
 	
 	public abstract String name() default "";
+
+	public abstract boolean show() default true; // DONE
 	
 	public abstract String info() default "";
 	
-	public abstract String group() default "";
+	public abstract String group() default ""; // DONE
 	
 	public abstract String[] validValues() default "";
 	
-	public abstract String minValue() default "";
-	public abstract String maxValue() default "";
+	public abstract String minValue() default ""; // DONE (NUMBER, STRING)
+	public abstract String maxValue() default ""; // DONE (NUMBER, STRING)
 	
 	public abstract boolean isListLengthFixed() default false;
 	public abstract String  maxListLength()     default "";

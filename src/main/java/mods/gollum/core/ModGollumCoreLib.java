@@ -1,28 +1,29 @@
 
 package mods.gollum.core;
 
-import java.lang.reflect.Method;
-
 import mods.gollum.core.common.CommonProxyGolumCoreLib;
-import mods.gollum.core.common.blocks.BlockProximitySpawn;
 import mods.gollum.core.common.command.CommandBuilding;
 import mods.gollum.core.common.config.ConfigGollumCoreLib;
 import mods.gollum.core.common.context.ModContext;
 import mods.gollum.core.common.creativetab.GollumCreativeTabs;
 import mods.gollum.core.common.event.WorldHandler;
 import mods.gollum.core.common.i18n.I18n;
-import mods.gollum.core.common.items.ItemBuilding;
 import mods.gollum.core.common.log.Logger;
 import mods.gollum.core.common.mod.GollumMod;
 import mods.gollum.core.common.reflection.WorldStub;
-import mods.gollum.core.common.tileentities.TileEntityBlockProximitySpawn;
 import mods.gollum.core.common.version.VersionChecker;
 import mods.gollum.core.common.worldgenerator.WorldGeneratorByBuilding;
 import mods.gollum.core.common.worldgenerator.WorldGeneratorByBuildingLoader;
+import mods.gollum.core.inits.ModBlocks;
+import mods.gollum.core.inits.ModItems;
+import mods.gollum.core.inits.ModTileEntities;
 import mods.gollum.core.tools.registry.BlockRegistry;
 import mods.gollum.core.tools.registry.ItemRegistry;
 import mods.gollum.core.utils.reflection.Reflection;
+import net.minecraft.block.Block;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.WorldSettings;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -73,9 +74,6 @@ public class ModGollumCoreLib extends GollumMod {
 	 */
 	public static GollumCreativeTabs tabBuildingStaff = new GollumCreativeTabs("BuildingStaff");;
 	
-	public static BlockProximitySpawn blockProximitySpawn;
-	public static ItemBuilding itemBuilding;
-	
 	@EventHandler public void handler(FMLInitializationEvent event)     { super.handler (event); }
 	@EventHandler public void handler(FMLPostInitializationEvent event) { super.handler (event); }
 	
@@ -112,10 +110,10 @@ public class ModGollumCoreLib extends GollumMod {
 		new VersionChecker();
 
 		// Initialisation des blocks
-		this.initBlocks ();
+		ModBlocks.init ();
 		
 		// Initialisation des items
-		this.initItem ();
+		ModItems.init ();
 
 		// Initialisation des reflection sur vanilla
 		this.initReflection();
@@ -132,10 +130,10 @@ public class ModGollumCoreLib extends GollumMod {
 		this.proxy.registerEvents();
 		
 		// Initialisation les TileEntities
-		this.initTileEntities ();
+		ModTileEntities.init();
 		
 		// Set de l'icon du tab creative
-		this.tabBuildingStaff.setIcon(this.itemBuilding);
+		this.tabBuildingStaff.setIcon(ModItems.itemBuilding);
 		
 		MinecraftForge.EVENT_BUS.register(new WorldHandler());
 	}
@@ -149,33 +147,6 @@ public class ModGollumCoreLib extends GollumMod {
 	@EventHandler
 	public void serverStarting(FMLServerStartingEvent event) {
 		event.registerServerCommand(new CommandBuilding());
-	}
-	
-	/**
-	 * // Nom des TileEntities
-	 */
-	private void initTileEntities () {
-		GameRegistry.registerTileEntity(TileEntityBlockProximitySpawn.class, "GollumCoreLib:BlockProximitySpawn");
-	}
-	
-	/**
-	 * Initialisation des blocks
-	 */
-	public void initBlocks () {
-		
-		// Création des blocks
-		this.blockProximitySpawn = new BlockProximitySpawn ("BlockProximitySpawn");
-		
-	}
-	
-	/**
-	 * Initialisation des items
-	 */
-	public void initItem () {
-		
-		// Création des items
-		this.itemBuilding = (ItemBuilding)new ItemBuilding("ItemBuilding").setCreativeTab(this.tabBuildingStaff);
-		
 	}
 	
 	/**
