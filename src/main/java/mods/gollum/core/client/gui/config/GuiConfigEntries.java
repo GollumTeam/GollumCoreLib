@@ -1,15 +1,14 @@
 package mods.gollum.core.client.gui.config;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import static mods.gollum.core.ModGollumCoreLib.log;
+
+import java.util.ArrayList;
+import java.util.TreeMap;
+
 import mods.gollum.core.client.gui.config.element.ConfigElement;
 import mods.gollum.core.client.gui.config.entry.ConfigEntry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiListExtended;
-import net.minecraft.client.gui.GuiSlot;
 import net.minecraft.client.renderer.Tessellator;
 
 public class GuiConfigEntries extends GuiListExtended {
@@ -109,19 +108,6 @@ public class GuiConfigEntries extends GuiListExtended {
 		return maxSizeEntry;
 	}
 	
-	public int getMaxValueSizeEntry () {
-		int maxSizeEntry = 0;
-		for (ConfigEntry entry : this.listEntries) {
-			
-			int size = entry.getValueWidth();
-			
-			if (maxSizeEntry < size) {
-				maxSizeEntry = size;
-			}
-		}
-		return maxSizeEntry;
-	}
-	
 	public void initGui() {
 		
 		this.width = this.parent.width;
@@ -133,10 +119,9 @@ public class GuiConfigEntries extends GuiListExtended {
 		this.right  = width;
 		
 		int maxLabel = this.getMaxLabelSizeEntry();
-		int maxValue = this.getMaxValueSizeEntry();
 		
 		int viewWidth = maxLabel + 8 + (width / 2);
-
+		
 		this.labelX = (this.width / 2) - (viewWidth / 2);
 		this.controlX = this.labelX + maxLabel + 8;
 		this.resetX = (this.width / 2) + (viewWidth / 2) - 45;
@@ -170,6 +155,19 @@ public class GuiConfigEntries extends GuiListExtended {
 		
 		return isDefault;
 	}
+
+	public boolean isValidValues() {
+		boolean isValid = true;
+		
+		for(ConfigEntry entry : this.listEntries) {
+			if (entry.enabled() && !entry.isValidValue()) {
+				isValid = false;
+				break;
+			}
+		}
+		
+		return isValid;
+	}
 	
 	public void setToDefault() {
 		for(ConfigEntry entry : this.listEntries) {
@@ -188,10 +186,12 @@ public class GuiConfigEntries extends GuiListExtended {
 	}
 	
 	public Object getValues() {
-		HashMap<String, Object> values = new HashMap<String, Object>();
+		TreeMap<String, Object> values = new TreeMap<String, Object>();
 		for(ConfigEntry entry : this.listEntries) {
-			if (entry.enabled()) {
+			if (entry.enabled() && entry.isValidValue()) {
 				values.put(entry.getName(), entry.getValue());
+			} else {
+				values.put(entry.getName(), entry.configElement.getValue());
 			}
 		}
 		return values;
@@ -239,7 +239,5 @@ public class GuiConfigEntries extends GuiListExtended {
 			entry.mouseClicked(mouseX, mouseY, mouseEvent);
 		}
 	}
-
-	
 	
 }

@@ -1,6 +1,10 @@
 package mods.gollum.core.client.gui.config.element;
 
+import mods.gollum.core.client.gui.config.entry.ByteEntry;
 import mods.gollum.core.client.gui.config.entry.ConfigEntry;
+import mods.gollum.core.client.gui.config.entry.IntegerEntry;
+import mods.gollum.core.client.gui.config.entry.LongEntry;
+import mods.gollum.core.client.gui.config.entry.ShortEntry;
 import mods.gollum.core.client.gui.config.entry.StringEntry;
 import mods.gollum.core.common.config.ConfigLoader.ConfigLoad;
 import mods.gollum.core.common.config.ConfigProp;
@@ -27,11 +31,11 @@ public abstract class ConfigElement {
 //		if (Json           .class.isAssignableFrom(clazz)) { return JsonEntry          .class; }
 //		if (IConfigJsonType.class.isAssignableFrom(clazz)) { return ConfigJsonTypeEntry.class; }
 		if (String         .class.isAssignableFrom(clazz)) { return StringEntry        .class; }
-//		if (Long           .class.isAssignableFrom(clazz) || Long     .TYPE.isAssignableFrom(clazz)) { return IntegerEntry.class; }
-//		if (Integer        .class.isAssignableFrom(clazz) || Integer  .TYPE.isAssignableFrom(clazz)) { return IntegerEntry.class; }
-//		if (Short          .class.isAssignableFrom(clazz) || Short    .TYPE.isAssignableFrom(clazz)) { return IntegerEntry.class; }
-//		if (Integer        .class.isAssignableFrom(clazz) || Byte     .TYPE.isAssignableFrom(clazz)) { return IntegerEntry.class; }
-//		if (Character      .class.isAssignableFrom(clazz) || Character.TYPE.isAssignableFrom(clazz)) { return IntegerEntry.class; }
+		if (Long           .class.isAssignableFrom(clazz) || Long     .TYPE.isAssignableFrom(clazz)) { return LongEntry.class; }
+		if (Integer        .class.isAssignableFrom(clazz) || Integer  .TYPE.isAssignableFrom(clazz)) { return IntegerEntry.class; }
+		if (Short          .class.isAssignableFrom(clazz) || Short    .TYPE.isAssignableFrom(clazz)) { return ShortEntry.class; }
+		if (Byte           .class.isAssignableFrom(clazz) || Byte     .TYPE.isAssignableFrom(clazz)) { return ByteEntry.class; }
+		if (Character      .class.isAssignableFrom(clazz) || Character.TYPE.isAssignableFrom(clazz)) { return ByteEntry.class; }
 //		if (Double         .class.isAssignableFrom(clazz) || Double   .TYPE.isAssignableFrom(clazz)) { return DoubleEntry .class; }
 //		if (Float          .class.isAssignableFrom(clazz) || Float    .TYPE.isAssignableFrom(clazz)) { return DoubleEntry .class; }
 //		if (Boolean        .class.isAssignableFrom(clazz) || Boolean  .TYPE.isAssignableFrom(clazz)) { return BooleanEntry.class; }
@@ -104,6 +108,96 @@ public abstract class ConfigElement {
 	public ConfigElement setDefaultValue(Object defaultValue) {
 		this.defaultValue = defaultValue;
 		return this;
+	}
+
+	public Long getMin() {
+
+		Long min = null;
+		String str = this.getConfigProp().minValue();
+		Class clazz = this.getEntryClass();
+		
+		if (str != null && !str.equals("")) {
+			try {
+				min = Long.parseLong(str);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		if (min == null) {
+			if (clazz == LongEntry.class) {
+				min = Long.MIN_VALUE;
+			}
+			if (clazz == IntegerEntry.class) {
+				min = (long)Integer.MIN_VALUE;
+			}
+			if (clazz == ShortEntry.class) {
+				min = (long)Short.MIN_VALUE;
+			}
+			if (clazz == ByteEntry.class) {
+				min = (long)Byte.MIN_VALUE;
+			}
+		} else {
+			if (clazz == LongEntry.class && min < Long.MIN_VALUE) {
+				min = Long.MIN_VALUE;
+			}
+			if (clazz == IntegerEntry.class && min < Integer.MIN_VALUE) {
+				min = (long)Integer.MIN_VALUE;
+			}
+			if (clazz == ShortEntry.class && min < Short.MIN_VALUE) {
+				min = (long)Short.MIN_VALUE;
+			}
+			if (clazz == ByteEntry.class && min < Byte.MIN_VALUE) {
+				min = (long)Byte.MIN_VALUE;
+			}
+		}
+		
+		return min;
+	}
+
+	public Long getMax() {
+		
+		Long max = null;
+		String str = this.getConfigProp().maxValue();
+		Class clazz = this.getEntryClass();
+		
+		if (str != null && !str.equals("")) {
+			try {
+				max = Long.parseLong(str);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		if (max == null) {
+			if (clazz == LongEntry.class) {
+				max = Long.MAX_VALUE;
+			}
+			if (clazz == IntegerEntry.class) {
+				max = (long)Integer.MAX_VALUE;
+			}
+			if (clazz == ShortEntry.class) {
+				max = (long)Short.MAX_VALUE;
+			}
+			if (clazz == ByteEntry.class) {
+				max = (long)Byte.MAX_VALUE;
+			}
+		} else {
+			if (clazz == LongEntry.class && max > Long.MAX_VALUE) {
+				max = Long.MAX_VALUE;
+			}
+			if (clazz == IntegerEntry.class && max > Integer.MAX_VALUE) {
+				max = (long)Integer.MAX_VALUE;
+			}
+			if (clazz == ShortEntry.class && max > Short.MAX_VALUE) {
+				max = (long)Short.MAX_VALUE;
+			}
+			if (clazz == ByteEntry.class && max > Byte.MAX_VALUE) {
+				max = (long)Byte.MAX_VALUE;
+			}
+		}
+		
+		return max;
 	}
 
 }

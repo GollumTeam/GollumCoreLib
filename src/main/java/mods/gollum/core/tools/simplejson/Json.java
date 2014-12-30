@@ -140,7 +140,7 @@ public class Json implements Cloneable {
 	public int     intValue()    { return new Long     (longValue()) .intValue()  ; }
 	public short   shortValue()  { return new Integer  (intValue())  .shortValue(); }
 	public byte    byteValue()   { return new Short    (shortValue()).byteValue() ; }
-	public char    charValue()   { return (char)(shortValue() & 0x00FF); }
+	public char    charValue()   { return (char)(this.byteValue()); }
 	public float   floatValue()  { try { return Float.parseFloat     (this.strValue()); } catch (Exception e) {} return 0; }
 	public double  doubleValue() { try { return Double.parseDouble   (this.strValue()); } catch (Exception e) {} return 0; }
 	public boolean boolValue()   { try { return Boolean.parseBoolean (this.strValue()); } catch (Exception e) {} return false; }

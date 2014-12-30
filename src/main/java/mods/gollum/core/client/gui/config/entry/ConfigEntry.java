@@ -40,10 +40,6 @@ public abstract class ConfigEntry implements IGuiListEntry {
 		return mc.fontRenderer.getStringWidth(this.getLabel());
 	}
 	
-	public int getValueWidth() {
-		return 200; // TODO
-	}
-	
 	public String getLabel () {
 		return this.parent.parent.mod.i18n().trans("config."+this.configElement.getName());
 	}
@@ -56,11 +52,8 @@ public abstract class ConfigEntry implements IGuiListEntry {
 		
 		if (this.labelDisplay) {
 			
-//			String label = (!isValidValue ? EnumChatFormatting.RED.toString() :
-//				(isChanged ? EnumChatFormatting.WHITE.toString() : EnumChatFormatting.GRAY.toString()))
-//			+ (isChanged ? EnumChatFormatting.ITALIC.toString() : "") + this.name;
-		
-			String label = this.getLabel();
+			String label = (!this.isValidValue() ? EnumChatFormatting.RED.toString() : (this.isChanged() ? EnumChatFormatting.WHITE.toString() : EnumChatFormatting.GRAY.toString())) + (this.isChanged() ? EnumChatFormatting.ITALIC.toString() : "") + this.getLabel();
+			
 			this.mc.fontRenderer.drawString(label, this.parent.labelX, y + slotHeight / 2 - this.mc.fontRenderer.FONT_HEIGHT / 2, 0xFFFFFF);
 		}
 		
@@ -74,7 +67,7 @@ public abstract class ConfigEntry implements IGuiListEntry {
 		this.btReset.enabled = this.enabled() && !this.isDefault();
 		this.btReset.drawButton(this.mc, mouseX, mouseY);
 	}
-
+	
 	public abstract Object getValue();
 	
 	public abstract ConfigEntry setValue(Object value);
@@ -89,6 +82,10 @@ public abstract class ConfigEntry implements IGuiListEntry {
 	
 	public boolean isDefault () {
 		return configElement != null && this.equals (configElement.getDefaultValue());
+	}
+	
+	public boolean isValidValue() {
+		return true;
 	}
 
 	@Override

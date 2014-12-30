@@ -12,13 +12,11 @@ import mods.gollum.core.common.mod.GollumMod;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.ChatComponentText;
 
 import org.lwjgl.input.Keyboard;
 
 import cpw.mods.fml.client.GuiModList;
 import cpw.mods.fml.client.config.GuiButtonExt;
-import cpw.mods.fml.client.config.GuiMessageDialog;
 import cpw.mods.fml.client.config.GuiUnicodeGlyphButton;
 import cpw.mods.fml.client.config.HoverChecker;
 import cpw.mods.fml.common.ModContainer;
@@ -174,7 +172,8 @@ public abstract class GuiConfig extends GuiScreen {
 			}
 			this.drawCenteredString(this.fontRendererObj, title2, this.width / 2, 18, 16777215);
 		}
-
+		
+		this.btDone.enabled  = this.entryList.isValidValues();
 		this.btUndo.enabled  = this.entryList.isChanged();
 		this.btReset.enabled = !this.entryList.isDefault();
 		

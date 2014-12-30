@@ -63,7 +63,11 @@ public class Logger {
 		int i = 0;
 		for (Object s : list) {
 			if (i != 0) builder.append(", ");
-			builder.append(s.toString());
+			if (s == null) {
+				builder.append("null");
+			} else {
+				builder.append(s.toString());
+			}
 			i++;
 		}
 		

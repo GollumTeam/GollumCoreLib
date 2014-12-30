@@ -37,7 +37,7 @@ public class ItemStackConfigType implements IConfigJsonType {
 	@Override
 	public void readConfig(Json dom) {
 		this.registerName = dom.child("registerName").strValue();
-		this.metadata     = dom.child("metadata")    .charValue();
+		this.metadata     = dom.child("metadata")    .byteValue();
 		this.number       = dom.child("number")      .intValue();
 	}
 

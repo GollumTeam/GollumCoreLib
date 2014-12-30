@@ -73,17 +73,22 @@ public class ConfigGollumCoreLib extends Config {
 //	@ConfigProp(group="Test") public  ItemStackConfigType itemStack1 = new ItemStackConfigType("minecraft:planks", 10, 3);
 //	@ConfigProp(group="Test") public  ItemStackConfigType[] itemStackAr1 = new ItemStackConfigType[] { new ItemStackConfigType("minecraft:planks", 10, 3), new ItemStackConfigType("minecraft:planks", 10, 3) };
 //	
-//	@ConfigProp(group="Test") public String    s1 = "AAA";
-//	@ConfigProp(group="Test") public long      l1 = 11111;
-//	@ConfigProp(group="Test") public Long      l2 = 22223L;
-//	@ConfigProp(group="Test") public int       i1 = 1111;
-//	@ConfigProp(group="Test") public Integer   i2 = 2222;
-//	@ConfigProp(group="Test") public short     w1 = 111;
-//	@ConfigProp(group="Test") public Short     w2 = 222;
-//	@ConfigProp(group="Test") public byte      b1 = 11;
-//	@ConfigProp(group="Test") public Byte      b2 = 22;
-//	@ConfigProp(group="Test") public char      c1 = 1;
-//	@ConfigProp(group="Test") public Character c2 = 2;
+	
+	@ConfigProp(group="Test", show=false)
+	public String hide = "Value is Hide";
+	
+	@ConfigProp(group="Test", minValue="7", maxValue="10")
+	public String maxSize = "ABCDEFGHIJ";
+	
+	@ConfigProp(group="Test") public String    s1 = "AAA";
+	@ConfigProp(group="Test") public long      l1 = 11111;
+	@ConfigProp(group="Test") public Long      l2 = 22223L;
+	@ConfigProp(group="Test") public int       i1 = 1111;
+	@ConfigProp(group="Test") public Integer   i2 = 2222;
+	@ConfigProp(group="Test") public short     w1 = 111;
+	@ConfigProp(group="Test") public Short     w2 = 222;
+	@ConfigProp(group="Test") public byte      b1 = 11;
+	@ConfigProp(group="Test") public Byte      b2 = 22;
 //	@ConfigProp(group="Test") public float     f1 = 1.5F;
 //	@ConfigProp(group="Test") public Float     f2 = 2.5F;
 //	@ConfigProp(group="Test") public double    d1 = 1.3D;

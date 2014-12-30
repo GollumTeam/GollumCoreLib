@@ -1,9 +1,6 @@
 
 package mods.gollum.core;
 
-import java.lang.reflect.Method;
-import java.util.List;
-
 import mods.gollum.core.common.CommonProxyGolumCoreLib;
 import mods.gollum.core.common.command.CommandBuilding;
 import mods.gollum.core.common.config.ConfigGollumCoreLib;
@@ -14,7 +11,6 @@ import mods.gollum.core.common.i18n.I18n;
 import mods.gollum.core.common.log.Logger;
 import mods.gollum.core.common.mod.GollumMod;
 import mods.gollum.core.common.reflection.WorldStub;
-import mods.gollum.core.common.tileentities.TileEntityBlockProximitySpawn;
 import mods.gollum.core.common.version.VersionChecker;
 import mods.gollum.core.common.worldgenerator.WorldGeneratorByBuilding;
 import mods.gollum.core.common.worldgenerator.WorldGeneratorByBuildingLoader;
@@ -23,14 +19,11 @@ import mods.gollum.core.inits.ModItems;
 import mods.gollum.core.inits.ModTileEntities;
 import mods.gollum.core.tools.registry.BlockRegistry;
 import mods.gollum.core.tools.registry.ItemRegistry;
-import mods.gollum.core.utils.reflection.DeobfuscateName;
 import mods.gollum.core.utils.reflection.Reflection;
 import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldSettings;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;

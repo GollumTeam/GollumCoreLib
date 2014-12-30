@@ -1,19 +1,17 @@
 package mods.gollum.core.client.gui.config.entry;
 
-import static mods.gollum.core.ModGollumCoreLib.log;
-
-import java.util.HashMap;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
-import cpw.mods.fml.client.config.GuiMessageDialog;
+import static mods.gollum.core.ModGollumCoreLib.log;
 import mods.gollum.core.client.gui.config.GuiConfigEntries;
 import mods.gollum.core.client.gui.config.GuiValueConfig;
 import mods.gollum.core.client.gui.config.element.CategoryElement;
 import mods.gollum.core.client.gui.config.element.ConfigElement;
 import mods.gollum.core.common.config.ConfigProp;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.ChatComponentText;
 
 public class CategoryEntry extends ButtonEntry {
 	
@@ -62,34 +60,54 @@ public class CategoryEntry extends ButtonEntry {
 	@Override
 	public boolean equals (Object values) {
 		
-		if (value instanceof HashMap) {
-			boolean equal = true;
+		if (value instanceof TreeMap) {
 			
-			for (Object key : ((HashMap)values).keySet()) {
-				if (((HashMap) this.value).containsKey(key)) {
+			for (Object key : ((TreeMap)values).keySet()) {
+				if (((TreeMap) this.value).containsKey(key)) {
 					
-					Object value    = ((HashMap)values).get(key);
-					Object oldValue = ((HashMap) this.value).get(key);
+					Object value    = ((TreeMap)values).get(key);
+					Object oldValue = ((TreeMap) this.value).get(key);
 					
-					if (
-						(oldValue == null && oldValue != value ) ||
-						(oldValue != null && ! oldValue.equals(value))
-					) {
-						equal = false;
-						break;
+					if (oldValue == null && oldValue != value) {
+						return false;
+					} else {
+						
+						if (value == null) {
+							return false;
+						}
+						if (oldValue.getClass().isArray()) {
+							
+							int length = Array.getLength(oldValue);
+							if (length != Array.getLength(value)) {
+								return false;
+							}
+							for (int i = 0; i < length; i++) {
+								Object nv = Array.get(value, i);
+								Object ov = Array.get(oldValue, i);
+								if (!nv.equals(ov)) {
+									return false;
+								}
+							}
+							
+						} else if (!oldValue.equals(value)) {
+							return false;
+						}
 					}
 					
 				} else {
-					equal = false;
-					break;
+					return false;
 				}
 			}
 			
-			return equal;
+			return true;
 		}
 		
 		return super.equals(values);
 	}
 	
+	@Override
+	public boolean isValidValue() {
+		return true;
+	}
 	
 }

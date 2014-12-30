@@ -1,17 +1,13 @@
 package mods.gollum.core.client.gui.config;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map.Entry;
-
 import static mods.gollum.core.ModGollumCoreLib.log;
+
+import java.util.Map.Entry;
+import java.util.TreeMap;
+
 import mods.gollum.core.client.gui.config.element.CategoryElement;
 import mods.gollum.core.client.gui.config.element.TypedValueElement;
 import mods.gollum.core.client.gui.config.entry.CategoryEntry;
-import mods.gollum.core.common.config.ConfigLoader;
-import mods.gollum.core.common.config.JsonConfigProp;
-import mods.gollum.core.common.config.ConfigLoader.ConfigLoad;
 import mods.gollum.core.common.config.ConfigProp;
 
 public class GuiValueConfig extends GuiConfig {
@@ -32,8 +28,8 @@ public class GuiValueConfig extends GuiConfig {
 		
 		try {
 			
-			HashMap<String, Object> values  = (HashMap<String, Object>)this.parentEntry.getValue();
-			HashMap<String, Object> dValues = (HashMap<String, Object>)this.parentEntry.configElement.getDefaultValue();
+			TreeMap<String, Object> values  = (TreeMap<String, Object>)this.parentEntry.getValue();
+			TreeMap<String, Object> dValues = (TreeMap<String, Object>)this.parentEntry.configElement.getDefaultValue();
 			
 			for (Entry<String, Object> entry : values.entrySet()) {
 				String name         = entry.getKey();
@@ -60,8 +56,8 @@ public class GuiValueConfig extends GuiConfig {
 	@Override
 	public void saveValue() {
 		
-		HashMap<String, Object> values    = (HashMap<String, Object>) this.parentEntry.getValue ();
-		HashMap<String, Object> newValues = (HashMap<String, Object>) this.entryList.getValues();
+		TreeMap<String, Object> values    = (TreeMap<String, Object>) this.parentEntry.getValue ();
+		TreeMap<String, Object> newValues = (TreeMap<String, Object>) this.entryList.getValues();
 		
 		for (Entry<String, Object> entry : values.entrySet()) {
 			if (newValues.containsKey(entry.getKey())) {

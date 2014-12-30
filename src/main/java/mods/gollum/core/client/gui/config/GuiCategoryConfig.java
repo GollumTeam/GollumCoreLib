@@ -1,18 +1,18 @@
 package mods.gollum.core.client.gui.config;
 
-import java.lang.reflect.Field;
+import static mods.gollum.core.ModGollumCoreLib.log;
+
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.TreeMap;
 import java.util.Map.Entry;
 
-import static mods.gollum.core.ModGollumCoreLib.log;
-import cpw.mods.fml.client.config.GuiMessageDialog;
 import mods.gollum.core.client.gui.config.element.CategoryElement;
 import mods.gollum.core.common.config.ConfigLoader;
 import mods.gollum.core.common.config.ConfigLoader.ConfigLoad;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ChatComponentText;
+import cpw.mods.fml.client.config.GuiMessageDialog;
 
 public class GuiCategoryConfig extends GuiConfig {
 	
@@ -46,8 +46,8 @@ public class GuiCategoryConfig extends GuiConfig {
 	public void saveValue() {
 		log.info("Save configuration "+this.getMod());
 		
-		HashMap<String, Object> values = new HashMap<String, Object>();
-		for (Entry<String, HashMap<String, Object>> entry : ((HashMap<String, HashMap<String, Object>>)this.entryList.getValues()).entrySet()) {
+		TreeMap<String, Object> values = new TreeMap<String, Object>();
+		for (Entry<String, TreeMap<String, Object>> entry : ((TreeMap<String, TreeMap<String, Object>>)this.entryList.getValues()).entrySet()) {
 			values.putAll(entry.getValue());
 		}
 		

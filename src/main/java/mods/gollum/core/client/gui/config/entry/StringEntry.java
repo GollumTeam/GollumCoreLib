@@ -45,7 +45,7 @@ public class StringEntry extends ConfigEntry {
 	
 	 @Override
 	public void keyTyped(char eventChar, int eventKey) {
-		if (enabled() || eventKey == Keyboard.KEY_LEFT || eventKey == Keyboard.KEY_RIGHT || eventKey == Keyboard.KEY_HOME || eventKey == Keyboard.KEY_END) {
+		if ((this.enabled() && this.validKeyTyped(eventChar)) || (eventKey == Keyboard.KEY_LEFT || eventKey == Keyboard.KEY_RIGHT || eventKey == Keyboard.KEY_HOME || eventKey == Keyboard.KEY_END)) {
 			this.textFieldValue.textboxKeyTyped((enabled() ? eventChar : Keyboard.CHAR_NONE), eventKey);
 			
 			// TODO
@@ -58,6 +58,25 @@ public class StringEntry extends ConfigEntry {
 		}
 	}
 	
+	protected boolean validKeyTyped(char eventChar) {
+		if (eventChar > 31) {
+			Long max = this.configElement.getMax();
+			if (max != null) {
+				return ((String)this.getValue()).length() < max;
+			}
+		} else {
+			if (eventChar == 8) {
+				Long min = this.configElement.getMin();
+				log.debug ( min);
+				if (min != null) {
+					return ((String)this.getValue()).length() > min;
+				}
+			}
+		}
+		
+		return true;
+	}
+
 	public Object getValue() {
 		return textFieldValue.getText();
 	}
@@ -81,5 +100,23 @@ public class StringEntry extends ConfigEntry {
 	public void mouseClicked(int x, int y, int mouseEvent) {
 		this.textFieldValue.mouseClicked(x, y, mouseEvent);
 		super.mouseClicked(x, y, mouseEvent);
+	}
+	
+	@Override
+	public boolean isValidValue() {
+		
+		Long max = this.configElement.getMax();
+		if (max != null) {
+			if (((String)this.getValue()).length() > max) {
+				return false;
+			}
+		}
+		Long min = this.configElement.getMin();
+		if (min != null) {
+			if (((String)this.getValue()).length() < min) {
+				return false;
+			}
+		}
+		return true;
 	}
 }

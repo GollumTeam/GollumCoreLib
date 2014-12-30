@@ -2,11 +2,12 @@ package mods.gollum.core.client.gui.config.element;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.TreeMap;
 
 import mods.gollum.core.client.gui.config.entry.CategoryEntry;
 import mods.gollum.core.client.gui.config.entry.ConfigEntry;
-import mods.gollum.core.common.config.ConfigProp;
 import mods.gollum.core.common.config.ConfigLoader.ConfigLoad;
+import mods.gollum.core.common.config.ConfigProp;
 import mods.gollum.core.common.config.JsonConfigProp;
 
 public class CategoryElement extends ConfigElement {
@@ -20,13 +21,13 @@ public class CategoryElement extends ConfigElement {
 		
 		this.configLoad = configLoad;
 		
-		HashMap<String, Object> value        = new HashMap<String, Object>();
-		HashMap<String, Object> defaultValue = new HashMap<String, Object>();
+		TreeMap<String, Object> value        = new TreeMap<String, Object>();
+		TreeMap<String, Object> defaultValue = new TreeMap<String, Object>();
 		
 		for (Field f : this.configLoad.config.getClass().getDeclaredFields()) {
 			
 			ConfigProp prop = f.getAnnotation(ConfigProp.class);
-			if (prop != null) {
+			if (prop != null && prop.show()) {
 				
 				String c = prop.group();
 				if (c == null || c.equals("")) {
