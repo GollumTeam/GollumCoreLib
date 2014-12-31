@@ -1,5 +1,6 @@
 package mods.gollum.core.client.gui.config.element;
 
+import mods.gollum.core.client.gui.config.entry.BooleanEntry;
 import mods.gollum.core.client.gui.config.entry.ByteEntry;
 import mods.gollum.core.client.gui.config.entry.ConfigEntry;
 import mods.gollum.core.client.gui.config.entry.DoubleEntry;
@@ -40,7 +41,7 @@ public abstract class ConfigElement {
 		if (Character      .class.isAssignableFrom(clazz) || Character.TYPE.isAssignableFrom(clazz)) { return ByteEntry.class; }
 		if (Double         .class.isAssignableFrom(clazz) || Double   .TYPE.isAssignableFrom(clazz)) { return DoubleEntry .class; }
 		if (Float          .class.isAssignableFrom(clazz) || Float    .TYPE.isAssignableFrom(clazz)) { return FloatEntry .class; }
-//		if (Boolean        .class.isAssignableFrom(clazz) || Boolean  .TYPE.isAssignableFrom(clazz)) { return BooleanEntry.class; }
+		if (Boolean        .class.isAssignableFrom(clazz) || Boolean  .TYPE.isAssignableFrom(clazz)) { return BooleanEntry.class; }
 //		
 //		if (clazz.isArray()) {
 //			
