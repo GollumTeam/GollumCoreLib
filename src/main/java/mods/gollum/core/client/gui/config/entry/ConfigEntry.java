@@ -3,6 +3,10 @@ package mods.gollum.core.client.gui.config.entry;
 import static cpw.mods.fml.client.config.GuiUtils.RESET_CHAR;
 import static cpw.mods.fml.client.config.GuiUtils.UNDO_CHAR;
 import static mods.gollum.core.ModGollumCoreLib.log;
+
+import java.lang.reflect.Array;
+import java.util.Arrays;
+
 import cpw.mods.fml.client.config.GuiButtonExt;
 import mods.gollum.core.client.gui.config.GuiConfigEntries;
 import mods.gollum.core.client.gui.config.element.ConfigElement;
@@ -90,11 +94,14 @@ public abstract class ConfigEntry implements IGuiListEntry {
 
 	@Override
 	public boolean equals (Object value) {
-		if (value == null) {
+		if (value == null || this.getValue() == null) {
 			return value == this.getValue();
 		}
 		if (value instanceof ConfigEntry) {
 			return ((ConfigEntry)value).getValue().equals(this.getValue());
+		}
+		if (value.getClass().isArray() && this.getValue().getClass().isArray()) {
+			return Arrays.equals((Object[])value, (Object[])this.getValue());
 		}
 		
 		return value.equals(this.getValue());
