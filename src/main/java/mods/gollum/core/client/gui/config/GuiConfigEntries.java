@@ -3,7 +3,7 @@ package mods.gollum.core.client.gui.config;
 import static mods.gollum.core.ModGollumCoreLib.log;
 
 import java.util.ArrayList;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 
 import mods.gollum.core.client.gui.config.element.ConfigElement;
 import mods.gollum.core.client.gui.config.entry.ConfigEntry;
@@ -186,7 +186,7 @@ public class GuiConfigEntries extends GuiListExtended {
 	}
 	
 	public Object getValues() {
-		TreeMap<String, Object> values = new TreeMap<String, Object>();
+		LinkedHashMap<String, Object> values = new LinkedHashMap<String, Object>();
 		for(ConfigEntry entry : this.listEntries) {
 			if (entry.enabled() && entry.isValidValue()) {
 				values.put(entry.getName(), entry.getValue());

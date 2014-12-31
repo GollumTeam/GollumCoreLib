@@ -3,7 +3,7 @@ package mods.gollum.core.client.gui.config;
 import static mods.gollum.core.ModGollumCoreLib.log;
 
 import java.util.ArrayList;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
 import mods.gollum.core.client.gui.config.element.CategoryElement;
@@ -46,8 +46,8 @@ public class GuiCategoryConfig extends GuiConfig {
 	public void saveValue() {
 		log.info("Save configuration "+this.getMod());
 		
-		TreeMap<String, Object> values = new TreeMap<String, Object>();
-		for (Entry<String, TreeMap<String, Object>> entry : ((TreeMap<String, TreeMap<String, Object>>)this.entryList.getValues()).entrySet()) {
+		LinkedHashMap<String, Object> values = new LinkedHashMap<String, Object>();
+		for (Entry<String, LinkedHashMap<String, Object>> entry : ((LinkedHashMap<String, LinkedHashMap<String, Object>>)this.entryList.getValues()).entrySet()) {
 			values.putAll(entry.getValue());
 		}
 		

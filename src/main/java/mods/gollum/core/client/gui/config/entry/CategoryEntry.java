@@ -3,7 +3,7 @@ package mods.gollum.core.client.gui.config.entry;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Map.Entry;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 
 import static mods.gollum.core.ModGollumCoreLib.log;
 import mods.gollum.core.client.gui.config.GuiConfigEntries;
@@ -60,13 +60,13 @@ public class CategoryEntry extends ButtonEntry {
 	@Override
 	public boolean equals (Object values) {
 		
-		if (value instanceof TreeMap) {
+		if (value instanceof LinkedHashMap) {
 			
-			for (Object key : ((TreeMap)values).keySet()) {
-				if (((TreeMap) this.value).containsKey(key)) {
+			for (Object key : ((LinkedHashMap)values).keySet()) {
+				if (((LinkedHashMap) this.value).containsKey(key)) {
 					
-					Object value    = ((TreeMap)values).get(key);
-					Object oldValue = ((TreeMap) this.value).get(key);
+					Object value    = ((LinkedHashMap)values).get(key);
+					Object oldValue = ((LinkedHashMap) this.value).get(key);
 					
 					if (oldValue == null && oldValue != value) {
 						return false;

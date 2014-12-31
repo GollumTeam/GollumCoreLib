@@ -3,7 +3,7 @@ package mods.gollum.core.client.gui.config;
 import static mods.gollum.core.ModGollumCoreLib.log;
 
 import java.util.Map.Entry;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 
 import mods.gollum.core.client.gui.config.element.CategoryElement;
 import mods.gollum.core.client.gui.config.element.TypedValueElement;
@@ -28,8 +28,8 @@ public class GuiValueConfig extends GuiConfig {
 		
 		try {
 			
-			TreeMap<String, Object> values  = (TreeMap<String, Object>)this.parentEntry.getValue();
-			TreeMap<String, Object> dValues = (TreeMap<String, Object>)this.parentEntry.configElement.getDefaultValue();
+			LinkedHashMap<String, Object> values  = (LinkedHashMap<String, Object>)this.parentEntry.getValue();
+			LinkedHashMap<String, Object> dValues = (LinkedHashMap<String, Object>)this.parentEntry.configElement.getDefaultValue();
 			
 			for (Entry<String, Object> entry : values.entrySet()) {
 				String name         = entry.getKey();
@@ -56,8 +56,8 @@ public class GuiValueConfig extends GuiConfig {
 	@Override
 	public void saveValue() {
 		
-		TreeMap<String, Object> values    = (TreeMap<String, Object>) this.parentEntry.getValue ();
-		TreeMap<String, Object> newValues = (TreeMap<String, Object>) this.entryList.getValues();
+		LinkedHashMap<String, Object> values    = (LinkedHashMap<String, Object>) this.parentEntry.getValue ();
+		LinkedHashMap<String, Object> newValues = (LinkedHashMap<String, Object>) this.entryList.getValues();
 		
 		for (Entry<String, Object> entry : values.entrySet()) {
 			if (newValues.containsKey(entry.getKey())) {

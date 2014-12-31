@@ -2,7 +2,7 @@ package mods.gollum.core.client.gui.config.element;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 
 import mods.gollum.core.client.gui.config.entry.CategoryEntry;
 import mods.gollum.core.client.gui.config.entry.ConfigEntry;
@@ -21,8 +21,8 @@ public class CategoryElement extends ConfigElement {
 		
 		this.configLoad = configLoad;
 		
-		TreeMap<String, Object> value        = new TreeMap<String, Object>();
-		TreeMap<String, Object> defaultValue = new TreeMap<String, Object>();
+		LinkedHashMap<String, Object> value        = new LinkedHashMap<String, Object>();
+		LinkedHashMap<String, Object> defaultValue = new LinkedHashMap<String, Object>();
 		
 		for (Field f : this.configLoad.config.getClass().getDeclaredFields()) {
 			
