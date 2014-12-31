@@ -1,11 +1,9 @@
 package mods.gollum.core.client.gui.config.entry;
 
 import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.Map.Entry;
 import java.util.LinkedHashMap;
+import java.util.Map.Entry;
 
-import static mods.gollum.core.ModGollumCoreLib.log;
 import mods.gollum.core.client.gui.config.GuiConfigEntries;
 import mods.gollum.core.client.gui.config.GuiValueConfig;
 import mods.gollum.core.client.gui.config.element.CategoryElement;

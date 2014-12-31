@@ -10,6 +10,7 @@ public class JsonConfigProp implements ConfigProp, IJsonComplement {
 	private boolean  show              = true;
 	private String   info              = "info";
 	private String   group             = "";
+	private String   newValue          = "";
 	private String[] validValues       = new String[0];
 	private String   minValue          = "";
 	private String   maxValue          = "";
@@ -21,9 +22,10 @@ public class JsonConfigProp implements ConfigProp, IJsonComplement {
 	private Type     type              = Type.DEFAULT;
 
 	@Override public String   name()              { return this.name; };
-	@Override public boolean show()               { return this.show; }
+	@Override public boolean  show()              { return this.show; }
 	@Override public String   info()              { return this.info; };
 	@Override public String   group()             { return this.group; };
+	@Override public String   newValue()          { return this.newValue; };
 	@Override public String[] validValues()       { return this.validValues; };
 	@Override public String   minValue()          { return this.minValue; };
 	@Override public String   maxValue()          { return this.maxValue; };
@@ -37,6 +39,7 @@ public class JsonConfigProp implements ConfigProp, IJsonComplement {
 	public JsonConfigProp name              (String   name             ) { this.name              = name             ; return this; }
 	public JsonConfigProp info              (String   info             ) { this.info              = info             ; return this; }
 	public JsonConfigProp group             (String   group            ) { this.group             = group            ; return this; }
+	public JsonConfigProp defaultValue      (String   newValue         ) { this.newValue          = newValue         ; return this; }
 	public JsonConfigProp validValues       (String[] validValues      ) { this.validValues       = validValues      ; return this; }
 	public JsonConfigProp minValue          (String   minValue         ) { this.minValue          = minValue         ; return this; }
 	public JsonConfigProp maxValue          (String   maxValue         ) { this.maxValue          = maxValue         ; return this; }

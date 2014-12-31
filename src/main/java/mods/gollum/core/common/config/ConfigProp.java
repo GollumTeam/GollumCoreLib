@@ -18,12 +18,14 @@ public @interface ConfigProp {
 	}
 	
 	public abstract String name() default "";
-
+	
 	public abstract boolean show() default true; // DONE
 	
 	public abstract String info() default "";
 	
 	public abstract String group() default ""; // DONE
+	
+	public abstract String newValue() default "";
 	
 	public abstract String[] validValues() default "";
 	

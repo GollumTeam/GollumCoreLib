@@ -235,5 +235,13 @@ public abstract class GuiConfig extends GuiScreen {
 		super.updateScreen();
 		this.entryList.updateScreen();
 	}
+
+	public boolean isArray() {
+		return false;
+	}
+	
+	public boolean displayEntryeLabel() {
+		return true;
+	}
 	
 }

@@ -1,6 +1,8 @@
 package mods.gollum.core.client.gui.config.entry;
 
+import mods.gollum.core.client.gui.config.GuiArrayConfig;
 import mods.gollum.core.client.gui.config.GuiConfigEntries;
+import mods.gollum.core.client.gui.config.GuiValueConfig;
 import mods.gollum.core.client.gui.config.element.ConfigElement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
@@ -28,6 +30,7 @@ public class ArrayEntry extends ButtonEntry {
 	
 	@Override
 	public void valueButtonPressed(int slotIndex) {
+		this.mc.displayGuiScreen(new GuiArrayConfig(this));
 	}
 	
 	@Override

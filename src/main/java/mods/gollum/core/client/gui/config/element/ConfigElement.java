@@ -97,6 +97,18 @@ public abstract class ConfigElement {
 	public Object getDefaultValue() {
 		return defaultValue;
 	}
+	
+	public Object newValue() {
+		
+		Class clazz = this.getEntryClass();
+		String newValue= this.getConfigProp().newValue();
+		
+		if (clazz == StringEntry.class) {
+			return newValue;
+		}
+		
+		return null;
+	}
 
 	/**
 	 * @param value the value to set

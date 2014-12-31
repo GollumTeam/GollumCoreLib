@@ -26,7 +26,7 @@ public abstract class ConfigEntry implements IGuiListEntry {
 	protected GuiButtonExt btUndo;
 	protected GuiButtonExt btReset;
 	
-	public boolean labelDisplay = true;
+	protected boolean labelDisplay = true;
 
 	public ConfigEntry(Minecraft mc, GuiConfigEntries parent, ConfigElement configElement) {
 		this.mc            = mc;
@@ -38,7 +38,7 @@ public abstract class ConfigEntry implements IGuiListEntry {
 	}
 	
 	public int getLabelWidth() {
-		if (!this.labelDisplay) {
+		if (!this.getLabelDisplay()) {
 			return 0;
 		}
 		return mc.fontRenderer.getStringWidth(this.getLabel());
@@ -52,9 +52,13 @@ public abstract class ConfigEntry implements IGuiListEntry {
 		return this.configElement.getName();
 	}
 	
+	public boolean getLabelDisplay () {
+		return this.labelDisplay && this.parent.parent.displayEntryeLabel();
+	}
+	
 	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, Tessellator tessellator, int mouseX, int mouseY, boolean isSelected) {
 		
-		if (this.labelDisplay) {
+		if (this.getLabelDisplay()) {
 			
 			String label = (!this.isValidValue() ? EnumChatFormatting.RED.toString() : (this.isChanged() ? EnumChatFormatting.WHITE.toString() : EnumChatFormatting.GRAY.toString())) + (this.isChanged() ? EnumChatFormatting.ITALIC.toString() : "") + this.getLabel();
 			
