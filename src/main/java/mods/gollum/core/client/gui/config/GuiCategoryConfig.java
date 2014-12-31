@@ -4,6 +4,7 @@ import static mods.gollum.core.ModGollumCoreLib.log;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import mods.gollum.core.client.gui.config.element.CategoryElement;
@@ -47,8 +48,8 @@ public class GuiCategoryConfig extends GuiConfig {
 		log.info("Save configuration "+this.getMod());
 		
 		LinkedHashMap<String, Object> values = new LinkedHashMap<String, Object>();
-		for (Entry<String, LinkedHashMap<String, Object>> entry : ((LinkedHashMap<String, LinkedHashMap<String, Object>>)this.entryList.getValues()).entrySet()) {
-			values.putAll(entry.getValue());
+		for (Entry<String, Object> entry : this.entryList.getValues().entrySet()) {
+			values.putAll((Map<? extends String, ? extends Object>) entry.getValue());
 		}
 		
 		this.configLoad.saveValue(values);

@@ -24,7 +24,7 @@ public class ConfigGollumCoreLib extends Config {
 	
 	@ConfigProp(mcRestart = true) 
 	public boolean devTools = false;
-			
+
 	@ConfigProp (info = "Display version checker message")
 	public boolean versionChecker = true;
 	
@@ -73,46 +73,56 @@ public class ConfigGollumCoreLib extends Config {
 //	@ConfigProp(group="Test") public  ItemStackConfigType itemStack1 = new ItemStackConfigType("minecraft:planks", 10, 3);
 //	@ConfigProp(group="Test") public  ItemStackConfigType[] itemStackAr1 = new ItemStackConfigType[] { new ItemStackConfigType("minecraft:planks", 10, 3), new ItemStackConfigType("minecraft:planks", 10, 3) };
 //	
+
+	@ConfigProp(group="Test", dev=true, worldRestart=true)
+	public String worldRestart = "worldRestart";
 	
-	@ConfigProp(group="Test", show=false)
+	@ConfigProp(group="Test", dev=true, show=false)
 	public String hide = "Value is Hide";
 	
-	@ConfigProp(group="Test", minValue="7", maxValue="10")
+	@ConfigProp(group="Test", dev=true, minValue="7", maxValue="10")
 	public String maxSize = "ABCDEFGHIJ";
 	
-	@ConfigProp(group="Test") public String    s1 = "AAA";
-	@ConfigProp(group="Test") public long      l1 = 11111;
-	@ConfigProp(group="Test") public Long      l2 = 22223L;
-	@ConfigProp(group="Test") public int       i1 = 1111;
-	@ConfigProp(group="Test") public Integer   i2 = 2222;
-	@ConfigProp(group="Test") public short     w1 = 111;
-	@ConfigProp(group="Test") public Short     w2 = 222;
-	@ConfigProp(group="Test") public byte      b1 = 11;
-	@ConfigProp(group="Test") public Byte      b2 = 22;
-	@ConfigProp(group="Test") public float     f1 = 1.5F;
-	@ConfigProp(group="Test") public Float     f2 = 2.5F;
-	@ConfigProp(group="Test") public double    d1 = 1.3D;
-	@ConfigProp(group="Test") public Double    d2 = 2.3D;
-	@ConfigProp(group="Test") public boolean   z1 = true;
-	@ConfigProp(group="Test") public Boolean   z2 = false;
+	@ConfigProp(group="Test", dev=true) public String    s1 = "AAA";
+	@ConfigProp(group="Test", dev=true) public long      l1 = 11111;
+	@ConfigProp(group="Test", dev=true) public Long      l2 = 22223L;
+	@ConfigProp(group="Test", dev=true) public int       i1 = 1111;
+	@ConfigProp(group="Test", dev=true) public Integer   i2 = 2222;
+	@ConfigProp(group="Test", dev=true) public short     w1 = 111;
+	@ConfigProp(group="Test", dev=true) public Short     w2 = 222;
+	@ConfigProp(group="Test", dev=true) public byte      b1 = 11;
+	@ConfigProp(group="Test", dev=true) public Byte      b2 = 22;
+	@ConfigProp(group="Test", dev=true) public float     f1 = 1.5F;
+	@ConfigProp(group="Test", dev=true) public Float     f2 = 2.5F;
+	@ConfigProp(group="Test", dev=true) public double    d1 = 1.3D;
+	@ConfigProp(group="Test", dev=true) public Double    d2 = 2.3D;
+	@ConfigProp(group="Test", dev=true) public boolean   z1 = true;
+	@ConfigProp(group="Test", dev=true) public Boolean   z2 = false;
 	
-	@ConfigProp(group="Test") public String   [] sAr1 = new String   [] { "AAA" , "BBB" , "CCC"  };
-//	@ConfigProp(group="Test") public long     [] lAr1 = new long     [] { 11111 , 11111 , 11111  };
-//	@ConfigProp(group="Test") public Long     [] lAr2 = new Long     [] { 22222L, 22222L, 22222L };
-//	@ConfigProp(group="Test") public int      [] iAr1 = new int      [] { 1111  , 1111  , 1111   };
-//	@ConfigProp(group="Test") public Integer  [] iAr2 = new Integer  [] { 2222  , 222   , 2222   };
-//	@ConfigProp(group="Test") public short    [] wAr1 = new short    [] { 111   , 111   , 111    };
-//	@ConfigProp(group="Test") public Short    [] wAr2 = new Short    [] { 222   , 222   , 222    };
-//	@ConfigProp(group="Test") public byte     [] bAr1 = new byte     [] { 11    , 11    , 11     };
-//	@ConfigProp(group="Test") public Byte     [] bAr2 = new Byte     [] { 22    , 22    , 22     };
-//	@ConfigProp(group="Test") public char     [] cAr1 = new char     [] { 1     , 1     , 1      };
-//	@ConfigProp(group="Test") public Character[] cAr2 = new Character[] { 2     , 2     , 2      };
-//	@ConfigProp(group="Test") public float    [] fAr1 = new float    [] { 1.5F  , 1.5F  , 1.5F   };
-//	@ConfigProp(group="Test") public Float    [] fAr2 = new Float    [] { 2.5F  , 2.5F  , 2.5F   };
-//	@ConfigProp(group="Test") public double   [] dAr1 = new double   [] { 1.3D  , 1.3D  , 1.3D   };
-//	@ConfigProp(group="Test") public Double   [] dAr2 = new Double   [] { 2.3D  , 2.3D  , 2.3D   };
-//	@ConfigProp(group="Test") public boolean  [] zAr1 = new boolean  [] { true  , true  , true   };
-//	@ConfigProp(group="Test") public Boolean  [] zAr2 = new Boolean  [] { false , false , false  };
+	@ConfigProp(group="Test", dev=true) public String   [] sAr1 = new String   [] { "AAA" , "BBB" , "CCC"  };
+	@ConfigProp(group="Test", dev=true) public long     [] lAr1 = new long     [] { 11111 , 11111 , 11111  };
+	@ConfigProp(group="Test", dev=true) public Long     [] lAr2 = new Long     [] { 22222L, 22222L, 22222L };
+	@ConfigProp(group="Test", dev=true) public int      [] iAr1 = new int      [] { 1111  , 1111  , 1111   };
+	@ConfigProp(group="Test", dev=true) public Integer  [] iAr2 = new Integer  [] { 2222  , 222   , 2222   };
+	@ConfigProp(group="Test", dev=true) public short    [] wAr1 = new short    [] { 111   , 111   , 111    };
+	@ConfigProp(group="Test", dev=true) public Short    [] wAr2 = new Short    [] { 222   , 222   , 222    };
+	@ConfigProp(group="Test", dev=true) public byte     [] bAr1 = new byte     [] { 11    , 11    , 11     };
+	@ConfigProp(group="Test", dev=true) public Byte     [] bAr2 = new Byte     [] { 22    , 22    , 22     };
+	@ConfigProp(group="Test", dev=true) public float    [] fAr1 = new float    [] { 1.5F  , 1.5F  , 1.5F   };
+	@ConfigProp(group="Test", dev=true) public Float    [] fAr2 = new Float    [] { 2.5F  , 2.5F  , 2.5F   };
+	@ConfigProp(group="Test", dev=true) public double   [] dAr1 = new double   [] { 1.3D  , 1.3D  , 1.3D   };
+	@ConfigProp(group="Test", dev=true) public Double   [] dAr2 = new Double   [] { 2.3D  , 2.3D  , 2.3D   };
+	@ConfigProp(group="Test", dev=true) public boolean  [] zAr1 = new boolean  [] { true  , true  , true   };
+	@ConfigProp(group="Test", dev=true) public Boolean  [] zAr2 = new Boolean  [] { false , false , false  };
+
+	@ConfigProp(group="Test", dev=true, newValue="ABCDEFG")     public String[] arNewValue      = new String[] { "newValue"  , "newValue"  , "newValue"   };
+	@ConfigProp(group="Test", dev=true, newValue="123")         public int[]    arNewValueInt   = new int[]    { 11          , 22          , 33           };
+	@ConfigProp(group="Test", dev=true, newValue="12.34")       public float[]  arNewValueFloat = new float[]  { 11.34F      , 22.34F      , 33.34F       };
+	@ConfigProp(group="Test", dev=true, isListLengthFixed=true) public String[] arFixed         = new String[] { "arFixed"   , "arFixed"   , "arFixed"    };
+	@ConfigProp(group="Test", dev=true, minListLength="1")      public String[] arMinFixed      = new String[] { "arMinFixed", "arMinFixed", "arMinFixed" };
+	@ConfigProp(group="Test", dev=true, maxListLength="5")      public String[] arMaxFixed     = new String[] { "arMaxFixed" , "arMaxFixed", "arMaxFixed" };
+	@ConfigProp(group="Test", dev=true, minListLength="1", maxListLength="5")
+	public String[] arMinMaxFixed = new String[] { "arMinMaxFixed" , "arMinMaxFixed" , "arMinMaxFixed" };
 	
 //	@ConfigProp(
 //		group="Test",

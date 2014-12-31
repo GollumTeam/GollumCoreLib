@@ -24,10 +24,12 @@ public abstract class ConfigElement {
 	}
 	
 	public abstract ConfigProp getConfigProp();
-
+	
 	public Class< ? extends ConfigEntry> getEntryClass() {
-		
-		Class clazz = this.getType();
+		return this.getEntryClass(this.getType());
+	}
+	
+	private Class< ? extends ConfigEntry> getEntryClass(Class clazz) {
 		
 //		if (this.anno.type() == ConfigProp.Type.ITEM)      { return ItemEntry          .class; }
 //		if (this.anno.type() == ConfigProp.Type.BLOCK)     { return BlockEntry         .class; }
@@ -43,29 +45,10 @@ public abstract class ConfigElement {
 		if (Double         .class.isAssignableFrom(clazz) || Double   .TYPE.isAssignableFrom(clazz)) { return DoubleEntry .class; }
 		if (Float          .class.isAssignableFrom(clazz) || Float    .TYPE.isAssignableFrom(clazz)) { return FloatEntry .class; }
 		if (Boolean        .class.isAssignableFrom(clazz) || Boolean  .TYPE.isAssignableFrom(clazz)) { return BooleanEntry.class; }
-//		
+		
 		if (clazz.isArray()) {
-//			
-//			Class subType = clazz.getComponentType();
-//			
-//			if (this.anno.type() == ConfigProp.Type.ITEM)      { return ItemEntry          .class; }
-//			if (this.anno.type() == ConfigProp.Type.BLOCK)     { return BlockEntry         .class; }
-////				if (this.anno.type() == ConfigProp.Type.SLIDER)    { return SliderEntry        .class; }
-//			if (Json           .class.isAssignableFrom(subType)) { return JsonEntry          .class; }
-//			if (IConfigJsonType.class.isAssignableFrom(subType)) { return ConfigJsonTypeEntry.class; }
-//			if (String         .class.isAssignableFrom(subType)) { return StringEntry        .class; }
-//			if (Long           .class.isAssignableFrom(subType) || Long     .TYPE.isAssignableFrom(subType)) { return IntegerEntry.class; }
-//			if (Integer        .class.isAssignableFrom(subType) || Integer  .TYPE.isAssignableFrom(subType)) { return IntegerEntry.class; }
-//			if (Short          .class.isAssignableFrom(subType) || Short    .TYPE.isAssignableFrom(subType)) { return IntegerEntry.class; }
-//			if (Integer        .class.isAssignableFrom(subType) || Byte     .TYPE.isAssignableFrom(subType)) { return IntegerEntry.class; }
-//			if (Character      .class.isAssignableFrom(subType) || Character.TYPE.isAssignableFrom(subType)) { return IntegerEntry.class; }
-//			if (Double         .class.isAssignableFrom(subType) || Double   .TYPE.isAssignableFrom(subType)) { return DoubleEntry .class; }
-//			if (Float          .class.isAssignableFrom(subType) || Float    .TYPE.isAssignableFrom(subType)) { return DoubleEntry .class; }
-//			if (Boolean        .class.isAssignableFrom(subType) || Boolean  .TYPE.isAssignableFrom(subType)) { return BooleanEntry.class; }
-//			
 			return ArrayEntry.class;
 		}
-
 		
 		return null;
 	}
@@ -100,11 +83,60 @@ public abstract class ConfigElement {
 	
 	public Object newValue() {
 		
-		Class clazz = this.getEntryClass();
+		Class clazz = this.getEntryClass (this.value.getClass().getComponentType());
 		String newValue= this.getConfigProp().newValue();
 		
 		if (clazz == StringEntry.class) {
 			return newValue;
+		} else
+		if (clazz == LongEntry.class) {
+			try {
+				return Long.parseLong(newValue);
+			} catch (Exception e) {
+				return (long)0;
+			}
+		} else
+		if (clazz == IntegerEntry.class) {
+			try {
+				return Integer.parseInt(newValue);
+			} catch (Exception e) {
+				return (int)0;
+			}
+		} else
+		if (clazz == ShortEntry.class) {
+			try {
+				return Short.parseShort(newValue);
+			} catch (Exception e) {
+				return (short)0;
+			}
+		} else
+		if (clazz == ByteEntry.class) {
+			try {
+				return Byte.parseByte(newValue);
+			} catch (Exception e) {
+				return (byte)0;
+			}
+		} else
+		if (clazz == DoubleEntry.class) {
+			try {
+				return Double.parseDouble(newValue);
+			} catch (Exception e) {
+				return (double)0;
+			}
+		} else
+		if (clazz == FloatEntry.class) {
+			try {
+				return Float.parseFloat(newValue);
+			} catch (Exception e) {
+				return (float)0;
+			}
+		} else
+		if (clazz == BooleanEntry.class) {
+			try {
+				return Boolean.parseBoolean(newValue);
+			} catch (Exception e) {
+				return false;
+			}
 		}
 		
 		return null;

@@ -8,6 +8,7 @@ import java.lang.reflect.Array;
 import java.util.Arrays;
 
 import cpw.mods.fml.client.config.GuiButtonExt;
+import cpw.mods.fml.client.config.GuiUtils;
 import mods.gollum.core.client.gui.config.GuiConfigEntries;
 import mods.gollum.core.client.gui.config.element.ConfigElement;
 import mods.gollum.core.common.config.JsonConfigProp;
@@ -23,6 +24,8 @@ public abstract class ConfigEntry implements IGuiListEntry {
 	public    GuiConfigEntries parent;
 	public ConfigElement configElement;
 	
+	public GuiButtonExt btnAdd;
+	protected GuiButtonExt btnRemove;
 	protected GuiButtonExt btUndo;
 	protected GuiButtonExt btReset;
 	
@@ -33,8 +36,13 @@ public abstract class ConfigEntry implements IGuiListEntry {
 		this.parent        = parent;
 		this.configElement = configElement;
 		
+		this.btnAdd     = new GuiButtonExt(0, 0, 0, 18, 18, "+");
+		this.btnRemove  = new GuiButtonExt(0, 0, 0, 18, 18, "x");
 		this.btUndo  = new GuiButtonExt(0, 0, 0, 18, 18, UNDO_CHAR);
 		this.btReset = new GuiButtonExt(0, 0, 0, 18, 18, RESET_CHAR);
+		
+		this.btnAdd    .packedFGColour = GuiUtils.getColorCode('2', true);
+		this.btnRemove .packedFGColour = GuiUtils.getColorCode('c', true);
 	}
 	
 	public int getLabelWidth() {
@@ -63,6 +71,20 @@ public abstract class ConfigEntry implements IGuiListEntry {
 			String label = (!this.isValidValue() ? EnumChatFormatting.RED.toString() : (this.isChanged() ? EnumChatFormatting.WHITE.toString() : EnumChatFormatting.GRAY.toString())) + (this.isChanged() ? EnumChatFormatting.ITALIC.toString() : "") + this.getLabel();
 			
 			this.mc.fontRenderer.drawString(label, this.parent.labelX, y + slotHeight / 2 - this.mc.fontRenderer.FONT_HEIGHT / 2, 0xFFFFFF);
+		}
+		
+		int posArBt = 66;
+		if (this.parent.parent.canRemove ()) {
+			this.btnRemove.xPosition = this.parent.scrollBarX - posArBt;
+			this.btnRemove.yPosition = y;
+			this.btnRemove.drawButton(this.mc, mouseX, mouseY);
+			posArBt += 22;
+		}
+		
+		if (this.parent.parent.canAdd ()) {
+			this.btnAdd.xPosition = this.parent.scrollBarX - posArBt;
+			this.btnAdd.yPosition = y;
+			this.btnAdd.drawButton(this.mc, mouseX, mouseY);
 		}
 		
 		this.btUndo.xPosition = this.parent.scrollBarX - 44;
@@ -98,14 +120,28 @@ public abstract class ConfigEntry implements IGuiListEntry {
 
 	@Override
 	public boolean equals (Object value) {
-		if (value == null || this.getValue() == null) {
+		Object cValue = this.getValue();
+		
+		if (value == null || cValue == null) {
 			return value == this.getValue();
 		}
+		
 		if (value instanceof ConfigEntry) {
-			return ((ConfigEntry)value).getValue().equals(this.getValue());
+			return ((ConfigEntry)value).getValue().equals(cValue);
 		}
-		if (value.getClass().isArray() && this.getValue().getClass().isArray()) {
-			return Arrays.equals((Object[])value, (Object[])this.getValue());
+		if (value.getClass().isArray() && cValue.getClass().isArray()) {
+			
+			int size = Array.getLength(value);
+			if (size != Array.getLength(cValue)) {
+				return false;
+			}
+			for (int i = 0; i < size;i++) {
+				Object val = Array.get(value, i);
+				if (!val.equals(Array.get(cValue, i))) {
+					return false;
+				}
+			}
+			return true;
 		}
 		
 		return value.equals(this.getValue());
@@ -129,18 +165,28 @@ public abstract class ConfigEntry implements IGuiListEntry {
 	@Override
 	public boolean mousePressed(int index, int x, int y, int mouseEvent, int relativeX, int relativeY) {
 		
+		if (this.btnAdd.mousePressed(this.mc, x, y)) {
+			btReset.func_146113_a(mc.getSoundHandler());
+			this.parent.add(index);
+			return true;
+		} else
+		if (this.btnRemove.mousePressed(this.mc, x, y)) {
+			btReset.func_146113_a(mc.getSoundHandler());
+			this.parent.remove(index);
+			return true;
+		} else
 		if (this.btReset.mousePressed(this.mc, x, y)) {
 			btReset.func_146113_a(mc.getSoundHandler());
 			this.setToDefault();
 			return true;
-		} else if (this.btUndo.mousePressed(this.mc, x, y)) {
+		} else
+		if (this.btUndo.mousePressed(this.mc, x, y)) {
 			btUndo.func_146113_a(mc.getSoundHandler());
 			this.undoChanges();
 			return true;
 		}
 		return false;
 	}
-	
 
 	/**
 	 * Fired when the mouse button is released. Arguments: index, x, y, mouseEvent, relativeX, relativeY

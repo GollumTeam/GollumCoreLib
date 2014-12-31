@@ -1,5 +1,8 @@
 package mods.gollum.core.client.gui.config.entry;
 
+import java.lang.reflect.Array;
+
+import scala.actors.threadpool.Arrays;
 import mods.gollum.core.client.gui.config.GuiArrayConfig;
 import mods.gollum.core.client.gui.config.GuiConfigEntries;
 import mods.gollum.core.client.gui.config.GuiValueConfig;
@@ -9,19 +12,25 @@ import net.minecraft.client.resources.I18n;
 
 public class ArrayEntry extends ButtonEntry {
 	
-	Object[] values;
+	Object values;
 	
 	public ArrayEntry(Minecraft mc, GuiConfigEntries parent, ConfigElement configElement) {
 		super(mc, parent, configElement);
-		this.values = (Object[])configElement.getValue();
+		
+		Object values = configElement.getValue();
+		
+		this.values =  Array.newInstance(values.getClass().getComponentType(), Array.getLength(values));
+		for (int i = 0; i < Array.getLength(values);i++) {
+			Array.set(this.values, i, Array.get(values, i));
+		}
 		this.updateValueButtonText();
 	}
 	
 	public void updateValueButtonText() {
 		
 		String text = "";
-		for (Object o : this.values) {
-			text += ", [" + o + "]";
+		for (int i = 0; i < Array.getLength(this.values); i++) {
+			text += ", [" + Array.get(this.values, i).toString() + "]";
 		}
 		text = text.replaceFirst(", ", "");
 		
@@ -41,10 +50,11 @@ public class ArrayEntry extends ButtonEntry {
 	@Override
 	public ConfigEntry setValue(Object value) {
 		try {
-			this.values = (Object[])value;
+			this.values = value;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		this.updateValueButtonText();
 		return this;
 	}
 

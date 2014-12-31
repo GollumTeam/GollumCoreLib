@@ -5,8 +5,12 @@ import static mods.gollum.core.ModGollumCoreLib.log;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
+import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.client.gui.config.element.ConfigElement;
+import mods.gollum.core.client.gui.config.element.TypedValueElement;
+import mods.gollum.core.client.gui.config.entry.AddButtonEntry;
 import mods.gollum.core.client.gui.config.entry.ConfigEntry;
+import mods.gollum.core.common.config.ConfigProp;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiListExtended;
 import net.minecraft.client.renderer.Tessellator;
@@ -34,27 +38,35 @@ public class GuiConfigEntries extends GuiListExtended {
 		
 		for (ConfigElement configElement : this.parent.configElements) {
 			if (configElement != null) {
-				if (configElement.getConfigProp().show()) {
-					try {
-						if (configElement.getEntryClass() != null) {
-							
-							ConfigEntry configEntry = configElement.getEntryClass().getConstructor(Minecraft.class, GuiConfigEntries.class, ConfigElement.class).newInstance(this.mc, this, configElement);
-							log.debug("Create config entry : "+configElement.getName()+" : "+configElement.getEntryClass().getName());
-							
-							listEntries.add(configEntry);
-						} else {
-							log.warning("ConfigElement "+configElement.getName()+" hasn't class entry");
-						}
-					} catch (Exception e) {
-						e.printStackTrace();
-						log.severe("Can create config entry : "+configElement.getName()+" : "+configElement.getEntryClass().getName());
-					}
+				ConfigProp anno = configElement.getConfigProp();
+				ConfigEntry configEntry = this.newInstanceOfEntryConfig(configElement, anno);
+				if (configEntry != null) {
+					this.listEntries.add(configEntry);
 				}
 			} else {
 				log.severe("Can create config entry because ConfigElement is null");
 			}
 		}
+		this.listEntries.add(new AddButtonEntry(this.mc, this));
+	}
+
+	protected ConfigEntry newInstanceOfEntryConfig(ConfigElement configElement, ConfigProp anno) {
+		ConfigEntry configEntry = null;
 		
+		if (anno.show() && (!anno.dev() || ModGollumCoreLib.config.devTools)) {
+			try {
+				if (configElement.getEntryClass() != null) {
+					configEntry = configElement.getEntryClass().getConstructor(Minecraft.class, GuiConfigEntries.class, ConfigElement.class).newInstance(this.mc, this, configElement);
+					log.debug("Create config entry : "+configElement.getName()+" : "+configElement.getEntryClass().getName());
+				} else {
+					log.warning("ConfigElement "+configElement.getName()+" hasn't class entry");
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				log.severe("Can create config entry : "+configElement.getName()+" : "+configElement.getEntryClass().getName());
+			}
+		}
+		return configEntry;
 	}
 
 	@Override
@@ -75,7 +87,7 @@ public class GuiConfigEntries extends GuiListExtended {
 	
 	@Override
 	protected int getSize() {
-		return this.listEntries.size();
+		return this.listEntries.size() - (this.parent.canAdd() ? 0 : 1);
 	}
 	
 	public IGuiListEntry getListEntry(int index) {
@@ -127,7 +139,12 @@ public class GuiConfigEntries extends GuiListExtended {
 		this.resetX = (this.width / 2) + (viewWidth / 2) - 45;
 		this.scrollBarX = this.resetX + 45;
 		this.controlWidth = this.resetX - this.controlX - 5;
-		
+		if (this.parent.canAdd ()) {
+			this.controlWidth -= 22;
+		}
+		if (this.parent.canRemove ()) {
+			this.controlWidth -= 22;
+		}
 	}
 	
 	public boolean isChanged() {
@@ -169,29 +186,29 @@ public class GuiConfigEntries extends GuiListExtended {
 		return isValid;
 	}
 	
-	public void setToDefault() {
-		for(ConfigEntry entry : this.listEntries) {
-			if (entry.enabled()) {
-				entry.setToDefault();
-			}
-		}
-	}
-
-	public void undoChanges() {
-		for(ConfigEntry entry : this.listEntries) {
-			if (entry.enabled()) {
-				entry.undoChanges();
-			}
-		}
-	}
-	
-	public Object getValues() {
+	public LinkedHashMap<String, Object> getValues() {
 		LinkedHashMap<String, Object> values = new LinkedHashMap<String, Object>();
 		for(ConfigEntry entry : this.listEntries) {
-			if (entry.enabled() && entry.isValidValue()) {
-				values.put(entry.getName(), entry.getValue());
-			} else {
-				values.put(entry.getName(), entry.configElement.getValue());
+			if (!(entry instanceof AddButtonEntry)) {
+				if (entry.enabled() && entry.isValidValue()) {
+					values.put(entry.getName(), entry.getValue());
+				} else {
+					values.put(entry.getName(), entry.configElement.getValue());
+				}
+			}
+		}
+		return values;
+	}
+	
+	public ArrayList<Object> getValuesByIndex() {
+		ArrayList<Object> values = new ArrayList<Object>();
+		for(ConfigEntry entry : this.listEntries) {
+			if (!(entry instanceof AddButtonEntry)) {
+				if (entry.enabled() && entry.isValidValue()) {
+					values.add(entry.getValue());
+				} else {
+					values.add(entry.configElement.getValue());
+				}
 			}
 		}
 		return values;
@@ -220,6 +237,49 @@ public class GuiConfigEntries extends GuiListExtended {
 	/////////////
 	// Actions //
 	/////////////
+
+	public void add(int index) {
+		if (this.parent.canAdd()) {
+			Object value = this.parent.newValue();
+			Object defaultValue = this.parent.newValue();
+			ConfigProp prop = this.parent.newConfigProp();
+			TypedValueElement configElement = new TypedValueElement(value.getClass(), "", value, defaultValue, prop);
+			
+			if (value != null && defaultValue != null) {
+				log.debug ("add : "+index);
+				
+				ConfigEntry configEntry = this.newInstanceOfEntryConfig(configElement, prop);
+				if (configEntry != null) {
+					this.listEntries.add(index, configEntry);
+				}
+			}
+			this.initGui();
+		}
+	}
+	
+	public void remove(int index) {
+		if (this.parent.canRemove()) {
+			log.debug ("remove : "+index);
+			this.listEntries.remove(index);
+			this.initGui();
+		}
+	}
+
+	public void setToDefault() {
+		for(ConfigEntry entry : this.listEntries) {
+			if (entry.enabled()) {
+				entry.setToDefault();
+			}
+		}
+	}
+
+	public void undoChanges() {
+		for(ConfigEntry entry : this.listEntries) {
+			if (entry.enabled()) {
+				entry.undoChanges();
+			}
+		}
+	}
 	
 	/**
 	 * This method is a pass-through for IConfigEntry objects that require keystrokes. Called from the parent GuiConfig screen.
@@ -239,5 +299,6 @@ public class GuiConfigEntries extends GuiListExtended {
 			entry.mouseClicked(mouseX, mouseY, mouseEvent);
 		}
 	}
+
 	
 }

@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mods.gollum.core.client.gui.config.element.ConfigElement;
+import mods.gollum.core.common.config.ConfigProp;
+import mods.gollum.core.common.config.JsonConfigProp;
 import mods.gollum.core.common.mod.GollumMod;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -99,7 +101,6 @@ public abstract class GuiConfig extends GuiScreen {
 		int undoWidth       = mc.fontRenderer.getStringWidth(" " + I18n.format("fml.configgui.tooltip.undoChanges")) + undoGlyphWidth + 20;
 		int resetWidth      = mc.fontRenderer.getStringWidth(" " + I18n.format("fml.configgui.tooltip.resetToDefault")) + resetGlyphWidth + 20;
 		int buttonWidthHalf = (doneWidth + 5 + undoWidth + 5 + resetWidth) / 2;
-		
 		
 		this.buttonList.add(this.btDone  = new GuiButtonExt(
 			2000,
@@ -242,6 +243,23 @@ public abstract class GuiConfig extends GuiScreen {
 	
 	public boolean displayEntryeLabel() {
 		return true;
+	}
+	
+	public boolean canAdd() {
+		return false;
+	}
+
+	public boolean canRemove() {
+		return false;
+	}
+
+	
+	public Object newValue() {
+		return null;
+	}
+	
+	public ConfigProp newConfigProp() {
+		return new JsonConfigProp();
 	}
 	
 }

@@ -2,14 +2,16 @@ package mods.gollum.core.client.gui.config;
 
 import static mods.gollum.core.ModGollumCoreLib.log;
 
-import java.util.Map.Entry;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.Map.Entry;
+import java.util.TreeMap;
 
-import mods.gollum.core.client.gui.config.element.CategoryElement;
 import mods.gollum.core.client.gui.config.element.TypedValueElement;
 import mods.gollum.core.client.gui.config.entry.ArrayEntry;
-import mods.gollum.core.client.gui.config.entry.CategoryEntry;
 import mods.gollum.core.common.config.ConfigProp;
+import mods.gollum.core.common.config.JsonConfigProp;
 
 public class GuiArrayConfig extends GuiConfig {
 
@@ -38,12 +40,12 @@ public class GuiArrayConfig extends GuiConfig {
 		
 		try {
 			
-			Object[] values  = (Object[])this.parentEntry.getValue();
-			Object[] dValues = (Object[])this.parentEntry.configElement.getDefaultValue();
+			Object values  = this.parentEntry.getValue();
+			Object dValues = this.parentEntry.configElement.getDefaultValue();
 			
-			for (int i = 0; i < values.length; i++) {
+			for (int i = 0; i < Array.getLength(values); i++) {
 				
-				Object value = values[i];
+				Object value = Array.get(values, i);
 				try {
 					Object cloned = value.getClass().getMethod("clone").invoke(value);
 					value = cloned;
@@ -51,8 +53,8 @@ public class GuiArrayConfig extends GuiConfig {
 				}
 				
 				Object defaultValue = null;
-				if (i < dValues.length) {
-					defaultValue = dValues[i];
+				if (i < Array.getLength(dValues)) {
+					defaultValue = Array.get(dValues, i);
 				} else {
 					defaultValue = this.parentEntry.configElement.newValue();
 				}
@@ -64,36 +66,73 @@ public class GuiArrayConfig extends GuiConfig {
 				Class type      = values.getClass().getComponentType();
 				ConfigProp prop = this.parentEntry.configElement.getConfigProp();
 				
-				this.configElements.add(new TypedValueElement(type, i+"", value, defaultValue, prop));
+				this.configElements.add(new TypedValueElement(type, "", value, defaultValue, prop));
 			}
 		} catch (Exception e)  {
 			e.printStackTrace();
 		}
 		
 	}
+	
+	@Override
+	public boolean canAdd() {
+		
+		if (!this.isArray()) {
+			return false;
+		}
+		
+		Object defaultValue = this.newValue();
+		ConfigProp prop = this.parentEntry.configElement.getConfigProp();
+		Integer max = null;
+		try {
+			max = Integer.parseInt(prop.maxListLength());
+		} catch (Exception e) {
+		}
+		
+		return defaultValue != null && !prop.isListLengthFixed() && (max == null || this.entryList.getValuesByIndex().size() < max);
+	}
+	
+	@Override
+	public boolean canRemove() {
+		
+		if (!this.isArray()) {
+			return false;
+		}
+		
+		ConfigProp prop = this.parentEntry.configElement.getConfigProp();
+		Integer min = null;
+		try {
+			min = Integer.parseInt(prop.minListLength());
+		} catch (Exception e) {
+		}
+		
+		return this.entryList.getSize() > 0 && !prop.isListLengthFixed() && (min == null || this.entryList.getValuesByIndex().size() > min);
+	}
+	
+	@Override
+	public Object newValue() {
+		return this.parentEntry.configElement.newValue();
+	}
+	
+	@Override
+	public ConfigProp newConfigProp() {
+		return this.parentEntry.configElement.getConfigProp();
+	}
 
 	@Override
 	public void saveValue() {
 		
-//		LinkedHashMap<String, Object> values    = (LinkedHashMap<String, Object>) this.parentEntry.getValue ();
-//		LinkedHashMap<String, Object> newValues = (LinkedHashMap<String, Object>) this.entryList.getValues();
-//		
-//		for (Entry<String, Object> entry : values.entrySet()) {
-//			if (newValues.containsKey(entry.getKey())) {
-//				
-//				Object value = newValues.get(entry.getKey());
-//				
-//				try {
-//					Object cloned = value.getClass().getMethod("clone").invoke(value);
-//					value = cloned;
-//				} catch (Exception e) {
-//				}
-//				
-//				values.put(entry.getKey(), value);
-//			}
-//		}
-//		
-//		this.parentEntry.setValue(values);
+		ArrayList<Object> values = this.entryList.getValuesByIndex();
+		
+		Class type = this.parentEntry.getValue().getClass().getComponentType();
+		Object rtn = Array.newInstance(type,values.size());
+		
+		int i = 0;
+		for (Object value : values) {
+			Array.set (rtn, i++, value);
+		}
+		
+		this.parentEntry.setValue(rtn);
 	}
 	
 }
