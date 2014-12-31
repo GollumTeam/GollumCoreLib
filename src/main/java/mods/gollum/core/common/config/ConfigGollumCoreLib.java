@@ -89,12 +89,12 @@ public class ConfigGollumCoreLib extends Config {
 	@ConfigProp(group="Test") public Short     w2 = 222;
 	@ConfigProp(group="Test") public byte      b1 = 11;
 	@ConfigProp(group="Test") public Byte      b2 = 22;
-//	@ConfigProp(group="Test") public float     f1 = 1.5F;
-//	@ConfigProp(group="Test") public Float     f2 = 2.5F;
-//	@ConfigProp(group="Test") public double    d1 = 1.3D;
-//	@ConfigProp(group="Test") public Double    d2 = 2.3D;
-//	@ConfigProp(group="Test") public boolean   z1 = true;
-//	@ConfigProp(group="Test") public Boolean   z2 = false;
+	@ConfigProp(group="Test") public float     f1 = 1.5F;
+	@ConfigProp(group="Test") public Float     f2 = 2.5F;
+	@ConfigProp(group="Test") public double    d1 = 1.3D;
+	@ConfigProp(group="Test") public Double    d2 = 2.3D;
+	@ConfigProp(group="Test") public boolean   z1 = true;
+	@ConfigProp(group="Test") public Boolean   z2 = false;
 	
 	@ConfigProp(group="Test") public String   [] sAr1 = new String   [] { "AAA" , "BBB" , "CCC"  };
 	@ConfigProp(group="Test") public long     [] lAr1 = new long     [] { 11111 , 11111 , 11111  };

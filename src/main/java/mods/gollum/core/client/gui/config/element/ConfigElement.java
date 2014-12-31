@@ -2,6 +2,8 @@ package mods.gollum.core.client.gui.config.element;
 
 import mods.gollum.core.client.gui.config.entry.ByteEntry;
 import mods.gollum.core.client.gui.config.entry.ConfigEntry;
+import mods.gollum.core.client.gui.config.entry.DoubleEntry;
+import mods.gollum.core.client.gui.config.entry.FloatEntry;
 import mods.gollum.core.client.gui.config.entry.IntegerEntry;
 import mods.gollum.core.client.gui.config.entry.LongEntry;
 import mods.gollum.core.client.gui.config.entry.ShortEntry;
@@ -36,8 +38,8 @@ public abstract class ConfigElement {
 		if (Short          .class.isAssignableFrom(clazz) || Short    .TYPE.isAssignableFrom(clazz)) { return ShortEntry.class; }
 		if (Byte           .class.isAssignableFrom(clazz) || Byte     .TYPE.isAssignableFrom(clazz)) { return ByteEntry.class; }
 		if (Character      .class.isAssignableFrom(clazz) || Character.TYPE.isAssignableFrom(clazz)) { return ByteEntry.class; }
-//		if (Double         .class.isAssignableFrom(clazz) || Double   .TYPE.isAssignableFrom(clazz)) { return DoubleEntry .class; }
-//		if (Float          .class.isAssignableFrom(clazz) || Float    .TYPE.isAssignableFrom(clazz)) { return DoubleEntry .class; }
+		if (Double         .class.isAssignableFrom(clazz) || Double   .TYPE.isAssignableFrom(clazz)) { return DoubleEntry .class; }
+		if (Float          .class.isAssignableFrom(clazz) || Float    .TYPE.isAssignableFrom(clazz)) { return FloatEntry .class; }
 //		if (Boolean        .class.isAssignableFrom(clazz) || Boolean  .TYPE.isAssignableFrom(clazz)) { return BooleanEntry.class; }
 //		
 //		if (clazz.isArray()) {
@@ -110,44 +112,60 @@ public abstract class ConfigElement {
 		return this;
 	}
 
-	public Long getMin() {
+	public Object getMin() {
 
-		Long min = null;
+		Object min = null;
 		String str = this.getConfigProp().minValue();
 		Class clazz = this.getEntryClass();
 		
 		if (str != null && !str.equals("")) {
 			try {
-				min = Long.parseLong(str);
+				if (DoubleEntry.class.isAssignableFrom(clazz)) {
+					min = Double.parseDouble(str);
+				} else {
+					min = Long.parseLong(str);
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 		
 		if (min == null) {
+			if (clazz == DoubleEntry.class) {
+				min = (double)Double.MIN_VALUE;
+			} else
+			if (clazz == FloatEntry.class) {
+				min = (double)Float.MIN_VALUE;
+			} else
 			if (clazz == LongEntry.class) {
-				min = Long.MIN_VALUE;
-			}
+				min = (long)Long.MIN_VALUE;
+			} else
 			if (clazz == IntegerEntry.class) {
 				min = (long)Integer.MIN_VALUE;
-			}
+			} else
 			if (clazz == ShortEntry.class) {
 				min = (long)Short.MIN_VALUE;
-			}
+			} else
 			if (clazz == ByteEntry.class) {
 				min = (long)Byte.MIN_VALUE;
 			}
 		} else {
-			if (clazz == LongEntry.class && min < Long.MIN_VALUE) {
-				min = Long.MIN_VALUE;
-			}
-			if (clazz == IntegerEntry.class && min < Integer.MIN_VALUE) {
+			if (clazz == DoubleEntry.class && (Double)min < Double.MIN_VALUE) {
+				min = (double)Double.MIN_VALUE;
+			} else
+			if (clazz == FloatEntry.class && (Double)min < Float.MIN_VALUE) {
+				min = (double)Float.MIN_VALUE;
+			} else
+			if (clazz == LongEntry.class && (Long)min < Long.MIN_VALUE) {
+				min = (long)Long.MIN_VALUE;
+			} else
+			if (clazz == IntegerEntry.class && (Long)min < Integer.MIN_VALUE) {
 				min = (long)Integer.MIN_VALUE;
-			}
-			if (clazz == ShortEntry.class && min < Short.MIN_VALUE) {
+			} else
+			if (clazz == ShortEntry.class && (Long)min < Short.MIN_VALUE) {
 				min = (long)Short.MIN_VALUE;
-			}
-			if (clazz == ByteEntry.class && min < Byte.MIN_VALUE) {
+			} else
+			if (clazz == ByteEntry.class && (Long)min < Byte.MIN_VALUE) {
 				min = (long)Byte.MIN_VALUE;
 			}
 		}
@@ -155,44 +173,60 @@ public abstract class ConfigElement {
 		return min;
 	}
 
-	public Long getMax() {
+	public Object getMax() {
 		
-		Long max = null;
+		Object max = null;
 		String str = this.getConfigProp().maxValue();
 		Class clazz = this.getEntryClass();
 		
 		if (str != null && !str.equals("")) {
 			try {
-				max = Long.parseLong(str);
+				if (DoubleEntry.class.isAssignableFrom(clazz)) {
+					max = Double.parseDouble(str);
+				} else {
+					max = Long.parseLong(str);
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 		
 		if (max == null) {
+			if (clazz == DoubleEntry.class) {
+				max = (double)Double.MAX_VALUE;
+			} else
+			if (clazz == FloatEntry.class) {
+				max = (double)Float.MAX_VALUE;
+			} else
 			if (clazz == LongEntry.class) {
 				max = Long.MAX_VALUE;
-			}
+			} else
 			if (clazz == IntegerEntry.class) {
 				max = (long)Integer.MAX_VALUE;
-			}
+			} else
 			if (clazz == ShortEntry.class) {
 				max = (long)Short.MAX_VALUE;
-			}
+			} else
 			if (clazz == ByteEntry.class) {
 				max = (long)Byte.MAX_VALUE;
 			}
 		} else {
-			if (clazz == LongEntry.class && max > Long.MAX_VALUE) {
-				max = Long.MAX_VALUE;
-			}
-			if (clazz == IntegerEntry.class && max > Integer.MAX_VALUE) {
+			if (clazz == DoubleEntry.class && (Double)max > Double.MAX_VALUE) {
+				max = (double)Double.MAX_VALUE;
+			} else
+			if (clazz == FloatEntry.class && (Double)max > Float.MAX_VALUE) {
+				max = (double)Float.MAX_VALUE;
+			} else
+			if (clazz == LongEntry.class && (Long)max > Long.MAX_VALUE) {
+				max = (long)Long.MAX_VALUE;
+			} else
+			if (clazz == IntegerEntry.class && (Long)max > Integer.MAX_VALUE) {
 				max = (long)Integer.MAX_VALUE;
-			}
-			if (clazz == ShortEntry.class && max > Short.MAX_VALUE) {
+			} else
+			if (clazz == ShortEntry.class && (Long)max > Short.MAX_VALUE) {
 				max = (long)Short.MAX_VALUE;
-			}
-			if (clazz == ByteEntry.class && max > Byte.MAX_VALUE) {
+			} else
+			if (clazz == ByteEntry.class && (Long)max > Byte.MAX_VALUE) {
 				max = (long)Byte.MAX_VALUE;
 			}
 		}

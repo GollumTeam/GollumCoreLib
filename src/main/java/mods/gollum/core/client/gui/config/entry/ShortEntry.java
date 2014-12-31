@@ -10,6 +10,7 @@ public class ShortEntry extends IntegerEntry {
 		super(mc, parent, configElement);
 	}
 	
+	@Override
 	public Object getValue() {
 		
 		Short value = new Short((short) 0);

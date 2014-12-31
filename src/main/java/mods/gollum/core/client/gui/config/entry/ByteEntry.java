@@ -10,6 +10,7 @@ public class ByteEntry extends ShortEntry {
 		super(mc, parent, configElement);
 	}
 	
+	@Override
 	public Object getValue() {
 		
 		Byte value = new Byte((byte)0);

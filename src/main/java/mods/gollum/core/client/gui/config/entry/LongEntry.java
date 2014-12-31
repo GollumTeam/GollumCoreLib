@@ -11,6 +11,7 @@ public class LongEntry extends StringEntry {
 		super(mc, parent, configElement);
 	}
 	
+	@Override
 	public Object getValue() {
 		
 		Long value = new Long(0L);
@@ -26,6 +27,7 @@ public class LongEntry extends StringEntry {
 		return new Long(this.getValue().toString());
 	}
 	
+	@Override
 	protected boolean validKeyTyped(char eventChar) {
 		if (eventChar <= 31 || (eventChar >= '0' && eventChar <='9') || eventChar == '-') {
 			return true;
@@ -36,8 +38,8 @@ public class LongEntry extends StringEntry {
 	@Override
 	public boolean isValidValue() {
 		
-		Long min = this.configElement.getMin();
-		Long max = this.configElement.getMax();
+		Long min = (Long)this.configElement.getMin();
+		Long max = (Long)this.configElement.getMax();
 		
 		return 
 			this.textFieldValue.getText().equals(this.getValue().toString()) &&
