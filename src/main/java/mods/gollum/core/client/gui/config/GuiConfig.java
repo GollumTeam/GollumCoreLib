@@ -146,9 +146,9 @@ public abstract class GuiConfig extends GuiScreen {
 			this.saveValue ();
 			this.displayParent();
 		} else if (button.id == 2001) {
-			this.entryList.setToDefault ();
+			this.setToDefault ();
 		} else if (button.id == 2002) {
-			this.entryList.undoChanges ();
+			this.undoChanges ();
 		}
 	}
 	
@@ -174,9 +174,9 @@ public abstract class GuiConfig extends GuiScreen {
 			this.drawCenteredString(this.fontRendererObj, title2, this.width / 2, 18, 16777215);
 		}
 		
-		this.btDone.enabled  = this.entryList.isValidValues();
-		this.btUndo.enabled  = this.entryList.isChanged();
-		this.btReset.enabled = !this.entryList.isDefault();
+		this.btDone.enabled  = this.isValidValues();
+		this.btUndo.enabled  = this.isChanged();
+		this.btReset.enabled = !this.isDefault();
 		
 		super.drawScreen(mouseX, mouseY, partialTicks);
 		
@@ -186,6 +186,28 @@ public abstract class GuiConfig extends GuiScreen {
 		if (this.resetHoverChecker.checkHover(mouseX, mouseY)) {
 			this.drawToolTip(this.mc.fontRenderer.listFormattedStringToWidth(I18n.format("fml.configgui.tooltip.resetAll"), 300), mouseX, mouseY);
 		}
+		
+		this.entryList.drawScreenPost (mouseX, mouseY, partialTicks);
+	}
+	
+	protected boolean isValidValues() {
+		return this.entryList.isValidValues ();
+	}
+	
+	protected boolean isChanged() {
+		return this.entryList.isChanged ();
+	}
+	
+	protected boolean isDefault() {
+		return this.entryList.isDefault ();
+	}
+	
+	protected void setToDefault() {
+		this.entryList.setToDefault ();
+	}
+	
+	protected void undoChanges() {
+		this.entryList.undoChanges ();
 	}
 	
 	public void drawToolTip(List stringList, int x, int y) {
@@ -241,7 +263,7 @@ public abstract class GuiConfig extends GuiScreen {
 		return false;
 	}
 	
-	public boolean displayEntryeLabel() {
+	public boolean displayEntriesLabel() {
 		return true;
 	}
 	

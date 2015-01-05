@@ -10,17 +10,20 @@ import java.util.TreeMap;
 
 import mods.gollum.core.client.gui.config.element.TypedValueElement;
 import mods.gollum.core.client.gui.config.entry.ArrayEntry;
+import mods.gollum.core.client.gui.config.entry.JsonObjectEntry;
 import mods.gollum.core.common.config.ConfigProp;
 import mods.gollum.core.common.config.JsonConfigProp;
+import mods.gollum.core.tools.simplejson.Json;
+import mods.gollum.core.tools.simplejson.JsonObject;
 
-public class GuiArrayConfig extends GuiConfig {
+public class GuiJsonObjectConfig extends GuiConfig {
 
-	private ArrayEntry parentEntry;
+	private JsonObjectEntry parentEntry;
 	
-	public GuiArrayConfig(ArrayEntry arrayEntry) {
-		super(arrayEntry.parent.parent);
-		this.parentEntry = arrayEntry;
-		this.titleLine2  = ((GuiConfig)this.parent).titleLine2 + " > " + arrayEntry.getLabel();
+	public GuiJsonObjectConfig(JsonObjectEntry jsonObjectEntry) {
+		super(jsonObjectEntry.parent.parent);
+		this.parentEntry = jsonObjectEntry;
+		this.titleLine2  = ((GuiConfig)this.parent).titleLine2 + " > " + jsonObjectEntry.getLabel();
 	}
 	
 	@Override
@@ -29,7 +32,7 @@ public class GuiArrayConfig extends GuiConfig {
 	}
 	
 	public boolean displayEntriesLabel() {
-		return false;
+		return true;
 	}
 	
 	@Override
@@ -37,33 +40,26 @@ public class GuiArrayConfig extends GuiConfig {
 		
 		try {
 			
-			Object values  = this.parentEntry.getValue();
-			Object dValues = this.parentEntry.configElement.getDefaultValue();
+			JsonObject values  = (JsonObject)this.parentEntry.getValue();
+			JsonObject dValues = (JsonObject)this.parentEntry.configElement.getDefaultValue();
 			
-			for (int i = 0; i < Array.getLength(values); i++) {
+			for (Entry<String, Json> entry : values.allChildWithKey()) {
 				
-				Object value = Array.get(values, i);
-				try {
-					Object cloned = value.getClass().getMethod("clone").invoke(value);
-					value = cloned;
-				} catch (Exception e) {
-				}
 				
 				Object defaultValue = null;
-				if (i < Array.getLength(dValues)) {
-					defaultValue = Array.get(dValues, i);
+				if (dValues.containsKey(entry.getKey())) {
+					defaultValue = values.child(entry.getKey());
 				} else {
 					defaultValue = this.parentEntry.configElement.newValue();
 				}
 				if (defaultValue == null) {
-					log.severe("A value in array are skipped. Don't default new value are found for this field : \""+this.parentEntry.getName()+"["+i+"]\"");
+					log.severe("A value in array are skipped. Don't default new value are found for this field : \""+this.parentEntry.getName()+"["+entry.getKey()+"]\"");
 					continue;
 				}
 				
-				Class type      = values.getClass().getComponentType();
 				ConfigProp prop = this.parentEntry.configElement.getConfigProp();
 				
-				this.configElements.add(new TypedValueElement(type, "", value, defaultValue, prop));
+				this.configElements.add(new TypedValueElement(Json.class, entry.getKey(), entry.getValue(), defaultValue, prop));
 			}
 		} catch (Exception e)  {
 			e.printStackTrace();
@@ -116,18 +112,13 @@ public class GuiArrayConfig extends GuiConfig {
 	public ConfigProp newConfigProp() {
 		return this.parentEntry.configElement.getConfigProp();
 	}
-
 	@Override
 	public void saveValue() {
 		
-		ArrayList<Object> values = this.entryList.getValuesByIndex();
-		
-		Class type = this.parentEntry.getValue().getClass().getComponentType();
-		Object rtn = Array.newInstance(type,values.size());
-		
-		int i = 0;
-		for (Object value : values) {
-			Array.set (rtn, i++, value);
+		LinkedHashMap<String, Object> values = this.entryList.getValues();
+		JsonObject rtn = new JsonObject();
+		for (Entry<String, Object> entry : values.entrySet()) {
+			rtn.add(entry.getKey(), (Json)entry.getValue());
 		}
 		
 		this.parentEntry.setValue(rtn);

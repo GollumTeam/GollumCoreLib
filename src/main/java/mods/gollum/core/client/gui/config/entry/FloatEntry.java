@@ -6,8 +6,8 @@ import net.minecraft.client.Minecraft;
 
 public class FloatEntry extends DoubleEntry {
 	
-	public FloatEntry(Minecraft mc, GuiConfigEntries parent, ConfigElement configElement) {
-		super(mc, parent, configElement);
+	public FloatEntry(int index, Minecraft mc, GuiConfigEntries parent, ConfigElement configElement) {
+		super(index, mc, parent, configElement);
 	}
 	
 	@Override

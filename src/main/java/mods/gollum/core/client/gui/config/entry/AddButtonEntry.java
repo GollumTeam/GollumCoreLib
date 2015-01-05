@@ -19,8 +19,8 @@ public class AddButtonEntry extends ConfigEntry {
 	protected GuiTextField textFieldValue;
 	private boolean first = true;
 	
-	public AddButtonEntry(Minecraft mc, GuiConfigEntries parent) {
-		super(mc, parent, new TypedValueElement(int.class, "", 0, 0, new JsonConfigProp()));
+	public AddButtonEntry(int index, Minecraft mc, GuiConfigEntries parent) {
+		super(index, mc, parent, new TypedValueElement(int.class, "", 0, 0, new JsonConfigProp()));
 		this.labelDisplay = false;
 	}
 	
@@ -33,7 +33,7 @@ public class AddButtonEntry extends ConfigEntry {
 	}
 	
 	public Object getValue() {
-		return null;
+		return this.configElement.getValue();
 	}
 	
 	public ConfigEntry setValue(Object value) {

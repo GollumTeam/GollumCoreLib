@@ -7,8 +7,8 @@ import net.minecraft.client.Minecraft;
 
 public class DoubleEntry extends StringEntry {
 	
-	public DoubleEntry(Minecraft mc, GuiConfigEntries parent, ConfigElement configElement) {
-		super(mc, parent, configElement);
+	public DoubleEntry(int index, Minecraft mc, GuiConfigEntries parent, ConfigElement configElement) {
+		super(index, mc, parent, configElement);
 	}
 	
 	@Override
@@ -58,7 +58,8 @@ public class DoubleEntry extends StringEntry {
 		return 
 			val != null &&
 			this.getDoubleValue() >= min &&
-			this.getDoubleValue() <= max
+			this.getDoubleValue() <= max &&
+			this.respectPattern()
 		;
 	}
 

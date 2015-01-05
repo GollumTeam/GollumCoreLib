@@ -1,23 +1,39 @@
 package mods.gollum.core.client.gui.config.element;
 
+import java.util.Set;
+
 import mods.gollum.core.client.gui.config.entry.ArrayEntry;
+import mods.gollum.core.client.gui.config.entry.BlockEntry;
 import mods.gollum.core.client.gui.config.entry.BooleanEntry;
 import mods.gollum.core.client.gui.config.entry.ByteEntry;
 import mods.gollum.core.client.gui.config.entry.ConfigEntry;
+import mods.gollum.core.client.gui.config.entry.ConfigJsonTypeEntry;
 import mods.gollum.core.client.gui.config.entry.DoubleEntry;
 import mods.gollum.core.client.gui.config.entry.FloatEntry;
 import mods.gollum.core.client.gui.config.entry.IntegerEntry;
+import mods.gollum.core.client.gui.config.entry.ItemEntry;
+import mods.gollum.core.client.gui.config.entry.JsonEntry;
+import mods.gollum.core.client.gui.config.entry.JsonObjectEntry;
+import mods.gollum.core.client.gui.config.entry.ListEntry;
 import mods.gollum.core.client.gui.config.entry.LongEntry;
+import mods.gollum.core.client.gui.config.entry.ModEntry;
 import mods.gollum.core.client.gui.config.entry.ShortEntry;
+import mods.gollum.core.client.gui.config.entry.SliderEntry;
 import mods.gollum.core.client.gui.config.entry.StringEntry;
-import mods.gollum.core.common.config.ConfigLoader.ConfigLoad;
 import mods.gollum.core.common.config.ConfigProp;
+import mods.gollum.core.common.config.type.IConfigJsonType;
+import mods.gollum.core.tools.simplejson.Json;
 
 public abstract class ConfigElement {
 	
 	private String name;
 	protected Object value = null;
 	protected Object defaultValue = null;
+	
+	public static final double DOUBLE_MAX = 9999999.0D;
+	public static final double DOUBLE_MIN = -9999999.0D;
+	public static final float  FLOAT_MAX  = 99999.0F;
+	public static final float  FLOAT_MIN  = -99999.0F;
 	
 	public ConfigElement (String name) {
 		this.name = name;
@@ -31,20 +47,50 @@ public abstract class ConfigElement {
 	
 	private Class< ? extends ConfigEntry> getEntryClass(Class clazz) {
 		
-//		if (this.anno.type() == ConfigProp.Type.ITEM)      { return ItemEntry          .class; }
-//		if (this.anno.type() == ConfigProp.Type.BLOCK)     { return BlockEntry         .class; }
-////		if (this.anno.type() == ConfigProp.Type.SLIDER)    { return SliderEntry        .class; }
-//		if (Json           .class.isAssignableFrom(clazz)) { return JsonEntry          .class; }
-//		if (IConfigJsonType.class.isAssignableFrom(clazz)) { return ConfigJsonTypeEntry.class; }
-		if (String         .class.isAssignableFrom(clazz)) { return StringEntry        .class; }
-		if (Long           .class.isAssignableFrom(clazz) || Long     .TYPE.isAssignableFrom(clazz)) { return LongEntry.class; }
-		if (Integer        .class.isAssignableFrom(clazz) || Integer  .TYPE.isAssignableFrom(clazz)) { return IntegerEntry.class; }
-		if (Short          .class.isAssignableFrom(clazz) || Short    .TYPE.isAssignableFrom(clazz)) { return ShortEntry.class; }
-		if (Byte           .class.isAssignableFrom(clazz) || Byte     .TYPE.isAssignableFrom(clazz)) { return ByteEntry.class; }
-		if (Character      .class.isAssignableFrom(clazz) || Character.TYPE.isAssignableFrom(clazz)) { return ByteEntry.class; }
-		if (Double         .class.isAssignableFrom(clazz) || Double   .TYPE.isAssignableFrom(clazz)) { return DoubleEntry .class; }
-		if (Float          .class.isAssignableFrom(clazz) || Float    .TYPE.isAssignableFrom(clazz)) { return FloatEntry .class; }
-		if (Boolean        .class.isAssignableFrom(clazz) || Boolean  .TYPE.isAssignableFrom(clazz)) { return BooleanEntry.class; }
+		ConfigProp prop = this.getConfigProp();
+		
+		if (clazz == null) {
+			return null;
+		}
+
+		if (Set            .class.isAssignableFrom(clazz)) { return JsonObjectEntry.class;     }
+		if (Json           .class.isAssignableFrom(clazz)) { return JsonEntry.class;           }
+		if (IConfigJsonType.class.isAssignableFrom(clazz)) { return ConfigJsonTypeEntry.class; }
+		if (String.class.isAssignableFrom(clazz)) {
+			if (
+				prop.validValues() != null && 
+				(
+					prop.validValues().length > 1 ||
+					(prop.validValues().length == 1 && !prop.validValues()[0].equals(""))
+				)
+			) {
+				return ListEntry.class;
+			}
+			if (prop.type() == ConfigProp.Type.MOD)   { return ModEntry  .class; }
+			if (prop.type() == ConfigProp.Type.ITEM)  { return ItemEntry .class; }
+			if (prop.type() == ConfigProp.Type.BLOCK) { return BlockEntry.class; }
+			return StringEntry.class;
+		}
+		
+		if (
+			Long   .class.isAssignableFrom(clazz) || Long   .TYPE.isAssignableFrom(clazz) ||
+			Integer.class.isAssignableFrom(clazz) || Integer.TYPE.isAssignableFrom(clazz) ||
+			Short  .class.isAssignableFrom(clazz) || Short  .TYPE.isAssignableFrom(clazz) ||
+			Byte   .class.isAssignableFrom(clazz) || Byte   .TYPE.isAssignableFrom(clazz) ||
+			Double .class.isAssignableFrom(clazz) || Double .TYPE.isAssignableFrom(clazz) ||
+			Float  .class.isAssignableFrom(clazz) || Float  .TYPE.isAssignableFrom(clazz)
+		) {
+			if (prop.type() == ConfigProp.Type.SLIDER) {
+				return SliderEntry.class;
+			}
+			if (Byte           .class.isAssignableFrom(clazz) || Byte   .TYPE.isAssignableFrom(clazz)) { return ByteEntry   .class; }
+			if (Short          .class.isAssignableFrom(clazz) || Short  .TYPE.isAssignableFrom(clazz)) { return ShortEntry  .class; }
+			if (Integer        .class.isAssignableFrom(clazz) || Integer.TYPE.isAssignableFrom(clazz)) { return IntegerEntry.class; }
+			if (Long           .class.isAssignableFrom(clazz) || Long   .TYPE.isAssignableFrom(clazz)) { return LongEntry   .class; }
+			if (Float          .class.isAssignableFrom(clazz) || Float  .TYPE.isAssignableFrom(clazz)) { return FloatEntry  .class; }
+			if (Double         .class.isAssignableFrom(clazz) || Double .TYPE.isAssignableFrom(clazz)) { return DoubleEntry .class; }
+		}
+		if (Boolean.class.isAssignableFrom(clazz) || Boolean  .TYPE.isAssignableFrom(clazz)) { return BooleanEntry.class; }
 		
 		if (clazz.isArray()) {
 			return ArrayEntry.class;
@@ -83,12 +129,37 @@ public abstract class ConfigElement {
 	
 	public Object newValue() {
 		
-		Class clazz = this.getEntryClass (this.value.getClass().getComponentType());
-		String newValue= this.getConfigProp().newValue();
+		Class componentType = this.value.getClass().getComponentType();
+		Class clazz         = this.getEntryClass (this.value.getClass().getComponentType());
+		String newValue     = this.getConfigProp().newValue();
 		
 		if (clazz == StringEntry.class) {
 			return newValue;
 		} else
+		if (!newValue.equals("") && ListEntry.class.isAssignableFrom(clazz)) {
+			return newValue;
+		}  else
+		if (clazz == JsonEntry.class) {
+			
+		} else
+		if (clazz == SliderEntry.class) {
+			
+			try {
+				if (Byte   .class.isAssignableFrom(componentType) || Byte   .TYPE.isAssignableFrom(componentType)) { return Byte   .parseByte   (newValue); }
+				if (Short  .class.isAssignableFrom(componentType) || Short  .TYPE.isAssignableFrom(componentType)) { return Short  .parseShort  (newValue); }
+				if (Integer.class.isAssignableFrom(componentType) || Integer.TYPE.isAssignableFrom(componentType)) { return Integer.parseInt    (newValue); }
+				if (Long   .class.isAssignableFrom(componentType) || Long   .TYPE.isAssignableFrom(componentType)) { return Long   .parseLong   (newValue); }
+				if (Float  .class.isAssignableFrom(componentType) || Float  .TYPE.isAssignableFrom(componentType)) { return Float  .parseFloat  (newValue); }
+				if (Double .class.isAssignableFrom(componentType) || Double .TYPE.isAssignableFrom(componentType)) { return Double .parseDouble (newValue); }
+			} catch (Exception e) {
+				if (Byte   .class.isAssignableFrom(componentType) || Byte   .TYPE.isAssignableFrom(componentType)) { return (byte)0; }
+				if (Short  .class.isAssignableFrom(componentType) || Short  .TYPE.isAssignableFrom(componentType)) { return (short)0; }
+				if (Integer.class.isAssignableFrom(componentType) || Integer.TYPE.isAssignableFrom(componentType)) { return (int)0; }
+				if (Long   .class.isAssignableFrom(componentType) || Long   .TYPE.isAssignableFrom(componentType)) { return (long)0; }
+				if (Float  .class.isAssignableFrom(componentType) || Float  .TYPE.isAssignableFrom(componentType)) { return (double)0; }
+				if (Double .class.isAssignableFrom(componentType) || Double .TYPE.isAssignableFrom(componentType)) { return (float)0; }
+			}
+		}  else
 		if (clazz == LongEntry.class) {
 			try {
 				return Long.parseLong(newValue);
@@ -166,7 +237,10 @@ public abstract class ConfigElement {
 		
 		if (str != null && !str.equals("")) {
 			try {
-				if (DoubleEntry.class.isAssignableFrom(clazz)) {
+				if (
+					DoubleEntry.class.isAssignableFrom(clazz) ||
+					SliderEntry.class.isAssignableFrom(clazz)
+				) {
 					min = Double.parseDouble(str);
 				} else {
 					min = Long.parseLong(str);
@@ -177,11 +251,35 @@ public abstract class ConfigElement {
 		}
 		
 		if (min == null) {
+			
+			if (clazz == SliderEntry.class) {
+				Class clazz2 = this.getValue().getClass();
+				if (Double.class.isAssignableFrom(clazz2) || Double.TYPE.isAssignableFrom(clazz2)) {
+					min = this.DOUBLE_MIN;
+				} else
+				if (Float.class.isAssignableFrom(clazz2) || Float.TYPE.isAssignableFrom(clazz2)) {
+					min = new Double (this.FLOAT_MIN);
+				} else
+				if (Long.class.isAssignableFrom(clazz2) || Long.TYPE.isAssignableFrom(clazz2)) {
+					min = this.DOUBLE_MIN;
+				} else
+				if (Integer.class.isAssignableFrom(clazz2) || Integer.TYPE.isAssignableFrom(clazz2)) {
+					min = new Double (this.FLOAT_MIN);
+				} else
+				if (Short.class.isAssignableFrom(clazz2) || Short.TYPE.isAssignableFrom(clazz2)) {
+					min = new Double (Short.MIN_VALUE);
+				} else
+				if (Byte.class.isAssignableFrom(clazz2) || Byte.TYPE.isAssignableFrom(clazz2)) {
+					min = new Double (Byte.MIN_VALUE);
+				}
+				
+			} else
+			
 			if (clazz == DoubleEntry.class) {
-				min = (double)Double.MIN_VALUE;
+				min = new Double(this.DOUBLE_MIN);
 			} else
 			if (clazz == FloatEntry.class) {
-				min = (double)Float.MIN_VALUE;
+				min = new Double(this.FLOAT_MIN);
 			} else
 			if (clazz == LongEntry.class) {
 				min = (long)Long.MIN_VALUE;
@@ -196,11 +294,53 @@ public abstract class ConfigElement {
 				min = (long)Byte.MIN_VALUE;
 			}
 		} else {
-			if (clazz == DoubleEntry.class && (Double)min < Double.MIN_VALUE) {
-				min = (double)Double.MIN_VALUE;
+			if (clazz == SliderEntry.class) {
+				Class clazz2 = this.getValue().getClass();
+				if (
+					(Double.class.isAssignableFrom(clazz2) || Double.TYPE.isAssignableFrom(clazz2)) &&
+					(Double)min < this.DOUBLE_MIN
+				) {
+					min = this.DOUBLE_MIN;
+				} else
+				if (
+					(Float.class.isAssignableFrom(clazz2) || Float.TYPE.isAssignableFrom(clazz2)) &&
+					(Double)min < this.FLOAT_MIN
+				) {
+					min = new Double(this.FLOAT_MIN);
+				} else
+				if (
+					(Long.class.isAssignableFrom(clazz2) || Long.TYPE.isAssignableFrom(clazz2)) &&
+					(Double)min < this.DOUBLE_MIN
+				) {
+					min = new Double(this.DOUBLE_MIN);
+				} else
+				if (
+					(Integer.class.isAssignableFrom(clazz2) || Integer.TYPE.isAssignableFrom(clazz2)) &&
+					(Double)min < this.FLOAT_MIN
+				) {
+					min = new Double(this.FLOAT_MIN);
+				} else
+				if (
+					(Short.class.isAssignableFrom(clazz2) || Short.TYPE.isAssignableFrom(clazz2) &&
+					(Double)min < Short.MIN_VALUE
+				)) {
+					min = new Double(Short.MIN_VALUE);
+				} else
+				if (
+					(Byte.class.isAssignableFrom(clazz2) || Byte.TYPE.isAssignableFrom(clazz2)) &&
+					(Double)min < Byte.MIN_VALUE
+					
+				) {
+					min = new Double(Byte.MIN_VALUE);
+				}
+				
 			} else
-			if (clazz == FloatEntry.class && (Double)min < Float.MIN_VALUE) {
-				min = (double)Float.MIN_VALUE;
+			
+			if (clazz == DoubleEntry.class && (Double)min < this.DOUBLE_MIN) {
+				min = new Double(this.DOUBLE_MIN);
+			} else
+			if (clazz == FloatEntry.class && (Double)min < this.FLOAT_MIN) {
+				min = new Double(this.FLOAT_MIN);
 			} else
 			if (clazz == LongEntry.class && (Long)min < Long.MIN_VALUE) {
 				min = (long)Long.MIN_VALUE;
@@ -238,11 +378,33 @@ public abstract class ConfigElement {
 		}
 		
 		if (max == null) {
+			if (clazz == SliderEntry.class) {
+				Class clazz2 = this.getValue().getClass();
+				if (Double.class.isAssignableFrom(clazz2) || Double.TYPE.isAssignableFrom(clazz2)) {
+					max = this.DOUBLE_MAX;
+				} else
+				if (Float.class.isAssignableFrom(clazz2) || Float.TYPE.isAssignableFrom(clazz2)) {
+					max = new Double(this.FLOAT_MAX);
+				} else
+				if (Long.class.isAssignableFrom(clazz2) || Long.TYPE.isAssignableFrom(clazz2)) {
+					max = this.DOUBLE_MAX;
+				} else
+				if (Integer.class.isAssignableFrom(clazz2) || Integer.TYPE.isAssignableFrom(clazz2)) {
+					max = new Double(this.FLOAT_MAX);
+				} else
+				if (Short.class.isAssignableFrom(clazz2) || Short.TYPE.isAssignableFrom(clazz2)) {
+					max = new Double(Short.MAX_VALUE);
+				} else
+				if (Byte.class.isAssignableFrom(clazz2) || Byte.TYPE.isAssignableFrom(clazz2)) {
+					max = new Double(Byte.MAX_VALUE);
+				}
+				
+			} else
 			if (clazz == DoubleEntry.class) {
-				max = (double)Double.MAX_VALUE;
+				max = new Double(this.DOUBLE_MAX);
 			} else
 			if (clazz == FloatEntry.class) {
-				max = (double)Float.MAX_VALUE;
+				max = new Double(this.FLOAT_MAX);
 			} else
 			if (clazz == LongEntry.class) {
 				max = Long.MAX_VALUE;
@@ -257,11 +419,55 @@ public abstract class ConfigElement {
 				max = (long)Byte.MAX_VALUE;
 			}
 		} else {
-			if (clazz == DoubleEntry.class && (Double)max > Double.MAX_VALUE) {
-				max = (double)Double.MAX_VALUE;
+			
+			if (clazz == SliderEntry.class) {
+				Class clazz2 = this.getValue().getClass();
+				if (
+					(Double.class.isAssignableFrom(clazz2) || Double.TYPE.isAssignableFrom(clazz2)) &&
+					(Double)max > this.DOUBLE_MAX
+				) {
+					max = this.DOUBLE_MAX;
+				} else
+				if (
+					(Float.class.isAssignableFrom(clazz2) || Float.TYPE.isAssignableFrom(clazz2)) &&
+					(Double)max > this.FLOAT_MAX
+				) {
+					max = new Double (this.FLOAT_MAX);
+				} else
+				if (
+					(Long.class.isAssignableFrom(clazz2) || Long.TYPE.isAssignableFrom(clazz2)) &&
+					(Long)max > this.DOUBLE_MAX
+				) {
+					max = this.DOUBLE_MAX;
+				} else
+				if (
+					(Integer.class.isAssignableFrom(clazz2) || Integer.TYPE.isAssignableFrom(clazz2)) &&
+					(Long)max > this.FLOAT_MAX
+				) {
+					max = new Double (Integer.MAX_VALUE);
+				} else
+				if (
+					(Short.class.isAssignableFrom(clazz2) || Short.TYPE.isAssignableFrom(clazz2) &&
+					(Long)max > Short.MAX_VALUE
+					
+				)) {
+					max = new Double (Short.MAX_VALUE);
+				} else
+				if (
+					(Byte.class.isAssignableFrom(clazz2) || Byte.TYPE.isAssignableFrom(clazz2)) &&
+					(Long)max > Byte.MAX_VALUE
+					
+				) {
+					max = new Double (Byte.MAX_VALUE);
+				}
+				
 			} else
-			if (clazz == FloatEntry.class && (Double)max > Float.MAX_VALUE) {
-				max = (double)Float.MAX_VALUE;
+			
+			if (clazz == DoubleEntry.class && (Double)max > this.DOUBLE_MAX) {
+				max = new Double(this.DOUBLE_MAX);
+			} else
+			if (clazz == FloatEntry.class && (Double)max > this.FLOAT_MAX) {
+				max = new Double(this.FLOAT_MAX);
 			} else
 			if (clazz == LongEntry.class && (Long)max > Long.MAX_VALUE) {
 				max = (long)Long.MAX_VALUE;

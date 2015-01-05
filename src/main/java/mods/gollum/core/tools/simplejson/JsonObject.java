@@ -17,7 +17,7 @@ import argo.jdom.JsonObjectNodeBuilder;
 
 public class JsonObject extends Json {
 	
-	JsonObject () {
+	public JsonObject () {
 		this.value = new HashMap<String, Json>();
 	}
 	

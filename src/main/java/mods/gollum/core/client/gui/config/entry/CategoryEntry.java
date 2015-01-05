@@ -15,8 +15,8 @@ public class CategoryEntry extends ButtonEntry {
 	
 	private Object value;
 	
-	public CategoryEntry(Minecraft mc, GuiConfigEntries parent, ConfigElement configElement) {
-		super(mc, parent, configElement);
+	public CategoryEntry(int index, Minecraft mc, GuiConfigEntries parent, ConfigElement configElement) {
+		super(index, mc, parent, configElement);
 		
 		this.labelDisplay = false;
 		this.updateValueButtonText(this.getLabel());

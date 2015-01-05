@@ -7,8 +7,8 @@ import net.minecraft.client.Minecraft;
 
 public class LongEntry extends StringEntry {
 	
-	public LongEntry(Minecraft mc, GuiConfigEntries parent, ConfigElement configElement) {
-		super(mc, parent, configElement);
+	public LongEntry(int index, Minecraft mc, GuiConfigEntries parent, ConfigElement configElement) {
+		super(index, mc, parent, configElement);
 	}
 	
 	@Override
@@ -44,7 +44,8 @@ public class LongEntry extends StringEntry {
 		return 
 			this.textFieldValue.getText().equals(this.getValue().toString()) &&
 			this.getLongValue() >= min &&
-			this.getLongValue() <= max
+			this.getLongValue() <= max &&
+			this.respectPattern()
 		;
 	}
 

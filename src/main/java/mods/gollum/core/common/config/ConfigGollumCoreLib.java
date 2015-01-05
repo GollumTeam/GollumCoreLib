@@ -24,7 +24,7 @@ public class ConfigGollumCoreLib extends Config {
 	
 	@ConfigProp(mcRestart = true) 
 	public boolean devTools = false;
-
+	
 	@ConfigProp (info = "Display version checker message")
 	public boolean versionChecker = true;
 	
@@ -33,47 +33,63 @@ public class ConfigGollumCoreLib extends Config {
 	// Test exemple //
 	//////////////////
 	
-	
-//	// JsonObject
-//	@ConfigProp(group="Test")
-//	public Json json1 = Json.create(
-//		new Json.EntryObject("field1", Json.create("Test")),
-//		new Json.EntryObject("field2", Json.create(1)),
-//		new Json.EntryObject("field3", Json.create(1.5))
-//	);
-//
-//	// JsonArray
-//	@ConfigProp(group="Test")
-//	public Json json2 = Json.create(
-//		Json.create("Test1"),
-//		Json.create("Test2"),
-//		Json.create("Test3")
-//	);
-//	
-//	@ConfigProp(group="Test")
-//	public Json json3 = Json.create(
-//		Json.create(1),
-//		Json.create(2),
-//		Json.create(3)
-//	);
-//	
-//	
-//	@ConfigProp(group="Test", type=Type.SLIDER)
-//	public byte slider = 20;
-//	
-//	@ConfigProp(group="Test", type=Type.ITEM)
-//	public String item = "minecraft:iron_axe";
-//	
-//	@ConfigProp(group="Test", type=Type.BLOCK)
-//	public String block = "minecraft:tnt";
-//	
-//	@ConfigProp(group="Test", type=Type.MOD)
-//	public String mod = ModGollumCoreLib.MODID;
-//
-//	@ConfigProp(group="Test") public  ItemStackConfigType itemStack1 = new ItemStackConfigType("minecraft:planks", 10, 3);
-//	@ConfigProp(group="Test") public  ItemStackConfigType[] itemStackAr1 = new ItemStackConfigType[] { new ItemStackConfigType("minecraft:planks", 10, 3), new ItemStackConfigType("minecraft:planks", 10, 3) };
-//	
+	// JsonObject
+	@ConfigProp(group="Test", dev=true)
+	public Json json1 = Json.create(
+		new Json.EntryObject("field1", Json.create("Test")),
+		new Json.EntryObject("field2", Json.create(1)),
+		new Json.EntryObject("field3", Json.create(1.5))
+	);
 
+	// JsonArray
+	@ConfigProp(group="Test", dev=true)
+	public Json json2 = Json.create(
+		Json.create("Test1"),
+		Json.create("Test2"),
+		Json.create("Test3")
+	);
+	
+	@ConfigProp(group="Test", dev=true)
+	public Json json3 = Json.create(
+		Json.create(1),
+		Json.create(2),
+		Json.create(3)
+	);
+	
+	// Json
+	@ConfigProp(group="Test", dev=true) public Json jsonStr    = Json.create("Test");
+	@ConfigProp(group="Test", dev=true) public Json jsonLong   = Json.create(10L);
+	@ConfigProp(group="Test", dev=true) public Json jsonInt    = Json.create((int)10);
+	@ConfigProp(group="Test", dev=true) public Json jsonShort  = Json.create((short)10);
+	@ConfigProp(group="Test", dev=true) public Json jsonByte   = Json.create((byte)10);
+	@ConfigProp(group="Test", dev=true) public Json jsonDouble = Json.create(10.5D);
+	@ConfigProp(group="Test", dev=true) public Json jsonFloat  = Json.create(10.5F);
+	
+	@ConfigProp(group="Test", dev=true, type=Type.SLIDER)
+	public byte slider = 20;
+	
+	@ConfigProp(group="Test", dev=true, type=Type.SLIDER)
+	public int[] ArSlider = new int[] { 20, 40 };
+	
+	@ConfigProp(group="Test", dev=true, type=Type.SLIDER)
+	public double slider2 = 20.5;
+	
+	@ConfigProp(group="Test", dev=true, type=Type.ITEM)
+	public String item = "minecraft:iron_axe";
+	
+	@ConfigProp(group="Test", dev=true, type=Type.BLOCK)
+	public String block = "minecraft:tnt";
+	
+	@ConfigProp(group="Test", dev=true, type=Type.MOD)
+	public String mod = ModGollumCoreLib.MODID;
+	
+	@ConfigProp(group="Test", dev=true, type=Type.MOD, newValue=ModGollumCoreLib.MODID)
+	public String arMod[] = new String[] { ModGollumCoreLib.MODID };
+	
+	@ConfigProp(group="Test") public  ItemStackConfigType itemStack1 = new ItemStackConfigType("minecraft:planks", 10, 3);
+//	@ConfigProp(group="Test") public  ItemStackConfigType[] itemStackAr1 = new ItemStackConfigType[] { new ItemStackConfigType("minecraft:planks", 10, 3), new ItemStackConfigType("minecraft:planks", 10, 3) };
+	
+	
 	@ConfigProp(group="Test", dev=true, worldRestart=true)
 	public String worldRestart = "worldRestart";
 	
@@ -124,22 +140,19 @@ public class ConfigGollumCoreLib extends Config {
 	@ConfigProp(group="Test", dev=true, minListLength="1", maxListLength="5")
 	public String[] arMinMaxFixed = new String[] { "arMinMaxFixed" , "arMinMaxFixed" , "arMinMaxFixed" };
 	
-//	@ConfigProp(
-//		group="Test",
-//		maxListLength = "5"
-//	) 
-//	public String [] sAr2 = new String [] { "AAA" , "BBB" , "CCC" };
-//	
-//	@ConfigProp(
-//		group="Test",
-//		isListLengthFixed = true,
-//		pattern="\\d*"
-//	) 
-//	public String [] sAr3 = new String [] { "123" , "465" , "789" };
-//	
-//	@ConfigProp(
-//		group="Test",
-//		pattern="\\d*"
-//	) 
-//	public String s2 = "123";
+	
+	@ConfigProp(
+		group="Test", 
+		dev=true,
+		isListLengthFixed = true,
+		pattern="\\d*"
+	) 
+	public String [] sArPattern = new String [] { "123" , "465" , "789" };
+	
+	@ConfigProp(
+		group="Test",
+		dev=true,
+		pattern="\\d*"
+	) 
+	public String sPattern = "123";
 }

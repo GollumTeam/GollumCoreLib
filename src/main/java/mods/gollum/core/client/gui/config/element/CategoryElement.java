@@ -60,7 +60,7 @@ public class CategoryElement extends ConfigElement {
 	public Class getType() {
 		return null;
 	}
-
+	
 	public Class< ? extends ConfigEntry> getEntryClass() {
 		return CategoryEntry.class;
 	}

@@ -12,10 +12,10 @@ import net.minecraft.client.resources.I18n;
 
 public class ArrayEntry extends ButtonEntry {
 	
-	Object values;
+	protected Object values;
 	
-	public ArrayEntry(Minecraft mc, GuiConfigEntries parent, ConfigElement configElement) {
-		super(mc, parent, configElement);
+	public ArrayEntry(int index, Minecraft mc, GuiConfigEntries parent, ConfigElement configElement) {
+		super(index, mc, parent, configElement);
 		
 		Object values = configElement.getValue();
 		
@@ -23,6 +23,7 @@ public class ArrayEntry extends ButtonEntry {
 		for (int i = 0; i < Array.getLength(values);i++) {
 			Array.set(this.values, i, Array.get(values, i));
 		}
+		
 		this.updateValueButtonText();
 	}
 	
@@ -49,11 +50,7 @@ public class ArrayEntry extends ButtonEntry {
 	
 	@Override
 	public ConfigEntry setValue(Object value) {
-		try {
-			this.values = value;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		this.values = value;
 		this.updateValueButtonText();
 		return this;
 	}

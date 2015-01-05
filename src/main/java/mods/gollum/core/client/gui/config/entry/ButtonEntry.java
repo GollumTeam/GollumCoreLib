@@ -16,8 +16,8 @@ public abstract class ButtonEntry extends ConfigEntry {
 	public static Boolean COLOR_GREEN = true;
 	public static Boolean COLOR_RED   = false;
 	
-	public ButtonEntry(Minecraft mc, GuiConfigEntries parent, ConfigElement configElement) {
-		super(mc, parent, configElement);
+	public ButtonEntry(int index, Minecraft mc, GuiConfigEntries parent, ConfigElement configElement) {
+		super(index, mc, parent, configElement);
 		
 		this.btnValue = new GuiButtonExt(0, parent.controlX, 0, parent.controlWidth, 18, "");
 		
@@ -62,7 +62,7 @@ public abstract class ButtonEntry extends ConfigEntry {
 	public boolean mousePressed(int index, int x, int y, int mouseEvent, int relativeX, int relativeY) {
 		if (this.btnValue.mousePressed(this.mc, x, y)) {
 			btnValue.func_146113_a(mc.getSoundHandler());
-			valueButtonPressed(index);
+			this.valueButtonPressed(index);
 			return true;
 		}
 		return super.mousePressed(index, x, y, mouseEvent, relativeX, relativeY);

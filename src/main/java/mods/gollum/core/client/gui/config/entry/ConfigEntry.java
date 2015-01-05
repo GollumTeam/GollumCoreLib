@@ -5,12 +5,16 @@ import static cpw.mods.fml.client.config.GuiUtils.UNDO_CHAR;
 import static mods.gollum.core.ModGollumCoreLib.log;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import cpw.mods.fml.client.config.GuiButtonExt;
 import cpw.mods.fml.client.config.GuiUtils;
+import cpw.mods.fml.client.config.HoverChecker;
 import mods.gollum.core.client.gui.config.GuiConfigEntries;
 import mods.gollum.core.client.gui.config.element.ConfigElement;
+import mods.gollum.core.common.config.ConfigProp;
 import mods.gollum.core.common.config.JsonConfigProp;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiListExtended.IGuiListEntry;
@@ -28,10 +32,20 @@ public abstract class ConfigEntry implements IGuiListEntry {
 	protected GuiButtonExt btnRemove;
 	protected GuiButtonExt btUndo;
 	protected GuiButtonExt btReset;
+	public int index;
+	
+	protected List<String> toolTip        = new ArrayList<String>();
+	protected List<String> undoToolTip    = new ArrayList<String>();
+	protected List<String> defaultToolTip = new ArrayList<String>();
+
+	protected HoverChecker tooltipHoverChecker;
+	protected HoverChecker undoHoverChecker;
+	protected HoverChecker defaultHoverChecker;
 	
 	protected boolean labelDisplay = true;
-
-	public ConfigEntry(Minecraft mc, GuiConfigEntries parent, ConfigElement configElement) {
+	
+	public ConfigEntry(int index, Minecraft mc, GuiConfigEntries parent, ConfigElement configElement) {
+		this.index         = index;
 		this.mc            = mc;
 		this.parent        = parent;
 		this.configElement = configElement;
@@ -43,6 +57,40 @@ public abstract class ConfigEntry implements IGuiListEntry {
 		
 		this.btnAdd    .packedFGColour = GuiUtils.getColorCode('2', true);
 		this.btnRemove .packedFGColour = GuiUtils.getColorCode('c', true);
+		
+		this.undoToolTip   .add(I18n.format("fml.configgui.tooltip.undoChanges"));
+		this.defaultToolTip.add(I18n.format("fml.configgui.tooltip.resetToDefault"));
+		
+		ConfigProp prop = configElement.getConfigProp();
+		
+		String defaultValueStr = "";
+		Object defaultValue = configElement.getDefaultValue();
+		if (defaultValue != null) {
+			if (defaultValue.getClass().isArray()) {
+				for (int i = 0; i < Array.getLength(defaultValue); i++) {
+					defaultValueStr += ", [" + Array.get(defaultValue, i).toString() + "]";
+				}
+				defaultValueStr = defaultValueStr.replaceFirst(", ", "");
+			} else {
+				defaultValueStr = configElement.getDefaultValue().toString();
+			}
+		}
+		if (defaultValueStr.length() > 17) {
+			defaultValueStr = defaultValueStr.substring(0, 15) + "...";
+		}
+		
+		this.toolTip.add (EnumChatFormatting.GREEN + configElement.getName());
+		if (!prop.info().equals("")) {
+			this.toolTip.add (EnumChatFormatting.YELLOW + prop.info());
+		}
+		if (!prop.minValue().equals("") || !prop.minValue().equals("")) {
+			this.toolTip.add (EnumChatFormatting.AQUA + I18n.format("fml.configgui.tooltip.defaultNumeric", configElement.getMin(), configElement.getMax(), defaultValueStr));
+		} else {
+			this.toolTip.add (EnumChatFormatting.AQUA + I18n.format("fml.configgui.tooltip.default", defaultValueStr));
+		}
+		
+		this.undoHoverChecker = new HoverChecker(this.btUndo, 800);
+		this.defaultHoverChecker = new HoverChecker(this.btReset, 800);
 	}
 	
 	public int getLabelWidth() {
@@ -53,7 +101,14 @@ public abstract class ConfigEntry implements IGuiListEntry {
 	}
 	
 	public String getLabel () {
-		return this.parent.parent.mod.i18n().trans("config."+this.configElement.getName());
+		
+		String key = "config."+this.configElement.getName();
+		mods.gollum.core.common.i18n.I18n i18n = this.parent.parent.mod.i18n();
+		
+		if (i18n.transExist(key)) {
+			return i18n.trans(key);
+		}
+		return this.configElement.getName();
 	}
 
 	public String getName() {
@@ -61,7 +116,7 @@ public abstract class ConfigEntry implements IGuiListEntry {
 	}
 	
 	public boolean getLabelDisplay () {
-		return this.labelDisplay && this.parent.parent.displayEntryeLabel();
+		return this.labelDisplay && this.parent.parent.displayEntriesLabel();
 	}
 	
 	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, Tessellator tessellator, int mouseX, int mouseY, boolean isSelected) {
@@ -96,6 +151,12 @@ public abstract class ConfigEntry implements IGuiListEntry {
 		this.btReset.yPosition = y;
 		this.btReset.enabled = this.enabled() && !this.isDefault();
 		this.btReset.drawButton(this.mc, mouseX, mouseY);
+		
+		if (this.tooltipHoverChecker == null) {
+			this.tooltipHoverChecker = new HoverChecker(y, y + slotHeight, x, this.parent.controlX + this.parent.controlWidth - 8, 800);
+		} else {
+			this.tooltipHoverChecker.updateBounds(y, y + slotHeight, x, this.parent.controlX + this.parent.controlWidth - 8 - 8);
+		}
 	}
 	
 	public abstract Object getValue();
@@ -107,11 +168,11 @@ public abstract class ConfigEntry implements IGuiListEntry {
 	}
 	
 	public boolean isChanged () {
-		return !(configElement != null && this.equals (configElement.getValue()));
+		return !(this.configElement != null && this.equals (this.configElement.getValue()));
 	}
 	
 	public boolean isDefault () {
-		return configElement != null && this.equals (configElement.getDefaultValue());
+		return this.configElement != null && this.equals (this.configElement.getDefaultValue());
 	}
 	
 	public boolean isValidValue() {
@@ -143,6 +204,28 @@ public abstract class ConfigEntry implements IGuiListEntry {
 			}
 			return true;
 		}
+		
+//		try {
+//			if (value instanceof Long || cValue instanceof Long) {
+//				return ((Long)value).equals((Long)cValue);
+//			}
+//			if (value instanceof Integer || cValue instanceof Integer) {
+//				return ((Integer)value).equals((Integer)cValue);
+//			}
+//			if (value instanceof Short || cValue instanceof Short) {
+//				return ((Short)value).equals((Short)cValue);
+//			}
+//			if (value instanceof Byte || cValue instanceof Byte) {
+//				return ((Byte)value).equals((Byte)cValue);
+//			}
+//			if (value instanceof Double || cValue instanceof Double) {
+//				return ((Double)value).equals((Double)cValue);
+//			}
+//			if (value instanceof Float || cValue instanceof Float) {
+//				return ((Float)value).equals((Float)cValue);
+//			}
+//		} catch (Exception e) {
+//		}
 		
 		return value.equals(this.getValue());
 	}
@@ -197,11 +280,32 @@ public abstract class ConfigEntry implements IGuiListEntry {
 	
 	public void keyTyped(char eventChar, int eventKey){
 	}
-
+	
 	public void mouseClicked(int mouseX, int mouseY, int mouseEvent) {
 	}
-
+	
 	public void updateCursorCounter() {
+	}
+	
+	public void elementClicked(int slotIndex, boolean doubleClick, int mouseX, int mouseY) {
+	}
+
+	public void setSlot(int slotIndex) {
+	}
+	
+	public void drawToolTip(int mouseX, int mouseY) {
+		boolean canHover = mouseY < this.parent.bottom && mouseY > this.parent.top;
+		if (toolTip.size() > 0 && this.tooltipHoverChecker != null) {
+			if (this.tooltipHoverChecker.checkHover(mouseX, mouseY, canHover)) {
+				this.parent.parent.drawToolTip(toolTip, mouseX, mouseY);
+			}
+		}
+
+		if (this.undoHoverChecker.checkHover(mouseX, mouseY, canHover))
+			this.parent.parent.drawToolTip(undoToolTip, mouseX, mouseY);
+
+		if (this.defaultHoverChecker.checkHover(mouseX, mouseY, canHover))
+			this.parent.parent.drawToolTip(defaultToolTip, mouseX, mouseY);
 	}
 
 	

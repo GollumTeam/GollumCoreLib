@@ -17,29 +17,29 @@ public @interface ConfigProp {
 		SLIDER,
 	}
 	
-	public abstract boolean show() default true; // DONE
+	public abstract boolean show() default true;
 	
 	public abstract String info() default "";
 	
-	public abstract String group() default ""; // DONE
+	public abstract String group() default "";
 	
-	public abstract String newValue() default ""; // DONE
+	public abstract String newValue() default "";
 	
 	public abstract String[] validValues() default "";
 	
-	public abstract String minValue() default ""; // DONE (NUMBER, STRING)
-	public abstract String maxValue() default ""; // DONE (NUMBER, STRING)
+	public abstract String minValue() default "";
+	public abstract String maxValue() default "";
 	
-	public abstract boolean isListLengthFixed() default false; // DONE
-	public abstract String  minListLength()     default ""; // DONE
-	public abstract String  maxListLength()     default ""; // DONE
+	public abstract boolean isListLengthFixed() default false;
+	public abstract String  minListLength()     default "";
+	public abstract String  maxListLength()     default "";
 	
-	public abstract boolean mcRestart()    default false;  // DONE
-	public abstract boolean worldRestart() default false;  // DONE
-
+	public abstract boolean mcRestart()    default false;
+	public abstract boolean worldRestart() default false;
+	
 	public abstract String pattern() default "";
 	
 	public abstract Type type() default Type.DEFAULT;
-
+	
 	public abstract boolean dev() default false;
 }

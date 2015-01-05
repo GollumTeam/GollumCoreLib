@@ -7,6 +7,7 @@ import cpw.mods.fml.client.config.GuiButtonExt;
 import cpw.mods.fml.client.config.GuiUtils;
 import mods.gollum.core.client.gui.config.GuiConfigEntries;
 import mods.gollum.core.client.gui.config.element.ConfigElement;
+import mods.gollum.core.common.config.ConfigProp;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.Tessellator;
@@ -17,8 +18,8 @@ public class StringEntry extends ConfigEntry {
 	protected GuiTextField textFieldValue;
 	private boolean first = true;
 	
-	public StringEntry(Minecraft mc, GuiConfigEntries parent, ConfigElement configElement) {
-		super(mc, parent, configElement);
+	public StringEntry(int index, Minecraft mc, GuiConfigEntries parent, ConfigElement configElement) {
+		super(index, mc, parent, configElement);
 		
 		this.textFieldValue = new GuiTextField(this.mc.fontRenderer, this.parent.controlX + 1, 0, this.parent.controlWidth - 3, 16);
 		this.textFieldValue.setMaxStringLength(10000);
@@ -94,6 +95,16 @@ public class StringEntry extends ConfigEntry {
 		super.mouseClicked(x, y, mouseEvent);
 	}
 	
+	protected boolean respectPattern () {
+		
+		ConfigProp prop = this.configElement.getConfigProp();
+		if (prop.pattern().equals("")) {
+			return true;
+		}
+		
+		return this.getValue().toString().matches(prop.pattern());
+	}
+	
 	@Override
 	public boolean isValidValue() {
 		
@@ -109,6 +120,6 @@ public class StringEntry extends ConfigEntry {
 				return false;
 			}
 		}
-		return true;
+		return this.respectPattern();
 	}
 }

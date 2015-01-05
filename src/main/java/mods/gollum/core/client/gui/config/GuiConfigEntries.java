@@ -27,6 +27,7 @@ public class GuiConfigEntries extends GuiListExtended {
 	public int resetX;
 	public int scrollBarX;
 	public int controlWidth;
+	public int selected = -1;
 	
 	public GuiConfigEntries(GuiConfig parent, Minecraft mc) {
 		super(mc, parent.width, parent.height, parent.titleLine2 != null ? 33 : 23, parent.height - 32, 20);
@@ -39,7 +40,7 @@ public class GuiConfigEntries extends GuiListExtended {
 		for (ConfigElement configElement : this.parent.configElements) {
 			if (configElement != null) {
 				ConfigProp anno = configElement.getConfigProp();
-				ConfigEntry configEntry = this.newInstanceOfEntryConfig(configElement, anno);
+				ConfigEntry configEntry = this.newInstanceOfEntryConfig(this.listEntries.size(), configElement, anno);
 				if (configEntry != null) {
 					this.listEntries.add(configEntry);
 				}
@@ -47,16 +48,16 @@ public class GuiConfigEntries extends GuiListExtended {
 				log.severe("Can create config entry because ConfigElement is null");
 			}
 		}
-		this.listEntries.add(new AddButtonEntry(this.mc, this));
+		this.listEntries.add(new AddButtonEntry(this.listEntries.size(), this.mc, this));
 	}
 
-	protected ConfigEntry newInstanceOfEntryConfig(ConfigElement configElement, ConfigProp anno) {
+	protected ConfigEntry newInstanceOfEntryConfig(int index, ConfigElement configElement, ConfigProp anno) {
 		ConfigEntry configEntry = null;
 		
 		if (anno.show() && (!anno.dev() || ModGollumCoreLib.config.devTools)) {
 			try {
 				if (configElement.getEntryClass() != null) {
-					configEntry = configElement.getEntryClass().getConstructor(Minecraft.class, GuiConfigEntries.class, ConfigElement.class).newInstance(this.mc, this, configElement);
+					configEntry = configElement.getEntryClass().getConstructor(int.class, Minecraft.class, GuiConfigEntries.class, ConfigElement.class).newInstance(index, this.mc, this, configElement);
 					log.debug("Create config entry : "+configElement.getName()+" : "+configElement.getEntryClass().getName());
 				} else {
 					log.warning("ConfigElement "+configElement.getName()+" hasn't class entry");
@@ -68,13 +69,10 @@ public class GuiConfigEntries extends GuiListExtended {
 		}
 		return configEntry;
 	}
-
+	
 	@Override
-	protected void elementClicked(int p_148144_1_, boolean p_148144_2_, int p_148144_3_, int p_148144_4_) {}
-
-	@Override
-	protected boolean isSelected(int p_148131_1_) {
-		return false;
+	protected boolean isSelected(int index) {
+		return this.selected == index;
 	}
 
 	@Override
@@ -89,11 +87,21 @@ public class GuiConfigEntries extends GuiListExtended {
 	protected int getSize() {
 		return this.listEntries.size() - (this.parent.canAdd() ? 0 : 1);
 	}
-	
+
 	public IGuiListEntry getListEntry(int index) {
 		return (IGuiListEntry) this.listEntries.get(index);
 	}
-
+	
+	public ConfigEntry getEntry(int index) {
+		return this.listEntries.get(index);
+	}
+	
+	public void drawScreenPost(int mouseX, int mouseY, float partialTicks) {
+		for (ConfigEntry entry : this.listEntries) {
+			entry.drawToolTip(mouseX, mouseY);
+		}
+	}
+	
 	@Override
 	public int getScrollBarX() {
 		return this.scrollBarX;
@@ -129,15 +137,19 @@ public class GuiConfigEntries extends GuiListExtended {
 		this.bottom = this.parent.height - 32;
 		this.left   = 0;
 		this.right  = width;
+		float ratio = 1.78F;
+		if (this.parent.displayEntriesLabel()) {
+			ratio = 2.0F;
+		}
 		
-		int maxLabel = this.getMaxLabelSizeEntry();
+		float maxLabel = (float)this.getMaxLabelSizeEntry();
 		
-		int viewWidth = maxLabel + 8 + (width / 2);
+		float viewWidth = (float)maxLabel + 8.0F + ((float)this.width / ratio);
 		
-		this.labelX = (this.width / 2) - (viewWidth / 2);
-		this.controlX = this.labelX + maxLabel + 8;
-		this.resetX = (this.width / 2) + (viewWidth / 2) - 45;
-		this.scrollBarX = this.resetX + 45;
+		this.labelX   = (int)( ((float)this.width / 2.0F) - (viewWidth / ratio)         );
+		this.controlX = (int)( (float)this.labelX + maxLabel + 8.0F                      );
+		this.resetX   = (int)( ((float)this.width / ratio) + (viewWidth / ratio) - 45.0F );
+		this.scrollBarX   = this.resetX + 45;
 		this.controlWidth = this.resetX - this.controlX - 5;
 		if (this.parent.canAdd ()) {
 			this.controlWidth -= 22;
@@ -234,6 +246,11 @@ public class GuiConfigEntries extends GuiListExtended {
 		return false;
 	}
 	
+	public void setSlot (int slotIndex) {
+		this.selected = slotIndex;
+		this.listEntries.get(slotIndex).setSlot(slotIndex);
+	}
+	
 	/////////////
 	// Actions //
 	/////////////
@@ -248,9 +265,12 @@ public class GuiConfigEntries extends GuiListExtended {
 			if (value != null && defaultValue != null) {
 				log.debug ("add : "+index);
 				
-				ConfigEntry configEntry = this.newInstanceOfEntryConfig(configElement, prop);
+				ConfigEntry configEntry = this.newInstanceOfEntryConfig(index, configElement, prop);
 				if (configEntry != null) {
 					this.listEntries.add(index, configEntry);
+					for (int i = index; i < this.listEntries.size(); i++) {
+						this.listEntries.get(i).index++;
+					}
 				}
 			}
 			this.initGui();
@@ -262,6 +282,9 @@ public class GuiConfigEntries extends GuiListExtended {
 			log.debug ("remove : "+index);
 			this.listEntries.remove(index);
 			this.initGui();
+			for (int i = index; i < this.listEntries.size(); i++) {
+				this.listEntries.get(i).index--;
+			}
 		}
 	}
 
@@ -299,6 +322,11 @@ public class GuiConfigEntries extends GuiListExtended {
 			entry.mouseClicked(mouseX, mouseY, mouseEvent);
 		}
 	}
-
+	
+	@Override
+	protected void elementClicked(int slotIndex, boolean doubleClick, int mouseX, int mouseY) {
+		this.setSlot(slotIndex);
+		this.listEntries.get(slotIndex).elementClicked(slotIndex, doubleClick, mouseX, mouseY);
+	}
 	
 }

@@ -6,8 +6,8 @@ import net.minecraft.client.Minecraft;
 
 public class IntegerEntry extends LongEntry {
 	
-	public IntegerEntry(Minecraft mc, GuiConfigEntries parent, ConfigElement configElement) {
-		super(mc, parent, configElement);
+	public IntegerEntry(int index, Minecraft mc, GuiConfigEntries parent, ConfigElement configElement) {
+		super(index, mc, parent, configElement);
 	}
 	
 	@Override

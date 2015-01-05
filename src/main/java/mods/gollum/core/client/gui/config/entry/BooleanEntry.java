@@ -9,8 +9,8 @@ public class BooleanEntry extends ButtonEntry {
 	
 	boolean value;
 	
-	public BooleanEntry(Minecraft mc, GuiConfigEntries parent, ConfigElement configElement) {
-		super(mc, parent, configElement);
+	public BooleanEntry(int index, Minecraft mc, GuiConfigEntries parent, ConfigElement configElement) {
+		super(index, mc, parent, configElement);
 		this.value = (Boolean)configElement.getValue();
 		this.updateValueButtonText();
 	}
@@ -23,7 +23,6 @@ public class BooleanEntry extends ButtonEntry {
 	@Override
 	public void valueButtonPressed(int slotIndex) {
 		this.setValue(!this.value);
-		this.updateValueButtonText();
 	}
 	
 	@Override
@@ -38,6 +37,7 @@ public class BooleanEntry extends ButtonEntry {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		this.updateValueButtonText();
 		return this;
 	}
 

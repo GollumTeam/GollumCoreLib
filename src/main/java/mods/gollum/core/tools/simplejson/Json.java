@@ -174,6 +174,10 @@ public class Json implements Cloneable {
 			}
 			return this.value().equals(((Json)obj).value());
 		}
+		try {
+			return Json.create(obj).equals(this.value());
+		} catch (Exception e) {
+		}
 		return false;
 	}
 

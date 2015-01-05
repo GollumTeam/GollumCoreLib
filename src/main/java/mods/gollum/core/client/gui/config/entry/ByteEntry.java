@@ -6,8 +6,8 @@ import net.minecraft.client.Minecraft;
 
 public class ByteEntry extends ShortEntry {
 	
-	public ByteEntry(Minecraft mc, GuiConfigEntries parent, ConfigElement configElement) {
-		super(mc, parent, configElement);
+	public ByteEntry(int index, Minecraft mc, GuiConfigEntries parent, ConfigElement configElement) {
+		super(index, mc, parent, configElement);
 	}
 	
 	@Override
