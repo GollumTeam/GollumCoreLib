@@ -50,8 +50,8 @@ public class GuiConfigEntries extends GuiListExtended {
 		}
 		this.listEntries.add(new AddButtonEntry(this.listEntries.size(), this.mc, this));
 	}
-
-	protected ConfigEntry newInstanceOfEntryConfig(int index, ConfigElement configElement, ConfigProp anno) {
+	
+	public ConfigEntry newInstanceOfEntryConfig(int index, ConfigElement configElement, ConfigProp anno) {
 		ConfigEntry configEntry = null;
 		
 		if (anno.show() && (!anno.dev() || ModGollumCoreLib.config.devTools)) {

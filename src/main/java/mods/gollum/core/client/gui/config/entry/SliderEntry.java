@@ -18,6 +18,19 @@ public class SliderEntry extends ConfigEntry {
 			Double.class.isAssignableFrom(configElement.getValue().getClass()) || Double.TYPE.isAssignableFrom(configElement.getValue().getClass()) ||
 			Float.class.isAssignableFrom(configElement.getValue().getClass())  || Float.TYPE.isAssignableFrom(configElement.getValue().getClass())
 		;
+
+		Double min = 0.0D;
+		Double max = 0.0D;
+		try {
+			min = (Double)configElement.getMin();
+		} catch (Exception e) {
+			min = (((Long)configElement.getMin()).doubleValue();
+		}
+		try {
+			max = (Double)configElement.getMax();
+		} catch (Exception e) {
+			max = (((Long)configElement.getMax()).doubleValue();
+		}
 		
 		this.slider = new GuiSlider(
 			0, this.parent.controlX, 
