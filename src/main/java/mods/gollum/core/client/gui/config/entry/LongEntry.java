@@ -38,8 +38,18 @@ public class LongEntry extends StringEntry {
 	@Override
 	public boolean isValidValue() {
 		
-		Long min = (Long)this.configElement.getMin();
-		Long max = (Long)this.configElement.getMax();
+		Long min = 0L;
+		Long max = 0L;
+		try {
+			min = (Long)this.configElement.getMin();
+		} catch (Exception e) {
+			min = ((Double)this.configElement.getMin()).longValue();
+		}
+		try {
+			max = (Long)this.configElement.getMax();
+		} catch (Exception e) {
+			max = ((Double)this.configElement.getMax()).longValue();
+		}
 		
 		return 
 			this.textFieldValue.getText().equals(this.getValue().toString()) &&
