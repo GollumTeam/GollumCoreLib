@@ -69,11 +69,14 @@ public class StringEntry extends ConfigEntry {
 		
 		return true;
 	}
-
+	
+	@Override
 	public Object getValue() {
 		return textFieldValue.getText();
 	}
+
 	
+	@Override
 	public ConfigEntry setValue(Object value) {
 		this.textFieldValue.setText(value.toString());
 		return this;

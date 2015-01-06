@@ -24,7 +24,7 @@ public class JsonObjectEntry extends ButtonEntry {
 	}
 
 	public void updateValueButtonText() {
-		this.updateValueButtonText(this.value.toString());
+		this.updateValueButtonText(this.getValue().toString());
 	}
 	
 	@Override

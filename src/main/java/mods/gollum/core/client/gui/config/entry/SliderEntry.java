@@ -109,6 +109,7 @@ public class SliderEntry extends ConfigEntry {
 		
 		this.slider.setValue((Double) valueD);
 		this.slider.updateSlider();
+		
 		return this;
 	}
 	

@@ -23,7 +23,7 @@ public class LongEntry extends StringEntry {
 		return value;
 	}
 	
-	private long getLongValue () {
+	protected long getLongValue () {
 		return new Long(this.getValue().toString());
 	}
 	

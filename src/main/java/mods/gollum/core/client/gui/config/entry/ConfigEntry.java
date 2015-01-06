@@ -43,6 +43,7 @@ public abstract class ConfigEntry implements IGuiListEntry {
 	protected HoverChecker defaultHoverChecker;
 	
 	protected boolean labelDisplay = true;
+	private int posY = 0;
 	
 	public ConfigEntry(int index, Minecraft mc, GuiConfigEntries parent, ConfigElement configElement) {
 		this.index         = index;
@@ -75,8 +76,8 @@ public abstract class ConfigEntry implements IGuiListEntry {
 				defaultValueStr = configElement.getDefaultValue().toString();
 			}
 		}
-		if (defaultValueStr.length() > 17) {
-			defaultValueStr = defaultValueStr.substring(0, 15) + "...";
+		if (defaultValueStr.length() > 27) {
+			defaultValueStr = defaultValueStr.substring(0, 25) + "...";
 		}
 		
 		this.toolTip.add (EnumChatFormatting.GREEN + configElement.getName());
@@ -120,6 +121,8 @@ public abstract class ConfigEntry implements IGuiListEntry {
 	}
 	
 	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, Tessellator tessellator, int mouseX, int mouseY, boolean isSelected) {
+		
+		this.posY = y;
 		
 		if (this.getLabelDisplay()) {
 			
@@ -205,28 +208,6 @@ public abstract class ConfigEntry implements IGuiListEntry {
 			return true;
 		}
 		
-//		try {
-//			if (value instanceof Long || cValue instanceof Long) {
-//				return ((Long)value).equals((Long)cValue);
-//			}
-//			if (value instanceof Integer || cValue instanceof Integer) {
-//				return ((Integer)value).equals((Integer)cValue);
-//			}
-//			if (value instanceof Short || cValue instanceof Short) {
-//				return ((Short)value).equals((Short)cValue);
-//			}
-//			if (value instanceof Byte || cValue instanceof Byte) {
-//				return ((Byte)value).equals((Byte)cValue);
-//			}
-//			if (value instanceof Double || cValue instanceof Double) {
-//				return ((Double)value).equals((Double)cValue);
-//			}
-//			if (value instanceof Float || cValue instanceof Float) {
-//				return ((Float)value).equals((Float)cValue);
-//			}
-//		} catch (Exception e) {
-//		}
-		
 		return value.equals(this.getValue());
 	}
 	
@@ -295,18 +276,19 @@ public abstract class ConfigEntry implements IGuiListEntry {
 	
 	public void drawToolTip(int mouseX, int mouseY) {
 		boolean canHover = mouseY < this.parent.bottom && mouseY > this.parent.top;
+		log.debug(this.posY, canHover);
 		if (toolTip.size() > 0 && this.tooltipHoverChecker != null) {
 			if (this.tooltipHoverChecker.checkHover(mouseX, mouseY, canHover)) {
 				this.parent.parent.drawToolTip(toolTip, mouseX, mouseY);
 			}
 		}
 
-		if (this.undoHoverChecker.checkHover(mouseX, mouseY, canHover))
+		if (this.undoHoverChecker.checkHover(mouseX, mouseY, canHover)) {
 			this.parent.parent.drawToolTip(undoToolTip, mouseX, mouseY);
-
-		if (this.defaultHoverChecker.checkHover(mouseX, mouseY, canHover))
+		}
+		if (this.defaultHoverChecker.checkHover(mouseX, mouseY, canHover)) {
 			this.parent.parent.drawToolTip(defaultToolTip, mouseX, mouseY);
+		}
 	}
-
 	
 }

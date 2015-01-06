@@ -23,7 +23,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.EnumChatFormatting;
 
-public class JsonEntry extends ConfigEntry {
+public class JsonEntry extends ConfigEntry implements IProxyEntry {
 	
 	ConfigEntry proxy;
 	
@@ -116,8 +116,11 @@ public class JsonEntry extends ConfigEntry {
 			JsonFloat jsonDefault = (JsonFloat)valueDefault;
 			
 			TypedValueElement nConfigElement = new TypedValueElement(Float.class, this.getName(), json.floatValue(), jsonDefault.floatValue(), prop);
-
+			
 			this.proxy = this.parent.newInstanceOfEntryConfig(this.index, nConfigElement, prop);
+		}
+		if (this.proxy != null) {
+			this.proxy.toolTip = this.toolTip;
 		}
 	}
 	
@@ -163,7 +166,7 @@ public class JsonEntry extends ConfigEntry {
 	@Override
 	public ConfigEntry setValue(Object value) {
 		
-		if (this.proxy == null) return this;
+		if (this.proxy == null) return this;;
 		
 		Json oldValue = this.getOldValue();
 		
@@ -188,7 +191,18 @@ public class JsonEntry extends ConfigEntry {
 			if (value instanceof JsonFloat)  { newValue = ((JsonFloat)  value).floatValue();  }
 		}
 		this.proxy.setValue (newValue);
+		
 		return this;
+	}
+
+
+	@Override
+	public void eventGetValue() {
+	}
+
+	@Override
+	public void eventSetValue() {
+		this.setValue(this.proxy.getValue());
 	}
 	
 	@Override

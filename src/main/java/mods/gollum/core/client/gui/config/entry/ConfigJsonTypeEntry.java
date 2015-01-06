@@ -13,16 +13,16 @@ public class ConfigJsonTypeEntry extends JsonEntry {
 
 	public ConfigJsonTypeEntry(int index, Minecraft mc, GuiConfigEntries parent, ConfigElement configElement) {
 		super(index, mc, parent, configElement);
-		this.updateValueButtonText();
+		this.getValue();
 	}
 	
 	protected void init(Object value, Object valueDefault, ConfigProp prop) {
 		super.init(((IConfigJsonType)value).writeConfig(), ((IConfigJsonType)valueDefault).writeConfig(), prop);
 	}
 	
-	public void updateValueButtonText() {
+	public void updateValueButtonText(Object value) {
 		if (this.proxy instanceof ButtonEntry) {
-			((ButtonEntry) this.proxy).updateValueButtonText(this.getValue().toString());
+			((ButtonEntry) this.proxy).updateValueButtonText(value.toString());
 		}
 	}
 	
@@ -33,27 +33,29 @@ public class ConfigJsonTypeEntry extends JsonEntry {
 	
 	@Override
 	public Object getValue() {
+		IConfigJsonType value = (IConfigJsonType) this.configElement.getValue();
 		try {
 			Json json = (Json) super.getValue();
-			IConfigJsonType value = ((IConfigJsonType)this.configElement.getValue()).getClass().newInstance();
+			value = ((IConfigJsonType)this.configElement.getValue()).getClass().newInstance();
 			value.readConfig(json);
-			return value;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return this.configElement.getValue();
+		this.updateValueButtonText(value);
+		return value;
 	}
 	
 	@Override
 	public ConfigEntry setValue(Object value) {
 		if (value instanceof IConfigJsonType) {
 			super.setValue(((IConfigJsonType) value).writeConfig());
+			this.getValue();
 			return this;
 		}
 		
 		super.setValue(value);
 		
-		this.updateValueButtonText();
+		this.getValue();
 		return this;
 	}
 }
