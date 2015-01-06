@@ -25,7 +25,7 @@ import net.minecraft.util.EnumChatFormatting;
 public abstract class ConfigEntry implements IGuiListEntry {
 	
 	protected Minecraft mc;
-	public    GuiConfigEntries parent;
+	public GuiConfigEntries parent;
 	public ConfigElement configElement;
 	
 	public GuiButtonExt btnAdd;
@@ -43,7 +43,6 @@ public abstract class ConfigEntry implements IGuiListEntry {
 	protected HoverChecker defaultHoverChecker;
 	
 	protected boolean labelDisplay = true;
-	private int posY = 0;
 	
 	public ConfigEntry(int index, Minecraft mc, GuiConfigEntries parent, ConfigElement configElement) {
 		this.index         = index;
@@ -121,8 +120,6 @@ public abstract class ConfigEntry implements IGuiListEntry {
 	}
 	
 	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, Tessellator tessellator, int mouseX, int mouseY, boolean isSelected) {
-		
-		this.posY = y;
 		
 		if (this.getLabelDisplay()) {
 			
@@ -275,8 +272,9 @@ public abstract class ConfigEntry implements IGuiListEntry {
 	}
 	
 	public void drawToolTip(int mouseX, int mouseY) {
-		boolean canHover = mouseY < this.parent.bottom && mouseY > this.parent.top;
-		log.debug(this.posY, canHover);
+		int posYReal = (this.index * this.parent.getSlotHeight()) - this.parent.getAmountScrolled();
+		boolean canHover = mouseY < this.parent.bottom && mouseY > this.parent.top && posYReal >= 0 && posYReal <= this.parent.height ;
+		
 		if (toolTip.size() > 0 && this.tooltipHoverChecker != null) {
 			if (this.tooltipHoverChecker.checkHover(mouseX, mouseY, canHover)) {
 				this.parent.parent.drawToolTip(toolTip, mouseX, mouseY);
