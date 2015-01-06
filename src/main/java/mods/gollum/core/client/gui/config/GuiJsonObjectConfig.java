@@ -48,7 +48,7 @@ public class GuiJsonObjectConfig extends GuiConfig {
 				
 				Object defaultValue = null;
 				if (dValues.containsKey(entry.getKey())) {
-					defaultValue = values.child(entry.getKey());
+					defaultValue = dValues.child(entry.getKey());
 				} else {
 					defaultValue = this.parentEntry.configElement.newValue();
 				}

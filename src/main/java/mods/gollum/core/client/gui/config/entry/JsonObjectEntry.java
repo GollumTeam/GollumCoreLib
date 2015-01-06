@@ -39,7 +39,11 @@ public class JsonObjectEntry extends ButtonEntry {
 
 	@Override
 	public ConfigEntry setValue(Object value) {
-		this.value = (JsonObject)configElement.getValue();
+		try {
+			this.value = (JsonObject)value;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		this.updateValueButtonText();
 		return this;
 	}

@@ -24,12 +24,12 @@ public class SliderEntry extends ConfigEntry {
 		try {
 			min = (Double)configElement.getMin();
 		} catch (Exception e) {
-			min = (((Long)configElement.getMin()).doubleValue();
+			min = ((Long)configElement.getMin()).doubleValue();
 		}
 		try {
 			max = (Double)configElement.getMax();
 		} catch (Exception e) {
-			max = (((Long)configElement.getMax()).doubleValue();
+			max = ((Long)configElement.getMax()).doubleValue();
 		}
 		
 		this.slider = new GuiSlider(
@@ -37,8 +37,8 @@ public class SliderEntry extends ConfigEntry {
 			0, this.parent.controlWidth,
 			18, 
 			"", "",
-			(Double)configElement.getMin(), 
-			(Double)configElement.getMax(), 
+			(Double)min, 
+			(Double)max, 
 			0.0D, 
 			floating, 
 			true

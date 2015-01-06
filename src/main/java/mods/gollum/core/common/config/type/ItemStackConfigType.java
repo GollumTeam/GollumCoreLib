@@ -19,7 +19,7 @@ public class ItemStackConfigType implements IConfigJsonType {
 	public ItemStackConfigType() throws Exception {
 		this(RegisteredObjects.instance().getRegisterName(Items.apple));
 	}
-
+	
 	public ItemStackConfigType(String registerName) {
 		this(registerName, 1);
 	}

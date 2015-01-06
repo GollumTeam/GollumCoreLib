@@ -1,5 +1,7 @@
 package mods.gollum.core.client.gui.config.entry;
 
+import java.lang.reflect.Array;
+
 import mods.gollum.core.client.gui.config.GuiConfigEntries;
 import mods.gollum.core.client.gui.config.element.ConfigElement;
 import mods.gollum.core.common.config.ConfigProp;
@@ -11,10 +13,17 @@ public class ConfigJsonTypeEntry extends JsonEntry {
 
 	public ConfigJsonTypeEntry(int index, Minecraft mc, GuiConfigEntries parent, ConfigElement configElement) {
 		super(index, mc, parent, configElement);
+		this.updateValueButtonText();
 	}
 	
 	protected void init(Object value, Object valueDefault, ConfigProp prop) {
 		super.init(((IConfigJsonType)value).writeConfig(), ((IConfigJsonType)valueDefault).writeConfig(), prop);
+	}
+	
+	public void updateValueButtonText() {
+		if (this.proxy instanceof ButtonEntry) {
+			((ButtonEntry) this.proxy).updateValueButtonText(this.getValue().toString());
+		}
 	}
 	
 	@Override
@@ -43,6 +52,8 @@ public class ConfigJsonTypeEntry extends JsonEntry {
 		}
 		
 		super.setValue(value);
+		
+		this.updateValueButtonText();
 		return this;
 	}
 }
