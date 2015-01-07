@@ -2,7 +2,6 @@ package mods.gollum.core.common.config.type;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import mods.gollum.core.ModGollumCoreLib;
@@ -10,16 +9,14 @@ import mods.gollum.core.common.config.IConfigMerge;
 import mods.gollum.core.common.config.type.BuildingConfigType.Group.Building;
 import mods.gollum.core.common.config.type.BuildingConfigType.Group.Building.Dimention;
 import mods.gollum.core.tools.registered.RegisteredObjects;
+import mods.gollum.core.tools.simplejson.Json;
+import mods.gollum.core.tools.simplejson.Json.EntryObject;
+import mods.gollum.core.tools.simplejson.JsonArray;
+import mods.gollum.core.tools.simplejson.JsonObject;
 import net.minecraft.block.Block;
-import argo.jdom.JsonArrayNodeBuilder;
 import argo.jdom.JsonNode;
-import argo.jdom.JsonNodeBuilder;
-import argo.jdom.JsonNodeBuilders;
-import argo.jdom.JsonObjectNodeBuilder;
-import argo.jdom.JsonRootNode;
-import argo.jdom.JsonStringNode;
 
-public class BuildingConfigType implements IConfigJsonClass, IConfigMerge {
+public class BuildingConfigType implements IConfigJsonType, IConfigMerge {
 	
 	public static class Group {
 		
@@ -49,7 +46,7 @@ public class BuildingConfigType implements IConfigJsonClass, IConfigMerge {
 	public BuildingConfigType () {
 	}
 	
-	public BuildingConfigType (JsonNode json, String modId) throws Exception {
+	public BuildingConfigType (Json json, String modId) throws Exception {
 		this.modId = modId;
 		this.readConfig(json);
 	}
@@ -60,38 +57,34 @@ public class BuildingConfigType implements IConfigJsonClass, IConfigMerge {
 	//////////
 	
 	@Override
-	public void readConfig(JsonNode json)  throws Exception {
+	public void readConfig(Json json) {
 		
-
-		Map<JsonStringNode, JsonNode> map = json.getFields();
-		for (Entry<JsonStringNode, JsonNode> entry : map.entrySet()) {
-			String groupName   = entry.getKey().getText();
-			JsonNode jsonGroup = entry.getValue();
+		for (Entry<String, Json> entry : json.allChildWithKey()) {
+			String groupName = entry.getKey();
+			Json   jsonGroup = entry.getValue();
 			
 			ModGollumCoreLib.log.debug("Building group :"+groupName);
-			
+
 			Group group = new Group();
-			group.globalSpawnRate = Integer.parseInt(jsonGroup.getNumberValue("globalSpawnRate"));
-			group.buildings       = this.readBuildings (jsonGroup.getNode("buildings"));
+			group.globalSpawnRate = jsonGroup.child("globalSpawnRate").intValue();
+			group.buildings       = this.readBuildings (jsonGroup.child("buildings"));
 			
 			lists.put(groupName, group);
 		}
+		
 	}
 	
-	private HashMap<String, Building> readBuildings(JsonNode node) {
-		
+	private HashMap<String, Building> readBuildings(Json json) {
 		
 		HashMap<String, Building> rtn = new HashMap<String, Building>();
 		
-		Map<JsonStringNode, JsonNode> mapBuildings = node.getFields();
-		for (Entry<JsonStringNode, JsonNode> entryBuilding : mapBuildings.entrySet()) {
-			
-			String   buildingName = entryBuilding.getKey().getText();
-			JsonNode jsonBuilding = entryBuilding.getValue();
+		for (Entry<String, Json> entryBuilding : json.allChildWithKey()) {
+			String buildingName = entryBuilding.getKey();
+			Json   jsonBuilding = entryBuilding.getValue();
 			
 			Building building   = new Building ();
-			building.disabled   = false; try { building.disabled = jsonBuilding.getBooleanValue("disabled"); } catch (Exception e) {}
-			building.dimentions = this.readDimentions (jsonBuilding.getNode("dimentions"));
+			building.disabled   = jsonBuilding.child("disabled").boolValue();
+			building.dimentions = this.readDimentions (jsonBuilding.child("dimentions"));
 			
 			rtn.put(buildingName, building);
 		}
@@ -99,22 +92,21 @@ public class BuildingConfigType implements IConfigJsonClass, IConfigMerge {
 		return rtn;
 	}
 	
-	private HashMap<Integer, Dimention> readDimentions(JsonNode node) {
+	private HashMap<Integer, Dimention> readDimentions(Json json) {
 		
 		HashMap<Integer, Dimention> rtn = new HashMap<Integer, Dimention> ();
 		
-		Map<JsonStringNode, JsonNode> mapBuildings = node.getFields();
-		for (Entry<JsonStringNode, JsonNode> entryDimention : mapBuildings.entrySet()) {
+		for (Entry<String, Json> entryDimention : json.allChildWithKey()) {
 			
-			Integer id = Integer.parseInt(entryDimention.getKey().getText());
-			JsonNode jsonDimention = entryDimention.getValue();
+			Integer id            = Integer.parseInt(entryDimention.getKey());
+			Json    jsonDimention = entryDimention.getValue();
 			
 			Dimention dimention = new Dimention();
-			dimention.spawnRate   = Integer.parseInt(jsonDimention.getNumberValue("spawnRate"));
-			dimention.spawnHeight = Integer.parseInt(jsonDimention.getNumberValue("spawnHeight"));
+			dimention.spawnRate   = jsonDimention.child("spawnRate").intValue();
+			dimention.spawnHeight = jsonDimention.child("spawnHeight").intValue();
 			
-			for (JsonNode jsonBlock : jsonDimention.getNode("blocksSpawn").getElements()) {
-				String key = jsonBlock.getText();
+			for (Json jsonBlock : jsonDimention.child("blocksSpawn").allChild()) {
+				String key = jsonBlock.strValue();
 				try {
 					Block b = RegisteredObjects.instance().getBlock(key);
 					
@@ -131,6 +123,7 @@ public class BuildingConfigType implements IConfigJsonClass, IConfigMerge {
 			rtn.put (id, dimention);
 			
 		}
+		
 		return rtn;
 	}
 	
@@ -139,73 +132,71 @@ public class BuildingConfigType implements IConfigJsonClass, IConfigMerge {
 	///////////
 	
 	@Override
-	public JsonRootNode writeConfig() {
-		JsonObjectNodeBuilder builder = JsonNodeBuilders.anObjectBuilder();
+	public Json writeConfig() {
+		Json builder = new JsonObject();
 		
+
 		for (Entry<String, Group> entry : this.lists.entrySet()) {
 			String groupName = entry.getKey();
 			Group group      = entry.getValue();
 			
-			JsonObjectNodeBuilder jsonGroup = JsonNodeBuilders.anObjectBuilder()
-				.withField("globalSpawnRate", JsonNodeBuilders.aNumberBuilder(group.globalSpawnRate.toString()))
-				.withField("buildings", this.getJsonBuildings (group.buildings))
-			;
+			Json jsonGroup = Json.create (
+				new EntryObject ("globalSpawnRate", Json.create(group.globalSpawnRate)),
+				new EntryObject ("buildings"      , this.getJsonBuildings (group.buildings))
+			);
 			
-			builder.withField(groupName, jsonGroup);
+			builder.add(groupName, jsonGroup);
 		}
 		
-		
-		
-		return builder.build();
+		return builder;
 	}
 	
-	private JsonNodeBuilder getJsonBuildings(HashMap<String, Building> buildings) {
+	private Json getJsonBuildings(HashMap<String, Building> buildings) {
 		
-		JsonObjectNodeBuilder jsonBuildings = JsonNodeBuilders.anObjectBuilder();
-		
+		Json jsonBuildings = new JsonObject();
 		
 		for (Entry<String, Building> entryBuilding : buildings.entrySet()) {
 			
 			String   buildingName = entryBuilding.getKey();
 			Building building     = entryBuilding.getValue();
 			
-			JsonObjectNodeBuilder jsonBuilding = JsonNodeBuilders.anObjectBuilder ()
-				.withField("disabled", (building.disabled) ? JsonNodeBuilders.aTrueBuilder() : JsonNodeBuilders.aFalseBuilder())
-				.withField("dimentions", this.getJsonDimentions (building.dimentions))
-			;
+			Json jsonBuilding = Json.create (
+				new EntryObject ("disabled"  , Json.create(building.disabled)),
+				new EntryObject ("dimentions", this.getJsonDimentions (building.dimentions))
+			);
 			
-			jsonBuildings.withField(buildingName, jsonBuilding);
+			jsonBuildings.add(buildingName, jsonBuilding);
 		}
 		
 		return jsonBuildings;
 	}
 	
-	private JsonNodeBuilder getJsonDimentions( HashMap<Integer, Dimention> dimentions) {
+	private Json getJsonDimentions( HashMap<Integer, Dimention> dimentions) {
 
-		JsonObjectNodeBuilder jsonDimentions = JsonNodeBuilders.anObjectBuilder();
+		Json jsonDimentions = new JsonObject();
 
 		for (Entry<Integer, Dimention> entryDimentions : dimentions.entrySet()) {
 			Integer dimentionId = entryDimentions.getKey();
 			Dimention dimention = entryDimentions.getValue();
 			
-			JsonObjectNodeBuilder jsonDimention = JsonNodeBuilders.anObjectBuilder ()
-				.withField("spawnHeight", JsonNodeBuilders.aNumberBuilder(dimention.spawnHeight.toString()))
-				.withField("spawnRate", JsonNodeBuilders.aNumberBuilder(dimention.spawnRate.toString()))
-				.withField("blocksSpawn", this.getJsonBlocksSpawn (dimention.blocksSpawn))
-			;
-
-			jsonDimentions.withField(dimentionId.toString(), jsonDimention);
+			Json jsonDimention = Json.create (
+				new EntryObject ("spawnHeight", Json.create(dimention.spawnHeight)),
+				new EntryObject ("spawnRate"  , Json.create(dimention.spawnRate)),
+				new EntryObject ("blocksSpawn", this.getJsonBlocksSpawn (dimention.blocksSpawn))
+			);
+			
+			jsonDimentions.add(dimentionId.toString(), jsonDimention);
 		}
 		
 		return jsonDimentions;
 	}
 
-	private JsonNodeBuilder getJsonBlocksSpawn(ArrayList<Block> blocksSpawn) {
-		JsonArrayNodeBuilder jsonBlocksSpawn = JsonNodeBuilders.anArrayBuilder();
+	private Json getJsonBlocksSpawn(ArrayList<Block> blocksSpawn) {
+		Json jsonBlocksSpawn = new JsonArray();
 		
 		for (Block block : blocksSpawn) {
 			try {
-				jsonBlocksSpawn.withElement(JsonNodeBuilders.aStringBuilder(RegisteredObjects.instance().getRegisterName (block)));
+				jsonBlocksSpawn.add( Json.create(RegisteredObjects.instance().getRegisterName (block)) );
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

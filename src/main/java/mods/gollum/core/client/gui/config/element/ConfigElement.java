@@ -16,7 +16,7 @@ import mods.gollum.core.client.gui.config.entry.JsonEntry;
 import mods.gollum.core.client.gui.config.entry.JsonObjectEntry;
 import mods.gollum.core.client.gui.config.entry.ListEntry;
 import mods.gollum.core.client.gui.config.entry.LongEntry;
-import mods.gollum.core.client.gui.config.entry.ModEntry;
+import mods.gollum.core.client.gui.config.entry.ModIdEntry;
 import mods.gollum.core.client.gui.config.entry.ShortEntry;
 import mods.gollum.core.client.gui.config.entry.SliderEntry;
 import mods.gollum.core.client.gui.config.entry.StringEntry;
@@ -66,7 +66,7 @@ public abstract class ConfigElement {
 			) {
 				return ListEntry.class;
 			}
-			if (prop.type() == ConfigProp.Type.MOD)   { return ModEntry  .class; }
+			if (prop.type() == ConfigProp.Type.MOD)   { return ModIdEntry  .class; }
 			if (prop.type() == ConfigProp.Type.ITEM)  { return ItemEntry .class; }
 			if (prop.type() == ConfigProp.Type.BLOCK) { return BlockEntry.class; }
 			return StringEntry.class;

@@ -6,11 +6,12 @@ import java.util.Map.Entry;
 
 import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.common.config.ConfigBuildings;
+import mods.gollum.core.common.config.ConfigLoader;
 import mods.gollum.core.common.config.type.BuildingConfigType;
 import mods.gollum.core.common.config.type.BuildingConfigType.Group;
 import mods.gollum.core.common.resource.ResourceLoader;
+import mods.gollum.core.tools.simplejson.Json;
 import argo.jdom.JdomParser;
-import argo.jdom.JsonRootNode;
 
 public class ModBuildingParser {
 
@@ -30,10 +31,11 @@ public class ModBuildingParser {
 		try {
 			
 			InputStream isJson = resourceLoader.asset (DIR_BUILDING_ASSETS+NAME_JSON, modId);
-			JsonRootNode json  = this.parser.parse(new InputStreamReader(isJson));
+			Json json  = Json.create (this.parser.parse(new InputStreamReader(isJson)));
 			isJson.close();
 			
 			ConfigBuildings config = new ConfigBuildings(modId, new BuildingConfigType(json, modId));
+			ConfigLoader.addSubConfig("Building", config);
 			
 			try {
 				config.loadConfig();

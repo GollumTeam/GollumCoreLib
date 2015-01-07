@@ -1,11 +1,11 @@
 package mods.gollum.core.common.config.type;
 
 import mods.gollum.core.ModGollumCoreLib;
-import argo.jdom.JsonNode;
+import mods.gollum.core.tools.simplejson.Json;
+import mods.gollum.core.tools.simplejson.Json.EntryObject;
 import argo.jdom.JsonNodeFactories;
-import argo.jdom.JsonRootNode;
 
-public class MobCapacitiesConfigType implements IConfigJsonClass {
+public class MobCapacitiesConfigType implements IConfigJsonType {
 	
 	public double moveSpeed      = 0D;
 	public double maxHealt       = 0.D;
@@ -29,24 +29,24 @@ public class MobCapacitiesConfigType implements IConfigJsonClass {
 	}
 	
 	@Override
-	public void readConfig(JsonNode json)  throws Exception {
-
-		try { this.moveSpeed      = Double.parseDouble(json.getNumberValue("moveSpeed"));      } catch (Exception e) { ModGollumCoreLib.log.severe("Read config : can't parse json on capacity moveSpeed"); }
-		try { this.maxHealt       = Double.parseDouble(json.getNumberValue("maxHealt"));       } catch (Exception e) { ModGollumCoreLib.log.severe("Read config : can't parse json on capacity maxHealt"); }
-		try { this.attackStrength = Double.parseDouble(json.getNumberValue("attackStrength")); } catch (Exception e) { ModGollumCoreLib.log.severe("Read config : can't parse json on capacity attackStrength"); }
-		try { this.followRange    = Double.parseDouble(json.getNumberValue("followRange"));    } catch (Exception e) { ModGollumCoreLib.log.severe("Read config : can't parse json on capacity followRange"); }
-		try { this.timeRange      = Double.parseDouble(json.getNumberValue("timeRange"));      } catch (Exception e) { ModGollumCoreLib.log.severe("Read config : can't parse json on capacity timeRange"); }
+	public void readConfig(Json json) {
+		
+		if (json.containsKey("moveSpeed")     ) this.moveSpeed      = json.child("moveSpeed")     .doubleValue();
+		if (json.containsKey("maxHealt")      ) this.maxHealt       = json.child("maxHealt")      .doubleValue();
+		if (json.containsKey("attackStrength")) this.attackStrength = json.child("attackStrength").doubleValue();
+		if (json.containsKey("followRange")   ) this.followRange    = json.child("followRange")   .doubleValue();
+		if (json.containsKey("timeRange")     ) this.timeRange      = json.child("timeRange")     .doubleValue();
 		
 	}
 
 	@Override
-	public JsonRootNode writeConfig() {
-		return JsonNodeFactories.object(
-			JsonNodeFactories.field ("moveSpeed"     , JsonNodeFactories.number(new Double (this.moveSpeed).toString())),
-			JsonNodeFactories.field ("maxHealt"      , JsonNodeFactories.number(new Double (this.maxHealt).toString())),
-			JsonNodeFactories.field ("attackStrength", JsonNodeFactories.number(new Double (this.attackStrength).toString())),
-			JsonNodeFactories.field ("followRange"   , JsonNodeFactories.number(new Double (this.followRange).toString())),
-			JsonNodeFactories.field ("timeRange"     , JsonNodeFactories.number(new Double (this.timeRange).toString()))
+	public Json writeConfig() {
+		return Json.create(
+			new EntryObject("moveSpeed"     , Json.create(this.moveSpeed)     ),
+			new EntryObject("maxHealt"      , Json.create(this.maxHealt)      ),
+			new EntryObject("attackStrength", Json.create(this.attackStrength)),
+			new EntryObject("followRange"   , Json.create(this.followRange)   ),
+			new EntryObject("timeRange"     , Json.create(this.timeRange)     )
 		);
 	}
 	

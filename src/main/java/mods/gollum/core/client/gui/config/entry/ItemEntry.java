@@ -3,7 +3,7 @@ package mods.gollum.core.client.gui.config.entry;
 import mods.gollum.core.client.gui.config.GuiConfigEntries;
 import mods.gollum.core.client.gui.config.GuiItemConfig;
 import mods.gollum.core.client.gui.config.GuiListConfig;
-import mods.gollum.core.client.gui.config.GuiModConfig;
+import mods.gollum.core.client.gui.config.GuiModIdConfig;
 import mods.gollum.core.client.gui.config.element.ConfigElement;
 import net.minecraft.client.Minecraft;
 

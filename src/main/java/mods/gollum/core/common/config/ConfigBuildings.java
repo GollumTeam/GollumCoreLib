@@ -12,7 +12,7 @@ public class ConfigBuildings extends Config {
 		this.buildings = buildings;
 	}
 
-	@ConfigProp (group = "Buildings List", info = "Spawn rate group between [0-10]")
+	@ConfigProp (group = "BuildingsList", info = "Spawn rate group between [0-10]", mcRestart=true)
 	public BuildingConfigType buildings;
 	
 }
