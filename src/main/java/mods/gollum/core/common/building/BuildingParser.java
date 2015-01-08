@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.imageio.ImageIO;
 
@@ -31,19 +32,19 @@ public class BuildingParser {
 	
 	private static final String NAME_IMG       = "structure.png";
 	private static final String NAME_JSON      = "infos.json";
-	private static HashMap<String, Building> parsed = new HashMap<String, Building>();
+	private static TreeMap<String, Building> parsed = new TreeMap<String, Building>();
 	
 	private JdomParser     parser         = new JdomParser();
 	private ResourceLoader resourceLoader = new ResourceLoader();
 	private String modID;
 	
-	public static HashMap<String, Building> getBuildingsList () {
+	public static TreeMap<String, Building> getBuildingsList () {
 		return parsed;
 	}
 
 
 	public static void reloadAll() {
-		HashMap<String, String> oldParsed = (HashMap<String, String>) parsed.clone();
+		TreeMap<String, String> oldParsed = (TreeMap<String, String>) parsed.clone();
 		parsed.clear();
 		BuildingParser parser = new BuildingParser();
 		for (String modIDName : oldParsed.keySet()) {

@@ -35,7 +35,7 @@ public class ModBuildingParser {
 			isJson.close();
 			
 			ConfigBuildings config = new ConfigBuildings(modId, new BuildingConfigType(json, modId));
-			ConfigLoader.addSubConfig("Building", config);
+			ConfigLoader.addSubConfig(config);
 			
 			try {
 				config.loadConfig();
