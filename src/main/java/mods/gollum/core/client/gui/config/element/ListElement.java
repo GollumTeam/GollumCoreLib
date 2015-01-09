@@ -23,10 +23,4 @@ public class ListElement extends ConfigElement {
 	public ConfigProp getConfigProp() {
 		return new JsonConfigProp();
 	}
-
-	@Override
-	public Class getType() {
-		return null;
-	}
-
 }

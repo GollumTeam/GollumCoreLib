@@ -99,7 +99,9 @@ public abstract class ConfigElement {
 		return null;
 	}
 	
-	public abstract Class getType ();
+	public Class getType () {
+		return null;
+	}
 	
 	public String getName() {
 		return this.name;

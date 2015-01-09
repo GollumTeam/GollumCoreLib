@@ -9,7 +9,7 @@ import mods.gollum.core.tools.simplejson.Json;
 
 public abstract class Config implements Cloneable {
 	
-	private String fileName;
+	private String fileName = "";
 	private String relativePath = "";
 	private boolean isMain = false;
 	

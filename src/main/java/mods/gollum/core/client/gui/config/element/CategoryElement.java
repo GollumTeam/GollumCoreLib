@@ -52,15 +52,12 @@ public class CategoryElement extends ConfigElement {
 		
 	}
 	
+	@Override
 	public ConfigProp getConfigProp() {
 		return new JsonConfigProp();
 	}
 	
 	@Override
-	public Class getType() {
-		return null;
-	}
-	
 	public Class< ? extends ConfigEntry> getEntryClass() {
 		return CategoryEntry.class;
 	}

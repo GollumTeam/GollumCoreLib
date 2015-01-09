@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import mods.gollum.core.client.gui.config.element.CategoryElement;
+import mods.gollum.core.client.gui.config.entry.CategoryEntry;
 import mods.gollum.core.common.config.ConfigLoader;
 import mods.gollum.core.common.config.ConfigLoader.ConfigLoad;
 import net.minecraft.client.gui.GuiScreen;
@@ -28,9 +29,20 @@ public class GuiCategoryConfig extends GuiConfig {
 		
 		this.configLoad = ConfigLoader.configLoaded.get(this.mod);
 		
-		ArrayList<String> categories = configLoad.getCategories();
+		ArrayList<String> categories = this.configLoad.getCategories();
+		
 		for (String category : categories) {
 			configElements.add(new CategoryElement (category, this.configLoad));
+		}
+	}
+	
+	@Override
+	public void initGui() {
+		super.initGui();
+
+		if (this.configLoad.getCategories().size() == 1) {
+//			this.mc.displayGuiScreen(new GuiValueConfig((CategoryEntry)this.entryList.getEntry(0)));
+			return;
 		}
 	}
 	
