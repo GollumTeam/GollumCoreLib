@@ -39,19 +39,25 @@ public class GuiCategoryConfig extends GuiConfig {
 	@Override
 	public void initGui() {
 		super.initGui();
-
-		if (this.configLoad.getCategories().size() == 1) {
-//			this.mc.displayGuiScreen(new GuiValueConfig((CategoryEntry)this.entryList.getEntry(0)));
+		
+		if (this.mustntDisplay()) {
+			this.mc.displayGuiScreen(new GuiValueConfig((CategoryEntry)this.entryList.getEntry(0)));
 			return;
 		}
 	}
 	
 	@Override
+	public boolean mustntDisplay () {
+		return this.configLoad.getCategories().size() == 1;
+	}
+	
+	@Override
 	public void displayParent() {
 		if (this.entryList.requiresMcRestart()) {
-			mc.displayGuiScreen(new GuiMessageDialog(parent, "fml.configgui.gameRestartTitle", new ChatComponentText(I18n.format("fml.configgui.gameRestartRequired")), "fml.configgui.confirmRestartMessage"));
+			this.saveValue ();
+			this.mc.displayGuiScreen(new GuiMessageDialog(this.getParent(), "fml.configgui.gameRestartTitle", new ChatComponentText(I18n.format("fml.configgui.gameRestartRequired")), "fml.configgui.confirmRestartMessage"));
 		} else {
-			this.mc.displayGuiScreen(this.parent);
+			super.displayParent();
 		}
 	}
 	
@@ -66,6 +72,7 @@ public class GuiCategoryConfig extends GuiConfig {
 		
 		this.configLoad.saveValue(values);
 		new ConfigLoader(configLoad.config, false).writeConfig();
+		
 	}
 	
 }

@@ -20,7 +20,7 @@ public class GuiArrayConfig extends GuiConfig {
 	public GuiArrayConfig(ArrayEntry arrayEntry) {
 		super(arrayEntry.parent.parent);
 		this.parentEntry = arrayEntry;
-		this.titleLine2  = ((GuiConfig)this.parent).titleLine2 + " > " + arrayEntry.getLabel();
+		this.titleLine2  = ((GuiConfig)this.getParent()).titleLine2 + " > " + arrayEntry.getLabel();
 	}
 	
 	@Override

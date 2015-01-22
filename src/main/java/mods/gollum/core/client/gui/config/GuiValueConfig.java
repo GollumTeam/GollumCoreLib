@@ -32,8 +32,8 @@ public class GuiValueConfig extends GuiConfig {
 			LinkedHashMap<String, Object> dValues = (LinkedHashMap<String, Object>)this.parentEntry.configElement.getDefaultValue();
 			
 			for (Entry<String, Object> entry : values.entrySet()) {
-				String name         = entry.getKey();
-				Object value        = entry.getValue();
+				String name  = entry.getKey();
+				Object value = entry.getValue();
 				
 				try {
 					Object cloned = value.getClass().getMethod("clone").invoke(value);

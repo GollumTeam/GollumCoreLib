@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import mods.gollum.core.client.gui.config.element.SubConfigElement;
 import mods.gollum.core.client.gui.config.element.SubGuiElement;
 import mods.gollum.core.client.gui.config.element.CategoryElement;
 import mods.gollum.core.common.config.ConfigLoader;
@@ -31,24 +32,40 @@ public class GuiModConfig extends GuiConfig {
 		
 		this.subConfigLoaded = ConfigLoader.getSubConfig(this.mod);
 		
-		if (this.subConfigLoaded.size() == 0) {
-			this.mc.displayGuiScreen(new GuiCategoryConfig(this.parent));
+		if (this.mustntDisplay ()) {
+			this.mc.displayGuiScreen(new GuiCategoryConfig(this));
 			return;
 		}
 		
-//		ArrayList<String> categories = configLoad.getCategories();
-//		for (String category : categories) {
-//			configElements.add(new CategoryElement (category, this.configLoad));
-//		}
+		ArrayList<String> categories = new ArrayList<String>();
+		
+		for (ConfigLoad configLoad : this.subConfigLoaded) {
+			ArrayList<String> cats = configLoad.getCategories();
+			for (String cat: cats) {
+				if (!categories.contains(cat)) {
+					categories.add(cat);
+				}
+			}
+		}
+		
+		for (String category : categories) {
+			configElements.add(new SubConfigElement(category, this.subConfigLoaded));
+		}
 	}
 	
 	@Override
 	public void displayParent() {
 		if (this.entryList.requiresMcRestart()) {
-			mc.displayGuiScreen(new GuiMessageDialog(parent, "fml.configgui.gameRestartTitle", new ChatComponentText(I18n.format("fml.configgui.gameRestartRequired")), "fml.configgui.confirmRestartMessage"));
+			this.saveValue ();
+			this.mc.displayGuiScreen(new GuiMessageDialog(this.getParent(), "fml.configgui.gameRestartTitle", new ChatComponentText(I18n.format("fml.configgui.gameRestartRequired")), "fml.configgui.confirmRestartMessage"));
 		} else {
-			this.mc.displayGuiScreen(this.parent);
+			super.displayParent();
 		}
+	}
+	
+	@Override
+	public boolean mustntDisplay () {
+		return this.subConfigLoaded.size() == 0;
 	}
 	
 	@Override

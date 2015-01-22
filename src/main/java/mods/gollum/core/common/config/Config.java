@@ -1,6 +1,7 @@
 package mods.gollum.core.common.config;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 
 import mods.gollum.core.common.config.type.IConfigJsonType;
 import mods.gollum.core.common.context.ModContext;
@@ -51,6 +52,36 @@ public abstract class Config implements Cloneable {
 			e.printStackTrace();
 		}
 		return cloned;
+	}
+	
+	
+	public boolean equals (Object value) {
+		
+		boolean equal = true;
+		
+		if (value instanceof Config) {
+			try {
+				for (Field f : this.getClass().getDeclaredFields()) {
+					if ( f.isAccessible() && Modifier.isStatic(f.getModifiers()) ) {
+						if ( f.get(this) == null ) {
+							if (f.get(value) != null) {
+								return false;
+							}
+						} else {
+							if (!f.get(this).equals(f.get(value))) {
+								return false;
+							}
+						}
+					}
+				}
+			} catch (Exception e) {
+				return false;
+			}
+		} else{
+			return false;
+		}
+		
+		return true;
 	}
 	
 	public boolean isMain() {

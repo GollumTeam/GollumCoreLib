@@ -58,7 +58,7 @@ public class CategoryEntry extends ButtonEntry {
 	@Override
 	public boolean equals (Object values) {
 		
-		if (value instanceof LinkedHashMap) {
+		if (values instanceof LinkedHashMap) {
 			
 			for (Object key : ((LinkedHashMap)values).keySet()) {
 				if (((LinkedHashMap) this.value).containsKey(key)) {
@@ -101,11 +101,6 @@ public class CategoryEntry extends ButtonEntry {
 		}
 		
 		return super.equals(values);
-	}
-	
-	@Override
-	public boolean isValidValue() {
-		return true;
 	}
 	
 }

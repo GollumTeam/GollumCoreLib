@@ -35,7 +35,7 @@ public abstract class GuiConfig extends GuiScreen {
 	private HoverChecker undoHoverChecker;
 	private HoverChecker resetHoverChecker;
 	
-	protected GuiScreen parent;
+	private GuiScreen parent;
 	
 	public GollumMod mod;
 	private String title;
@@ -134,16 +134,35 @@ public abstract class GuiConfig extends GuiScreen {
 		
 	}
 	
+	public boolean mustntDisplay () {
+		return false;
+	}
+	
 	public abstract void saveValue();
 	
+	public GuiScreen getParent () {
+		if (this.parent instanceof GuiConfig) {
+			if (((GuiConfig) this.parent).mustntDisplay()) {
+				return ((GuiConfig) this.parent).getParent();
+			}
+		}
+		return this.parent;
+	}
+	
 	public void displayParent() {
-		this.mc.displayGuiScreen(this.parent);
+		this.saveValue ();
+		if (this.parent instanceof GuiConfig) {
+			if (((GuiConfig) this.parent).mustntDisplay()) {
+				((GuiConfig) this.parent).displayParent();
+				return;
+			}
+		}
+		this.mc.displayGuiScreen(this.getParent());
 	}
 	
 	@Override
 	protected void actionPerformed(GuiButton button) {
 		if (button.id == 2000) {
-			this.saveValue ();
 			this.displayParent();
 		} else if (button.id == 2001) {
 			this.setToDefault ();

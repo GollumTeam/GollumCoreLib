@@ -23,7 +23,7 @@ public class GuiListConfig extends GuiConfig {
 	public GuiListConfig(ListEntry listEntry) {
 		super(listEntry.parent.parent);
 		this.parentEntry  = listEntry;
-		this.titleLine2   = ((GuiConfig)this.parent).titleLine2 + " > " + listEntry.getLabel();
+		this.titleLine2   = ((GuiConfig)this.getParent()).titleLine2 + " > " + listEntry.getLabel();
 		this.currentValue = this.parentEntry.getValue().toString();
 	}
 	

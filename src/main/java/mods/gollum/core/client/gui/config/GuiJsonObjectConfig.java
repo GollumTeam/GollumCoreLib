@@ -23,7 +23,7 @@ public class GuiJsonObjectConfig extends GuiConfig {
 	public GuiJsonObjectConfig(JsonObjectEntry jsonObjectEntry) {
 		super(jsonObjectEntry.parent.parent);
 		this.parentEntry = jsonObjectEntry;
-		this.titleLine2  = ((GuiConfig)this.parent).titleLine2 + " > " + jsonObjectEntry.getLabel();
+		this.titleLine2  = ((GuiConfig)this.getParent()).titleLine2 + " > " + jsonObjectEntry.getLabel();
 	}
 	
 	@Override
