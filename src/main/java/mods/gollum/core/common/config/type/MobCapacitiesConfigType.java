@@ -5,7 +5,7 @@ import mods.gollum.core.tools.simplejson.Json;
 import mods.gollum.core.tools.simplejson.Json.EntryObject;
 import argo.jdom.JsonNodeFactories;
 
-public class MobCapacitiesConfigType implements IConfigJsonType {
+public class MobCapacitiesConfigType extends ConfigJsonType {
 	
 	public double moveSpeed      = 0D;
 	public double maxHealt       = 0.D;
@@ -48,16 +48,6 @@ public class MobCapacitiesConfigType implements IConfigJsonType {
 			new EntryObject("followRange"   , Json.create(this.followRange)   ),
 			new EntryObject("timeRange"     , Json.create(this.timeRange)     )
 		);
-	}
-	
-	public boolean equals (MobCapacitiesConfigType obj) {
-		return
-			this.moveSpeed      == obj.moveSpeed &&
-			this.maxHealt       == obj.maxHealt  &&
-			this.attackStrength == obj.attackStrength &&
-			this.followRange    == obj.followRange &&
-			this.timeRange      == obj.timeRange
-		;
 	}
 	
 	/**

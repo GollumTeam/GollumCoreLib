@@ -59,6 +59,7 @@ public class SliderEntry extends ConfigEntry {
 	
 	@Override
 	public Object getValue() {
+		super.getValue();
 		try {
 			if (Double.class.isAssignableFrom(this.configElement.getValue().getClass()) || Double.TYPE.isAssignableFrom(this.configElement.getValue().getClass())) {
 				return new Double (this.slider.getValue());
@@ -110,7 +111,7 @@ public class SliderEntry extends ConfigEntry {
 		this.slider.setValue((Double) valueD);
 		this.slider.updateSlider();
 		
-		return this;
+		return super.setValue(value);
 	}
 	
 	

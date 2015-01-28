@@ -13,7 +13,7 @@ public class LongEntry extends StringEntry {
 	
 	@Override
 	public Object getValue() {
-		
+		super.getValue();
 		Long value = new Long(0L);
 		try {
 			value = Long.parseLong(this.textFieldValue.getText());

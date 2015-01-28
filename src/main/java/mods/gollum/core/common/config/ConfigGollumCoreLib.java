@@ -3,6 +3,7 @@ package mods.gollum.core.common.config;
 import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.common.config.ConfigProp.Type;
 import mods.gollum.core.common.config.type.ItemStackConfigType;
+import mods.gollum.core.tools.simplejson.IJsonObjectDisplay;
 import mods.gollum.core.tools.simplejson.Json;
 
 
@@ -48,13 +49,28 @@ public class ConfigGollumCoreLib extends Config {
 		Json.create("Test2"),
 		Json.create("Test3")
 	);
-	
+
 	@ConfigProp(group="Test", dev=true)
 	public Json json3 = Json.create(
 		Json.create(1),
 		Json.create(2),
 		Json.create(3)
 	);
+	
+
+	@ConfigProp(group="Test", dev=true)
+	public Json jsonDisplay = Json.create(
+		new Json.EntryObject("field1", Json.create("Test")),
+		new Json.EntryObject("field2", Json.create(1)),
+		new Json.EntryObject("field3", Json.create(1.5))
+	).addComplement(new IJsonObjectDisplay() {
+		
+		@Override
+		public String display(Json json) {
+			return json.child("field1").strValue()+" / "+json.child("field2")+" / "+json.child("field3");
+		}
+	});
+	
 	
 	// Json
 	@ConfigProp(group="Test", dev=true) public Json jsonStr    = Json.create("Test");

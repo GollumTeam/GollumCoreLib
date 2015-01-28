@@ -43,6 +43,10 @@ public abstract class ConfigEntry implements IGuiListEntry {
 	protected HoverChecker defaultHoverChecker;
 	
 	protected boolean labelDisplay = true;
+
+	protected IProxyEntry parentProxy;
+	protected boolean eventGetCall = false;
+	protected boolean eventSetCall = false;
 	
 	public ConfigEntry(int index, Minecraft mc, GuiConfigEntries parent, ConfigElement configElement) {
 		this.index         = index;
@@ -142,14 +146,21 @@ public abstract class ConfigEntry implements IGuiListEntry {
 			this.btnAdd.drawButton(this.mc, mouseX, mouseY);
 		}
 		
+		if (!this.parent.parent.undoIsVisible() && !this.parent.parent.resetIsVisible()) {
+			this.parent.controlWidth = this.parent.scrollBarX - 5- this.parent.controlX;
+		}
+		
+		this.btUndo.visible  = this.parent.parent.undoIsVisible();
+		this.btReset.visible = this.parent.parent.resetIsVisible();
+		
 		this.btUndo.xPosition = this.parent.scrollBarX - 44;
 		this.btUndo.yPosition = y;
-		this.btUndo.enabled = this.enabled() && this.isChanged();
+		this.btUndo.enabled = this.enabled() && this.isChanged() && this.parent.parent.undoIsVisible();
 		this.btUndo.drawButton(this.mc, mouseX, mouseY);
 		
 		this.btReset.xPosition = this.parent.scrollBarX - 22;
 		this.btReset.yPosition = y;
-		this.btReset.enabled = this.enabled() && !this.isDefault();
+		this.btReset.enabled = this.enabled() && !this.isDefault() && this.parent.parent.resetIsVisible();
 		this.btReset.drawButton(this.mc, mouseX, mouseY);
 		
 		if (this.tooltipHoverChecker == null) {
@@ -157,11 +168,26 @@ public abstract class ConfigEntry implements IGuiListEntry {
 		} else {
 			this.tooltipHoverChecker.updateBounds(y, y + slotHeight, x, this.parent.controlX + this.parent.controlWidth - 8 - 8);
 		}
+		
 	}
 	
-	public abstract Object getValue();
+	public Object getValue() {
+		if (this.parentProxy != null && !this.eventGetCall) {
+			this.eventGetCall = true;
+			this.parentProxy.eventGetValue ();
+			this.eventGetCall = false;
+		}
+		return null;
+	}
 	
-	public abstract ConfigEntry setValue(Object value);
+	public ConfigEntry setValue(Object value) {
+		if (this.parentProxy != null && !this.eventSetCall) {
+			this.eventSetCall = true;
+			this.parentProxy.eventSetValue ();
+			this.eventSetCall = false;
+		}
+		return this;
+}
 	
 	public boolean enabled() {
 		return this.mc.theWorld != null ? !this.configElement.getConfigProp().worldRestart() : true;
@@ -287,6 +313,10 @@ public abstract class ConfigEntry implements IGuiListEntry {
 		if (this.defaultHoverChecker.checkHover(mouseX, mouseY, canHover)) {
 			this.parent.parent.drawToolTip(defaultToolTip, mouseX, mouseY);
 		}
+	}
+
+	public void setParentProxy(IProxyEntry parentProxy) {
+		this.parentProxy = parentProxy;
 	}
 	
 }

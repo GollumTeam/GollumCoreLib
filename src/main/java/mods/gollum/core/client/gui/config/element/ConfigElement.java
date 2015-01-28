@@ -21,7 +21,7 @@ import mods.gollum.core.client.gui.config.entry.ShortEntry;
 import mods.gollum.core.client.gui.config.entry.SliderEntry;
 import mods.gollum.core.client.gui.config.entry.StringEntry;
 import mods.gollum.core.common.config.ConfigProp;
-import mods.gollum.core.common.config.type.IConfigJsonType;
+import mods.gollum.core.common.config.type.ConfigJsonType;
 import mods.gollum.core.tools.simplejson.Json;
 
 public abstract class ConfigElement {
@@ -55,7 +55,7 @@ public abstract class ConfigElement {
 
 		if (Set            .class.isAssignableFrom(clazz)) { return JsonObjectEntry.class;     }
 		if (Json           .class.isAssignableFrom(clazz)) { return JsonEntry.class;           }
-		if (IConfigJsonType.class.isAssignableFrom(clazz)) { return ConfigJsonTypeEntry.class; }
+		if (ConfigJsonType.class.isAssignableFrom(clazz)) { return ConfigJsonTypeEntry.class; }
 		if (String.class.isAssignableFrom(clazz)) {
 			if (
 				prop.validValues() != null && 
@@ -141,6 +141,13 @@ public abstract class ConfigElement {
 		if (!newValue.equals("") && ListEntry.class.isAssignableFrom(clazz)) {
 			return newValue;
 		}  else
+		if (clazz == ConfigJsonTypeEntry.class) {
+			try {
+				return componentType.newInstance();
+			} catch (Exception e) {
+				return null;
+			}
+		} else
 		if (clazz == JsonEntry.class) {
 			
 		} else

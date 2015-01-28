@@ -12,7 +12,7 @@ public class FloatEntry extends DoubleEntry {
 	
 	@Override
 	public Object getValue() {
-		
+		super.getValue();
 		Float value = new Float(0.0F);
 		try {
 			value = Float.parseFloat(this.textFieldValue.getText());

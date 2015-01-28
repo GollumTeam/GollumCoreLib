@@ -35,7 +35,7 @@ public abstract class GuiConfig extends GuiScreen {
 	private HoverChecker undoHoverChecker;
 	private HoverChecker resetHoverChecker;
 	
-	private GuiScreen parent;
+	protected GuiScreen parent;
 	
 	public GollumMod mod;
 	private String title;
@@ -43,7 +43,6 @@ public abstract class GuiConfig extends GuiScreen {
 	
 	private boolean needsRefresh = true;
 	
-
 	public GuiConfig(GuiScreen parent) {
 		
 		this.parent = parent;
@@ -110,21 +109,25 @@ public abstract class GuiConfig extends GuiScreen {
 			20, 
 			I18n.format("gui.done")
 		));
+		
 		this.buttonList.add(this.btUndo = new GuiUnicodeGlyphButton(
 			2002,
 			this.width / 2 - buttonWidthHalf + doneWidth + 5,
 			this.height - 29, 
 			undoWidth,
 			20,
-			" " + I18n.format("fml.configgui.tooltip.undoChanges"), UNDO_CHAR, 2.0F));
-		
+			" " + I18n.format("fml.configgui.tooltip.undoChanges"), UNDO_CHAR, 
+			2.0F
+		));
+			
 		this.buttonList.add(this.btReset = new GuiUnicodeGlyphButton(
 			2001,
 			this.width / 2 - buttonWidthHalf + doneWidth + 5 + undoWidth + 5,
 			this.height - 29,
 			resetWidth,
 			20,
-			" " + I18n.format("fml.configgui.tooltip.resetToDefault"), RESET_CHAR, 2.0F
+			" " + I18n.format("fml.configgui.tooltip.resetToDefault"), RESET_CHAR, 
+			2.0F
 		));
 		
 		this.undoHoverChecker = new HoverChecker(this.btUndo, 800);
@@ -194,8 +197,11 @@ public abstract class GuiConfig extends GuiScreen {
 		}
 		
 		this.btDone.enabled  = this.isValidValues();
-		this.btUndo.enabled  = this.isChanged();
-		this.btReset.enabled = !this.isDefault();
+		this.btUndo.enabled  = this.isChanged() && this.undoIsVisible();
+		this.btReset.enabled = !this.isDefault() && this.resetIsVisible();
+
+		this.btUndo.visible  = this.undoIsVisible();
+		this.btReset.visible = this.resetIsVisible();
 		
 		super.drawScreen(mouseX, mouseY, partialTicks);
 		
@@ -207,6 +213,15 @@ public abstract class GuiConfig extends GuiScreen {
 		}
 		
 		this.entryList.drawScreenPost (mouseX, mouseY, partialTicks);
+	}
+	
+	
+	public boolean resetIsVisible() {
+		return true;
+	}
+	
+	public boolean undoIsVisible() {
+		return true;
 	}
 	
 	protected boolean isValidValues() {

@@ -33,11 +33,8 @@ public class AddButtonEntry extends ConfigEntry {
 	}
 	
 	public Object getValue() {
+		super.getValue();
 		return this.configElement.getValue();
-	}
-	
-	public ConfigEntry setValue(Object value) {
-		return this;
 	}
 	
 }

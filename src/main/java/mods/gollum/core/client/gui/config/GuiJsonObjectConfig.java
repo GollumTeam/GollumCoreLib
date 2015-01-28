@@ -14,6 +14,7 @@ import mods.gollum.core.client.gui.config.entry.JsonObjectEntry;
 import mods.gollum.core.common.config.ConfigProp;
 import mods.gollum.core.common.config.JsonConfigProp;
 import mods.gollum.core.tools.simplejson.Json;
+import mods.gollum.core.tools.simplejson.JsonArray;
 import mods.gollum.core.tools.simplejson.JsonObject;
 
 public class GuiJsonObjectConfig extends GuiConfig {
@@ -23,7 +24,7 @@ public class GuiJsonObjectConfig extends GuiConfig {
 	public GuiJsonObjectConfig(JsonObjectEntry jsonObjectEntry) {
 		super(jsonObjectEntry.parent.parent);
 		this.parentEntry = jsonObjectEntry;
-		this.titleLine2  = ((GuiConfig)this.getParent()).titleLine2 + " > " + jsonObjectEntry.getLabel();
+		this.titleLine2  = ((GuiConfig)this.parent).titleLine2 + " > " + jsonObjectEntry.getLabel();
 	}
 	
 	@Override
@@ -120,6 +121,8 @@ public class GuiJsonObjectConfig extends GuiConfig {
 		for (Entry<String, Object> entry : values.entrySet()) {
 			rtn.add(entry.getKey(), (Json)entry.getValue());
 		}
+		
+		
 		
 		this.parentEntry.setValue(rtn);
 	}

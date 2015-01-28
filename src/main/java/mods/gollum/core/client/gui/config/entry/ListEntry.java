@@ -24,6 +24,7 @@ public class ListEntry extends ButtonEntry {
 
 	@Override
 	public Object getValue() {
+		super.getValue();
 		return this.value;
 	}
 
@@ -31,7 +32,7 @@ public class ListEntry extends ButtonEntry {
 	public ConfigEntry setValue(Object value) {
 		this.value = value;
 		this.updateValueButtonText(this.value.toString());
-		return this;
+		return super.setValue(value);
 	}
 
 }

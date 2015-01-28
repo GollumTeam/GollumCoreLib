@@ -12,7 +12,7 @@ public class ShortEntry extends IntegerEntry {
 	
 	@Override
 	public Object getValue() {
-		
+		super.getValue();
 		Short value = new Short((short) 0);
 		try {
 			value = Short.parseShort(this.textFieldValue.getText());

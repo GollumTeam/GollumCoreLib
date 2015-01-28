@@ -5,7 +5,7 @@ import java.lang.reflect.Array;
 import mods.gollum.core.client.gui.config.GuiConfigEntries;
 import mods.gollum.core.client.gui.config.element.ConfigElement;
 import mods.gollum.core.common.config.ConfigProp;
-import mods.gollum.core.common.config.type.IConfigJsonType;
+import mods.gollum.core.common.config.type.ConfigJsonType;
 import mods.gollum.core.tools.simplejson.Json;
 import net.minecraft.client.Minecraft;
 
@@ -17,7 +17,7 @@ public class ConfigJsonTypeEntry extends JsonEntry {
 	}
 	
 	protected void init(Object value, Object valueDefault, ConfigProp prop) {
-		super.init(((IConfigJsonType)value).writeConfig(), ((IConfigJsonType)valueDefault).writeConfig(), prop);
+		super.init(((ConfigJsonType)value).writeConfig(), ((ConfigJsonType)valueDefault).writeConfig(), prop);
 	}
 	
 	public void updateValueButtonText(Object value) {
@@ -28,15 +28,25 @@ public class ConfigJsonTypeEntry extends JsonEntry {
 	
 	@Override
 	protected Json getOldValue () {
-		return ((IConfigJsonType)this.configElement.getValue()).writeConfig();
+		return ((ConfigJsonType)this.configElement.getValue()).writeConfig();
+	}
+	
+	private Json rebuildJson (Json json) {
+		try {
+			ConfigJsonType value = ((ConfigJsonType)this.configElement.getValue()).getClass().newInstance();
+			value.readConfig(json);
+			json = value.writeConfig();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return json;
 	}
 	
 	@Override
 	public Object getValue() {
-		IConfigJsonType value = (IConfigJsonType) this.configElement.getValue();
+		ConfigJsonType value = (ConfigJsonType) this.configElement.getValue();
 		try {
-			Json json = (Json) super.getValue();
-			value = ((IConfigJsonType)this.configElement.getValue()).getClass().newInstance();
+			Json json = this.rebuildJson((Json) super.getValue());
 			value.readConfig(json);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -47,15 +57,14 @@ public class ConfigJsonTypeEntry extends JsonEntry {
 	
 	@Override
 	public ConfigEntry setValue(Object value) {
-		if (value instanceof IConfigJsonType) {
-			super.setValue(((IConfigJsonType) value).writeConfig());
-			this.getValue();
-			return this;
+		if (value instanceof ConfigJsonType) {
+			return super.setValue(((ConfigJsonType) value).writeConfig());
 		}
 		
-		super.setValue(value);
+		if (value instanceof Json) {
+			value = this.rebuildJson ((Json) value);
+		}
 		
-		this.getValue();
-		return this;
+		return super.setValue(value);
 	}
 }

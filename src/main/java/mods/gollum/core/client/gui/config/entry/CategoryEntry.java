@@ -30,13 +30,14 @@ public class CategoryEntry extends ButtonEntry {
 
 	@Override
 	public Object getValue() {
+		super.getValue();
 		return this.value;
 	}
 
 	@Override
 	public ConfigEntry setValue(Object value) {
 		this.value = value;
-		return this;
+		return super.setValue(value);
 	}
 	
 	@Override

@@ -16,7 +16,7 @@ import mods.gollum.core.tools.simplejson.JsonObject;
 import net.minecraft.block.Block;
 import argo.jdom.JsonNode;
 
-public class BuildingConfigType implements IConfigJsonType, IConfigMerge {
+public class BuildingConfigType extends ConfigJsonType implements IConfigMerge {
 	
 	public static class Group {
 		
@@ -63,8 +63,6 @@ public class BuildingConfigType implements IConfigJsonType, IConfigMerge {
 			String groupName = entry.getKey();
 			Json   jsonGroup = entry.getValue();
 			
-			ModGollumCoreLib.log.debug("Building group :"+groupName);
-
 			Group group = new Group();
 			group.globalSpawnRate = jsonGroup.child("globalSpawnRate").intValue();
 			group.buildings       = this.readBuildings (jsonGroup.child("buildings"));
@@ -205,11 +203,6 @@ public class BuildingConfigType implements IConfigJsonType, IConfigMerge {
 		return jsonBlocksSpawn;
 	}
 	
-	
-	public boolean equals (BuildingConfigType obj) {
-		return false;
-	}
-
 	@Override
 	public boolean merge(Object newValueObj) {
 		

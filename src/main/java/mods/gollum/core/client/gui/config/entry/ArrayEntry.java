@@ -45,6 +45,7 @@ public class ArrayEntry extends ButtonEntry {
 	
 	@Override
 	public Object getValue() {
+		super.getValue();
 		return this.values;
 	}
 	
@@ -52,7 +53,7 @@ public class ArrayEntry extends ButtonEntry {
 	public ConfigEntry setValue(Object value) {
 		this.values = value;
 		this.updateValueButtonText();
-		return this;
+		return super.setValue(value);
 	}
 
 }

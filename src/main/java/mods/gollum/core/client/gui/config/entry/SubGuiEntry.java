@@ -28,12 +28,7 @@ public class SubGuiEntry extends ButtonEntry {
 
 	@Override
 	public Object getValue() {
+		super.getValue();
 		return this.configElement.getValue();
 	}
-
-	@Override
-	public ConfigEntry setValue(Object value) {
-		return this;
-	}
-
 }

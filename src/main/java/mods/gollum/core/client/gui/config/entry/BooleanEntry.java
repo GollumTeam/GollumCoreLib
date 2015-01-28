@@ -27,6 +27,7 @@ public class BooleanEntry extends ButtonEntry {
 	
 	@Override
 	public Object getValue() {
+		super.getValue();
 		return this.value;
 	}
 	
@@ -38,7 +39,7 @@ public class BooleanEntry extends ButtonEntry {
 			e.printStackTrace();
 		}
 		this.updateValueButtonText();
-		return this;
+		return super.setValue(value);
 	}
 
 }

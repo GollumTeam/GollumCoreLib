@@ -3,7 +3,7 @@ package mods.gollum.core.common.config;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
-import mods.gollum.core.common.config.type.IConfigJsonType;
+import mods.gollum.core.common.config.type.ConfigJsonType;
 import mods.gollum.core.common.context.ModContext;
 import mods.gollum.core.tools.simplejson.Json;
 

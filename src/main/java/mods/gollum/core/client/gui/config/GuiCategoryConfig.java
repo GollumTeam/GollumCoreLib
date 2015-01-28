@@ -22,6 +22,7 @@ public class GuiCategoryConfig extends GuiConfig {
 	
 	public GuiCategoryConfig(GuiScreen parent) {
 		super(parent);
+		this.titleLine2 = "Configuration";
 	}
 	
 	@Override
@@ -63,7 +64,7 @@ public class GuiCategoryConfig extends GuiConfig {
 	
 	@Override
 	public void saveValue() {
-		log.info("Save configuration "+this.getMod());
+		log.info("Save configuration "+this.getMod().getModId());
 		
 		LinkedHashMap<String, Object> values = new LinkedHashMap<String, Object>();
 		for (Entry<String, Object> entry : this.entryList.getValues().entrySet()) {

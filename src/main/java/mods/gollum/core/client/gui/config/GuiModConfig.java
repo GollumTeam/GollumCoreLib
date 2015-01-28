@@ -28,7 +28,7 @@ public class GuiModConfig extends GuiConfig {
 	@Override
 	protected void initConfigElement() {
 		
-		configElements.add(new SubGuiElement("Configuration", GuiCategoryConfig.class));
+		this.configElements.add(new SubGuiElement("Configuration", GuiCategoryConfig.class));
 		
 		this.subConfigLoaded = ConfigLoader.getSubConfig(this.mod);
 		
@@ -54,13 +54,13 @@ public class GuiModConfig extends GuiConfig {
 	}
 	
 	@Override
-	public void displayParent() {
-		if (this.entryList.requiresMcRestart()) {
-			this.saveValue ();
-			this.mc.displayGuiScreen(new GuiMessageDialog(this.getParent(), "fml.configgui.gameRestartTitle", new ChatComponentText(I18n.format("fml.configgui.gameRestartRequired")), "fml.configgui.confirmRestartMessage"));
-		} else {
-			super.displayParent();
-		}
+	public boolean resetIsVisible() {
+		return false;
+	}
+	
+	@Override
+	public boolean undoIsVisible() {
+		return false;
 	}
 	
 	@Override
@@ -70,15 +70,6 @@ public class GuiModConfig extends GuiConfig {
 	
 	@Override
 	public void saveValue() {
-//		log.info("Save configuration "+this.getMod());
-//		
-//		LinkedHashMap<String, Object> values = new LinkedHashMap<String, Object>();
-//		for (Entry<String, Object> entry : this.entryList.getValues().entrySet()) {
-//			values.putAll((Map<? extends String, ? extends Object>) entry.getValue());
-//		}
-//		
-//		this.configLoad.saveValue(values);
-//		new ConfigLoader(configLoad.config, false).writeConfig();
 	}
 	
 }

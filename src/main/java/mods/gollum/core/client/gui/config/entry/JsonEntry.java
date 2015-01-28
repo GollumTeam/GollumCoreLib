@@ -1,6 +1,7 @@
 package mods.gollum.core.client.gui.config.entry;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import cpw.mods.fml.client.config.HoverChecker;
@@ -12,6 +13,7 @@ import mods.gollum.core.common.config.JsonConfigProp;
 import mods.gollum.core.tools.simplejson.IJsonComplement;
 import mods.gollum.core.tools.simplejson.Json;
 import mods.gollum.core.tools.simplejson.JsonArray;
+import mods.gollum.core.tools.simplejson.JsonBool;
 import mods.gollum.core.tools.simplejson.JsonByte;
 import mods.gollum.core.tools.simplejson.JsonDouble;
 import mods.gollum.core.tools.simplejson.JsonFloat;
@@ -25,7 +27,7 @@ import net.minecraft.util.EnumChatFormatting;
 
 public class JsonEntry extends ConfigEntry implements IProxyEntry {
 	
-	ConfigEntry proxy;
+	protected ConfigEntry proxy;
 	
 	public JsonEntry(int index, Minecraft mc, GuiConfigEntries parent, ConfigElement configElement) {
 		super(index, mc, parent, configElement);
@@ -36,7 +38,7 @@ public class JsonEntry extends ConfigEntry implements IProxyEntry {
 	}
 	
 	protected void init(Object value, Object valueDefault, ConfigProp prop) {
-		
+
 		IJsonComplement newProp = ((Json)value).getComplement(JsonConfigProp.class);
 		if (newProp != null) {
 			prop = (ConfigProp) newProp;
@@ -118,10 +120,20 @@ public class JsonEntry extends ConfigEntry implements IProxyEntry {
 			TypedValueElement nConfigElement = new TypedValueElement(Float.class, this.getName(), json.floatValue(), jsonDefault.floatValue(), prop);
 			
 			this.proxy = this.parent.newInstanceOfEntryConfig(this.index, nConfigElement, prop);
+		} else if (((Json)value).isBool()) {
+			
+			JsonBool json        = (JsonBool)value;
+			JsonBool jsonDefault = (JsonBool)valueDefault;
+			
+			TypedValueElement nConfigElement = new TypedValueElement(Boolean.class, this.getName(), json.boolValue(), jsonDefault.boolValue(), prop);
+			
+			this.proxy = this.parent.newInstanceOfEntryConfig(this.index, nConfigElement, prop);
 		}
 		if (this.proxy != null) {
 			this.proxy.toolTip = this.toolTip;
 		}
+		
+		this.proxy.setParentProxy (this);
 	}
 	
 	protected Json getOldValue () {
@@ -130,6 +142,8 @@ public class JsonEntry extends ConfigEntry implements IProxyEntry {
 	
 	@Override
 	public Object getValue() {
+		
+		super.getValue();
 		
 		if (this.proxy == null) return this.configElement.getValue();
 		
@@ -158,6 +172,8 @@ public class JsonEntry extends ConfigEntry implements IProxyEntry {
 			json = Json.create(Double.parseDouble (value.toString()));
 		} else if (oldValue.isFloat()) {
 			json = Json.create(Float.parseFloat (value.toString()));
+		} else if (oldValue.isBool()) {
+			json = Json.create(Boolean.parseBoolean(value.toString()));
 		}
 		
 		return json;
@@ -189,10 +205,18 @@ public class JsonEntry extends ConfigEntry implements IProxyEntry {
 			if (value instanceof JsonByte)   { newValue = ((JsonByte)   value).byteValue();   }
 			if (value instanceof JsonDouble) { newValue = ((JsonDouble) value).doubleValue(); }
 			if (value instanceof JsonFloat)  { newValue = ((JsonFloat)  value).floatValue();  }
+			if (value instanceof JsonBool)   { newValue = ((JsonBool)   value).boolValue();   }
 		}
+		
+		if (value instanceof Json) {
+			for (IJsonComplement complement : oldValue.getComplements()) {
+				((Json) value).addComplement(complement);
+			}
+		}
+		
 		this.proxy.setValue (newValue);
 		
-		return this;
+		return super.setValue(value);
 	}
 
 

@@ -72,6 +72,7 @@ public class StringEntry extends ConfigEntry {
 	
 	@Override
 	public Object getValue() {
+		super.getValue();
 		return textFieldValue.getText();
 	}
 
@@ -79,7 +80,7 @@ public class StringEntry extends ConfigEntry {
 	@Override
 	public ConfigEntry setValue(Object value) {
 		this.textFieldValue.setText(value.toString());
-		return this;
+		return super.setValue(value);
 	}
 	
 	@Override

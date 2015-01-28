@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
 import mods.gollum.core.client.gui.config.GuiConfigEntries;
+import mods.gollum.core.client.gui.config.GuiSubConfigConfig;
 import mods.gollum.core.client.gui.config.GuiValueConfig;
 import mods.gollum.core.client.gui.config.element.CategoryElement;
 import mods.gollum.core.client.gui.config.element.ConfigElement;
@@ -28,18 +29,19 @@ public class SubConfigEntry extends ButtonEntry {
 
 	@Override
 	public void valueButtonPressed(int slotIndex) {
-//		this.mc.displayGuiScreen(new GuiValueConfig(this));
+		this.mc.displayGuiScreen(new GuiSubConfigConfig(this));
 	}
 
 	@Override
 	public Object getValue() {
+		super.getValue();
 		return this.value;
 	}
 
 	@Override
 	public ConfigEntry setValue(Object value) {
 		this.value = (ArrayList<Config>) value;
-		return this;
+		return super.setValue(value);
 	}
 	
 	@Override

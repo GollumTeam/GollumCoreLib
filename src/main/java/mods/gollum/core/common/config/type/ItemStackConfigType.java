@@ -10,7 +10,7 @@ import mods.gollum.core.tools.simplejson.IJsonObjectDisplay;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
-public class ItemStackConfigType implements IConfigJsonType {
+public class ItemStackConfigType extends ConfigJsonType {
 	
 	private String registerName;
 	private int metadata;
@@ -52,19 +52,6 @@ public class ItemStackConfigType implements IConfigJsonType {
 	
 	public ItemStack getItemStak () {
 		return new ItemStack (RegisteredObjects.instance().getItem(registerName), number, metadata);
-	}
-
-	public boolean equals (Object obj) {
-		
-		if (obj instanceof ItemStackConfigType) {
-			return
-				this.registerName.equals(((ItemStackConfigType)obj).registerName) &&
-				this.metadata == ((ItemStackConfigType)obj).metadata &&
-				this.number   == ((ItemStackConfigType)obj).number
-			;
-		}
-		
-		return false;
 	}
 	
 	@Override

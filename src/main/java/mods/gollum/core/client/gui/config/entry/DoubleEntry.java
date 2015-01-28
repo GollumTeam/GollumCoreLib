@@ -14,6 +14,8 @@ public class DoubleEntry extends StringEntry {
 	@Override
 	public Object getValue() {
 		
+		super.getValue();
+		
 		Double value = new Double(0D);
 		try {
 			value = Double.parseDouble(this.textFieldValue.getText());

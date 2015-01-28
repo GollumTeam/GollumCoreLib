@@ -15,9 +15,17 @@ public class CategoryElement extends ConfigElement {
 	private ConfigLoad configLoad;
 	private HashMap<String, Class> types = new HashMap<String, Class>();
 	private HashMap<String, ConfigProp> props = new HashMap<String, ConfigProp>();
+	public String category ;
 	
 	public CategoryElement(String category, ConfigLoad configLoad) {
-		super(category);
+		this(category, configLoad, category);
+	}
+		
+	
+	public CategoryElement(String category, ConfigLoad configLoad, String label) {
+		super(label);
+		
+		this.category = category; 
 		
 		this.configLoad = configLoad;
 		

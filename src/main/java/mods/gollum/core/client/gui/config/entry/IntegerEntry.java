@@ -12,7 +12,7 @@ public class IntegerEntry extends LongEntry {
 	
 	@Override
 	public Object getValue() {
-		
+		super.getValue();
 		Integer value = new Integer(0);
 		try {
 			value = Integer.parseInt(this.textFieldValue.getText());

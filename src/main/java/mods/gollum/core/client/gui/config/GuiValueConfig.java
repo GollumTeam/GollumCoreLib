@@ -18,7 +18,7 @@ public class GuiValueConfig extends GuiConfig {
 	public GuiValueConfig(CategoryEntry parentEntry) {
 		super(parentEntry.parent.parent);
 		this.parentEntry = parentEntry;
-		this.titleLine2  = parentEntry.getLabel();	
+		this.titleLine2  = ((GuiConfig)this.parent).titleLine2 + " > " + parentEntry.getLabel();	
 		this.category    = parentEntry.configElement.getName();
 		log.debug ("Category : "+this.category);
 	}
