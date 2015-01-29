@@ -16,11 +16,13 @@ import net.minecraft.client.renderer.Tessellator;
 public class BuildingEntry extends ConfigEntry {
 	
 	private BuildingConfigType value;
-	
+
 	private int currentGroup = 0;
+	private int currentBuilding = 0;
 
 	private ConfigEntry group;
 	private ConfigEntry globalSpawnRate;
+	private ConfigEntry building;
 	
 	public BuildingEntry(int index, Minecraft mc, GuiConfigEntries parent, ConfigElement configElement) {
 		super(index, mc, parent, configElement);
@@ -29,10 +31,17 @@ public class BuildingEntry extends ConfigEntry {
 		
 		parent.setSlotHeight (200);
 		
-		Object[] valuesO = this.value.lists.keySet().toArray();
-		String[] valuesS = new String[valuesO.length];
-		for (int i = 0; i < valuesO.length; i++) {
-			valuesS[i] = (String)valuesO[i];
+		this.init ();
+	}
+	
+	private void init() {
+		
+		final BuildingEntry _this = this;
+		
+		Object[] valuesGO = this.value.lists.keySet().toArray();
+		String[] valuesGS = new String[valuesGO.length];
+		for (int i = 0; i < valuesGO.length; i++) {
+			valuesGS[i] = (String)valuesGO[i];
 		}
 		
 		this.group = this.createSubEntry(
@@ -40,14 +49,12 @@ public class BuildingEntry extends ConfigEntry {
 			this.getCurrentGroupName(),
 			this.getCurrentDefaultGroupName(),
 			0,
-			new JsonConfigProp().type(ConfigProp.Type.LIST_INLINE).validValues(valuesS)
+			new JsonConfigProp().type(ConfigProp.Type.LIST_INLINE).validValues(valuesGS)
 		);
 		this.group.btResetIsVisible = false;
 		this.group.btUndoIsVisible  = false;
 		this.group.formatedLabel    = false;
-		
-		final BuildingEntry _this = this;
-		
+			
 		this.group.addEvent(new Event() {
 			
 			@Override
@@ -65,15 +72,15 @@ public class BuildingEntry extends ConfigEntry {
 					_this.globalSpawnRate.setValue(groupC.globalSpawnRate);
 					_this.globalSpawnRate.configElement.setValue(groupO.globalSpawnRate);
 					_this.globalSpawnRate.configElement.setDefaultValue(groupD.globalSpawnRate);
+					
+
+					_this.building.setValue(groupC.globalSpawnRate);
+					_this.building.configElement.setValue(groupO.globalSpawnRate);
+					_this.building.configElement.setDefaultValue(groupD.globalSpawnRate);
 				} 
 			}
 			
 		});
-		
-		this.init ();
-	}
-	
-	private void init() {
 		
 		this.globalSpawnRate = this.createSubEntry(
 			"globalSpawnRate",
@@ -85,8 +92,6 @@ public class BuildingEntry extends ConfigEntry {
 		this.globalSpawnRate.btResetIsVisible = true;
 		this.globalSpawnRate.btUndoIsVisible  = true;
 		
-		final BuildingEntry _this = this;
-		
 		this.globalSpawnRate.addEvent(new Event() {
 			
 			@Override
@@ -97,12 +102,53 @@ public class BuildingEntry extends ConfigEntry {
 			
 		});
 		
+		Group group = _this.getCurrentGroup();
+		
+		Object[] valuesBO = group.buildings.keySet().toArray();
+		String[] valuesBS = new String[valuesBO.length];
+		for (int i = 0; i < valuesBO.length; i++) {
+			valuesBS[i] = (String)valuesBO[i];
+		}
+		
+		this.building = this.createSubEntry(
+				"building",
+				this.getCurrentBuildingName(),
+				this.getCurrentBuildingGroupName(),
+				1,
+				new JsonConfigProp().type(ConfigProp.Type.LIST_INLINE).validValues(valuesBS)
+			);
+		this.building.btResetIsVisible = false;
+		this.building.btUndoIsVisible  = false;
+		this.building.formatedLabel    = false;
+				
+		this.building.addEvent(new Event() {
+			
+			@Override
+			public void call(Type type, Object... params) {
+				
+				if (type == Type.CHANGE) {
+					
+//					Group oldGroup = _this.getCurrentGroup();
+//					oldGroup.globalSpawnRate = (Integer) _this.globalSpawnRate.getValue();
+//					
+//					_this.setCurrentGroup((String) _this.group.getValue());
+//					Group groupC = _this.getCurrentGroup();
+//					Group groupD = _this.getCurrentDefaultGroup();
+//					Group groupO = _this.getCurrentOldGroup();
+//					_this.globalSpawnRate.setValue(groupC.globalSpawnRate);
+//					_this.globalSpawnRate.configElement.setValue(groupO.globalSpawnRate);
+//					_this.globalSpawnRate.configElement.setDefaultValue(groupD.globalSpawnRate);
+				} 
+			}
+			
+		});
 	}
 	
 	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, Tessellator tessellator, int mouseX, int mouseY, boolean isSelected) {
 		
 		this.group          .drawEntry(0, x, y     , listWidth, 22, tessellator, mouseX, mouseY, isSelected);
 		this.globalSpawnRate.drawEntry(1, x, y + 22, listWidth, 22, tessellator, mouseX, mouseY, isSelected);
+		this.building       .drawEntry(2, x, y + 44, listWidth, 22, tessellator, mouseX, mouseY, isSelected);
 	}
 	
 	public void setCurrentGroup (String name) {
@@ -121,7 +167,7 @@ public class BuildingEntry extends ConfigEntry {
 		return this.getCurrentGroupName(this.value.lists.keySet());
 	}
 	public String getCurrentDefaultGroupName () {
-		return this.getCurrentGroupName(((BuildingConfigType)this.configElement.getValue()).lists.keySet());
+		return this.getCurrentGroupName(((BuildingConfigType)this.configElement.getDefaultValue()).lists.keySet());
 	}
 	public String getCurrentOldGroupName () {
 		return this.getCurrentGroupName(((BuildingConfigType)this.configElement.getValue()).lists.keySet());
@@ -129,7 +175,7 @@ public class BuildingEntry extends ConfigEntry {
 	
 	public String getCurrentGroupName (Collection<String> collection) {
 		int i = 0;
-		for (String group : ((BuildingConfigType)this.configElement.getValue()).lists.keySet()) {
+		for (String group : collection) {
 			if (i == this.currentGroup) {
 				return group;
 			}
@@ -141,11 +187,11 @@ public class BuildingEntry extends ConfigEntry {
 	public Group getCurrentGroup () {
 		return this.getCurrentGroup(this.value.lists.values());
 	}
-	public Group getCurrentOldGroup () {
-		return this.getCurrentGroup(((BuildingConfigType)this.configElement.getValue()).lists.values());
-	}
 	public Group getCurrentDefaultGroup () {
 		return this.getCurrentGroup(((BuildingConfigType)this.configElement.getDefaultValue()).lists.values());
+	}
+	public Group getCurrentOldGroup () {
+		return this.getCurrentGroup(((BuildingConfigType)this.configElement.getValue()).lists.values());
 	}
 	
 	private Group getCurrentGroup (Collection<Group> collection) {
@@ -153,6 +199,27 @@ public class BuildingEntry extends ConfigEntry {
 		for (Group group : collection) {
 			if (i == this.currentGroup) {
 				return group;
+			}
+			i++;
+		}
+		return null;
+	}
+	
+	public String getCurrentBuildingName () {
+		return this.getCurrentBuildingName(this.getCurrentGroup().buildings.keySet());
+	}
+	public String getCurrentBuildingGroupName () {
+		return this.getCurrentBuildingName(this.getCurrentDefaultGroup().buildings.keySet());
+	}
+	public String getCurrentOldBuildingName () {
+		return this.getCurrentBuildingName(this.getCurrentOldGroup().buildings.keySet());
+	}
+	
+	public String getCurrentBuildingName (Collection<String> collection) {
+		int i = 0;
+		for (String building : collection) {
+			if (i == this.currentBuilding) {
+				return building;
 			}
 			i++;
 		}
