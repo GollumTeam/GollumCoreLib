@@ -215,6 +215,10 @@ public abstract class GuiConfig extends GuiScreen {
 		this.entryList.drawScreenPost (mouseX, mouseY, partialTicks);
 	}
 	
+	@Override
+	public void drawGradientRect(int p_73733_1_, int p_73733_2_, int p_73733_3_, int p_73733_4_, int p_73733_5_, int p_73733_6_) {
+		super.drawGradientRect(p_73733_1_, p_73733_2_, p_73733_3_, p_73733_4_, p_73733_5_, p_73733_6_);
+	}
 	
 	public boolean resetIsVisible() {
 		return true;

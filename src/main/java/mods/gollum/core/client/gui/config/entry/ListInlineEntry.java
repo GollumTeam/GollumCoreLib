@@ -11,7 +11,7 @@ import net.minecraft.client.renderer.Tessellator;
 
 public class ListInlineEntry extends ConfigEntry {
 	
-	private String[] values;
+	public String[] values;
 	private int index = 0;
 	
 	private GuiButtonExt btnLabel;
