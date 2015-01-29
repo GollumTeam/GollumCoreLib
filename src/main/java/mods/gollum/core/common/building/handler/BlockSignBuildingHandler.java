@@ -1,5 +1,6 @@
 package mods.gollum.core.common.building.handler;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -22,7 +23,20 @@ public class BlockSignBuildingHandler extends BuildingBlockHandler {
 		
 		if (block instanceof BlockSign) {
 			
-			if (block == Blocks.standing_sign) { // TODO USE reflection class
+			boolean standing = true;
+			try {
+				// TODO 1.6.4
+				// 1.7.10 field_149967_b
+				// 1.7.2  field_149967_b
+				// 1.6.4  
+				Field f = BlockSign.class.getDeclaredField("field_149967_b");
+				f.setAccessible(true);
+				standing = (Boolean) f.get(block);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			if (standing) { // TODO USE reflection class
 				metadata = (metadata + 4*rotate) % 0xF;
 			} else {
 				if (orientation == Unity.ORIENTATION_NONE)  { metadata = (metadata & 0x8) + 0; } else 

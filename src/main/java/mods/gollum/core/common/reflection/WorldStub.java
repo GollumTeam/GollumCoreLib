@@ -5,22 +5,28 @@ import java.util.List;
 import mods.gollum.core.utils.reflection.DeobfuscateName;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.profiler.Profiler;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldSettings;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.storage.ISaveHandler;
 
 public class WorldStub extends World {
 	
 	private WorldStub() {
-		super(null, null, null, new WorldSettings(null), null);
+		super(null, null, new WorldSettings(null),  null, null);
 	}
 	
 	@Override
 	@DeobfuscateName (value="scheduleBlockUpdateWithPriority")
 	public void scheduleBlockUpdateWithPriority(int p_147454_1_, int p_147454_2_, int p_147454_3_, Block p_147454_4_, int p_147454_5_, int p_147454_6_) {
 	}
-	
+
+	// 1.7.10 : func_147446_b
+	// 1.7.2  : func_147446_b
+	// 1.6.4  :
 	@Override
 	@DeobfuscateName (value="func_147446_b")
 	public void func_147446_b(int p_147446_1_, int p_147446_2_, int p_147446_3_, Block p_147446_4_, int p_147446_5_, int p_147446_6_) {
@@ -48,7 +54,10 @@ public class WorldStub extends World {
 	protected IChunkProvider createChunkProvider() {
 		return null;
 	}
-	
+
+//	// 1.7.10 : func_152379_p ?
+//	// 1.7.2  : NOT EXIST
+//	// 1.6.4  :
 	@Override
 	@DeobfuscateName ("func_152379_p")
 	protected int func_152379_p() {

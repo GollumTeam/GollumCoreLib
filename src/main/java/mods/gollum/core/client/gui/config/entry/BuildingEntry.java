@@ -144,7 +144,8 @@ public class BuildingEntry extends ConfigEntry {
 			
 		});
 	}
-	
+
+	@Override
 	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, Tessellator tessellator, int mouseX, int mouseY, boolean isSelected) {
 		
 		this.parent.controlWidth -= 7;
@@ -187,6 +188,26 @@ public class BuildingEntry extends ConfigEntry {
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		RenderHelper.enableStandardItemLighting();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+	}
+	
+	@Override
+	public int getLabelWidth() {
+		if (!this.getLabelDisplay()) {
+			return 0;
+		}
+		
+		int[] sizes = new int[] {
+			mc.fontRenderer.getStringWidth(this.tradIfExist("group")),
+			mc.fontRenderer.getStringWidth(this.tradIfExist("globalSpawnRate")),
+			mc.fontRenderer.getStringWidth(this.tradIfExist("building")),
+		};
+		
+		int size = 0;
+		for (int s : sizes) {
+			size = Math.max(size, s);
+		}
+		
+		return size;
 	}
 	
 	public void setCurrentGroup (String name) {
