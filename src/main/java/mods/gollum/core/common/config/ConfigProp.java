@@ -15,6 +15,7 @@ public @interface ConfigProp {
 		BLOCK,
 		MOD,
 		SLIDER,
+		LIST_INLINE,
 	}
 	
 	public abstract boolean show() default true;
@@ -40,6 +41,8 @@ public @interface ConfigProp {
 	public abstract String pattern() default "";
 	
 	public abstract Type type() default Type.DEFAULT;
+	public abstract String entryClass() default "";
 	
 	public abstract boolean dev() default false;
+
 }

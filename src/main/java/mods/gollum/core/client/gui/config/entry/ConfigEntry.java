@@ -14,6 +14,7 @@ import cpw.mods.fml.client.config.GuiUtils;
 import cpw.mods.fml.client.config.HoverChecker;
 import mods.gollum.core.client.gui.config.GuiConfigEntries;
 import mods.gollum.core.client.gui.config.element.ConfigElement;
+import mods.gollum.core.client.gui.config.element.TypedValueElement;
 import mods.gollum.core.common.config.ConfigProp;
 import mods.gollum.core.common.config.JsonConfigProp;
 import net.minecraft.client.Minecraft;
@@ -23,6 +24,21 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.util.EnumChatFormatting;
 
 public abstract class ConfigEntry implements IGuiListEntry {
+	
+	public abstract static class Event {
+		
+		public ConfigEntry target;
+		
+		enum Type {
+			CHANGE,
+			SET_VALUE,
+			GET_VALUE
+		}
+		
+		public abstract void call (Type type, Object ... params);
+	}
+	
+	private ArrayList<Event> events = new ArrayList<Event>();
 	
 	protected Minecraft mc;
 	public GuiConfigEntries parent;
@@ -34,19 +50,28 @@ public abstract class ConfigEntry implements IGuiListEntry {
 	protected GuiButtonExt btReset;
 	public int index;
 	
+	public boolean btUndoIsVisible  = true;
+	public boolean btResetIsVisible = true;
+	
+	public boolean formatedLabel = true;
+	
 	protected List<String> toolTip        = new ArrayList<String>();
 	protected List<String> undoToolTip    = new ArrayList<String>();
 	protected List<String> defaultToolTip = new ArrayList<String>();
-
+	
 	protected HoverChecker tooltipHoverChecker;
 	protected HoverChecker undoHoverChecker;
 	protected HoverChecker defaultHoverChecker;
 	
 	protected boolean labelDisplay = true;
-
-	protected IProxyEntry parentProxy;
-	protected boolean eventGetCall = false;
-	protected boolean eventSetCall = false;
+	
+	protected boolean eventGetCall   = false;
+	protected boolean eventSetCall   = false;
+	protected boolean eventChangeCall= false;
+	
+	private Object oldValue = null;
+	
+	private ArrayList<ConfigEntry> subEntries = new ArrayList<ConfigEntry>();
 	
 	public ConfigEntry(int index, Minecraft mc, GuiConfigEntries parent, ConfigElement configElement) {
 		this.index         = index;
@@ -104,15 +129,19 @@ public abstract class ConfigEntry implements IGuiListEntry {
 		return mc.fontRenderer.getStringWidth(this.getLabel());
 	}
 	
-	public String getLabel () {
+	public String tradIfExist (String name) {
 		
-		String key = "config."+this.configElement.getName();
+		String key = "config."+name;
 		mods.gollum.core.common.i18n.I18n i18n = this.parent.parent.mod.i18n();
 		
 		if (i18n.transExist(key)) {
 			return i18n.trans(key);
 		}
-		return this.configElement.getName();
+		return name;
+	}
+	
+	public String getLabel () {
+		return this.tradIfExist(this.configElement.getName());
 	}
 
 	public String getName() {
@@ -126,8 +155,11 @@ public abstract class ConfigEntry implements IGuiListEntry {
 	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, Tessellator tessellator, int mouseX, int mouseY, boolean isSelected) {
 		
 		if (this.getLabelDisplay()) {
+			String label = this.getLabel();
 			
-			String label = (!this.isValidValue() ? EnumChatFormatting.RED.toString() : (this.isChanged() ? EnumChatFormatting.WHITE.toString() : EnumChatFormatting.GRAY.toString())) + (this.isChanged() ? EnumChatFormatting.ITALIC.toString() : "") + this.getLabel();
+			if (this.formatedLabel) {
+				label = (!this.isValidValue() ? EnumChatFormatting.RED.toString() : (this.isChanged() ? EnumChatFormatting.WHITE.toString() : EnumChatFormatting.GRAY.toString())) + (this.isChanged() ? EnumChatFormatting.ITALIC.toString() : "") + label;
+			}
 			
 			this.mc.fontRenderer.drawString(label, this.parent.labelX, y + slotHeight / 2 - this.mc.fontRenderer.FONT_HEIGHT / 2, 0xFFFFFF);
 		}
@@ -146,12 +178,14 @@ public abstract class ConfigEntry implements IGuiListEntry {
 			this.btnAdd.drawButton(this.mc, mouseX, mouseY);
 		}
 		
-		if (!this.parent.parent.undoIsVisible() && !this.parent.parent.resetIsVisible()) {
-			this.parent.controlWidth = this.parent.scrollBarX - 5- this.parent.controlX;
-		}
+		this.btUndo.visible  = this.btUndoIsVisible  && this.parent.parent.undoIsVisible();
+		this.btReset.visible = this.btResetIsVisible && this.parent.parent.resetIsVisible();
 		
-		this.btUndo.visible  = this.parent.parent.undoIsVisible();
-		this.btReset.visible = this.parent.parent.resetIsVisible();
+		if (!this.btUndo.visible && !this.btReset.visible) {
+			this.parent.controlWidth = this.parent.scrollBarX - 5- this.parent.controlX;
+		} else {
+			this.parent.initGui();
+		}
 		
 		this.btUndo.xPosition = this.parent.scrollBarX - 44;
 		this.btUndo.yPosition = y;
@@ -172,22 +206,31 @@ public abstract class ConfigEntry implements IGuiListEntry {
 	}
 	
 	public Object getValue() {
-		if (this.parentProxy != null && !this.eventGetCall) {
+		if (!this.eventGetCall) {
 			this.eventGetCall = true;
-			this.parentProxy.eventGetValue ();
+			this.FireEvent(Event.Type.SET_VALUE);
 			this.eventGetCall = false;
 		}
+		
 		return null;
 	}
 	
 	public ConfigEntry setValue(Object value) {
-		if (this.parentProxy != null && !this.eventSetCall) {
+		if (!this.eventSetCall) {
 			this.eventSetCall = true;
-			this.parentProxy.eventSetValue ();
+			this.FireEvent(Event.Type.GET_VALUE);
 			this.eventSetCall = false;
 		}
+		
+		if (!this.eventChangeCall && (this.oldValue == null || !this.equals(this.oldValue))) {
+			this.eventChangeCall = true;
+			this.FireEvent(Event.Type.CHANGE);
+			this.eventChangeCall = false;
+		}
+		this.oldValue = this.getValue();
+		
 		return this;
-}
+	}
 	
 	public boolean enabled() {
 		return this.mc.theWorld != null ? !this.configElement.getConfigProp().worldRestart() : true;
@@ -272,6 +315,12 @@ public abstract class ConfigEntry implements IGuiListEntry {
 			this.undoChanges();
 			return true;
 		}
+		
+		for (ConfigEntry subEntry : this.subEntries) {
+			if (subEntry.mousePressed(index, x, y, mouseEvent, relativeX, relativeY)) {
+				return true;
+			}
+		}
 		return false;
 	}
 
@@ -280,18 +329,33 @@ public abstract class ConfigEntry implements IGuiListEntry {
 	 */
 	@Override
 	public void mouseReleased(int index, int x, int y, int mouseEvent, int relativeX, int relativeY) {
+		for (ConfigEntry subEntry : this.subEntries) {
+			subEntry.mouseReleased(index, x, y, mouseEvent, relativeX, relativeY);
+		}
 	}
 	
 	public void keyTyped(char eventChar, int eventKey){
+		for (ConfigEntry subEntry : this.subEntries) {
+			subEntry.keyTyped(eventChar, eventKey);
+		}
 	}
 	
 	public void mouseClicked(int mouseX, int mouseY, int mouseEvent) {
+		for (ConfigEntry subEntry : this.subEntries) {
+			subEntry.mouseClicked(mouseX, mouseY, mouseEvent);
+		}
 	}
 	
 	public void updateCursorCounter() {
+		for (ConfigEntry subEntry : this.subEntries) {
+			subEntry.updateCursorCounter();
+		}
 	}
 	
 	public void elementClicked(int slotIndex, boolean doubleClick, int mouseX, int mouseY) {
+		for (ConfigEntry subEntry : this.subEntries) {
+			subEntry.elementClicked(slotIndex, doubleClick, mouseX, mouseY);
+		}
 	}
 
 	public void setSlot(int slotIndex) {
@@ -306,17 +370,40 @@ public abstract class ConfigEntry implements IGuiListEntry {
 				this.parent.parent.drawToolTip(toolTip, mouseX, mouseY);
 			}
 		}
-
+		
 		if (this.undoHoverChecker.checkHover(mouseX, mouseY, canHover)) {
 			this.parent.parent.drawToolTip(undoToolTip, mouseX, mouseY);
 		}
 		if (this.defaultHoverChecker.checkHover(mouseX, mouseY, canHover)) {
 			this.parent.parent.drawToolTip(defaultToolTip, mouseX, mouseY);
 		}
+		
+		for (ConfigEntry subEntry : this.subEntries) {
+			subEntry.drawToolTip(mouseX, mouseY);
+		}
 	}
-
-	public void setParentProxy(IProxyEntry parentProxy) {
-		this.parentProxy = parentProxy;
+	protected ConfigEntry createSubEntry(String label, Object value, Object defaultValue, int index) {
+		return this.createSubEntry(label, value, defaultValue, index, new JsonConfigProp());
 	}
 	
+	protected ConfigEntry createSubEntry(String label, Object value, Object defaultValue, int index, ConfigProp prop) {
+		
+		TypedValueElement configElement = new TypedValueElement(value.getClass(), label, value, defaultValue, prop);
+		ConfigEntry configEntry  = this.parent.newInstanceOfEntryConfig(index, configElement, prop);
+		
+		this.subEntries.add (configEntry);
+		
+		return configEntry;
+	}
+	
+	public void addEvent (Event e) {
+		e.target = this;
+		this.events.add(e);
+	}
+	
+	public void FireEvent (Event.Type type, Object... params) {
+		for (Event e : this.events) {
+			e.call(type, params);
+		}
+	}
 }

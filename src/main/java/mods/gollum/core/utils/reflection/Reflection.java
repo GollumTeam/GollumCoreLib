@@ -9,7 +9,7 @@ import mods.gollum.core.common.reflection.WorldStub;
 
 public class Reflection {
 	
-	public static void setFinalStatic(Field field, Object object, Object value) throws Exception {
+	public static void setFinalField(Field field, Object object, Object value) throws Exception {
 		field.setAccessible(true);
 		
 		Field modifiersField = Field.class.getDeclaredField("modifiers");
@@ -19,6 +19,10 @@ public class Reflection {
 		field.set(object, value);
 		
 		modifiersField.setInt(field, field.getModifiers() | Modifier.FINAL);
+	}
+	
+	public static void setFinalStatic(Field field, Object value) throws Exception {
+		setFinalField (field, null, value);
 	}
 	
 	public static void enableSynchronized(Method m) throws Exception {

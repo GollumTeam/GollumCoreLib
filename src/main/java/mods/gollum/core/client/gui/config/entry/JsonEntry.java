@@ -133,7 +133,21 @@ public class JsonEntry extends ConfigEntry implements IProxyEntry {
 			this.proxy.toolTip = this.toolTip;
 		}
 		
-		this.proxy.setParentProxy (this);
+		final IProxyEntry _this = this;
+		
+		this.proxy.addEvent(new Event() {
+			
+			@Override
+			public void call(Type type, Object... params) {
+				
+				if (type == Type.SET_VALUE) {
+					_this.eventGetValue();
+				} else if (type == Type.GET_VALUE) {
+					_this.eventSetValue();
+				} 
+			}
+			
+		});
 	}
 	
 	protected Json getOldValue () {

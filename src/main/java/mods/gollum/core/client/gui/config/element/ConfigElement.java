@@ -15,6 +15,7 @@ import mods.gollum.core.client.gui.config.entry.ItemEntry;
 import mods.gollum.core.client.gui.config.entry.JsonEntry;
 import mods.gollum.core.client.gui.config.entry.JsonObjectEntry;
 import mods.gollum.core.client.gui.config.entry.ListEntry;
+import mods.gollum.core.client.gui.config.entry.ListInlineEntry;
 import mods.gollum.core.client.gui.config.entry.LongEntry;
 import mods.gollum.core.client.gui.config.entry.ModIdEntry;
 import mods.gollum.core.client.gui.config.entry.ShortEntry;
@@ -49,14 +50,23 @@ public abstract class ConfigElement {
 		
 		ConfigProp prop = this.getConfigProp();
 		
+		if (!prop.entryClass().equals("")) {
+			try {
+				return (Class<? extends ConfigEntry>) Class.forName(prop.entryClass());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
 		if (clazz == null) {
 			return null;
 		}
 
-		if (Set            .class.isAssignableFrom(clazz)) { return JsonObjectEntry.class;     }
-		if (Json           .class.isAssignableFrom(clazz)) { return JsonEntry.class;           }
+		if (Set           .class.isAssignableFrom(clazz)) { return JsonObjectEntry.class;     }
+		if (Json          .class.isAssignableFrom(clazz)) { return JsonEntry.class;           }
 		if (ConfigJsonType.class.isAssignableFrom(clazz)) { return ConfigJsonTypeEntry.class; }
 		if (String.class.isAssignableFrom(clazz)) {
+			if (prop.type() == ConfigProp.Type.LIST_INLINE) { return ListInlineEntry.class; }
 			if (
 				prop.validValues() != null && 
 				(
@@ -69,6 +79,7 @@ public abstract class ConfigElement {
 			if (prop.type() == ConfigProp.Type.MOD)   { return ModIdEntry  .class; }
 			if (prop.type() == ConfigProp.Type.ITEM)  { return ItemEntry .class; }
 			if (prop.type() == ConfigProp.Type.BLOCK) { return BlockEntry.class; }
+			
 			return StringEntry.class;
 		}
 		

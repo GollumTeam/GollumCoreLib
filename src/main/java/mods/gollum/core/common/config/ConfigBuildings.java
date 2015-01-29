@@ -12,7 +12,12 @@ public class ConfigBuildings extends Config {
 		this.buildings = buildings;
 	}
 
-	@ConfigProp (group = "BuildingsList", info = "Spawn rate group between [0-10]", mcRestart=true)
+	@ConfigProp (
+		group = "BuildingsList",
+		info = "Spawn rate group between [0-10]",
+		mcRestart = true,
+		entryClass = "mods.gollum.core.client.gui.config.entry.BuildingEntry"
+	)
 	public BuildingConfigType buildings;
 	
 }

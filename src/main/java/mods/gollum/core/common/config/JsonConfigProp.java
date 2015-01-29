@@ -20,6 +20,7 @@ public class JsonConfigProp implements ConfigProp, IJsonComplement {
 	private boolean  worldRestart      = false;
 	private String   pattern           = "";
 	private Type     type              = Type.DEFAULT;
+	private String   entryClass        = "";
 	private boolean  dev               = false;
 
 	@Override public boolean  show()              { return this.show; }
@@ -36,7 +37,8 @@ public class JsonConfigProp implements ConfigProp, IJsonComplement {
 	@Override public boolean  worldRestart()      { return this.worldRestart; };
 	@Override public String   pattern()           { return this.pattern; };
 	@Override public Type     type()              { return this.type; }
-	@Override public boolean  dev()               { return this.dev; };
+	@Override public String   entryClass()        { return this.entryClass; };
+	@Override public boolean  dev()               { return this.dev; }
 
 	public JsonConfigProp info              (String   info             ) { this.info              = info             ; return this; }
 	public JsonConfigProp group             (String   group            ) { this.group             = group            ; return this; }
@@ -51,6 +53,7 @@ public class JsonConfigProp implements ConfigProp, IJsonComplement {
 	public JsonConfigProp worldRestart      (boolean  worldRestart     ) { this.worldRestart      = worldRestart     ; return this; }
 	public JsonConfigProp pattern           (String   pattern          ) { this.pattern           = pattern          ; return this; }
 	public JsonConfigProp type              (Type     type             ) { this.type              = type             ; return this; }
+	public JsonConfigProp entryClass        (String   entryClass       ) { this.entryClass        = entryClass       ; return this; }
 	public JsonConfigProp dev               (boolean  dev              ) { this.dev               = dev              ; return this; }
 	
 	@Override

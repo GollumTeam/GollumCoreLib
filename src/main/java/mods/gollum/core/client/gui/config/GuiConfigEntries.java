@@ -11,15 +11,17 @@ import mods.gollum.core.client.gui.config.element.TypedValueElement;
 import mods.gollum.core.client.gui.config.entry.AddButtonEntry;
 import mods.gollum.core.client.gui.config.entry.ConfigEntry;
 import mods.gollum.core.common.config.ConfigProp;
+import mods.gollum.core.utils.reflection.Reflection;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiListExtended;
+import net.minecraft.client.gui.GuiSlot;
 import net.minecraft.client.renderer.Tessellator;
 
 public class GuiConfigEntries extends GuiListExtended {
 
 	protected Minecraft mc;
 	public GuiConfig parent;
-		
+	
 	private ArrayList<ConfigEntry> listEntries = new ArrayList<ConfigEntry>();
 	
 	public int labelX;
@@ -251,6 +253,22 @@ public class GuiConfigEntries extends GuiListExtended {
 		this.listEntries.get(slotIndex).setSlot(slotIndex);
 	}
 	
+	public GuiConfigEntries setSlotHeight(int height) {
+		try {
+			
+			try {
+				Reflection.setFinalField(GuiSlot.class.getDeclaredField("slotHeight"), this, height);
+			} catch (Exception e) {
+				e.printStackTrace();
+				Reflection.setFinalField(GuiSlot.class.getDeclaredField("field_148149_f"), this, height);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return this;
+	}
+	
 	/////////////
 	// Actions //
 	/////////////
@@ -328,5 +346,6 @@ public class GuiConfigEntries extends GuiListExtended {
 		this.setSlot(slotIndex);
 		this.listEntries.get(slotIndex).elementClicked(slotIndex, doubleClick, mouseX, mouseY);
 	}
+
 	
 }

@@ -34,7 +34,7 @@ public class WorldHandler {
 					
 					if (f.getType() == EntityTracker.class) {
 						try {
-							Reflection.setFinalStatic(f, worldServer, new EntityTrackerProxy(worldServer, tracker));
+							Reflection.setFinalField(f, worldServer, new EntityTrackerProxy(worldServer, tracker));
 						} catch (Exception e) {
 							e.printStackTrace();
 						}

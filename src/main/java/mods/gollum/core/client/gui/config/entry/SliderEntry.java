@@ -65,19 +65,19 @@ public class SliderEntry extends ConfigEntry {
 				return new Double (this.slider.getValue());
 			} else
 			if (Float.class.isAssignableFrom(this.configElement.getValue().getClass()) || Float.TYPE.isAssignableFrom(this.configElement.getValue().getClass())) {
-				return Float.parseFloat(new Double (this.slider.getValue()).toString());
+				return (float)this.slider.getValue();
 			} else
 			if (Long.class.isAssignableFrom(this.configElement.getValue().getClass()) || Long.TYPE.isAssignableFrom(this.configElement.getValue().getClass())) {
-				return new Long ((long)this.slider.getValue());
+				return new Long ((long)Math.round(this.slider.getValue()));
 			} else
 			if (Integer.class.isAssignableFrom(this.configElement.getValue().getClass()) || Integer.TYPE.isAssignableFrom(this.configElement.getValue().getClass())) {
-				return new Integer ((int)this.slider.getValue());
+				return new Integer ((int)Math.round(this.slider.getValue()));
 			} else
 			if (Short.class.isAssignableFrom(this.configElement.getValue().getClass()) || Short.TYPE.isAssignableFrom(this.configElement.getValue().getClass())) {
-				return new Short ((short)this.slider.getValue());
+				return new Short ((short)Math.round(this.slider.getValue()));
 			}else
 			if (Byte.class.isAssignableFrom(this.configElement.getValue().getClass()) || Byte.TYPE.isAssignableFrom(this.configElement.getValue().getClass())) {
-				return new Byte ((byte)this.slider.getValue());
+				return new Byte ((byte)Math.round(this.slider.getValue()));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

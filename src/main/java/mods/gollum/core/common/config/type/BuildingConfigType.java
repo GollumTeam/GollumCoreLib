@@ -1,8 +1,8 @@
 package mods.gollum.core.common.config.type;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.common.config.IConfigMerge;
@@ -14,20 +14,19 @@ import mods.gollum.core.tools.simplejson.Json.EntryObject;
 import mods.gollum.core.tools.simplejson.JsonArray;
 import mods.gollum.core.tools.simplejson.JsonObject;
 import net.minecraft.block.Block;
-import argo.jdom.JsonNode;
 
 public class BuildingConfigType extends ConfigJsonType implements IConfigMerge {
 	
 	public static class Group {
 		
 		public Integer globalSpawnRate = null;
-		public HashMap<String, Building> buildings = new HashMap<String, Building>();
+		public TreeMap<String, Building> buildings = new TreeMap<String, Building>();
 		
 		
 		public static class Building {
 
 			public boolean disabled = false;
-			public HashMap<Integer, Dimention> dimentions = new HashMap<Integer, Dimention>();
+			public TreeMap<Integer, Dimention> dimentions = new TreeMap<Integer, Dimention>();
 			
 			public static class Dimention {
 				
@@ -41,7 +40,7 @@ public class BuildingConfigType extends ConfigJsonType implements IConfigMerge {
 	}
 	
 	public String modId = null;
-	public HashMap<String, Group> lists = new HashMap<String, BuildingConfigType.Group>();
+	public TreeMap<String, Group> lists = new TreeMap<String, BuildingConfigType.Group>();
 	
 	public BuildingConfigType () {
 	}
@@ -50,7 +49,6 @@ public class BuildingConfigType extends ConfigJsonType implements IConfigMerge {
 		this.modId = modId;
 		this.readConfig(json);
 	}
-	
 	
 	//////////
 	// Read //
@@ -72,9 +70,9 @@ public class BuildingConfigType extends ConfigJsonType implements IConfigMerge {
 		
 	}
 	
-	private HashMap<String, Building> readBuildings(Json json) {
+	private TreeMap<String, Building> readBuildings(Json json) {
 		
-		HashMap<String, Building> rtn = new HashMap<String, Building>();
+		TreeMap<String, Building> rtn = new TreeMap<String, Building>();
 		
 		for (Entry<String, Json> entryBuilding : json.allChildWithKey()) {
 			String buildingName = entryBuilding.getKey();
@@ -90,9 +88,9 @@ public class BuildingConfigType extends ConfigJsonType implements IConfigMerge {
 		return rtn;
 	}
 	
-	private HashMap<Integer, Dimention> readDimentions(Json json) {
+	private TreeMap<Integer, Dimention> readDimentions(Json json) {
 		
-		HashMap<Integer, Dimention> rtn = new HashMap<Integer, Dimention> ();
+		TreeMap<Integer, Dimention> rtn = new TreeMap<Integer, Dimention> ();
 		
 		for (Entry<String, Json> entryDimention : json.allChildWithKey()) {
 			
@@ -149,7 +147,7 @@ public class BuildingConfigType extends ConfigJsonType implements IConfigMerge {
 		return builder;
 	}
 	
-	private Json getJsonBuildings(HashMap<String, Building> buildings) {
+	private Json getJsonBuildings(TreeMap<String, Building> buildings) {
 		
 		Json jsonBuildings = new JsonObject();
 		
@@ -169,7 +167,7 @@ public class BuildingConfigType extends ConfigJsonType implements IConfigMerge {
 		return jsonBuildings;
 	}
 	
-	private Json getJsonDimentions( HashMap<Integer, Dimention> dimentions) {
+	private Json getJsonDimentions( TreeMap<Integer, Dimention> dimentions) {
 
 		Json jsonDimentions = new JsonObject();
 
@@ -232,4 +230,6 @@ public class BuildingConfigType extends ConfigJsonType implements IConfigMerge {
 		
 		return false;
 	}
+
+	
 }
