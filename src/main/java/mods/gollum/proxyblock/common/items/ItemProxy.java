@@ -1,6 +1,7 @@
 package mods.gollum.proxyblock.common.items;
 
 import static mods.gollum.proxyblock.ModGollumProxyBlock.log;
+import mods.gollum.core.tools.registered.RegisteredObjects;
 import mods.gollum.proxyblock.common.blocks.BlockProxy;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -21,20 +22,34 @@ public class ItemProxy extends ItemBlock {
 		this.block = (BlockProxy) block;
 	}
 
-	private Item getTarget () {
-		return this.getTarget(0);
+//	private Item getTarget () {
+//		return this.getTarget(0);
+//	}
+//	private Item getTarget (int damage) {
+//		
+//		if (damage > 15) {
+//			damage = 0;
+//		}
+//		
+//		Item i = Item.getItemFromBlock(this.block.getTarget(damage));
+//		if (i != null) {
+//			return i;
+//		}
+//		return Items.apple;
+//	}
+
+	private ItemStack replaceBlock (ItemStack is) {
+		ItemStack nIs = new ItemStack(i, is.stackSize, is.getItemDamage());
+		
+		return this.block.getTarget(metadata);
 	}
-	private Item getTarget (int damage) {
-		
-		if (damage > 15) {
-			damage = 0;
-		}
-		
-		Item i = Item.getItemFromBlock(this.block.getTarget(damage));
-		if (i != null) {
-			return i;
-		}
-		return Items.apple;
+	
+	private void trace () {
+		this.trace(new ItemStack(this));
+	}
+	private void trace (ItemStack is) {
+		ItemStack nIs = this.replaceBlock(is);
+		log.message("Block transform \""+RegisteredObjects.instance().getRegisterName(this)+"\":"+is.getItemDamage()+" => \""+RegisteredObjects.instance().getRegisterName(nIs.getItem())+"\":"+nIs.getItemDamage()+"");
 	}
 	
 	@Override
@@ -44,28 +59,26 @@ public class ItemProxy extends ItemBlock {
 	
 	@Override
 	public String getUnlocalizedName(ItemStack is) {
-		Item i = this.getTarget(is.getItemDamage());
-		ItemStack nIs = new ItemStack(i, is.stackSize, is.getItemDamage());
-		return i.getUnlocalizedName(nIs)+"d";
+		ItemStack nIs = this.replaceBlock(is);
+		return nIs.getItem().getUnlocalizedName(nIs);
 	}
 
 	@Override
 	public boolean onItemUse(ItemStack is, EntityPlayer e, World w, int x, int y, int z, int side, float posX, float posY, float posZ) {
-		Item i = this.getTarget(is.getItemDamage());
-		ItemStack nIs = new ItemStack(i, is.stackSize, is.getItemDamage());
-		return i.onItemUse(is, e, w, x, y, z, side, posX, posY, posZ);
-//		return super.onItemUse(is, e, w, x, y, z, side, posX, posY, posZ);
+		ItemStack nIs = this.replaceBlock(is);
+		this.trace(is);
+		return nIs.getItem().onItemUse(is, e, w, x, y, z, side, posX, posY, posZ);
 	}
 	
 	@Override
 	public void onUpdate(ItemStack is, World w, Entity e, int slot, boolean b) {
 		
-		Item i = this.getTarget(is.getItemDamage());
-		ItemStack nIs = new ItemStack(i, is.stackSize, is.getItemDamage());
+		ItemStack nIs = this.replaceBlock(is);
 		
 		if (e instanceof EntityPlayer) {
 			((EntityPlayer) e).inventory.setInventorySlotContents(slot, nIs);
+			this.trace(is);
 		}
-		i.onUpdate(is, w, e, slot, b);
+		nIs.getItem().onUpdate(is, w, e, slot, b);
 	}
 }
