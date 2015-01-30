@@ -5,6 +5,7 @@ import mods.gollum.core.tools.helper.blocks.HBlockContainer;
 import mods.gollum.core.tools.registered.RegisteredObjects;
 import mods.gollum.proxyblock.common.items.ItemProxy;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockGrass;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -15,48 +16,62 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
-public class BlockProxy extends HBlockContainer {
+public class BlockProxy extends HBlockContainer implements Cloneable {
 	
-	private ItemStack[] targets = new ItemStack[16];
+	public static class ReplaceBlock {
+		public Block   block;
+		public Integer metadata;
+		public int     number;
+		
+		public ReplaceBlock(Block block) {
+			this(block, null);
+		}
+		public ReplaceBlock(Block block, Integer metadata) {
+			this(block, metadata, 1);
+		}
+		public ReplaceBlock(Block block, Integer metadata, int number) {
+			block    = this.block;
+			metadata = this.metadata;
+			number   = this.number;
+		}
+		
+		public Object clone () {
+			return new ReplaceBlock(this.block, this.metadata, this.number);
+		}
+	}
+	
+	private ReplaceBlock[] targets = new ReplaceBlock[16];
 	
 	public BlockProxy(String registerName) {
 		super(registerName, Material.grass);
 		this.helper.setItemBlockClass(ItemProxy.class);
 	}
 
-	public BlockProxy setTarget(ItemStack target) {
+	public BlockProxy setTarget(ReplaceBlock target) {
 		for (int i = 0; i < 16; i++) {
 			this.setTarget(target, i);
 		}
 		return this;
 	}
-	public BlockProxy setTarget(ItemStack target, int metadata) {
+	public BlockProxy setTarget(ReplaceBlock target, int metadata) {
 		this.targets[metadata] = target;
 		return this;
 	}
-	public ItemStack getTarget() {
+	public ReplaceBlock getTarget() {
 		return this.getTarget(0);
 	}
-	public ItemStack getTarget(int metadata) {
+	public ReplaceBlock getTarget(int metadata) {
 		if (this.targets[metadata] != null) {
 			return this.targets[metadata];
 		}
-		return new ItemStack(Blocks.grass);
-	}
-
-	public Block getTargetBlock() {
-		return this.getTargetBlock(0);
-	}
-	public Block getTargetBlock(int metadata) {
-		ItemStack is = this.getTarget(metadata);
-		return Block.getBlockFromItem(is.getItem());
+		return new ReplaceBlock(Blocks.grass);
 	}
 
 	public int getTargetMetadata() {
 		return this.getTargetMetadata(0);
 	}
 	public int getTargetMetadata(int metadata) {
-		metadata = this.getTarget(metadata).getItemDamage();
+		metadata = this.getTarget(metadata).metadata;
 		if (metadata > 0xF) {
 			metadata = 0xF;
 		}
@@ -67,7 +82,7 @@ public class BlockProxy extends HBlockContainer {
 		this.trace(0);
 	}
 	private void trace (int metadata) {
-		log.message("Block transform \""+RegisteredObjects.instance().getRegisterName(this)+"\":"+metadata+" => \""+RegisteredObjects.instance().getRegisterName(this.getTargetBlock(metadata))+"\":"+this.getTargetMetadata(metadata)+"");
+		log.message("Block transform \""+RegisteredObjects.instance().getRegisterName(this)+"\":"+metadata+" => \""+RegisteredObjects.instance().getRegisterName(this.getTarget(metadata).block)+"\":"+this.getTarget(metadata).metadata+"");
 	}
 	
 	@Override
@@ -88,12 +103,12 @@ public class BlockProxy extends HBlockContainer {
 	
 	@Override
 	public Material getMaterial() {
-		return this.getTargetBlock().getMaterial();
+		return this.getTarget().block.getMaterial();
 	}
 	
 	@Override
 	public IIcon getIcon(int side, int metadata) {
-		return this.getTargetBlock(metadata).getIcon(side, metadata);
+		return this.getTarget(metadata).block.getIcon(side, metadata);
 	}
 	
 	////////////
@@ -102,9 +117,8 @@ public class BlockProxy extends HBlockContainer {
 	
 	public void onBlockPlacedBy(World w, int x, int y, int z, EntityLivingBase e, ItemStack is) {
 		int   metadata  = w.getBlockMetadata(x, y, z);
-		Block tBlock    = this.getTargetBlock(metadata);
-		int   tMetadata = this.getTargetMetadata(metadata);
-		w.setBlock(x, y, z, tBlock, tMetadata, 2);
+		ReplaceBlock target = this.getTarget(metadata);
+		w.setBlock(x, y, z, target.block, target.metadata, 2);
 		this.trace(metadata);
 	}
 	

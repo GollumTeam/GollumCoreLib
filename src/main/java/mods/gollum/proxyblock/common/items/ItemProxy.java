@@ -22,25 +22,17 @@ public class ItemProxy extends ItemBlock {
 		this.block = (BlockProxy) block;
 	}
 
-//	private Item getTarget () {
-//		return this.getTarget(0);
-//	}
-//	private Item getTarget (int damage) {
-//		
-//		if (damage > 15) {
-//			damage = 0;
-//		}
-//		
-//		Item i = Item.getItemFromBlock(this.block.getTarget(damage));
-//		if (i != null) {
-//			return i;
-//		}
-//		return Items.apple;
-//	}
-
+	private Item getTarget () {
+		return this.getTarget(0);
+	}
+	private Item getTarget (int damage) {
+		return this.replaceBlock(new ItemStack(this, 1, damage)).getItem();
+	}
 	private ItemStack replaceBlock (ItemStack is) {
-		ItemStack nIs = new ItemStack(i, is.stackSize, is.getItemDamage());
-		
+		int metadata = is.getItemDamage();
+		if (metadata > 15) {
+			metadata = 0;
+		}
 		return this.block.getTarget(metadata);
 	}
 	

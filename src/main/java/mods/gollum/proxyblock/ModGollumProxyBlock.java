@@ -69,7 +69,10 @@ public class ModGollumProxyBlock extends GollumMod {
 	/** 3 **/
 	@Override
 	public void postInit(FMLPostInitializationEvent event) {
-		ModBlocks.blockProxy1.setTarget(Blocks.gold_block);
+		
+		ModBlocks.blockProxy1.setTarget(Blocks.gold_block, 0);
+		
+		
 	}
 	
 }
