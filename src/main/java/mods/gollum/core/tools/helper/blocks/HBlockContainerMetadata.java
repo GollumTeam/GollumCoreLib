@@ -19,19 +19,19 @@ public abstract class HBlockContainerMetadata extends HBlockContainer implements
 
 	private BlockMetadataHelper helperMetadata;
 
-	public HBlockContainerMetadata(int id, String registerName, Material material) {
+	public HBlockContainerMetadata(String registerName, Material material) {
 		super(registerName, material);
 		this.helperMetadata = new BlockMetadataHelper(this, registerName);
 		this.setItemBlockClass(HItemBlockMetadata.class);
 	}
 	
-	public HBlockContainerMetadata(int id, String registerName, Material material, int listSubBlock[]) {
+	public HBlockContainerMetadata(String registerName, Material material, int listSubBlock[]) {
 		super(registerName, material);
 		this.helperMetadata = new BlockMetadataHelper(this, registerName, listSubBlock);
 		this.setItemBlockClass(HItemBlockMetadata.class);
 	}
 	
-	public HBlockContainerMetadata(int id, String registerName, Material material, int numberSubBlock) {
+	public HBlockContainerMetadata(String registerName, Material material, int numberSubBlock) {
 		super(registerName, material);
 		this.helperMetadata = new BlockMetadataHelper(this, registerName, numberSubBlock);
 		this.setItemBlockClass(HItemBlockMetadata.class);

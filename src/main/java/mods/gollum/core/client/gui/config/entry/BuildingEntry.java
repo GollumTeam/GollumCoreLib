@@ -26,6 +26,9 @@ public class BuildingEntry extends ConfigEntry {
 	private ConfigEntry group;
 	private ConfigEntry globalSpawnRate;
 	private ConfigEntry building;
+	private ConfigEntry bDisabled;
+	
+	private boolean mutexChange = true;
 	
 	public BuildingEntry(int index, Minecraft mc, GuiConfigEntries parent, ConfigElement configElement) {
 		super(index, mc, parent, configElement);
@@ -62,33 +65,13 @@ public class BuildingEntry extends ConfigEntry {
 			
 			@Override
 			public void call(Type type, Object... params) {
-				
 				if (type == Type.CHANGE) {
-					
-					Group oldGroup = _this.getCurrentGroup();
-					oldGroup.globalSpawnRate = (Integer) _this.globalSpawnRate.getValue();
-					
-					_this.setCurrentGroup((String) _this.group.getValue());
-					Group groupC = _this.getCurrentGroup();
-					Group groupD = _this.getCurrentDefaultGroup();
-					Group groupO = _this.getCurrentOldGroup();
-					_this.globalSpawnRate.setValue(groupC.globalSpawnRate);
-					_this.globalSpawnRate.configElement.setValue(groupO.globalSpawnRate);
-					_this.globalSpawnRate.configElement.setDefaultValue(groupD.globalSpawnRate);
-					
-					Object[] valuesBO = groupC.buildings.keySet().toArray();
-					String[] valuesBS = new String[valuesBO.length];
-					for (int i = 0; i < valuesBO.length; i++) {
-						valuesBS[i] = (String)valuesBO[i];
+					if (_this.mutexChange()) {
+						_this.saveEntry();
+						_this.setGroup();
+						_this.setBuilding();
+						_this.mutexChange = true;
 					}
-					
-					((ListInlineEntry)_this.building).values = valuesBS;
-					_this.currentBuilding = 0;
-					
-					_this.building.setValue(_this.getCurrentBuildingName());
-					_this.building.configElement.setValue(groupO.globalSpawnRate);
-					_this.building.configElement.setDefaultValue(groupD.globalSpawnRate);
-					
 				} 
 			}
 			
@@ -108,13 +91,15 @@ public class BuildingEntry extends ConfigEntry {
 			
 			@Override
 			public void call(Type type, Object... params) {
-				Group group = _this.getCurrentGroup();
-				group.globalSpawnRate = (Integer) _this.globalSpawnRate.getValue();
+				if (_this.mutexChange()) {
+					_this.saveEntry();
+					_this.mutexChange = true;
+				}
 			}
 			
 		});
 		
-		Group group = _this.getCurrentGroup();
+		Group group = this.getCurrentGroup();
 		
 		Object[] valuesBO = group.buildings.keySet().toArray();
 		String[] valuesBS = new String[valuesBO.length];
@@ -123,12 +108,12 @@ public class BuildingEntry extends ConfigEntry {
 		}
 		
 		this.building = this.createSubEntry(
-				"building",
-				this.getCurrentBuildingName(),
-				this.getCurrentBuildingGroupName(),
-				1,
-				new JsonConfigProp().type(ConfigProp.Type.LIST_INLINE).validValues(valuesBS)
-			);
+			"building",
+			this.getCurrentBuildingName(),
+			this.getCurrentBuildingGroupName(),
+			1,
+			new JsonConfigProp().type(ConfigProp.Type.LIST_INLINE).validValues(valuesBS)
+		);
 		this.building.btResetIsVisible = false;
 		this.building.btUndoIsVisible  = false;
 		this.building.formatedLabel    = false;
@@ -138,13 +123,103 @@ public class BuildingEntry extends ConfigEntry {
 			@Override
 			public void call(Type type, Object... params) {
 				if (type == Type.CHANGE) {
-					Building building = _this.getCurrentBuilding();
+					if (_this.mutexChange()) {
+						_this.saveEntry();
+						_this.setBuilding();
+						_this.mutexChange = true;
+					}
+				} 
+			}
+			
+		});
+		
+		Building buildingC = this.getCurrentBuilding();
+		Building buildingD = this.getCurrentDefaultBuilding();
+		
+		this.bDisabled = this.createSubEntry(
+			"disabled",
+			buildingC.disabled,
+			buildingD.disabled,
+			1,
+			new JsonConfigProp()
+		);
+		
+		this.building.addEvent(new Event() {
+			
+			@Override
+			public void call(Type type, Object... params) {
+				if (_this.mutexChange()) {
+					_this.saveEntry();
+					_this.mutexChange = true;
 				}
 			}
 			
 		});
 	}
+	
+	private boolean mutexChange () {
+		boolean m = this.mutexChange;
+		this.mutexChange = false;
+		return m;
+	}
+	
+	public void saveEntry () {
 
+		Group    group    = this.getCurrentGroup();
+		Building building = this.getCurrentBuilding();
+		
+		group.globalSpawnRate = (Integer) this.globalSpawnRate.getValue();
+		building.disabled     = (Boolean) this.bDisabled.getValue();
+		
+	}
+
+	public void setGroup () {
+		
+		this.setCurrentGroup((String) this.group.getValue());
+		
+		Group group = this.getCurrentGroup();
+		Group groupC = this.getCurrentGroup();
+		Group groupD = this.getCurrentDefaultGroup();
+		Group groupO = this.getCurrentOldGroup();
+			
+		this.globalSpawnRate.setValue(groupC.globalSpawnRate);
+		this.globalSpawnRate.configElement.setValue(groupO.globalSpawnRate);
+		this.globalSpawnRate.configElement.setDefaultValue(groupD.globalSpawnRate);
+		
+		Object[] valuesBO = groupC.buildings.keySet().toArray();
+		String[] valuesBS = new String[valuesBO.length];
+		for (int i = 0; i < valuesBO.length; i++) {
+			valuesBS[i] = (String)valuesBO[i];
+		}
+		
+		((ListInlineEntry)this.building).values = valuesBS;
+		this.currentBuilding = 0;
+		
+	}
+	
+	public void setBuilding () {
+		
+		this.setCurrentBuilding((String) this.building.getValue());
+		
+		Group groupC = this.getCurrentGroup();
+		Group groupD = this.getCurrentDefaultGroup();
+		Group groupO = this.getCurrentOldGroup();
+		
+		this.building.setValue(this.getCurrentBuildingName());
+		this.building.configElement.setValue(groupO.globalSpawnRate);
+		this.building.configElement.setDefaultValue(groupD.globalSpawnRate);
+		
+		Building buildingC = this.getCurrentBuilding();
+		Building buildingD = this.getCurrentDefaultBuilding();
+		Building buildingO = this.getCurrentOldBuilding();
+		
+		this.bDisabled.setValue(buildingC.disabled);
+		this.bDisabled.configElement.setValue(buildingO.disabled);
+		this.bDisabled.configElement.setDefaultValue(buildingD.disabled);
+		
+		this.setValue(this.getValue());
+	}
+	
 	@Override
 	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, Tessellator tessellator, int mouseX, int mouseY, boolean isSelected) {
 		
@@ -156,13 +231,14 @@ public class BuildingEntry extends ConfigEntry {
 		
 		drawRec(this.parent.labelX - 10, y);
 		
-		this.globalSpawnRate.drawEntry(1, x, y + 22, listWidth, 22, tessellator, mouseX, mouseY, isSelected);
-		this.building       .drawEntry(2, x, y + 44, listWidth, 22, tessellator, mouseX, mouseY, isSelected);
+		this.globalSpawnRate.drawEntry(1, x, y + 24, listWidth, 22, tessellator, mouseX, mouseY, isSelected);
+		this.building       .drawEntry(2, x, y + 46, listWidth, 22, tessellator, mouseX, mouseY, isSelected);
 		
-		
-		drawRec(this.parent.labelX, y + 44);
+		drawRec(this.parent.labelX, y + 48);
 		
 		this.parent.labelX += 10;
+		
+		this.bDisabled.drawEntry(2, x, y + 72, listWidth, 22, tessellator, mouseX, mouseY, isSelected);
 		
 		this.parent.labelX -= 10;
 		
@@ -197,8 +273,8 @@ public class BuildingEntry extends ConfigEntry {
 		}
 		
 		int[] sizes = new int[] {
-			mc.fontRenderer.getStringWidth(this.tradIfExist("group")),
-			mc.fontRenderer.getStringWidth(this.tradIfExist("globalSpawnRate")),
+			mc.fontRenderer.getStringWidth(this.tradIfExist("group"))-20,
+			mc.fontRenderer.getStringWidth(this.tradIfExist("globalSpawnRate"))-10,
 			mc.fontRenderer.getStringWidth(this.tradIfExist("building")),
 		};
 		
@@ -209,12 +285,24 @@ public class BuildingEntry extends ConfigEntry {
 		
 		return size;
 	}
-	
+
 	public void setCurrentGroup (String name) {
 		int i = 0;
 		for (String group : this.value.lists.keySet()) {
 			if (group.equals(name)) {
 				this.currentGroup = i;
+				return;
+			}
+			i++;
+		}
+		return;
+	}
+	
+	public void setCurrentBuilding (String name) {
+		int i = 0;
+		for (String building : this.getCurrentGroup().buildings.keySet()) {
+			if (building.equals(name)) {
+				this.currentBuilding = i;
 				return;
 			}
 			i++;
