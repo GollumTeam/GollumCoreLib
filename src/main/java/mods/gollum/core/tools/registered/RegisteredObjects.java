@@ -1,15 +1,11 @@
 package mods.gollum.core.tools.registered;
 
 import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.LinkedHashMap;
-import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import mods.gollum.core.ModGollumCoreLib;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class RegisteredObjects {
 	
@@ -24,8 +20,8 @@ public class RegisteredObjects {
 		return instance;
 	}
 
-	public HashMap<String, Block> getBlocksList() {
-		HashMap<String, Block>list = new HashMap<String, Block>();
+	public TreeMap<String, Block> getBlocksList() {
+		TreeMap<String, Block>list = new TreeMap<String, Block>();
 		
 		for (Object o : Block.blockRegistry) {
 			Block b = (Block)o;
@@ -35,8 +31,8 @@ public class RegisteredObjects {
 		return list;
 	}
 
-	public HashMap<String, Item> getItemsList() {
-		HashMap<String, Item>list = new HashMap<String, Item>();
+	public TreeMap<String, Item> getItemsList() {
+		TreeMap<String, Item>list = new TreeMap<String, Item>();
 		
 		for (Object o : Item.itemRegistry) {
 			Item i = (Item)o;

@@ -84,11 +84,6 @@ public class StringEntry extends ConfigEntry {
 	
 	@Override
 	public void updateCursorCounter() {
-
-		this.textFieldValue.xPosition = this.parent.controlX + 2;
-		this.textFieldValue.width = this.parent.controlWidth - 100;
-		this.textFieldValue.setEnabled(this.enabled());
-		
 		this.textFieldValue.updateCursorCounter();
 	}
 	

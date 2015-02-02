@@ -15,4 +15,9 @@ public class BlockEntry extends ListEntry {
 	public void valueButtonPressed(int slotIndex) {
 		this.mc.displayGuiScreen(new GuiBlockConfig(this));
 	}
+	
+	@Override
+	public boolean hasSearch () {
+		return true;
+	}
 }

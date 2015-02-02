@@ -1,6 +1,8 @@
 package mods.gollum.core.common.config.type;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
@@ -167,7 +169,7 @@ public class BuildingConfigType extends ConfigJsonType implements IConfigMerge {
 		return jsonBuildings;
 	}
 	
-	private Json getJsonDimentions( TreeMap<Integer, Dimention> dimentions) {
+	private Json getJsonDimentions(TreeMap<Integer, Dimention> dimentions) {
 
 		Json jsonDimentions = new JsonObject();
 

@@ -6,9 +6,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.TreeMap;
 
 import mods.gollum.core.client.gui.config.GuiConfigEntries;
 import mods.gollum.core.client.gui.config.element.ConfigElement;
+import mods.gollum.core.client.gui.config.entry.ConfigEntry.Event.Type;
 import mods.gollum.core.common.config.ConfigProp;
 import mods.gollum.core.common.config.JsonConfigProp;
 import mods.gollum.core.common.config.type.BuildingConfigType;
@@ -37,7 +39,8 @@ public class BuildingEntry extends ConfigEntry {
 	private ConfigEntry dSpawnRate;
 	private ConfigEntry dSpawnHeight;
 	private ConfigEntry dBlocksSpawn;
-	
+
+	private boolean mutexChangeEvent = true;
 	private boolean mutexChange = true;
 	
 	public BuildingEntry(int index, Minecraft mc, GuiConfigEntries parent, ConfigElement configElement) {
@@ -80,10 +83,10 @@ public class BuildingEntry extends ConfigEntry {
 			@Override
 			public void call(Type type, Object... params) {
 				if (type == Type.CHANGE) {
-					if (_this.mutexChange()) {
+					if (_this.mutexChangeEvent()) {
 						_this.saveEntry();
 						_this.setGroup();
-						_this.mutexChange = true;
+						_this.mutexChangeEvent = true;
 					}
 				} 
 			}
@@ -104,9 +107,9 @@ public class BuildingEntry extends ConfigEntry {
 			
 			@Override
 			public void call(Type type, Object... params) {
-				if (_this.mutexChange()) {
+				if (_this.mutexChangeEvent()) {
 					_this.saveEntry();
-					_this.mutexChange = true;
+					_this.mutexChangeEvent = true;
 				}
 			}
 			
@@ -140,10 +143,10 @@ public class BuildingEntry extends ConfigEntry {
 			@Override
 			public void call(Type type, Object... params) {
 				if (type == Type.CHANGE) {
-					if (_this.mutexChange()) {
+					if (_this.mutexChangeEvent()) {
 						_this.saveEntry();
 						_this.setBuilding();
-						_this.mutexChange = true;
+						_this.mutexChangeEvent = true;
 					}
 				} 
 			}
@@ -165,9 +168,9 @@ public class BuildingEntry extends ConfigEntry {
 			
 			@Override
 			public void call(Type type, Object... params) {
-				if (_this.mutexChange()) {
+				if (_this.mutexChangeEvent()) {
 					_this.saveEntry();
-					_this.mutexChange = true;
+					_this.mutexChangeEvent = true;
 				}
 			}
 			
@@ -180,23 +183,35 @@ public class BuildingEntry extends ConfigEntry {
 		Set<Integer> dimentionsC = buildingC.dimentions.keySet();
 		Set<Integer> dimentionsD = buildingD.dimentions.keySet();
 		
+
+		String[] dimC = new String[buildingC.dimentions.size()];
+		String[] dimD = new String[buildingD.dimentions.size()];
+		for (int i = 0; i < dimC.length; i++) {
+			dimC[i] = buildingC.dimentions.keySet().toArray()[i].toString();
+		}
+		for (int i = 0; i < dimD.length; i++) {
+			dimD[i] = buildingD.dimentions.keySet().toArray()[i].toString();
+		}
+		
 		this.bDimentionList = this.createSubEntry(
 			"dimention",
-			buildingC.dimentions.keySet().toArray(new String[0]),
-			buildingD.dimentions.keySet().toArray(new String[0]),
+			dimC,
+			dimD,
 			4,
 			new JsonConfigProp().entryClass(BuildingEntryTab.class.getCanonicalName())
 		);
+		
+		this.setCurrentDimention(((BuildingEntryTab)this.bDimentionList).getSelected());
 		
 		this.bDimentionList.addEvent(new Event() {
 			
 			@Override
 			public void call(Type type, Object... params) {
 				if (type == Type.CHANGE) {
-					if (_this.mutexChange()) {
+					if (_this.mutexChangeEvent()) {
 						_this.saveEntry();
 						_this.setDimention();
-						_this.mutexChange = true;
+						_this.mutexChangeEvent = true;
 					}
 				} 
 			}
@@ -220,9 +235,9 @@ public class BuildingEntry extends ConfigEntry {
 			
 			@Override
 			public void call(Type type, Object... params) {
-				if (_this.mutexChange()) {
+				if (_this.mutexChangeEvent()) {
 					_this.saveEntry();
-					_this.mutexChange = true;
+					_this.mutexChangeEvent = true;
 				}
 			}
 			
@@ -239,9 +254,9 @@ public class BuildingEntry extends ConfigEntry {
 			
 			@Override
 			public void call(Type type, Object... params) {
-				if (_this.mutexChange()) {
+				if (_this.mutexChangeEvent()) {
 					_this.saveEntry();
-					_this.mutexChange = true;
+					_this.mutexChangeEvent = true;
 				}
 			}
 			
@@ -273,16 +288,21 @@ public class BuildingEntry extends ConfigEntry {
 			
 			@Override
 			public void call(Type type, Object... params) {
-				if (_this.mutexChange()) {
+				if (_this.mutexChangeEvent()) {
 					_this.saveEntry();
-					_this.mutexChange = true;
+					_this.mutexChangeEvent = true;
 				}
 			}
 			
 		});
 		
 	}
-	
+
+	private boolean mutexChangeEvent () {
+		boolean m = this.mutexChangeEvent;
+		this.mutexChangeEvent = false;
+		return m;
+	}
 	private boolean mutexChange () {
 		boolean m = this.mutexChange;
 		this.mutexChange = false;
@@ -290,138 +310,181 @@ public class BuildingEntry extends ConfigEntry {
 	}
 	
 	public void saveEntry () {
-
-		Group    group      = this.getCurrentGroup();
-		Building building   = this.getCurrentBuilding();
-		Dimention dimention = this.getCurrentDimention();
 		
-		group.globalSpawnRate = (Integer) this.globalSpawnRate.getValue();
-		building.disabled     = (Boolean) this.bDisabled.getValue();
-		
-		List<String> dimentionKeys = Arrays.asList((String[])this.bDimentionList.getValue());
-		
-//		for (Entry<Integer, Dimention> entry : building.dimentions.entrySet()) {
-//			
-//
-//
-//			yourArray).contains(yourChar)
-//
-//
-//			
-//		}
-		
-		if (dimention != null) {
+		if (this.mutexChange()) {
 			
+			Group    group      = this.getCurrentGroup();
+			Building building   = this.getCurrentBuilding();
+			Dimention dimentionC = this.getCurrentDimention();
+			
+			group.globalSpawnRate = (Integer) this.globalSpawnRate.getValue();
+			building.disabled     = (Boolean) this.bDisabled.getValue();
+			
+			List<String> dimentionKeys = Arrays.asList((String[])this.bDimentionList.getValue());
+			
+			for (Entry<Integer, Dimention> entry : new TreeMap<Integer, Dimention> (building.dimentions).entrySet()) {
+				if (!dimentionKeys.contains(entry.getKey().toString())) {
+					Dimention dimention = building.dimentions.remove(entry.getKey());
+				}
+			}
+			for (String key : dimentionKeys) {
+				Integer keyInt = 0;
+				try {
+					keyInt = Integer.parseInt(key);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				if (!building.dimentions.containsKey(keyInt)) {
+					Dimention dimention = building.dimentions.put(keyInt, new Dimention());
+				}
+			}
+			
+			if (dimentionC != null) {
+				dimentionC.spawnRate   = (Integer) this.dSpawnRate.getValue();
+				dimentionC.spawnHeight = (Integer) this.dSpawnHeight.getValue();
+				
+				ArrayList<Block> blocksSpawn = new ArrayList<Block>();
+				for (String blockName : (String[])this.dBlocksSpawn.getValue()) {
+					Block b = RegisteredObjects.instance().getBlock(blockName);
+					if (b != null) {
+						blocksSpawn.add(b);
+					}
+				}
+				
+				dimentionC.blocksSpawn = blocksSpawn;
+			}
+			
+			this.fireEvent(Type.CHANGE);
+			this.mutexChange = true;
 		}
 		
 	}
 
 	public void setGroup () {
 		
-		this.setCurrentGroup((String) this.group.getValue());
-		
-		Group groupC = this.getCurrentGroup();
-		Group groupO = this.getCurrentOldGroup();
-		Group groupD = this.getCurrentDefaultGroup();
+		if (this.mutexChange()) {
 			
-		this.globalSpawnRate              .setValue       (groupC.globalSpawnRate);
-		this.globalSpawnRate.configElement.setValue       (groupO.globalSpawnRate);
-		this.globalSpawnRate.configElement.setDefaultValue(groupD.globalSpawnRate);
-		
-		Object[] valuesBO = groupC.buildings.keySet().toArray();
-		String[] valuesBS = new String[valuesBO.length];
-		for (int i = 0; i < valuesBO.length; i++) {
-			valuesBS[i] = (String)valuesBO[i];
-		}
-		
-		((ListInlineEntry)this.building).values = valuesBS;
-		
-		this.currentBuilding  = 0;
+			this.setCurrentGroup((String) this.group.getValue());
+			
+			Group groupC = this.getCurrentGroup();
+			Group groupO = this.getCurrentOldGroup();
+			Group groupD = this.getCurrentDefaultGroup();
+				
+			this.globalSpawnRate              .setValue       (groupC.globalSpawnRate);
+			this.globalSpawnRate.configElement.setValue       (groupO.globalSpawnRate);
+			this.globalSpawnRate.configElement.setDefaultValue(groupD.globalSpawnRate);
+			
+			Object[] valuesBO = groupC.buildings.keySet().toArray();
+			String[] valuesBS = new String[valuesBO.length];
+			for (int i = 0; i < valuesBO.length; i++) {
+				valuesBS[i] = (String)valuesBO[i];
+			}
+			
+			((ListInlineEntry)this.building).values = valuesBS;
+			
+			this.currentBuilding  = 0;
+			
+			this.fireEvent(Type.CHANGE);
 
-		this.setValue(this.getValue());
-		
+			this.mutexChange = true;
+		}
 		this.setBuilding ();
 	}
 	
 	public void setBuilding () {
-		
-		this.setCurrentBuilding((String) this.building.getValue());
-		
-		Building buildingC = this.getCurrentBuilding();
-		Building buildingO = this.getCurrentOldBuilding();
-		Building buildingD = this.getCurrentDefaultBuilding();
-		
-		this.bDisabled              .setValue       (buildingC.disabled);
-		this.bDisabled.configElement.setValue       (buildingO.disabled);
-		this.bDisabled.configElement.setDefaultValue(buildingD.disabled);
-		
-		this.bDimentionList              .setValue       (buildingC.dimentions.keySet().toArray(new String[0]));
-		this.bDimentionList.configElement.setValue       (buildingO.dimentions.keySet().toArray(new String[0]));
-		this.bDimentionList.configElement.setDefaultValue(buildingD.dimentions.keySet().toArray(new String[0]));
-		((BuildingEntryTab)this.bDimentionList).setIndex0();
-		
-		this.currentDimention = null;
 
-		this.setValue(this.getValue());
+		if (this.mutexChange()) {
+			
+			this.setCurrentBuilding((String) this.building.getValue());
+			
+			Building buildingC = this.getCurrentBuilding();
+			Building buildingO = this.getCurrentOldBuilding();
+			Building buildingD = this.getCurrentDefaultBuilding();
+			
+			this.bDisabled              .setValue       (buildingC.disabled);
+			this.bDisabled.configElement.setValue       (buildingO.disabled);
+			this.bDisabled.configElement.setDefaultValue(buildingD.disabled);
+			
+			String[] dimC = new String[buildingC.dimentions.size()];
+			String[] dimO = new String[buildingO.dimentions.size()];
+			String[] dimD = new String[buildingD.dimentions.size()];
+			
+			for (int i = 0; i < dimC.length; i++) {
+				dimC[i] = buildingC.dimentions.keySet().toArray()[i].toString();
+			}
+			for (int i = 0; i < dimO.length; i++) {
+				dimO[i] = buildingO.dimentions.keySet().toArray()[i].toString();
+			}
+			for (int i = 0; i < dimD.length; i++) {
+				dimD[i] = buildingD.dimentions.keySet().toArray()[i].toString();
+			}
+			
+			this.bDimentionList              .setValue       (dimC);
+			this.bDimentionList.configElement.setValue       (dimO);
+			this.bDimentionList.configElement.setDefaultValue(dimD);
+			((BuildingEntryTab)this.bDimentionList).setIndex0();
+			
+			this.fireEvent(Type.CHANGE);
+			
+			this.mutexChange = true;
+		}
 		
 		this.setDimention ();
 	}
 
 	public void setDimention () {
 		
-		this.currentDimention = null;
-		try {
-			if (!((BuildingEntryTab)this.bDimentionList).selected.equals("")) {
-				this.currentDimention = Integer.parseInt(((BuildingEntryTab)this.bDimentionList).selected);
+		if (this.mutexChange()) {
+			
+			this.setCurrentDimention(((BuildingEntryTab)this.bDimentionList).getSelected());
+			
+			Dimention dimentionC = this.getCurrentDimention();
+			Dimention dimentionO = this.getCurrentOldDimention();
+			Dimention dimentionD = this.getCurrentDefaultDimention();
+			
+			dimentionC = dimentionC != null ? dimentionC : new Dimention();
+			dimentionD = dimentionD != null ? dimentionD : new Dimention();
+			dimentionO = dimentionO != null ? dimentionO : new Dimention();
+	
+			this.dSpawnRate              .setValue       (dimentionC.spawnRate);
+			this.dSpawnRate.configElement.setValue       (dimentionO.spawnRate);
+			this.dSpawnRate.configElement.setDefaultValue(dimentionD.spawnRate);
+	
+			this.dSpawnHeight              .setValue       (dimentionC.spawnHeight);
+			this.dSpawnHeight.configElement.setValue       (dimentionO.spawnHeight);
+			this.dSpawnHeight.configElement.setDefaultValue(dimentionD.spawnHeight);
+			
+	
+			ArrayList<String> blocksC = new ArrayList<String>();
+			for (Block block : dimentionC.blocksSpawn) {
+				String name = RegisteredObjects.instance().getRegisterName(block);
+				if (name != null) {
+					blocksC.add(name);
+				}
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		Dimention dimentionC = this.getCurrentDimention();
-		Dimention dimentionO = this.getCurrentOldDimention();
-		Dimention dimentionD = this.getCurrentDefaultDimention();
-		
-		dimentionC = dimentionC != null ? dimentionC : new Dimention();
-		dimentionD = dimentionD != null ? dimentionD : new Dimention();
-		dimentionO = dimentionO != null ? dimentionO : new Dimention();
+			ArrayList<String> blocksD = new ArrayList<String>();
+			for (Block block : dimentionD.blocksSpawn) {
+				String name = RegisteredObjects.instance().getRegisterName(block);
+				if (name != null) {
+					blocksD.add(name);
+				}
+			}
+			ArrayList<String> blocksO = new ArrayList<String>();
+			for (Block block : dimentionO.blocksSpawn) {
+				String name = RegisteredObjects.instance().getRegisterName(block);
+				if (name != null) {
+					blocksO.add(name);
+				}
+			}
+			
+			this.dBlocksSpawn              .setValue       (blocksC.toArray(new String[0]));
+			this.dBlocksSpawn.configElement.setValue       (blocksO.toArray(new String[0]));
+			this.dBlocksSpawn.configElement.setDefaultValue(blocksD.toArray(new String[0]));
+			
+			this.fireEvent(Type.CHANGE);
 
-		this.dSpawnRate              .setValue       (dimentionC.spawnRate);
-		this.dSpawnRate.configElement.setValue       (dimentionO.spawnRate);
-		this.dSpawnRate.configElement.setDefaultValue(dimentionD.spawnRate);
-
-		this.dSpawnHeight              .setValue       (dimentionC.spawnHeight);
-		this.dSpawnHeight.configElement.setValue       (dimentionO.spawnHeight);
-		this.dSpawnHeight.configElement.setDefaultValue(dimentionD.spawnHeight);
-		
-
-		ArrayList<String> blocksC = new ArrayList<String>();
-		for (Block block : dimentionC.blocksSpawn) {
-			String name = RegisteredObjects.instance().getRegisterName(block);
-			if (name != null) {
-				blocksC.add(name);
-			}
+			this.mutexChange = true;
 		}
-		ArrayList<String> blocksD = new ArrayList<String>();
-		for (Block block : dimentionD.blocksSpawn) {
-			String name = RegisteredObjects.instance().getRegisterName(block);
-			if (name != null) {
-				blocksD.add(name);
-			}
-		}
-		ArrayList<String> blocksO = new ArrayList<String>();
-		for (Block block : dimentionO.blocksSpawn) {
-			String name = RegisteredObjects.instance().getRegisterName(block);
-			if (name != null) {
-				blocksO.add(name);
-			}
-		}
-		
-		this.dBlocksSpawn              .setValue       (blocksC.toArray(new String[0]));
-		this.dBlocksSpawn.configElement.setValue       (blocksO.toArray(new String[0]));
-		this.dBlocksSpawn.configElement.setDefaultValue(blocksD.toArray(new String[0]));
-		
-		this.setValue(this.getValue());
 	}
 	
 	@Override
@@ -433,19 +496,19 @@ public class BuildingEntry extends ConfigEntry {
 		this.group.drawEntry(0, x, y     , listWidth, 22, tessellator, mouseX, mouseY, isSelected, false);
 		this.parent.labelX += 10;
 		
-		this.drawRec(this.parent.labelX-10, y + 20, this.parent.scrollBarX - this.parent.labelX + 7, 200, 0x0EFFFFFF);
+		this.drawRec(this.parent.labelX-10, y + 20, this.parent.scrollBarX - this.parent.labelX + 7, 200, 0x08FFFFFF);
 		
 		this.globalSpawnRate.drawEntry(1, x, y + 24, listWidth, 22, tessellator, mouseX, mouseY, isSelected, false);
 		this.building       .drawEntry(2, x, y + 46, listWidth, 22, tessellator, mouseX, mouseY, isSelected, false);
 		
-		this.drawRec(this.parent.labelX, y + 68, this.parent.scrollBarX - this.parent.labelX - 3, 152, 0x0EFFFFFF);
+		this.drawRec(this.parent.labelX, y + 68, this.parent.scrollBarX - this.parent.labelX - 3, 152, 0x08FFFFFF);
 		
 		this.parent.labelX += 10;
 		
 		this.bDisabled     .drawEntry(3, x, y + 72, listWidth, 22, tessellator, mouseX, mouseY, isSelected, false);
 		this.bDimentionList.drawEntry(4, x, y + 92, listWidth, 22, tessellator, mouseX, mouseY, isSelected, false);
 		
-		this.drawRec(this.parent.labelX, y + 111, this.parent.scrollBarX - this.parent.labelX - 3, 109, 0x0EFFFFFF);
+		this.drawRec(this.parent.labelX, y + 111, this.parent.scrollBarX - this.parent.labelX - 3, 109, 0x08FFFFFF);
 		
 		this.parent.labelX += 10;
 		
@@ -466,11 +529,14 @@ public class BuildingEntry extends ConfigEntry {
 		}
 		
 		int[] sizes = new int[] {
-			mc.fontRenderer.getStringWidth(this.tradIfExist("group"))-10,
+			mc.fontRenderer.getStringWidth(this.tradIfExist("group"      ))-10,
 			mc.fontRenderer.getStringWidth(this.tradIfExist("globalSpawnRate")),
-			mc.fontRenderer.getStringWidth(this.tradIfExist("building"))+10,
-			mc.fontRenderer.getStringWidth(this.tradIfExist("disabled"))+10,
-			mc.fontRenderer.getStringWidth(this.tradIfExist("dimention"))+10,
+			mc.fontRenderer.getStringWidth(this.tradIfExist("building"   ))+10,
+			mc.fontRenderer.getStringWidth(this.tradIfExist("disabled"   ))+10,
+			mc.fontRenderer.getStringWidth(this.tradIfExist("dimention"  ))+10,
+			mc.fontRenderer.getStringWidth(this.tradIfExist("spawnRate"  ))+20,
+			mc.fontRenderer.getStringWidth(this.tradIfExist("spawnHeight"))+20,
+			mc.fontRenderer.getStringWidth(this.tradIfExist("blocksSpawn"))+20,
 		};
 		
 		int size = 0;
@@ -492,7 +558,6 @@ public class BuildingEntry extends ConfigEntry {
 		}
 		return;
 	}
-	
 	public void setCurrentBuilding (String name) {
 		int i = 0;
 		for (String building : this.getCurrentGroup().buildings.keySet()) {
@@ -503,6 +568,16 @@ public class BuildingEntry extends ConfigEntry {
 			i++;
 		}
 		return;
+	}
+	private void setCurrentDimention(String dim) {
+		this.currentDimention = null;
+		try {
+			if (!dim.equals("")) {
+				this.currentDimention = Integer.parseInt(dim);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public String getCurrentGroupName () {
@@ -611,9 +686,14 @@ public class BuildingEntry extends ConfigEntry {
 
 	@Override
 	public ConfigEntry setValue(Object value) {
+		this.saveEntry();
 		if (value instanceof BuildingConfigType) {
+			this.currentGroup     = 0;
+			this.currentBuilding  = 0;
+			this.currentDimention = null;
 			this.value = (BuildingConfigType) ((BuildingConfigType)value).clone();
 		}
+		this.setGroup();
 		return super.setValue(value);
 	}
 }

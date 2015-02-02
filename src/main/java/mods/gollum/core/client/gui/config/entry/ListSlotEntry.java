@@ -34,7 +34,7 @@ public class ListSlotEntry extends ConfigEntry {
 	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, Tessellator tessellator, int mouseX, int mouseY, boolean isSelected, boolean resetControlWidth) {
 		
 		int x1 = this.parent.controlX;
-		int x2 = this.parent.controlX + this.parent.controlWidth;
+		int x2 = this.parent.scrollBarX - 3;
 		int y1 = y + this.parent.getSlotHeight ();
 		int y2 = y;
 		
@@ -76,7 +76,13 @@ public class ListSlotEntry extends ConfigEntry {
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 		}
 		
-		this.mc.fontRenderer.drawString(((ListElement)this.configElement).label, this.parent.controlX + 7, y+6, this.isSelected() ? 0xFFFFFF : 0x888888);
+		String label = ((ListElement)this.configElement).label;
+		
+		while (!label.equals("") && this.mc.fontRenderer.getStringWidth(label) > x2 - x1) {
+			label = label.substring(0, label.length() - 1);
+		}
+		
+		this.mc.fontRenderer.drawString(label, this.parent.controlX + 7, y+6, this.isSelected() ? 0xFFFFFF : 0x888888, true);
 	}
 	
 	public boolean isSelected() {

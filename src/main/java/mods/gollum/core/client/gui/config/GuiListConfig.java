@@ -2,22 +2,20 @@ package mods.gollum.core.client.gui.config;
 
 import static mods.gollum.core.ModGollumCoreLib.log;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map.Entry;
-import java.util.TreeMap;
 
+import org.lwjgl.input.Keyboard;
+
+import mods.gollum.core.ModGollumCoreLib;
+import mods.gollum.core.client.gui.config.element.ConfigElement;
 import mods.gollum.core.client.gui.config.element.ListElement;
-import mods.gollum.core.client.gui.config.element.TypedValueElement;
-import mods.gollum.core.client.gui.config.entry.ArrayEntry;
 import mods.gollum.core.client.gui.config.entry.ListEntry;
-import mods.gollum.core.common.config.ConfigProp;
-import mods.gollum.core.common.config.JsonConfigProp;
+import net.minecraft.client.gui.GuiTextField;
 
 public class GuiListConfig extends GuiConfig {
 	
 	protected ListEntry parentEntry;
+	protected GuiTextField search = null;
 	public String currentValue;
 	
 	public GuiListConfig(ListEntry listEntry) {
@@ -27,6 +25,7 @@ public class GuiListConfig extends GuiConfig {
 		this.currentValue = this.parentEntry.getValue().toString();
 	}
 	
+	@Override
 	public boolean displayEntriesLabel() {
 		return false;
 	}
@@ -34,12 +33,52 @@ public class GuiListConfig extends GuiConfig {
 	@Override
 	protected void initConfigElement() {
 		
+		String search = "";
+		
+		if (this.search != null) {
+			search = this.search.getText().trim();
+		}
+		
+		this.configElements = new ArrayList<ConfigElement>();
 		String[] values = this.parentEntry.configElement.getConfigProp().validValues();
 		
 		for (String value : values) {
-			this.configElements.add(new ListElement(value, value));
+			if (search.equals("") || value.indexOf(search) != -1) {
+				this.configElements.add(new ListElement(value, value));
+			}
 		}
  	}
+	
+	@Override
+	public void initGui() {
+		
+		super.initGui();
+		
+		this.search = new GuiTextField(this.mc.fontRenderer, 0, 0, 0, 16);
+		
+	}
+	
+	public int getTopEntryList() {
+		return super.getTopEntryList() + 20;
+	}
+	
+	@Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+		
+		super.drawScreen(mouseX, mouseY, partialTicks);
+		
+		if (this.parentEntry.hasSearch()) {
+			
+			this.search.xPosition = this.entryList.controlX;
+			this.search.yPosition = super.getTopEntryList();
+			this.search.width = this.entryList.scrollBarX - this.entryList.controlX - 4;
+			this.search.height = 16;
+			this.search.drawTextBox();
+			if (this.search.getText().equals("")) {
+				this.drawString(this.fontRendererObj, ModGollumCoreLib.i18n.trans("config.search"), this.search.xPosition + 4, this.search.yPosition + 4, 0x444444);
+			}
+		}
+	}
 	
 	@Override
 	public void saveValue() {
@@ -56,6 +95,7 @@ public class GuiListConfig extends GuiConfig {
 		return this.currentValue.equals(this.parentEntry.configElement.getDefaultValue());
 	}
 	
+	@Override
 	protected void setToDefault() {
 		
 		Object defaultValue = this.parentEntry.configElement.getDefaultValue();
@@ -68,8 +108,9 @@ public class GuiListConfig extends GuiConfig {
 		}
 	}
 	
+	@Override
 	protected void undoChanges() {
-
+		
 		Object value = this.parentEntry.configElement.getValue();
 		
 		for (int i = 0; i < this.entryList.getSize(); i++) {
@@ -78,6 +119,24 @@ public class GuiListConfig extends GuiConfig {
 				break;
 			}
 		}
+	}
+	
+	 @Override
+	public void keyTyped(char eventChar, int eventKey) {
+		this.search.textboxKeyTyped(eventChar, eventKey);
+		super.keyTyped(eventChar, eventKey);
+	}
+	 
+	@Override
+	public void updateScreen() {
+		super.updateScreen();
+		this.search.updateCursorCounter();
+	}
+	
+	@Override
+	protected void mouseClicked(int x, int y, int mouseEvent) {
+		super.mouseClicked(x, y, mouseEvent);
+		this.search.mouseClicked(x, y, mouseEvent);
 	}
 	
 }

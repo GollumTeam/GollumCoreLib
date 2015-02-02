@@ -249,7 +249,7 @@ public abstract class ConfigEntry implements IGuiListEntry {
 	public Object getValue() {
 		if (!this.eventGetCall) {
 			this.eventGetCall = true;
-			this.FireEvent(Event.Type.SET_VALUE);
+			this.fireEvent(Event.Type.SET_VALUE);
 			this.eventGetCall = false;
 		}
 		
@@ -259,13 +259,13 @@ public abstract class ConfigEntry implements IGuiListEntry {
 	public ConfigEntry setValue(Object value) {
 		if (!this.eventSetCall) {
 			this.eventSetCall = true;
-			this.FireEvent(Event.Type.GET_VALUE);
+			this.fireEvent(Event.Type.GET_VALUE);
 			this.eventSetCall = false;
 		}
 		
 		if (!this.eventChangeCall && (this.oldValue == null || !this.equals(this.oldValue))) {
 			this.eventChangeCall = true;
-			this.FireEvent(Event.Type.CHANGE);
+			this.fireEvent(Event.Type.CHANGE);
 			this.eventChangeCall = false;
 		}
 		this.oldValue = this.getValue();
@@ -443,7 +443,7 @@ public abstract class ConfigEntry implements IGuiListEntry {
 		this.events.add(e);
 	}
 	
-	public void FireEvent (Event.Type type, Object... params) {
+	public void fireEvent (Event.Type type, Object... params) {
 		for (Event e : this.events) {
 			e.call(type, params);
 		}

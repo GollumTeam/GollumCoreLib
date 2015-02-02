@@ -135,7 +135,7 @@ public class GuiConfigEntries extends GuiListExtended {
 		this.width = this.parent.width;
 		this.height = this.parent.height;
 		
-		this.top    = this.parent.titleLine2 != null ? 33 : 23;
+		this.top    = this.parent.getTopEntryList ();
 		this.bottom = this.parent.height - 32;
 		this.left   = 0;
 		this.right  = width;

@@ -17,6 +17,10 @@ public class ListEntry extends ButtonEntry {
 		this.updateValueButtonText(this.value.toString());
 	}
 	
+	public boolean hasSearch () {
+		return false;
+	}
+	
 	@Override
 	public void valueButtonPressed(int slotIndex) {
 		this.mc.displayGuiScreen(new GuiListConfig(this));
@@ -27,7 +31,7 @@ public class ListEntry extends ButtonEntry {
 		super.getValue();
 		return this.value;
 	}
-
+	
 	@Override
 	public ConfigEntry setValue(Object value) {
 		this.value = value;

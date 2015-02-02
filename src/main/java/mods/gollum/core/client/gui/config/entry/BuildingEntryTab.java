@@ -5,6 +5,7 @@ import java.util.TreeMap;
 
 import mods.gollum.core.client.gui.config.GuiConfigEntries;
 import mods.gollum.core.client.gui.config.element.ConfigElement;
+import mods.gollum.core.client.gui.config.entry.ConfigEntry.Event;
 import mods.gollum.core.common.config.ConfigProp;
 import mods.gollum.core.common.config.JsonConfigProp;
 import net.minecraft.client.Minecraft;
@@ -15,7 +16,7 @@ import cpw.mods.fml.client.config.GuiUtils;
 
 public class BuildingEntryTab extends ConfigEntry {
 
-	public String selected = "";
+	private String selected = "";
 	public int index = 0;
 	private TreeMap<String, GuiButtonExt> values = new TreeMap<String, GuiButtonExt>();
 	
@@ -136,7 +137,7 @@ public class BuildingEntryTab extends ConfigEntry {
 	public ConfigEntry addValues(String value) {
 		
 		this.values.put(value, new GuiButtonExt(0, parent.controlX, 0, mc.fontRenderer.getStringWidth(value)+10, 18, value));
-		this.selected = value;
+		this.select (value);
 		
 		return this;
 	}
@@ -147,19 +148,33 @@ public class BuildingEntryTab extends ConfigEntry {
 			this.index = 0;
 		}
 	}
-
+	
 	private void next() {
 		this.index++;
 	}
 	
 	private void remove() {
+		if (this.values.containsKey(this.selected)) {
+			this.values.remove(this.selected);
+		}
+		this.setIndex0 ();
 	}
 	
 	public void setIndex0 () {
-		this.selected = null;
 		if (this.values.size() > 0) {
-			this.selected = this.values.firstKey();
+			this.select (this.values.firstKey());
+			return;
 		}
+		this.select (null);
+	}
+	
+	public void select (String value) {
+		this.selected = value;
+		this.fireEvent(Event.Type.CHANGE);
+	}
+	
+	public String getSelected () {
+		return this.selected;
 	}
 	
 	/////////////
@@ -212,7 +227,7 @@ public class BuildingEntryTab extends ConfigEntry {
 				
 				if (bt.mousePressed(this.mc, x, y)) {
 					bt.func_146113_a(mc.getSoundHandler());
-					this.selected = bt.displayString;
+					this.select (bt.displayString);
 					return true;
 				}
 			}

@@ -20,7 +20,7 @@ public class GuiBlockConfig extends GuiListConfig {
 	protected void initConfigElement() {
 		
 		for (Entry<String, Block> entry : RegisteredObjects.instance().getBlocksList().entrySet()) {
-			this.configElements.add(new ListElement(entry.getKey(), entry.getValue().getLocalizedName()));
+			this.configElements.add(new ListElement(entry.getKey(), entry.getValue().getLocalizedName() + " ("+entry.getKey()+")"));
 		}
  	}
 	

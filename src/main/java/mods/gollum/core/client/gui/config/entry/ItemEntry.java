@@ -17,4 +17,10 @@ public class ItemEntry extends ListEntry {
 	public void valueButtonPressed(int slotIndex) {
 		this.mc.displayGuiScreen(new GuiItemConfig(this));
 	}
+	
+	@Override
+	public boolean hasSearch () {
+		return true;
+	}
+	
 }

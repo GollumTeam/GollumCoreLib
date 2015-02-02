@@ -20,7 +20,7 @@ public class GuiItemConfig extends GuiListConfig {
 	protected void initConfigElement() {
 		
 		for (Entry<String, Item> entry : RegisteredObjects.instance().getItemsList().entrySet()) {
-			this.configElements.add(new ListElement(entry.getKey(), entry.getValue().getItemStackDisplayName(new ItemStack(entry.getValue()))));
+			this.configElements.add(new ListElement (entry.getKey(), entry.getValue().getItemStackDisplayName(new ItemStack(entry.getValue())) + " ("+entry.getKey()+")" ));
 		}
  	}
 	
@@ -29,7 +29,7 @@ public class GuiItemConfig extends GuiListConfig {
 	 */
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-
+		
 		for (int i = 0; i < this.entryList.getSize(); i++) {
 			ConfigEntry entry = this.entryList.getEntry(i);
 			if (entry instanceof ListSlotEntry) {

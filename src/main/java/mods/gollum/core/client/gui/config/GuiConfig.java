@@ -86,19 +86,19 @@ public abstract class GuiConfig extends GuiScreen {
 		}
 		
 		if (this.needsRefresh) {
-			this.entryList = new GuiConfigEntries(this, mc);
+			this.entryList = new GuiConfigEntries(this, this.mc);
 			this.needsRefresh = false;
 		}
 		
 		// Init Button action
 		
-		int undoGlyphWidth  = mc.fontRenderer.getStringWidth(UNDO_CHAR)  * 2;
-		int resetGlyphWidth = mc.fontRenderer.getStringWidth(RESET_CHAR) * 2;
+		int undoGlyphWidth  = this.mc.fontRenderer.getStringWidth(UNDO_CHAR)  * 2;
+		int resetGlyphWidth = this.mc.fontRenderer.getStringWidth(RESET_CHAR) * 2;
 		
 		// Calculate size
-		int doneWidth       = Math.max(mc.fontRenderer.getStringWidth(I18n.format("gui.done")) + 20, 100);
-		int undoWidth       = mc.fontRenderer.getStringWidth(" " + I18n.format("fml.configgui.tooltip.undoChanges")) + undoGlyphWidth + 20;
-		int resetWidth      = mc.fontRenderer.getStringWidth(" " + I18n.format("fml.configgui.tooltip.resetToDefault")) + resetGlyphWidth + 20;
+		int doneWidth       = Math.max(this.mc.fontRenderer.getStringWidth(I18n.format("gui.done")) + 20, 100);
+		int undoWidth       = this.mc.fontRenderer.getStringWidth(" " + I18n.format("fml.configgui.tooltip.undoChanges")) + undoGlyphWidth + 20;
+		int resetWidth      = this.mc.fontRenderer.getStringWidth(" " + I18n.format("fml.configgui.tooltip.resetToDefault")) + resetGlyphWidth + 20;
 		int buttonWidthHalf = (doneWidth + 5 + undoWidth + 5 + resetWidth) / 2;
 		
 		this.buttonList.add(this.btDone  = new GuiButtonExt(
@@ -135,6 +135,10 @@ public abstract class GuiConfig extends GuiScreen {
 		
 		this.entryList.initGui();
 		
+	}
+	
+	public int getTopEntryList() {
+		return this.titleLine2 != null ? 33 : 23;
 	}
 	
 	public boolean mustntDisplay () {
@@ -321,5 +325,6 @@ public abstract class GuiConfig extends GuiScreen {
 	public ConfigProp newConfigProp() {
 		return new JsonConfigProp();
 	}
+
 	
 }
