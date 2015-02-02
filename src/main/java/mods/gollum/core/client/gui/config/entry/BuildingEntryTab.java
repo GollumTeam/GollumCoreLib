@@ -18,7 +18,6 @@ public class BuildingEntryTab extends ConfigEntry {
 	public String selected = "";
 	public int index = 0;
 	private TreeMap<String, GuiButtonExt> values = new TreeMap<String, GuiButtonExt>();
-	private String[] valuesDefault = new String[0];
 	
 	private GuiButtonExt btnPrev;
 	private GuiButtonExt btnNext;
@@ -34,12 +33,8 @@ public class BuildingEntryTab extends ConfigEntry {
 	public BuildingEntryTab(int index , Minecraft mc, GuiConfigEntries parent, ConfigElement configElement) {
 		super(index, mc, parent, configElement);
 		
-		this.setValue         (configElement.getValue());
-		this.setValuesDefault ((String[]) configElement.getDefaultValue());
-		
-		if (this.values.size() == 0) {
-			this.selected = this.values.firstKey();
-		}
+		this.setValue (configElement.getValue());
+		this.setIndex0();
 		
 		this.init ();
 	}
@@ -126,7 +121,7 @@ public class BuildingEntryTab extends ConfigEntry {
 	@Override
 	 public Object getValue() {
 		super.getValue();
-		return this.values.keySet().toArray();
+		return this.values.keySet().toArray(new String[0]);
 	}
 	
 	@Override
@@ -136,11 +131,6 @@ public class BuildingEntryTab extends ConfigEntry {
 			this.addValues(value);
 		}
 		return super.setValue(values);
-	}
-	
-	private ConfigEntry setValuesDefault(String[] values) {
-		this.valuesDefault = values;
-		return this;
 	}
 	
 	public ConfigEntry addValues(String value) {
@@ -157,9 +147,19 @@ public class BuildingEntryTab extends ConfigEntry {
 			this.index = 0;
 		}
 	}
-	
+
 	private void next() {
 		this.index++;
+	}
+	
+	private void remove() {
+	}
+	
+	public void setIndex0 () {
+		this.selected = null;
+		if (this.values.size() > 0) {
+			this.selected = this.values.firstKey();
+		}
 	}
 	
 	/////////////
@@ -199,6 +199,11 @@ public class BuildingEntryTab extends ConfigEntry {
 			if (this.btnAdd.mousePressed(this.mc, x, y)) {
 				btnAdd.func_146113_a(mc.getSoundHandler());
 				this.modalEnabled = true;
+				return true;
+			}
+			if (this.btnRemove.mousePressed(this.mc, x, y)) {
+				btnRemove.func_146113_a(mc.getSoundHandler());
+				this.remove();
 				return true;
 			}
 			for (Entry<String, GuiButtonExt> entry : this.values.entrySet()){
