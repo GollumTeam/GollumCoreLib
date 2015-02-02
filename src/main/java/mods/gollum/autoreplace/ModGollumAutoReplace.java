@@ -1,11 +1,12 @@
-package mods.gollum.proxyblock;
+package mods.gollum.autoreplace;
 
+import mods.gollum.autoreplace.common.CommonProxyGollumAutoReplace;
+import mods.gollum.autoreplace.common.config.ConfigGollumAutoReplace;
+import mods.gollum.autoreplace.inits.ModBlocks;
 import mods.gollum.core.common.i18n.I18n;
 import mods.gollum.core.common.log.Logger;
 import mods.gollum.core.common.mod.GollumMod;
 import mods.gollum.core.common.version.VersionChecker;
-import mods.gollum.proxyblock.common.CommonProxyGollumProxyBlock;
-import mods.gollum.proxyblock.inits.ModBlocks;
 import net.minecraft.init.Blocks;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -15,20 +16,20 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid = ModGollumProxyBlock.MODID, name = ModGollumProxyBlock.MODNAME, version = ModGollumProxyBlock.VERSION, acceptedMinecraftVersions = ModGollumProxyBlock.MINECRAFT_VERSION, dependencies = ModGollumProxyBlock.DEPENDENCIES)
-public class ModGollumProxyBlock extends GollumMod {
+@Mod(modid = ModGollumAutoReplace.MODID, name = ModGollumAutoReplace.MODNAME, version = ModGollumAutoReplace.VERSION, acceptedMinecraftVersions = ModGollumAutoReplace.MINECRAFT_VERSION, dependencies = ModGollumAutoReplace.DEPENDENCIES)
+public class ModGollumAutoReplace extends GollumMod {
 
-	public final static String MODID = "GollumProxyBlock";
-	public final static String MODNAME = "Gollum Proxy Block";
+	public final static String MODID = "GollumAutoReplace";
+	public final static String MODNAME = "Gollum Auto Replace";
 	public final static String VERSION = "1.0.0";
 	public final static String MINECRAFT_VERSION = "1.7.10";
 	public final static String DEPENDENCIES = "required-after:GollumCoreLib";
 	
-	@Instance(ModGollumProxyBlock.MODID)
-	public static ModGollumProxyBlock instance; 
+	@Instance(ModGollumAutoReplace.MODID)
+	public static ModGollumAutoReplace instance; 
 	
-	@SidedProxy(clientSide = "mods.gollum.proxyblock.client.ClientProxyGollumProxyBlock", serverSide = "mods.gollum.proxyblock.common.CommonProxyGollumProxyBlock")
-	public static CommonProxyGollumProxyBlock proxy; 
+	@SidedProxy(clientSide = "mods.gollum.autoreplace.client.ClientProxyGollumAutoReplace", serverSide = "mods.gollum.autoreplace.common.CommonProxyGollumAutoReplace")
+	public static CommonProxyGollumAutoReplace proxy; 
 
 	/**
 	 * Gestion des logs
@@ -40,10 +41,10 @@ public class ModGollumProxyBlock extends GollumMod {
 	 */
 	public static I18n i18n;
 	
-//	/**
-//	 * La configuration
-//	 */
-//	public static ConfigGollumProxyBlock config;
+	/**
+	 * La configuration
+	 */
+	public static ConfigGollumAutoReplace config;
 	
 	@EventHandler public void handler(FMLPreInitializationEvent event)  { super.handler (event); }
 	@EventHandler public void handler(FMLInitializationEvent event)     { super.handler (event); }
@@ -69,10 +70,6 @@ public class ModGollumProxyBlock extends GollumMod {
 	/** 3 **/
 	@Override
 	public void postInit(FMLPostInitializationEvent event) {
-		
-		ModBlocks.blockProxy1.setTarget(Blocks.gold_block, 0);
-		
-		
 	}
 	
 }

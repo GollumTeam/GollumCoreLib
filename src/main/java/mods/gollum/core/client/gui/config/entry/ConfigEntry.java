@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+
 import cpw.mods.fml.client.config.GuiButtonExt;
 import cpw.mods.fml.client.config.GuiUtils;
 import cpw.mods.fml.client.config.HoverChecker;
@@ -19,6 +22,7 @@ import mods.gollum.core.common.config.ConfigProp;
 import mods.gollum.core.common.config.JsonConfigProp;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiListExtended.IGuiListEntry;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.EnumChatFormatting;
@@ -44,7 +48,7 @@ public abstract class ConfigEntry implements IGuiListEntry {
 	public GuiConfigEntries parent;
 	public ConfigElement configElement;
 	
-	public GuiButtonExt btnAdd;
+	public    GuiButtonExt btnAdd;
 	protected GuiButtonExt btnRemove;
 	protected GuiButtonExt btUndo;
 	protected GuiButtonExt btReset;
@@ -151,8 +155,13 @@ public abstract class ConfigEntry implements IGuiListEntry {
 	public boolean getLabelDisplay () {
 		return this.labelDisplay && this.parent.parent.displayEntriesLabel();
 	}
+
 	
-	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, Tessellator tessellator, int mouseX, int mouseY, boolean isSelected) {
+	public final void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, Tessellator tessellator, int mouseX, int mouseY, boolean isSelected) {
+		this.drawEntry(slotIndex, x, y, listWidth, slotHeight, tessellator, mouseX, mouseY, isSelected, true);
+	}
+	
+	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, Tessellator tessellator, int mouseX, int mouseY, boolean isSelected, boolean resetControlWidth) {
 		
 		if (this.getLabelDisplay()) {
 			String label = this.getLabel();
@@ -181,10 +190,8 @@ public abstract class ConfigEntry implements IGuiListEntry {
 		this.btUndo.visible  = this.btUndoIsVisible  && this.parent.parent.undoIsVisible();
 		this.btReset.visible = this.btResetIsVisible && this.parent.parent.resetIsVisible();
 		
-		if (!this.btUndo.visible && !this.btReset.visible) {
-			this.parent.controlWidth = this.parent.scrollBarX - 5- this.parent.controlX;
-		} else {
-			this.parent.initGui();
+		if (resetControlWidth) {
+			this.resetControlWidth();
 		}
 		
 		this.btUndo.xPosition = this.parent.scrollBarX - 44;
@@ -203,6 +210,40 @@ public abstract class ConfigEntry implements IGuiListEntry {
 			this.tooltipHoverChecker.updateBounds(y, y + slotHeight, x, this.parent.controlX + this.parent.controlWidth - 8 - 8);
 		}
 		
+	}
+	
+	protected void resetControlWidth() {
+		if (!this.btUndo.visible && !this.btReset.visible) {
+			this.parent.controlWidth = this.parent.scrollBarX - 5- this.parent.controlX;
+		} else {
+			this.parent.initGui();
+		}
+	}
+	
+	
+	protected void drawRec(int x, int y, int width, int height, int color1) {
+		this.drawRec(x, y, width, height, color1, color1);
+	}
+	
+	protected void drawRec(int x, int y, int width, int height, int color1, int color2) {
+		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+		RenderHelper.disableStandardItemLighting();
+		GL11.glDisable(GL11.GL_LIGHTING);
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		
+		this.parent.parent.drawGradientRect(
+			x, 
+			y, 
+			x + width, 
+			y + height, 
+			color1, 
+			color2
+		);
+		
+		GL11.glEnable(GL11.GL_LIGHTING);
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		RenderHelper.enableStandardItemLighting();
+		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 	}
 	
 	public Object getValue() {
@@ -391,8 +432,9 @@ public abstract class ConfigEntry implements IGuiListEntry {
 		TypedValueElement configElement = new TypedValueElement(value.getClass(), label, value, defaultValue, prop);
 		ConfigEntry configEntry  = this.parent.newInstanceOfEntryConfig(index, configElement, prop);
 		
-		this.subEntries.add (configEntry);
-		
+		if (configEntry != null) {
+			this.subEntries.add (configEntry);
+		}
 		return configEntry;
 	}
 	

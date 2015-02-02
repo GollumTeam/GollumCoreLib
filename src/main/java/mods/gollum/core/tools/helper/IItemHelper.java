@@ -8,6 +8,11 @@ public interface IItemHelper {
 	public ItemHelper getGollumHelper ();
 	
 	/**
+	 * Enregistrement du item. Appelé a la fin du postInit
+	 */
+	public void register ();
+	
+	/**
 	 * Nom d'enregistrement du mod
 	 */
 	public String getRegisterName();

@@ -23,7 +23,7 @@ public class BlockRegistry {
 	
 	public void registerAll () {
 		for (IBlockHelper block : this.blocks) {
-			block.getGollumHelper ().register();
+			block.register();
 		}
 		this.blocks.clear();
 	}

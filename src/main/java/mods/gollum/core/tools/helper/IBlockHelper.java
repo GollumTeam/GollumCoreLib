@@ -12,6 +12,11 @@ public interface IBlockHelper {
 	public BlockHelper getGollumHelper ();
 	
 	/**
+	 * Enregistrement du block. Appelé a la fin du postInit
+	 */
+	public void register ();
+	
+	/**
 	 * Nom d'enregistrement du mod
 	 */
 	public String getRegisterName();

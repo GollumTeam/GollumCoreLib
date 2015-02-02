@@ -31,14 +31,12 @@ public class ListSlotEntry extends ConfigEntry {
 	}
 	
 	@Override
-	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, Tessellator tessellator, int mouseX, int mouseY, boolean isSelected) {
+	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, Tessellator tessellator, int mouseX, int mouseY, boolean isSelected, boolean resetControlWidth) {
 		
 		int x1 = this.parent.controlX;
 		int x2 = this.parent.controlX + this.parent.controlWidth;
 		int y1 = y + this.parent.getSlotHeight ();
 		int y2 = y;
-		
-//		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		
 		if (this.itemStackIcon != null) {
 			try {

@@ -16,7 +16,7 @@ public class ItemStackConfigType extends ConfigJsonType {
 	private int metadata;
 	private int number;
 	
-	public ItemStackConfigType() throws Exception {
+	public ItemStackConfigType() {
 		this(RegisteredObjects.instance().getRegisterName(Items.apple));
 	}
 	

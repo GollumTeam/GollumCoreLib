@@ -208,7 +208,7 @@ public abstract class GollumMod {
 		this.preInit(event);
 		
 		BlockRegistry.instance().registerAll();
-		ItemRegistry.instance().registerAll();
+		ItemRegistry .instance().registerAll();
 		
 		ModContext.instance ().pop();
 	}

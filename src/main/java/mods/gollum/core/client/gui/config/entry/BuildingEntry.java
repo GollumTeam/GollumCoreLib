@@ -1,6 +1,9 @@
 package mods.gollum.core.client.gui.config.entry;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -12,21 +15,30 @@ import mods.gollum.core.common.config.JsonConfigProp;
 import mods.gollum.core.common.config.type.BuildingConfigType;
 import mods.gollum.core.common.config.type.BuildingConfigType.Group;
 import mods.gollum.core.common.config.type.BuildingConfigType.Group.Building;
+import mods.gollum.core.common.config.type.BuildingConfigType.Group.Building.Dimention;
+import mods.gollum.core.tools.registered.RegisteredObjects;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.init.Blocks;
 
 public class BuildingEntry extends ConfigEntry {
 	
 	private BuildingConfigType value;
-
-	private int currentGroup = 0;
-	private int currentBuilding = 0;
+	
+	private int     currentGroup     = 0;
+	private int     currentBuilding  = 0;
+	private Integer currentDimention = null;
 
 	private ConfigEntry group;
 	private ConfigEntry globalSpawnRate;
 	private ConfigEntry building;
 	private ConfigEntry bDisabled;
+	private ConfigEntry bDimentionList;
+	private ConfigEntry dSpawnRate;
+	private ConfigEntry dSpawnHeight;
+	private ConfigEntry dBlocksSpawn;
 	
 	private boolean mutexChange = true;
 	
@@ -35,7 +47,7 @@ public class BuildingEntry extends ConfigEntry {
 		
 		this.value = (BuildingConfigType) configElement.getValue();
 		
-		parent.setSlotHeight (200);
+		parent.setSlotHeight (175);
 		
 		this.init ();
 	}
@@ -111,7 +123,7 @@ public class BuildingEntry extends ConfigEntry {
 			"building",
 			this.getCurrentBuildingName(),
 			this.getCurrentBuildingGroupName(),
-			1,
+			2,
 			new JsonConfigProp().type(ConfigProp.Type.LIST_INLINE).validValues(valuesBS)
 		);
 		this.building.btResetIsVisible = false;
@@ -140,7 +152,7 @@ public class BuildingEntry extends ConfigEntry {
 			"disabled",
 			buildingC.disabled,
 			buildingD.disabled,
-			1,
+			3,
 			new JsonConfigProp()
 		);
 		
@@ -155,6 +167,71 @@ public class BuildingEntry extends ConfigEntry {
 			}
 			
 		});
+
+		Set<Integer> dimentionsC = buildingC.dimentions.keySet();
+		Set<Integer> dimentionsD = buildingD.dimentions.keySet();
+		
+		String[] dimCStr = new String[dimentionsC.size()];
+		for (int i = 0; i < dimentionsC.size(); i++) {
+			dimCStr[i] = dimentionsC.toArray()[i].toString();
+		}
+		String[] dimDStr = new String[dimentionsD.size()];
+		for (int i = 0; i < dimentionsD.size(); i++) {
+			dimDStr[i] = dimentionsD.toArray()[i].toString();
+		}
+		
+		this.bDimentionList = this.createSubEntry(
+			"dimention",
+			dimCStr,
+			dimDStr,
+			4,
+			new JsonConfigProp().entryClass(BuildingEntryTab.class.getCanonicalName())
+		);
+		
+		Dimention dimentionC = this.getCurrentDimention();
+		Dimention dimentionD = this.getCurrentDefaultDimention();
+
+		dimentionC = dimentionC != null ? dimentionC : new Dimention();
+		dimentionD = dimentionD != null ? dimentionD : new Dimention();
+		
+		this.dSpawnRate = this.createSubEntry(
+			"spawnRate",
+			dimentionC.spawnRate,
+			dimentionD.spawnRate,
+			5,
+			new JsonConfigProp().type(ConfigProp.Type.SLIDER).minValue("0").maxValue("50")
+		);
+		this.dSpawnHeight = this.createSubEntry(
+			"spawnHeight",
+			dimentionC.spawnHeight,
+			dimentionD.spawnHeight,
+			6,
+			new JsonConfigProp().type(ConfigProp.Type.SLIDER).minValue("1").maxValue("256")
+		);
+
+		ArrayList<String> blocksC = new ArrayList<String>();
+		for (Block block : dimentionC.blocksSpawn) {
+			String name = RegisteredObjects.instance().getRegisterName(block);
+			if (name != null) {
+				blocksC.add(name);
+			}
+		}
+		ArrayList<String> blocksD = new ArrayList<String>();
+		for (Block block : dimentionD.blocksSpawn) {
+			String name = RegisteredObjects.instance().getRegisterName(block);
+			if (name != null) {
+				blocksD.add(name);
+			}
+		}
+		
+		this.dBlocksSpawn = this.createSubEntry(
+			"blocksSpawn",
+			blocksC.toArray(new String[0]),
+			blocksD.toArray(new String[0]),
+			7,
+			new JsonConfigProp().type(ConfigProp.Type.BLOCK).newValue(RegisteredObjects.instance().getRegisterName(Blocks.grass))
+		);
+		
 	}
 	
 	private boolean mutexChange () {
@@ -221,49 +298,37 @@ public class BuildingEntry extends ConfigEntry {
 	}
 	
 	@Override
-	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, Tessellator tessellator, int mouseX, int mouseY, boolean isSelected) {
+	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, Tessellator tessellator, int mouseX, int mouseY, boolean isSelected, boolean resetControlWidth) {
 		
 		this.parent.controlWidth -= 7;
 		
 		this.parent.labelX -= 10;
-		this.group.drawEntry(0, x, y     , listWidth, 22, tessellator, mouseX, mouseY, isSelected);
+		this.group.drawEntry(0, x, y     , listWidth, 22, tessellator, mouseX, mouseY, isSelected, false);
 		this.parent.labelX += 10;
 		
-		drawRec(this.parent.labelX - 10, y);
+		this.drawRec(this.parent.labelX-10, y + 20, this.parent.scrollBarX - this.parent.labelX + 7, 200, 0x0EFFFFFF);
 		
-		this.globalSpawnRate.drawEntry(1, x, y + 24, listWidth, 22, tessellator, mouseX, mouseY, isSelected);
-		this.building       .drawEntry(2, x, y + 46, listWidth, 22, tessellator, mouseX, mouseY, isSelected);
+		this.globalSpawnRate.drawEntry(1, x, y + 24, listWidth, 22, tessellator, mouseX, mouseY, isSelected, false);
+		this.building       .drawEntry(2, x, y + 46, listWidth, 22, tessellator, mouseX, mouseY, isSelected, false);
 		
-		drawRec(this.parent.labelX, y + 48);
+		this.drawRec(this.parent.labelX, y + 68, this.parent.scrollBarX - this.parent.labelX - 3, 152, 0x0EFFFFFF);
 		
 		this.parent.labelX += 10;
 		
-		this.bDisabled.drawEntry(2, x, y + 72, listWidth, 22, tessellator, mouseX, mouseY, isSelected);
+		this.bDisabled     .drawEntry(3, x, y + 72, listWidth, 22, tessellator, mouseX, mouseY, isSelected, false);
+		this.bDimentionList.drawEntry(4, x, y + 92, listWidth, 22, tessellator, mouseX, mouseY, isSelected, false);
 		
-		this.parent.labelX -= 10;
+		this.drawRec(this.parent.labelX, y + 111, this.parent.scrollBarX - this.parent.labelX - 3, 109, 0x0EFFFFFF);
+		
+		this.parent.labelX += 10;
+		
+		this.dSpawnRate  .drawEntry(4, x, y + 112, listWidth, 22, tessellator, mouseX, mouseY, isSelected, false);
+		this.dSpawnHeight.drawEntry(4, x, y + 132, listWidth, 22, tessellator, mouseX, mouseY, isSelected, false);
+		this.dBlocksSpawn.drawEntry(4, x, y + 152, listWidth, 22, tessellator, mouseX, mouseY, isSelected);
+		
+		this.resetControlWidth();
 		
 		this.parent.controlWidth += 3;
-	}
-
-	private void drawRec(int x, int y) {
-		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-		RenderHelper.disableStandardItemLighting();
-		GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glDisable(GL11.GL_DEPTH_TEST);
-		
-		this.parent.parent.drawGradientRect(
-			x, 
-			y + 20, 
-			this.parent.controlX + this.parent.controlWidth+3, 
-			y + 1000, 
-			0x0EFFFFFF, 
-			0x0EFFFFFF
-		);
-		
-		GL11.glEnable(GL11.GL_LIGHTING);
-		GL11.glEnable(GL11.GL_DEPTH_TEST);
-		RenderHelper.enableStandardItemLighting();
-		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 	}
 	
 	@Override
@@ -273,9 +338,11 @@ public class BuildingEntry extends ConfigEntry {
 		}
 		
 		int[] sizes = new int[] {
-			mc.fontRenderer.getStringWidth(this.tradIfExist("group"))-20,
-			mc.fontRenderer.getStringWidth(this.tradIfExist("globalSpawnRate"))-10,
-			mc.fontRenderer.getStringWidth(this.tradIfExist("building")),
+			mc.fontRenderer.getStringWidth(this.tradIfExist("group"))-10,
+			mc.fontRenderer.getStringWidth(this.tradIfExist("globalSpawnRate")),
+			mc.fontRenderer.getStringWidth(this.tradIfExist("building"))+10,
+			mc.fontRenderer.getStringWidth(this.tradIfExist("disabled"))+10,
+			mc.fontRenderer.getStringWidth(this.tradIfExist("dimention"))+10,
 		};
 		
 		int size = 0;
@@ -367,7 +434,7 @@ public class BuildingEntry extends ConfigEntry {
 			}
 			i++;
 		}
-		return null;
+		return "";
 	}
 	
 	public Building getCurrentBuilding () {
@@ -386,6 +453,24 @@ public class BuildingEntry extends ConfigEntry {
 				return building;
 			}
 			i++;
+		}
+		return null;
+	}
+	
+	public Dimention getCurrentDimention () {
+		return this.getCurrentDimention(this.getCurrentBuilding().dimentions.entrySet());
+	}
+	public Dimention getCurrentDefaultDimention () {
+		return this.getCurrentDimention(this.getCurrentDefaultBuilding().dimentions.entrySet());
+	}
+	public Dimention getCurrentOldDimention () {
+		return this.getCurrentDimention(this.getCurrentOldBuilding().dimentions.entrySet());
+	}
+	private Dimention getCurrentDimention (Set<Entry<Integer, Dimention>> collection) {
+		for (Entry<Integer, Dimention> entry : collection) {
+			if (entry.getKey().equals(this.currentDimention)) {
+				return entry.getValue();
+			}
 		}
 		return null;
 	}

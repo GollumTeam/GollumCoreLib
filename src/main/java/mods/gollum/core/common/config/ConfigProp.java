@@ -23,7 +23,7 @@ public @interface ConfigProp {
 	public abstract String info() default "";
 	
 	public abstract String group() default "";
-	
+
 	public abstract String newValue() default "";
 	
 	public abstract String[] validValues() default "";

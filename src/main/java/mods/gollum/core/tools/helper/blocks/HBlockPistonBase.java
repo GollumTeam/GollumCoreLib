@@ -45,6 +45,13 @@ public class HBlockPistonBase extends BlockPistonBase implements IBlockHelper {
 		return helper;
 	}
 	
+	/**
+	 * Enregistrement du block. Appelé a la fin du postInit
+	 */
+	public void register () {
+		helper.register();
+	}
+	
 	@Override
 	public String getRegisterName() {
 		return helper.getRegisterName();

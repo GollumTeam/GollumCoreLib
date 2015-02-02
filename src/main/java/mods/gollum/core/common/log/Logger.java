@@ -166,7 +166,7 @@ public class Logger {
 				break;
 			case LEVEL_MESSAGE:
 				if (Logger.level <= LEVEL_MESSAGE) {
-					log.trace (msg.toString());
+					log.info (msg.toString());
 				}
 				break;
 			case LEVEL_INFO:

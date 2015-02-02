@@ -26,6 +26,13 @@ public class HBlockPistonExtension extends BlockPistonExtension implements IBloc
 	}
 	
 	/**
+	 * Enregistrement du block. Appelé a la fin du postInit
+	 */
+	public void register () {
+		helper.register();
+	}
+	
+	/**
 	 * Nom d'enregistrement du mod
 	 */
 	@Override

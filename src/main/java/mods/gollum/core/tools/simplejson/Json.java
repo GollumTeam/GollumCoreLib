@@ -135,7 +135,7 @@ public class Json implements Cloneable {
 	}
 	
 	public Object  value ()      { return this.value;  }
-	public String  strValue()    { return (value() != null) ? value().toString () : "";    }
+	public String  strValue()    { return (value() != null) ? value().toString () : ""; }
 	public long    longValue()   { try { return Long.parseLong       (this.strValue()); } catch (Exception e) {} return 0; }
 	public int     intValue()    { return new Long     (longValue()) .intValue()  ; }
 	public short   shortValue()  { return new Integer  (intValue())  .shortValue(); }
@@ -180,12 +180,17 @@ public class Json implements Cloneable {
 		}
 		return false;
 	}
-
+	
 	public Json addComplement(IJsonComplement jsonComplement) {
 		this.complements.add(jsonComplement);
 		return this;
 	}
-
+	
+	public Json clearComplement() {
+		this.complements.clear();
+		return this;
+	}
+	
 	private Json addComplements(ArrayList<IJsonComplement> complements) {
 		this.complements.addAll(complements);
 		return this;

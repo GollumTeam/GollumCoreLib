@@ -38,9 +38,9 @@ public class BlockInfosKeyHandler {
 				if (block != null) {
 					int metadata = world.getBlockMetadata (x, y, z);
 					
-					player.addChatMessage(new ChatComponentText("Block : pos="+x+"x"+y+"x"+z+", metadata="+EnumChatFormatting.RED+metadata+EnumChatFormatting.WHITE+", rname="+RegisteredObjects.instance().getRegisterName(block)+", name="+block.getUnlocalizedName()));
+					player.addChatMessage(new ChatComponentText("Block : pos="+x+"x"+y+"x"+z+", id="+Block.getIdFromBlock(block)+", metadata="+EnumChatFormatting.RED+metadata+EnumChatFormatting.WHITE+", rname="+RegisteredObjects.instance().getRegisterName(block)+", name="+block.getUnlocalizedName()));
 				} else {
-					player.addChatMessage(new ChatComponentText("Block : pos="+x+"x"+y+"x"+z+" rname=minecraft:air"));
+					player.addChatMessage(new ChatComponentText("Block : pos="+x+"x"+y+"x"+z+", id=0, rname=minecraft:air"));
 				}
 			}
 		}

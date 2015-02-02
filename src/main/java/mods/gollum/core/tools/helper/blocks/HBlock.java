@@ -1,5 +1,6 @@
 package mods.gollum.core.tools.helper.blocks;
 
+import cpw.mods.fml.common.registry.GameRegistry;
 import mods.gollum.core.ModGollumCoreLib;
 import mods.gollum.core.tools.helper.BlockHelper;
 import mods.gollum.core.tools.helper.IBlockHelper;
@@ -24,6 +25,13 @@ public class HBlock extends Block implements IBlockHelper {
 	@Override
 	public BlockHelper getGollumHelper () {
 		return helper;
+	}
+	
+	/**
+	 * Enregistrement du block. Appelé a la fin du postInit
+	 */
+	public void register () {
+		helper.register();
 	}
 	
 	/**

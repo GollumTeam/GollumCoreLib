@@ -30,8 +30,8 @@ public class BuildingConfigType extends ConfigJsonType implements IConfigMerge {
 			
 			public static class Dimention {
 				
-				public Integer spawnRate = null;
-				public Integer spawnHeight = null;
+				public Integer spawnRate = 1;
+				public Integer spawnHeight = 64;
 				public ArrayList<Block> blocksSpawn = new ArrayList<Block>();
 				
 			}

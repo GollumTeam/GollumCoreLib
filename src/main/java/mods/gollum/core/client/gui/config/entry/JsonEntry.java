@@ -4,6 +4,8 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import com.google.gson.JsonObject;
+
 import cpw.mods.fml.client.config.HoverChecker;
 import mods.gollum.core.client.gui.config.GuiConfigEntries;
 import mods.gollum.core.client.gui.config.element.ConfigElement;
@@ -55,13 +57,13 @@ public class JsonEntry extends ConfigEntry implements IProxyEntry {
 				jsonDefault[i] = ((Json)valueDefault).child(i);
 			}
 			
-			TypedValueElement nConfigElement = new TypedValueElement(Json.class, this.getName(), json, jsonDefault, prop);
+			TypedValueElement nConfigElement = new TypedValueElement(JsonArray.class, this.getName(), json, jsonDefault, prop);
 			
 			this.proxy = new ArrayEntry(this.index, this.mc, this.parent, nConfigElement);
 		
 		} else if (((Json)value).isObject()) {
 			
-			TypedValueElement nConfigElement = new TypedValueElement(Json.class, this.getName(), value, valueDefault, prop);
+			TypedValueElement nConfigElement = new TypedValueElement(JsonObject.class, this.getName(), value, valueDefault, prop);
 			
 			this.proxy = new JsonObjectEntry(this.index, this.mc, this.parent, nConfigElement);
 		} else if (((Json)value).isString()) {
@@ -190,7 +192,17 @@ public class JsonEntry extends ConfigEntry implements IProxyEntry {
 			json = Json.create(Boolean.parseBoolean(value.toString()));
 		}
 		
+		this.setComplements(json);
+		
 		return json;
+	}
+
+	private void setComplements(Json json) {
+		Json oldValue = this.getOldValue();
+		json.clearComplement();
+		for (IJsonComplement complement : oldValue.getComplements()) {
+			json.addComplement(complement);
+		}
 	}
 	
 	@Override
@@ -223,9 +235,7 @@ public class JsonEntry extends ConfigEntry implements IProxyEntry {
 		}
 		
 		if (value instanceof Json) {
-			for (IJsonComplement complement : oldValue.getComplements()) {
-				((Json) value).addComplement(complement);
-			}
+			this.setComplements((Json) value);
 		}
 		
 		this.proxy.setValue (newValue);
@@ -244,9 +254,9 @@ public class JsonEntry extends ConfigEntry implements IProxyEntry {
 	}
 	
 	@Override
-	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, Tessellator tessellator, int mouseX, int mouseY, boolean isSelected) {
+	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, Tessellator tessellator, int mouseX, int mouseY, boolean isSelected, boolean resetControlWidth) {
 		if (this.proxy == null) return;
-		this.proxy.drawEntry (slotIndex, x, y, listWidth, slotHeight, tessellator, mouseX, mouseY, isSelected);
+		this.proxy.drawEntry (slotIndex, x, y, listWidth, slotHeight, tessellator, mouseX, mouseY, isSelected, resetControlWidth);
 	}
 	
 	@Override

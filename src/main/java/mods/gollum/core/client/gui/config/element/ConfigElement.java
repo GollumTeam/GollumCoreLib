@@ -22,6 +22,7 @@ import mods.gollum.core.client.gui.config.entry.ShortEntry;
 import mods.gollum.core.client.gui.config.entry.SliderEntry;
 import mods.gollum.core.client.gui.config.entry.StringEntry;
 import mods.gollum.core.common.config.ConfigProp;
+import mods.gollum.core.common.config.JsonConfigProp;
 import mods.gollum.core.common.config.type.ConfigJsonType;
 import mods.gollum.core.tools.simplejson.Json;
 
@@ -142,14 +143,14 @@ public abstract class ConfigElement {
 	
 	public Object newValue() {
 		
-		Class componentType = this.value.getClass().getComponentType();
-		Class clazz         = this.getEntryClass (this.value.getClass().getComponentType());
-		String newValue     = this.getConfigProp().newValue();
+		Class  componentType = this.value.getClass().getComponentType();
+		Class  clazz         = this.getEntryClass (componentType);
+		String newValue      = this.getConfigProp().newValue();
 		
 		if (clazz == StringEntry.class) {
 			return newValue;
 		} else
-		if (!newValue.equals("") && ListEntry.class.isAssignableFrom(clazz)) {
+		if (!newValue.equals("") && clazz != null && ListEntry.class.isAssignableFrom(clazz)) {
 			return newValue;
 		}  else
 		if (clazz == ConfigJsonTypeEntry.class) {
@@ -160,6 +161,10 @@ public abstract class ConfigElement {
 			}
 		} else
 		if (clazz == JsonEntry.class) {
+			
+			if (this.getConfigProp() instanceof JsonConfigProp) {
+				return ((JsonConfigProp) this.getConfigProp()).newJsonValue();
+			}
 			
 		} else
 		if (clazz == SliderEntry.class) {

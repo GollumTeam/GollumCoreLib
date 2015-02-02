@@ -23,7 +23,7 @@ public class ItemRegistry {
 	
 	public void registerAll () {
 		for (IItemHelper item : this.items) {
-			item.getGollumHelper ().register();
+			item.register();
 		}
 		this.items.clear();
 	}

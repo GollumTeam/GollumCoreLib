@@ -3,13 +3,14 @@ package mods.gollum.core.common.config;
 import java.lang.annotation.Annotation;
 
 import mods.gollum.core.tools.simplejson.IJsonComplement;
+import mods.gollum.core.tools.simplejson.Json;
 
 public class JsonConfigProp implements ConfigProp, IJsonComplement {
 
 	private boolean  show              = true;
 	private String   info              = "info";
 	private String   group             = "";
-	private String   newValue          = "";
+	private Object   newValue          = null;
 	private String[] validValues       = new String[0];
 	private String   minValue          = "";
 	private String   maxValue          = "";
@@ -26,7 +27,13 @@ public class JsonConfigProp implements ConfigProp, IJsonComplement {
 	@Override public boolean  show()              { return this.show; }
 	@Override public String   info()              { return this.info; };
 	@Override public String   group()             { return this.group; };
-	@Override public String   newValue()          { return this.newValue; };
+	@Override public String   newValue()          {
+		if (this.newValue instanceof Json) {
+			return ((Json) this.newValue).strValue();
+		}
+		return (this.newValue != null) ? this.newValue.toString() : "";
+	};
+	          public Json     newJsonValue()      { return (Json) this.newValue; };
 	@Override public String[] validValues()       { return this.validValues; };
 	@Override public String   minValue()          { return this.minValue; };
 	@Override public String   maxValue()          { return this.maxValue; };
@@ -42,7 +49,8 @@ public class JsonConfigProp implements ConfigProp, IJsonComplement {
 
 	public JsonConfigProp info              (String   info             ) { this.info              = info             ; return this; }
 	public JsonConfigProp group             (String   group            ) { this.group             = group            ; return this; }
-	public JsonConfigProp defaultValue      (String   newValue         ) { this.newValue          = newValue         ; return this; }
+	public JsonConfigProp newValue          (String   newValue         ) { this.newValue          = newValue         ; return this; }
+	public JsonConfigProp newValue          (Json     newValue         ) { this.newValue          = newValue         ; return this; }
 	public JsonConfigProp validValues       (String[] validValues      ) { this.validValues       = validValues      ; return this; }
 	public JsonConfigProp minValue          (String   minValue         ) { this.minValue          = minValue         ; return this; }
 	public JsonConfigProp maxValue          (String   maxValue         ) { this.maxValue          = maxValue         ; return this; }

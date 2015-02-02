@@ -27,13 +27,13 @@ public class StringEntry extends ConfigEntry {
 	}
 	
 	@Override
-	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, Tessellator tessellator, int mouseX, int mouseY, boolean isSelected) {
+	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, Tessellator tessellator, int mouseX, int mouseY, boolean isSelected, boolean resetControlWidth) {
 		
-		super.drawEntry(slotIndex, x, y, listWidth, slotHeight, tessellator, mouseX, mouseY, isSelected);
+		super.drawEntry(slotIndex, x, y, listWidth, slotHeight, tessellator, mouseX, mouseY, isSelected, resetControlWidth);
 		
 		if (this.first) {
 			this.first = false;
-			this.textFieldValue.setText(this.textFieldValue.getText());
+			this.textFieldValue.setCursorPositionZero();
 		}
 		
 		this.textFieldValue.xPosition = this.parent.controlX + 2;
@@ -75,7 +75,6 @@ public class StringEntry extends ConfigEntry {
 		super.getValue();
 		return textFieldValue.getText();
 	}
-
 	
 	@Override
 	public ConfigEntry setValue(Object value) {

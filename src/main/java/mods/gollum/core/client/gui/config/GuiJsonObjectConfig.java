@@ -113,6 +113,7 @@ public class GuiJsonObjectConfig extends GuiConfig {
 	public ConfigProp newConfigProp() {
 		return this.parentEntry.configElement.getConfigProp();
 	}
+	
 	@Override
 	public void saveValue() {
 		

@@ -34,20 +34,21 @@ public class ListInlineEntry extends ConfigEntry {
 		this.btnLabel.displayString = (String) this.getValue();
 	}
 	
-	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, Tessellator tessellator, int mouseX, int mouseY, boolean isSelected) {
+	@Override
+	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, Tessellator tessellator, int mouseX, int mouseY, boolean isSelected, boolean resetControlWidth) {
 		
-		super.drawEntry(slotIndex, x, y, listWidth, slotHeight, tessellator, mouseX, mouseY, isSelected);;
+		super.drawEntry(slotIndex, x, y, listWidth, slotHeight, tessellator, mouseX, mouseY, isSelected, resetControlWidth);
 		
 		this.btnPrev.xPosition = this.parent.controlX;
 		this.btnPrev.yPosition = y;
 		this.btnPrev.drawButton(this.mc, mouseX, mouseY);
 		
-		this.btnLabel.xPosition = this.parent.controlX + 22;
+		this.btnLabel.xPosition = this.parent.controlX + 20;
 		this.btnLabel.yPosition = y;
-		this.btnLabel.width = this.parent.controlWidth - 44;
+		this.btnLabel.width = this.parent.controlWidth - 40;
 		this.btnLabel.drawButton(this.mc, mouseX, mouseY);
 		
-		this.btnNext.xPosition = this.parent.controlX + this.parent.controlWidth - 18;
+		this.btnNext.xPosition = this.parent.controlX + this.parent.controlWidth - 17;
 		this.btnNext.yPosition = y;
 		this.btnNext.drawButton(this.mc, mouseX, mouseY);
 		
@@ -123,5 +124,5 @@ public class ListInlineEntry extends ConfigEntry {
 		this.btnNext.mouseReleased(x, y);
 		this.btnPrev.mouseReleased(x, y);
 	}
-
+	
 }
