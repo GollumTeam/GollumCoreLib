@@ -232,6 +232,12 @@ public class BuildingConfigType extends ConfigJsonType implements IConfigMerge {
 		
 		return false;
 	}
-
+	
+	@Override
+	public Object clone() {
+		BuildingConfigType cloned = (BuildingConfigType)super.clone();
+		cloned.modId = this.modId;
+		return cloned;
+	}
 	
 }

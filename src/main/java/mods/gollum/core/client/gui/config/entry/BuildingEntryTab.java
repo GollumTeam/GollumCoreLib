@@ -42,8 +42,8 @@ public class BuildingEntryTab extends ConfigEntry {
 	
 	private void init() {
 		
-		this.btUndoIsVisible  = false;
-		this.btResetIsVisible = false;
+//		this.btUndoIsVisible  = false;
+//		this.btResetIsVisible = false;
 		
 		this.btnPrev   = new GuiButtonExt(0, 0, 0, 10, 18, "<");
 		this.btnNext   = new GuiButtonExt(0, 0, 0, 10, 18, ">");
@@ -76,13 +76,22 @@ public class BuildingEntryTab extends ConfigEntry {
 			this.parent.controlWidth += this.btnAddDone.width;
 			
 		} else {
-			
+
+			this.btnPrev.enabled   = this.index != 0;
 			this.btnPrev.xPosition = this.parent.controlX;
 			this.btnPrev.yPosition = y;
 			this.btnPrev.drawButton(this.mc, mouseX, mouseY);
 			
 			int btX = 10;
+			int i = 0;
+			boolean moreLong = false;
+			
 			for (Entry<String, GuiButtonExt> entry : this.values.entrySet()){
+				
+				if (i < this.index) {
+					i++;
+					continue;
+				}
 				
 				GuiButtonExt bt = entry.getValue();
 				
@@ -95,14 +104,21 @@ public class BuildingEntryTab extends ConfigEntry {
 				bt.enabled = !bt.enabled;
 				
 				if (!bt.enabled) {
-					this.drawRec(bt.xPosition+1, y+15, 1, 3, 0xFF7E7E7E);
-					this.drawRec(bt.xPosition+2, y+15, bt.width-3, 3, 0xFF525252);
-					this.drawRec(bt.xPosition+bt.width-2, y+15, 1, 3, 0xFF3F3F3F);
+					this.drawRec(bt.xPosition+1         , y+15, 1         , 3, 0xFF7E7E7E);
+					this.drawRec(bt.xPosition+2         , y+15, bt.width-3, 3, 0xFF525252);
+					this.drawRec(bt.xPosition+bt.width-2, y+15, 1         , 3, 0xFF3F3F3F);
 				}
 				
 				btX += bt.width - 1;
+				
+				if (moreLong = this.parent.controlX + btX > this.parent.controlX + this.parent.controlWidth - 48) {
+					break;
+				}
+				
+				i++;
 			}
 			
+			this.btnNext.enabled   = moreLong;
 			this.btnNext.xPosition = this.parent.controlX + this.parent.controlWidth - 48;
 			this.btnNext.yPosition = y;
 			this.btnNext.drawButton(this.mc, mouseX, mouseY);
@@ -161,6 +177,7 @@ public class BuildingEntryTab extends ConfigEntry {
 	}
 	
 	public void setIndex0 () {
+		this.index = 0;
 		if (this.values.size() > 0) {
 			this.select (this.values.firstKey());
 			return;

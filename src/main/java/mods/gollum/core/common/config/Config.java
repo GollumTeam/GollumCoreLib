@@ -3,9 +3,7 @@ package mods.gollum.core.common.config;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
-import mods.gollum.core.common.config.type.ConfigJsonType;
 import mods.gollum.core.common.context.ModContext;
-import mods.gollum.core.tools.simplejson.Json;
 
 
 public abstract class Config implements Cloneable {
@@ -45,9 +43,25 @@ public abstract class Config implements Cloneable {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object clone() {
-		Config cloned = null;
+		Config cloned = this;
 		try {
 			cloned = (Config) super.clone();
+			
+			try {
+				for (Field f : cloned.getClass().getDeclaredFields()) {
+					f.setAccessible(true);
+					if (!Modifier.isStatic(f.getModifiers())) {
+						try {
+							Object oldField = f.get(this);
+							Object newField = oldField.getClass().getMethod("clone").invoke(oldField);
+							f.set(cloned, newField);
+						} catch (Exception e) {
+						}
+					}
+				}
+			} catch (Exception e) {
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

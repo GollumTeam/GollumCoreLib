@@ -415,6 +415,7 @@ public abstract class ConfigEntry implements IGuiListEntry {
 			subEntry.drawToolTip(mouseX, mouseY);
 		}
 	}
+	
 	protected ConfigEntry createSubEntry(String label, Object value, Object defaultValue, int index) {
 		return this.createSubEntry(label, value, defaultValue, index, new JsonConfigProp());
 	}

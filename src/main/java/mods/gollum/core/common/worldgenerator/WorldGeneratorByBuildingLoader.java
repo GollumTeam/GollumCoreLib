@@ -26,7 +26,6 @@ public class WorldGeneratorByBuildingLoader {
 
 	public void loadBuildingList () {
 		
-		
 		ModBuildingParser parser = new ModBuildingParser ();
 		
 		for (String modId : Loader.instance().getIndexedModList().keySet()) {
