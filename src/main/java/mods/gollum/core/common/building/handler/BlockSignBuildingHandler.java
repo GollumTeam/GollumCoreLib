@@ -36,7 +36,7 @@ public class BlockSignBuildingHandler extends BuildingBlockHandler {
 				e.printStackTrace();
 			}
 			
-			if (standing) { // TODO USE reflection class
+			if (standing) {
 				metadata = (metadata + 4*rotate) % 0xF;
 			} else {
 				if (orientation == Unity.ORIENTATION_NONE)  { metadata = (metadata & 0x8) + 0; } else 
