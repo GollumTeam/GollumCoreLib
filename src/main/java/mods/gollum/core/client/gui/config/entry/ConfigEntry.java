@@ -226,10 +226,6 @@ public abstract class ConfigEntry implements IGuiListEntry {
 	}
 	
 	protected void drawRec(int x, int y, int width, int height, int color1, int color2) {
-		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-		RenderHelper.disableStandardItemLighting();
-		GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		
 		this.parent.parent.drawGradientRect(
 			x, 
@@ -240,10 +236,6 @@ public abstract class ConfigEntry implements IGuiListEntry {
 			color2
 		);
 		
-		GL11.glEnable(GL11.GL_LIGHTING);
-		GL11.glEnable(GL11.GL_DEPTH_TEST);
-		RenderHelper.enableStandardItemLighting();
-		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 	}
 	
 	public Object getValue() {

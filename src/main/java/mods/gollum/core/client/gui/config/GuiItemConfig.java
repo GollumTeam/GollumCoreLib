@@ -22,6 +22,7 @@ public class GuiItemConfig extends GuiListConfig {
 		for (Entry<String, Item> entry : RegisteredObjects.instance().getItemsList().entrySet()) {
 			this.configElements.add(new ListElement (entry.getKey(), entry.getValue().getItemStackDisplayName(new ItemStack(entry.getValue())) + " ("+entry.getKey()+")" ));
 		}
+		this.filter();
  	}
 	
 	/**

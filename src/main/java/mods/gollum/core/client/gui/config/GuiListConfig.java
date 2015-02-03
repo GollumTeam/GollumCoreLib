@@ -16,6 +16,7 @@ public class GuiListConfig extends GuiConfig {
 	
 	protected ListEntry parentEntry;
 	protected GuiTextField search = null;
+	protected String searchValue = "";
 	public String currentValue;
 	
 	public GuiListConfig(ListEntry listEntry) {
@@ -33,22 +34,27 @@ public class GuiListConfig extends GuiConfig {
 	@Override
 	protected void initConfigElement() {
 		
-		String search = "";
-		
-		if (this.search != null) {
-			search = this.search.getText().trim();
-		}
-		
-		this.configElements = new ArrayList<ConfigElement>();
 		String[] values = this.parentEntry.configElement.getConfigProp().validValues();
 		
 		for (String value : values) {
-			if (search.equals("") || value.indexOf(search) != -1) {
-				this.configElements.add(new ListElement(value, value));
-			}
+			this.configElements.add(new ListElement(value, value));
 		}
+		
+		this.filter();
  	}
 	
+	protected void filter() {
+		for (ConfigElement complement : new ArrayList<ConfigElement>(this.configElements)) {
+			if (
+				!this.searchValue.equals("") &&
+				complement.getValue().toString().indexOf(searchValue) == -1 &&
+				((ListElement)complement).label.indexOf(searchValue) == -1
+			) {
+				this.configElements.remove(complement);
+			}
+		}
+	}
+
 	@Override
 	public void initGui() {
 		
@@ -75,8 +81,17 @@ public class GuiListConfig extends GuiConfig {
 			this.search.height = 16;
 			this.search.drawTextBox();
 			if (this.search.getText().equals("")) {
-				this.drawString(this.fontRendererObj, ModGollumCoreLib.i18n.trans("config.search"), this.search.xPosition + 4, this.search.yPosition + 4, 0x444444);
+				this.drawString(this.fontRendererObj, ModGollumCoreLib.i18n.trans("config.search"), this.search.xPosition + 9, this.search.yPosition + 4, 0x444444);
 			}
+			
+			if (!this.searchValue.equals(this.search.getText().trim())) {
+				this.searchValue = this.search.getText().trim();
+				this.configElements = new ArrayList<ConfigElement>();
+				this.entryList = null;
+				this.needsRefresh = true;
+				super.initGui();
+			}
+			
 		}
 	}
 	

@@ -13,6 +13,7 @@ import mods.gollum.core.client.gui.config.element.ListElement;
 import mods.gollum.core.common.config.ConfigProp;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.resources.I18n;
@@ -34,51 +35,29 @@ public class ListSlotEntry extends ConfigEntry {
 	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, Tessellator tessellator, int mouseX, int mouseY, boolean isSelected, boolean resetControlWidth) {
 		
 		int x1 = this.parent.controlX;
-		int x2 = this.parent.scrollBarX - 3;
 		int y1 = y + this.parent.getSlotHeight ();
-		int y2 = y;
+		int x2 = this.parent.scrollBarX - 1;
 		
 		if (this.itemStackIcon != null) {
 			try {
-				
-				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-				GL11.glDisable(GL11.GL_TEXTURE_2D);
-				tessellator.startDrawingQuads();
-				tessellator.setColorOpaque_I(0xDDDDDD);
-				tessellator.addVertexWithUV((double)x1-18, (double)(y+18), 0.0D, 0.0D, 1.0D);
-				tessellator.addVertexWithUV((double)x1-2, (double)(y+18), 0.0D, 1.0D, 1.0D);
-				tessellator.addVertexWithUV((double)x1-2, (double)(y+2), 0.0D, 1.0D, 0.0D);
-				tessellator.addVertexWithUV((double)x1-18, (double)(y+2), 0.0D, 0.0D, 0.0D);
-				tessellator.draw();
-				GL11.glEnable(GL11.GL_TEXTURE_2D);
-				
+
+				this.drawRec(x1-19, y+1, 18, 18, 0xFFCCCCCC);
+				this.drawRec(x1-18, y+2, 16, 16, 0xFF999999);
+				RenderHelper.enableGUIStandardItemLighting();
 				this.itemRender.renderItemIntoGUI(this.mc.fontRenderer, this.mc.getTextureManager(), this.itemStackIcon, x1-18, y+2);
+				
 			} catch (Exception e) {
 			}
 		}
 		
 		if (this.isSelected()) {
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			GL11.glDisable(GL11.GL_TEXTURE_2D);
-			tessellator.startDrawingQuads();
-			tessellator.setColorOpaque_I(0x808080);
-			tessellator.addVertexWithUV((double)x1, (double)(y1), 0.0D, 0.0D, 1.0D);
-			tessellator.addVertexWithUV((double)x2, (double)(y1), 0.0D, 1.0D, 1.0D);
-			tessellator.addVertexWithUV((double)x2, (double)(y2), 0.0D, 1.0D, 0.0D);
-			tessellator.addVertexWithUV((double)x1, (double)(y2), 0.0D, 0.0D, 0.0D);
-			tessellator.setColorOpaque_I(0x000000);
-			tessellator.addVertexWithUV((double)(x1 + 1), (double)(y1-1), 0.0D, 0.0D, 1.0D);
-			tessellator.addVertexWithUV((double)(x2 - 1), (double)(y1-1), 0.0D, 1.0D, 1.0D);
-			tessellator.addVertexWithUV((double)(x2 - 1), (double)(y2+1), 0.0D, 1.0D, 0.0D);
-			tessellator.addVertexWithUV((double)(x1 + 1), (double)(y2+1), 0.0D, 0.0D, 0.0D);
-			tessellator.draw();
-			GL11.glEnable(GL11.GL_TEXTURE_2D);
+			this.drawRec(x1  , y  , x2-x1  , this.parent.getSlotHeight ()  , 0xFF808080);
+			this.drawRec(x1+1, y+1, x2-x1-2, this.parent.getSlotHeight ()-2, 0xFF000000);
 		}
 		
 		String label = ((ListElement)this.configElement).label;
 		
-		while (!label.equals("") && this.mc.fontRenderer.getStringWidth(label) > x2 - x1) {
+		while (!label.equals("") && this.mc.fontRenderer.getStringWidth(label) > x2 - x1 - 7) {
 			label = label.substring(0, label.length() - 1);
 		}
 		

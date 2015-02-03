@@ -572,7 +572,7 @@ public class BuildingEntry extends ConfigEntry {
 	private void setCurrentDimention(String dim) {
 		this.currentDimention = null;
 		try {
-			if (!dim.equals("")) {
+			if (dim != null && !dim.equals("")) {
 				this.currentDimention = Integer.parseInt(dim);
 			}
 		} catch (Exception e) {

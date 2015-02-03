@@ -22,6 +22,7 @@ public class GuiBlockConfig extends GuiListConfig {
 		for (Entry<String, Block> entry : RegisteredObjects.instance().getBlocksList().entrySet()) {
 			this.configElements.add(new ListElement(entry.getKey(), entry.getValue().getLocalizedName() + " ("+entry.getKey()+")"));
 		}
+		this.filter();
  	}
 	
 	/**

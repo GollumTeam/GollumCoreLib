@@ -41,7 +41,7 @@ public abstract class GuiConfig extends GuiScreen {
 	private String title;
 	public String titleLine2 = null;
 	
-	private boolean needsRefresh = true;
+	protected boolean needsRefresh = true;
 	
 	public GuiConfig(GuiScreen parent) {
 		
@@ -100,6 +100,8 @@ public abstract class GuiConfig extends GuiScreen {
 		int undoWidth       = this.mc.fontRenderer.getStringWidth(" " + I18n.format("fml.configgui.tooltip.undoChanges")) + undoGlyphWidth + 20;
 		int resetWidth      = this.mc.fontRenderer.getStringWidth(" " + I18n.format("fml.configgui.tooltip.resetToDefault")) + resetGlyphWidth + 20;
 		int buttonWidthHalf = (doneWidth + 5 + undoWidth + 5 + resetWidth) / 2;
+		
+		this.buttonList.clear();
 		
 		this.buttonList.add(this.btDone  = new GuiButtonExt(
 			2000,
