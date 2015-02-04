@@ -147,7 +147,6 @@ public class BlockAutoReplace extends HBlockContainer implements Cloneable {
 	 * Enregistrement du item. Appelé a la fin du postInit
 	 */
 	public void register () {
-		this.setBlockName(getRegisterName ());
 		
 		ModContainer mc = Loader.instance().activeModContainer();
 		HashMap<String, Object> descriptor = new HashMap<String, Object>();
