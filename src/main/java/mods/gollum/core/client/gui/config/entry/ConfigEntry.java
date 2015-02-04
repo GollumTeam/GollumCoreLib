@@ -317,9 +317,13 @@ public abstract class ConfigEntry implements IGuiListEntry {
 	public ConfigEntry undoChanges() {
 		return this.setValue(this.configElement.getValue());
 	}
-	
+
 	public boolean requiresMcRestart() {
 		return configElement.getConfigProp().mcRestart();
+	}
+	
+	public boolean requiresWorldRestart() {
+		return configElement.getConfigProp().worldRestart();
 	}
 	
 	/**

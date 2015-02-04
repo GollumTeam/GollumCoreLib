@@ -18,6 +18,11 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ChatComponentText;
 import cpw.mods.fml.client.config.GuiMessageDialog;
+import cpw.mods.fml.client.event.ConfigChangedEvent;
+import cpw.mods.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
+import cpw.mods.fml.client.event.ConfigChangedEvent.PostConfigChangedEvent;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.eventhandler.Event.Result;
 
 public class GuiSubConfigConfig extends GuiConfig {
 	
@@ -44,16 +49,27 @@ public class GuiSubConfigConfig extends GuiConfig {
 	
 	@Override
 	public void displayParent() {
-		if (this.entryList.requiresMcRestart()) {
+		
+		boolean mcRestart = this.entryList.requiresMcRestart();
+		boolean wRestart  = this.entryList.requiresWorldRestart();
+		
+		ConfigChangedEvent event = new OnConfigChangedEvent(this.getMod().getModId(), this.subConfigEntry.getName(), wRestart, mcRestart);
+		FMLCommonHandler.instance().bus().post(event);
+		if (!event.getResult().equals(Result.DENY)) {
 			this.saveValue ();
-			this.mc.displayGuiScreen(new GuiMessageDialog(this.getParent(), "fml.configgui.gameRestartTitle", new ChatComponentText(I18n.format("fml.configgui.gameRestartRequired")), "fml.configgui.confirmRestartMessage"));
-		} else {
-			super.displayParent();
+			FMLCommonHandler.instance().bus().post(new PostConfigChangedEvent(this.getMod().getModId(), this.subConfigEntry.getName(), wRestart, mcRestart));
+			
+			if (mcRestart) {
+				this.mc.displayGuiScreen(new GuiMessageDialog(this.getParent(), "fml.configgui.gameRestartTitle", new ChatComponentText(I18n.format("fml.configgui.gameRestartRequired")), "fml.configgui.confirmRestartMessage"));
+				return;
+			}
 		}
+		super.displayParent();
 	}
 	
 	@Override
 	public void saveValue() {
+		
 		log.info("Save configuration "+this.getMod().getModId()+" > "+this.subConfigEntry.getLabel());
 		
 		for (Entry<String, Object> entry : this.entryList.getValues().entrySet()) {

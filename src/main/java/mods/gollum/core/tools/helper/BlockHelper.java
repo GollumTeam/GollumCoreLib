@@ -40,7 +40,7 @@ public class BlockHelper implements IBlockHelper {
 		this.registerName = registerName;
 		this.mod          = ModContext.instance().getCurrent();
 		
-		if (!vanillaRegister) BlockRegistry.instance().add((IBlockHelper) this.parent);
+		BlockRegistry.instance().add((IBlockHelper) this.parent);
 		
 	}
 
@@ -64,6 +64,9 @@ public class BlockHelper implements IBlockHelper {
 	 * Enregistrement du block. Appelé a la fin du postInit
 	 */
 	public void register () {
+		
+		if(vanillaRegister) return;
+		
 		this.parent.setBlockName(this.registerName);
 		GameRegistry.registerBlock (this.parent , this.itemBlockClass , this.getRegisterName ());
 	}

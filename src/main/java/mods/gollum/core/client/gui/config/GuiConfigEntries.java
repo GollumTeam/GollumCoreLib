@@ -237,10 +237,20 @@ public class GuiConfigEntries extends GuiListExtended {
 			entry.updateCursorCounter();
 		}
 	}
-	
+
 	public boolean requiresMcRestart() {
 		for (ConfigEntry entry : this.listEntries) {
 			if (entry.isChanged() && entry.requiresMcRestart()) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public boolean requiresWorldRestart() {
+		for (ConfigEntry entry : this.listEntries) {
+			if (entry.isChanged() && entry.requiresWorldRestart()) {
 				return true;
 			}
 		}
