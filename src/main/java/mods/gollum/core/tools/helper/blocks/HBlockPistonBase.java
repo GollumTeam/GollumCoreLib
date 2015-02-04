@@ -16,7 +16,6 @@ import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-@Deprecated
 public class HBlockPistonBase extends BlockPistonBase implements IBlockHelper {
 	
 	protected BlockHelper helper;
