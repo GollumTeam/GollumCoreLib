@@ -16,6 +16,7 @@ import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+@Deprecated
 public class HBlockPistonBase extends BlockPistonBase implements IBlockHelper {
 	
 	protected BlockHelper helper;
@@ -30,7 +31,7 @@ public class HBlockPistonBase extends BlockPistonBase implements IBlockHelper {
 	protected String suffixTop    = "_top";
 	protected String suffixSticky = "_sticky";
 	protected String suffixOpen   = "_open";
-	protected String suffixBotom  = "_bottom";
+	protected String suffixBottom  = "_bottom";
 	protected String suffixSide   = "_side";
 	
 	public HBlockPistonBase(String registerName, boolean isSticky)  {
@@ -98,9 +99,22 @@ public class HBlockPistonBase extends BlockPistonBase implements IBlockHelper {
 			return;
 		};
 		
+		this.registerBlockIconsTop   (iconRegister);
+		this.registerBlockIconsOpen  (iconRegister);
+		this.registerBlockIconsBottom(iconRegister);
+		this.registerBlockIconsSide  (iconRegister);
+		
+	}
+	protected void registerBlockIconsTop(IIconRegister iconRegister) {
 		this.iconTop    = helper.loadTexture(iconRegister, suffixTop + (this.isSticky ? suffixSticky : ""));
+	}
+	protected void registerBlockIconsOpen(IIconRegister iconRegister) {
 		this.iconOpen   = helper.loadTexture(iconRegister, suffixOpen);
-		this.iconBottom = helper.loadTexture(iconRegister, suffixBotom);
+	}
+	protected void registerBlockIconsBottom(IIconRegister iconRegister) {
+		this.iconBottom = helper.loadTexture(iconRegister, suffixBottom);
+	}
+	protected void registerBlockIconsSide(IIconRegister iconRegister) {
 		this.iconSide   = helper.loadTexture(iconRegister, suffixSide);
 	}
 	

@@ -5,6 +5,7 @@ import java.lang.annotation.Annotation;
 import mods.gollum.core.tools.simplejson.IJsonComplement;
 import mods.gollum.core.tools.simplejson.Json;
 
+@SuppressWarnings(value = { "all" })
 public class JsonConfigProp implements ConfigProp, IJsonComplement {
 
 	private boolean  show              = true;
