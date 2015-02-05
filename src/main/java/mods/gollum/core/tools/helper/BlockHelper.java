@@ -22,12 +22,12 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 public class BlockHelper implements IBlockHelper {
 	
-	// Pour chaque element natural. Utilise le fonctionnement naturel mais pas des helper
+	// Pour chaque element natural. Utilise le fonctionnement naturel mais pas des helpers
 	// Une sorte de config
 	// Par defaut le helper vas enregistrer le block, charger des texture perso ...
-	public boolean vanillaRegister = false;
-	public boolean vanillaTexture = false;
-	public boolean vanillaPicked = false;
+	public boolean vanillaRegister      = false;
+	public boolean vanillaTexture       = false;
+	public boolean vanillaPicked        = false;
 	public boolean vanillaDamageDropped = false;
 	
 	protected GollumMod mod;

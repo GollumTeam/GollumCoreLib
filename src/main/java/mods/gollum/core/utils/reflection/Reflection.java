@@ -9,6 +9,10 @@ import mods.gollum.core.common.reflection.WorldStub;
 
 public class Reflection {
 	
+	/////////////////////////
+	// Final method manage //
+	/////////////////////////
+	
 	public static void setFinalField(Field field, Object object, Object value) throws Exception {
 		field.setAccessible(true);
 		
@@ -25,6 +29,10 @@ public class Reflection {
 		setFinalField (field, null, value);
 	}
 	
+	/////////////////////////
+	// Method manage //
+	/////////////////////////
+	
 	public static void enableSynchronized(Method m) throws Exception {
 		
 		Field modifiersField = Method.class.getDeclaredField("modifiers");
@@ -32,6 +40,10 @@ public class Reflection {
 		
 		modifiersField.setInt(m, m.getModifiers() | Modifier.SYNCHRONIZED);
 	}
+
+	/////////////////////////////
+	// Obfuscate method manage //
+	/////////////////////////////
 	
 	public static Method getMethodByDesobfuscate (Class clazz, String name) {
 		
