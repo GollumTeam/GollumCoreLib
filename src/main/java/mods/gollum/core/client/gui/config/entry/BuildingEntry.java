@@ -248,7 +248,7 @@ public class BuildingEntry extends ConfigEntry {
 			dimentionC.spawnHeight,
 			dimentionD.spawnHeight,
 			6,
-			new JsonConfigProp().type(ConfigProp.Type.SLIDER).minValue("1").maxValue("256")
+			new JsonConfigProp().type(ConfigProp.Type.SLIDER).minValue("0").maxValue("255")
 		);
 		this.dSpawnHeight.addEvent(new Event() {
 			
