@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeSet;
 
+import mods.gollum.core.utils.math.Integer3d;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 
@@ -18,49 +19,38 @@ public class Building {
 	public static class Unity3D implements Comparable {
 		
 		private Building building;
-		private int x;
-		private int y;
-		private int z;
+		private Integer3d position3d;
 		public Unity unity;
 		
+		
 		public Unity3D (Building building, Unity unity, int x, int y, int z) {
-			this.building = building;
-			this.unity = unity;
-			this.x = x;
-			this.y = y;
-			this.z = z;
+			this(building, unity, new Integer3d(x, y, z));
+		}
+		
+		private Unity3D (Building building, Unity unity, Integer3d position3d) {
+			this.building   = building;
+			this.unity      = unity;
+			this.position3d = position3d;
 		}
 		
 		public int x(int rotate) {
-			return (rotate == ROTATED_90 || rotate == ROTATED_270) ? building.maxX(rotate) - z - 1 : x;
+			return (rotate == ROTATED_90 || rotate == ROTATED_270) ? building.maxX(rotate) - this.position3d.z - 1 : this.position3d.x;
 		}
 		public int y(int rotate) {
-			return y;
+			return this.position3d.y;
 		}
 		public int z(int rotate) {
-			return (rotate == ROTATED_90 || rotate == ROTATED_270) ? x : building.maxZ(rotate) - z - 1;
-		}
-		
-		public boolean equal (Object o) {
-
-			Unity3D unity3D = (Unity3D)o;
-			
-			return x == unity3D.x || y == unity3D.y || z == unity3D.z;
+			return (rotate == ROTATED_90 || rotate == ROTATED_270) ? this.position3d.x : building.maxZ(rotate) - this.position3d.z - 1;
 		}
 
 		@Override
+		public boolean equals (Object o) {
+			return this.position3d.equals(((Unity3D)o).position3d);
+		}
+		
+		@Override
 		public int compareTo(Object o) {
-			
-			Unity3D unity3D = (Unity3D)o;
-			
-			if (x < unity3D.x) { return -1; }
-			if (x > unity3D.x) { return  1; }
-			if (y < unity3D.y) { return -1; }
-			if (y > unity3D.y) { return  1; }
-			if (z < unity3D.z) { return -1; }
-			if (z > unity3D.z) { return  1; }
-			
-			return 0;
+			return this.position3d.compareTo(((Unity3D)o).position3d);
 		}
 		
 	}
