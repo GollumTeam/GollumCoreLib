@@ -11,8 +11,9 @@ import mods.gollum.core.tools.helper.IBlockHelper;
 import mods.gollum.core.tools.registered.RegisteredObjects;
 import mods.gollum.core.utils.reflection.Reflection;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockPistonBase;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.util.ObjectIntIdentityMap;
 import net.minecraft.util.RegistryNamespaced;
 import net.minecraft.util.RegistrySimple;
@@ -43,6 +44,39 @@ public class BlockRegistry {
 		this.blocks.clear();
 	}
 	
+	
+	public void overrideBlocksClassField (Block vanillaBlock, Block block) {
+		
+		try {
+			
+			Field field = null;
+			
+			for (Field f : Blocks.class.getFields()) {
+				f.setAccessible(true);
+				if (Modifier.isStatic(f.getModifiers()) && f.get(null) == vanillaBlock) {
+					field = f;
+				}
+			}
+			if (field == null) {
+				throw new Exception("This block \""+vanillaBlock.getClass().getName()+"\" not found in fields "+Blocks.class.getName());
+			}
+			
+			this.overrideBlocksClassField(field.getName(), block);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void overrideBlocksClassField (String fieldName, Block block) {
+		try {
+			Reflection.setFinalStatic(Blocks.class.getDeclaredField(fieldName), block);
+			log.message("Override Blocks field fieldName=\""+fieldName+"\" by "+block.getClass().getSimpleName());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
 	public void overrideRegistered (String registerName, Block block) {
 		
 		try {
@@ -53,42 +87,24 @@ public class BlockRegistry {
 				
 				log.message("Override registery block \""+registerName+"\" by "+block.getClass().getSimpleName());
 				
-				Field f1 = null;
-				for (Field f : Blocks.class.getDeclaredFields()) {
-					f.setAccessible(true);
-					
-					if (Modifier.isStatic(f.getModifiers()) && f.get(null) == vanillaBlock) {
-						f1 = f;
-						break;
-					}
-				}
-				if (f1 == null) {
-					throw new Exception(" 1 - Replace \""+registerName+"\" registery is KO because field not founs in minecraft.init.Blocks");
-				}
-
-//				Reflection.setFinalStatic(f1, vanillaBlock);
-				Reflection.setFinalStatic(f1, block);
-//				Reflection.setFinalStatic(Blocks.class.getDeclaredField("piston"), (BlockPistonBase)block);
-				log.debug (" 1 - Replace \""+registerName+"\" registery : Blocks.");
-				
 				FMLControlledNamespacedRegistry<Block> blockRegistry = GameData.getBlockRegistry();
-				Field f2 = RegistrySimple.class.getDeclaredField("registryObjects");
-				f2.setAccessible(true);
-				Map registryObjects = (Map)f2.get(blockRegistry);
-				registryObjects.put("minecraft:piston", block);
-				log.debug (" 2 - Replace \""+registerName+"\" registery : registryObjects");
+				Field f1 = RegistrySimple.class.getDeclaredField("registryObjects");
+				f1.setAccessible(true);
+				Map registryObjects = (Map)f1.get(blockRegistry);
+				registryObjects.put(registerName, block);
+				log.debug (" 1 - Replace \""+registerName+"\" registery : registryObjects");
 				
 
-				Field f3 = RegistryNamespaced.class.getDeclaredField("underlyingIntegerMap");
-				f3.setAccessible(true);
-				ObjectIntIdentityMap underlyingIntegerMap = (ObjectIntIdentityMap)f3.get(blockRegistry);
+				Field f2 = RegistryNamespaced.class.getDeclaredField("underlyingIntegerMap");
+				f2.setAccessible(true);
+				ObjectIntIdentityMap underlyingIntegerMap = (ObjectIntIdentityMap)f2.get(blockRegistry);
 				
 				int id = underlyingIntegerMap.func_148747_b(vanillaBlock);
 				if (id == -1) {
-					throw new Exception(" 3 - Replace \""+registerName+"\" registery is KO because id not found");
+					throw new Exception(" 2 - Replace \""+registerName+"\" registery is KO because id not found");
 				}
 				underlyingIntegerMap.func_148746_a(block, id);
-				log.debug (" 3 - Replace \""+registerName+"\" registery : underlyingIntegerMap id="+id);
+				log.debug (" 2 - Replace \""+registerName+"\" registery : underlyingIntegerMap id="+id);
 				
 			} else {
 				log.severe("The original block \""+registerName+"\" not found for replace registery.");
