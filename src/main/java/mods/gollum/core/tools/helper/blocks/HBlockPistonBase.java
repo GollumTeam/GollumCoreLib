@@ -25,8 +25,7 @@ public class HBlockPistonBase extends BlockPistonBase implements IBlockHelper {
 	protected IIcon iconTop;
 	protected IIcon iconOpen;
 	protected IIcon iconBottom;
-	protected IIcon iconSide;
-
+	
 	protected String suffixTop    = "_top";
 	protected String suffixSticky = "_sticky";
 	protected String suffixOpen   = "_open";
@@ -105,16 +104,16 @@ public class HBlockPistonBase extends BlockPistonBase implements IBlockHelper {
 		
 	}
 	protected void registerBlockIconsTop(IIconRegister iconRegister) {
-		this.iconTop    = helper.loadTexture(iconRegister, suffixTop + (this.isSticky ? suffixSticky : ""));
+		this.iconTop = helper.loadTexture(iconRegister, suffixTop + (this.isSticky ? suffixSticky : ""));
 	}
 	protected void registerBlockIconsOpen(IIconRegister iconRegister) {
-		this.iconOpen   = helper.loadTexture(iconRegister, suffixOpen);
+		this.iconOpen = helper.loadTexture(iconRegister, suffixOpen);
 	}
 	protected void registerBlockIconsBottom(IIconRegister iconRegister) {
 		this.iconBottom = helper.loadTexture(iconRegister, suffixBottom);
 	}
 	protected void registerBlockIconsSide(IIconRegister iconRegister) {
-		this.iconSide   = helper.loadTexture(iconRegister, suffixSide);
+		this.blockIcon = helper.loadTexture(iconRegister, suffixSide);
 	}
 	
 	/**
@@ -148,7 +147,7 @@ public class HBlockPistonBase extends BlockPistonBase implements IBlockHelper {
 			return this.iconTop;
 		}
 		
-		return side != Facing.oppositeSide[orientation] ? this.iconSide : this.iconBottom;
+		return side != Facing.oppositeSide[orientation] ? this.blockIcon : this.iconBottom;
 	}
 	
 	@Override
