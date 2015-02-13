@@ -69,7 +69,7 @@ public class ModGollumCoreLib extends GollumMod {
 	/**
 	 * Tab du mode creative
 	 */
-	public static GollumCreativeTabs tabBuildingStaff = new GollumCreativeTabs("BuildingStaff");;
+	public static GollumCreativeTabs tabBuildingStaff = new GollumCreativeTabs("BuildingStaff");
 	
 	@EventHandler public void handler(FMLInitializationEvent event)     { super.handler (event); }
 	@EventHandler public void handler(FMLPostInitializationEvent event) { super.handler (event); }
