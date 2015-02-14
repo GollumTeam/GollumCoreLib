@@ -50,4 +50,7 @@ public class Integer3d implements Cloneable, Comparable {
 		return 0;
 	}
 	
+	public String toString () {
+		return this.x + ", " + this.y + ", " + this.z;
+	}
 }
