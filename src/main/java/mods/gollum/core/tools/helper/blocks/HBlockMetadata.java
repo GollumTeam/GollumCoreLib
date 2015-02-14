@@ -42,6 +42,11 @@ public class HBlockMetadata extends HBlock implements IBlockMetadataHelper {
 	// Helper //
 	////////////
 	
+	@Override
+	public BlockMetadataHelper getGollumHelperMetadata () {
+		return (BlockMetadataHelper) this.helper;
+	}
+	
 	/**
 	 * returns a list of blocks with the same ID, but different meta (eg: wood
 	 * returns 4 blocks)

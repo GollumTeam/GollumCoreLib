@@ -43,6 +43,11 @@ public class BlockMetadataHelper extends BlockHelper implements IBlockMetadataHe
 			this.listSubEnabled.add (metadata);
 		}
 	}
+
+	@Override
+	public BlockMetadataHelper getGollumHelperMetadata () {
+		return this;
+	}
 	
 	/**
 	 * returns a list of blocks with the same ID, but different meta (eg: wood

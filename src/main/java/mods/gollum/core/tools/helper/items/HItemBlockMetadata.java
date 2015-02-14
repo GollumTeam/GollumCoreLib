@@ -3,6 +3,7 @@ package mods.gollum.core.tools.helper.items;
 import mods.gollum.core.tools.helper.BlockHelper;
 import mods.gollum.core.tools.helper.BlockMetadataHelper;
 import mods.gollum.core.tools.helper.IBlockHelper;
+import mods.gollum.core.tools.helper.IBlockMetadataHelper;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -24,8 +25,8 @@ public class HItemBlockMetadata extends ItemBlock {
 		int dammage = itemStack.getItemDamage();
 		
 		// Castage du helper
-		BlockHelper blockHelper = ((IBlockHelper) this.field_150939_a).getGollumHelper ();
-		BlockMetadataHelper blockMetadataHelper = (BlockMetadataHelper)blockHelper;
+		BlockHelper         blockHelper         = ((IBlockHelper)         this.field_150939_a).getGollumHelper ();
+		BlockMetadataHelper blockMetadataHelper = ((IBlockMetadataHelper) this.field_150939_a).getGollumHelperMetadata ();
 		
 		return this.getUnlocalizedName() + "." + blockMetadataHelper.getEnabledMetadata (dammage);
 	}

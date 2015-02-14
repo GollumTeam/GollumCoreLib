@@ -44,7 +44,7 @@ public class BlockHelper implements IBlockHelper {
 		this.parent.setBlockName(this.registerName);
 		
 	}
-
+	
 	@Override
 	public BlockHelper getGollumHelper() {
 		return this;

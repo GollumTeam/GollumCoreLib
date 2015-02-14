@@ -37,7 +37,8 @@ public abstract class HBlockContainerMetadata extends HBlockContainer implements
 		this.setItemBlockClass(HItemBlockMetadata.class);
 	}
 	
-	public BlockHelper getGollumHelperMetadata () {
+	@Override
+	public BlockMetadataHelper getGollumHelperMetadata () {
 		return helperMetadata;
 	}
 	

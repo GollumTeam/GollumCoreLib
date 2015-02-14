@@ -13,6 +13,8 @@ import net.minecraft.world.World;
 
 public interface IBlockMetadataHelper {
 	
+	public BlockMetadataHelper getGollumHelperMetadata();
+	
 	public void getSubBlocks(Item item, CreativeTabs ctabs, List list);
 	
 	/**
