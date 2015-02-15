@@ -16,7 +16,7 @@ public class ConfigBuildings extends Config {
 		group = "BuildingsList",
 		info = "Spawn rate group between [0-10]",
 		mcRestart = true,
-		entryClass = "mods.gollum.core.client.gui.config.entry.BuildingEntry"
+		entryClass = "com.gollum.core.client.gui.config.entry.BuildingEntry"
 	)
 	public BuildingConfigType buildings;
 	

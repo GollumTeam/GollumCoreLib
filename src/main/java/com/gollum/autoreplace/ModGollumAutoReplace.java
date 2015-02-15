@@ -29,7 +29,7 @@ public class ModGollumAutoReplace extends GollumMod {
 	@Instance(ModGollumAutoReplace.MODID)
 	public static ModGollumAutoReplace instance; 
 	
-	@SidedProxy(clientSide = "mods.gollum.autoreplace.client.ClientProxyGollumAutoReplace", serverSide = "mods.gollum.autoreplace.common.CommonProxyGollumAutoReplace")
+	@SidedProxy(clientSide = "com.gollum.autoreplace.client.ClientProxyGollumAutoReplace", serverSide = "com.gollum.autoreplace.common.CommonProxyGollumAutoReplace")
 	public static CommonProxyGollumAutoReplace proxy; 
 
 	/**

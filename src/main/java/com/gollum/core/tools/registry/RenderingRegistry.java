@@ -1,7 +1,8 @@
 package com.gollum.core.tools.registry;
 
-import mods.rbd.client.render.mobs.RenderFaery;
-import mods.rbd.common.entities.EntityFireFaery;
+import com.gollum.rbd.client.render.mobs.RenderFaery;
+import com.gollum.rbd.common.entities.EntityFireFaery;
+
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;

@@ -49,7 +49,7 @@ public class ModGollumCoreLib extends GollumMod {
 	@Instance(ModGollumCoreLib.MODID)
 	public static ModGollumCoreLib instance;
 	
-	@SidedProxy(clientSide = "mods.gollum.core.client.ClientProxyGolumCoreLib", serverSide = "mods.gollum.core.common.CommonProxyGolumCoreLib")
+	@SidedProxy(clientSide = "com.gollum.core.client.ClientProxyGolumCoreLib", serverSide = "com.gollum.core.common.CommonProxyGolumCoreLib")
 	public static CommonProxyGolumCoreLib proxy;
 	
 	/**
