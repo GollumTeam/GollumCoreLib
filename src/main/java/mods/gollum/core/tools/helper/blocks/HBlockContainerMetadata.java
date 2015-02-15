@@ -49,7 +49,7 @@ public abstract class HBlockContainerMetadata extends HBlockContainer implements
 	 */
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs ctabs, List list) {
-		((IBlockMetadataHelper) this.helperMetadata).getSubBlocks(item, ctabs, list);
+		this.helperMetadata.getSubBlocks(item, ctabs, list);
 	}
 	
 	/**
@@ -71,22 +71,22 @@ public abstract class HBlockContainerMetadata extends HBlockContainer implements
 	 */
 	@Override
 	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
-		return (helper.vanillaPicked) ? super.getPickBlock(target, world, x, y, z) : ((IBlockMetadataHelper) helper).getPickBlock(target, world, x, y, z);
+		return (helper.vanillaPicked) ? super.getPickBlock(target, world, x, y, z) : helperMetadata.getPickBlock(target, world, x, y, z);
 	}
 
 	/**
 	 * Liste des metadata enabled pour le subtype
 	 */
 	public TreeSet<Integer> listSubEnabled () {
-		return ((IBlockMetadataHelper) this.helperMetadata).listSubEnabled();
+		return this.helperMetadata.listSubEnabled();
 	}
 	
 	public int getEnabledMetadata (int dammage) {
-		return ((IBlockMetadataHelper) this.helperMetadata).getEnabledMetadata(dammage);
+		return this.helperMetadata.getEnabledMetadata(dammage);
 	}
 	
 	@Override
 	public IIcon getIcon(int side, int metadata) {
-		return (helper.vanillaTexture) ? super.getIcon(side, metadata) : ((IBlockMetadataHelper) this.helperMetadata).getIcon(side, metadata);
+		return (helper.vanillaTexture) ? super.getIcon(side, metadata) : this.helperMetadata.getIcon(side, metadata);
 	}
 }

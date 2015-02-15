@@ -8,7 +8,7 @@
 					"0": {
 						"spawnRate":0,
 						"spawnHeight":3,
-						"blocksSpawn":["minecraft:grass"]
+						"blocksSpawn":[]
 					}
 				}
 			}
