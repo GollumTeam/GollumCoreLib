@@ -8,6 +8,7 @@ import mods.gollum.core.tools.helper.BlockMetadataHelper;
 import mods.gollum.core.tools.helper.IBlockMetadataHelper;
 import mods.gollum.core.tools.helper.items.HItemBlockMetadata;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -83,6 +84,15 @@ public abstract class HBlockContainerMetadata extends HBlockContainer implements
 	
 	public int getEnabledMetadata (int dammage) {
 		return this.helperMetadata.getEnabledMetadata(dammage);
+	}
+
+	//////////////////////////
+	//Gestion des textures  //
+	//////////////////////////
+	
+	@Override
+	public void registerBlockIcons(IIconRegister iconRegister) {
+		if (helper.vanillaTexture) super.registerBlockIcons(iconRegister); else helperMetadata.registerBlockIcons(iconRegister);
 	}
 	
 	@Override
