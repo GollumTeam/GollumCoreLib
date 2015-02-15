@@ -381,6 +381,11 @@ public class BuildingEntry extends ConfigEntry {
 			}
 			
 			((ListInlineEntry)this.building).values = valuesBS;
+			if (valuesBS.length != 0) {
+				this.building.setValue(valuesBS[0]);
+			} else {
+				this.building.setValue(null);
+			}
 			
 			this.currentBuilding  = 0;
 			
