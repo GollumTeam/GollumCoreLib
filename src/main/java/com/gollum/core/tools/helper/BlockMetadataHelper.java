@@ -80,8 +80,10 @@ public class BlockMetadataHelper extends BlockHelper implements IBlockMetadataHe
 	 */
 	@Override
 	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
-		
-		ItemStack is = this.parent.getPickBlock(null, world, x, y, z);
+		return this.parent.getPickBlock(target, world, x, y, z);
+	}
+	
+	public ItemStack getPickBlock(ItemStack is, World world, int x, int y, int z) {
 		
 		if (is == null) {
 			return null;

@@ -76,7 +76,7 @@ public class HBlockMetadata extends HBlock implements IBlockMetadataHelper {
 	 */
 	@Override
 	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
-		return (helper.vanillaPicked) ? super.getPickBlock(target, world, x, y, z) : ((IBlockMetadataHelper) helper).getPickBlock(target, world, x, y, z);
+		return (helper.vanillaPicked) ? super.getPickBlock(target, world, x, y, z) : ((BlockMetadataHelper) helper).getPickBlock(super.getPickBlock(null, world, x, y, z), world, x, y, z);
 	}
 	
 	/**

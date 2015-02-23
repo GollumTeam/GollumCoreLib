@@ -60,7 +60,7 @@ public abstract class HBlockContainerMetadata extends HBlockContainer implements
 	 */
 	@Override
 	public int damageDropped(int damage) {
-		return (helper.vanillaDamageDropped) ? super.damageDropped(damage) : ((IBlockMetadataHelper) this.helper).damageDropped (damage);
+		return (helper.vanillaDamageDropped) ? super.damageDropped(damage) : this.helperMetadata.damageDropped (damage);
 	}
 	
 	/**
@@ -73,7 +73,7 @@ public abstract class HBlockContainerMetadata extends HBlockContainer implements
 	 */
 	@Override
 	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
-		return (helper.vanillaPicked) ? super.getPickBlock(target, world, x, y, z) : helperMetadata.getPickBlock(target, world, x, y, z);
+		return (helper.vanillaPicked) ? super.getPickBlock(target, world, x, y, z) : helperMetadata.getPickBlock(super.getPickBlock(null, world, x, y, z), world, x, y, z);
 	}
 
 	/**
