@@ -33,7 +33,7 @@
 		<link>
 			<name>vendors</name>
 			<type>2</type>
-			<location>ROOT_LOC/minecraft</location>
+			<location>ROOT_LOC/mcp/minecraft</location>
 		</link>
 	</linkedResources>
 	<filteredResources>
