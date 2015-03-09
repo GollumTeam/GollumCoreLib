@@ -1,1 +1,14 @@
 forge-1.6.4-9.11.1.965-prebuild.zip
+client
+docs
+forge.pyc
+install.cmd
+install.sh
+patches
+common
+fml
+forge.py
+forgeversion.properties
+install.py
+mcp
+README.md
