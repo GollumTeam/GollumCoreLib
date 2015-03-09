@@ -1,4 +1,5 @@
-eclipse/*
+eclipse/Minecraft/bin
+eclipse/.metadata
 
 forge-1.6.4-9.11.1.965-prebuild.zip
 client
