@@ -17,14 +17,15 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "2.0.0"
-group= "com.gollum.core" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "GollumCoreLib-"
 
 minecraft {
     version = "1.7.10-10.13.3.1395-1710ls"
     runDir = "eclipse"
 }
+
+version = "2.0.0-"+minecraft.version
+group= "com.gollum.core" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "GollumCoreLib"
 
 dependencies {
     // you may put jars on which you depend on in ./libs
