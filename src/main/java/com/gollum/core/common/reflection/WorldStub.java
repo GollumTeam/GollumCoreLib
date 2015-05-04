@@ -70,5 +70,10 @@ public class WorldStub extends World {
 	public Entity getEntityByID(int p_73045_1_) {
 		return null;
 	}
-
+	
+	@Override
+	@DeobfuscateName ("addBlockEvent")
+	public void addBlockEvent(int p_147452_1_, int p_147452_2_, int p_147452_3_, Block p_147452_4_, int p_147452_5_, int p_147452_6_) {
+	}
+	
 }
