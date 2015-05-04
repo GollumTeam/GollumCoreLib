@@ -1,5 +1,7 @@
 package com.gollum.core.common.items;
 
+import static com.gollum.core.ModGollumCoreLib.log;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
@@ -22,8 +24,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemBuilding extends HItem {
 	
-	long lastBuild = 0;
-	
 	private ArrayList<SubBuilding> lastBuildings = new ArrayList<Building.SubBuilding>();
 	
 	public SubBuilding getLastBuild(int i) {
@@ -38,6 +38,7 @@ public class ItemBuilding extends HItem {
 	public ItemBuilding(String registerName) {
 		super(registerName);
 		
+		this.setMaxStackSize(1);
 		this.setHasSubtypes(true);
 		
 	}
@@ -67,16 +68,13 @@ public class ItemBuilding extends HItem {
 	 * false if it don't. This is for ITEMS, not BLOCKS
 	 */
 	@Override
-	public boolean onItemUse(ItemStack itemStack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+	public boolean onItemUseFirst(ItemStack itemStack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+		
+		log.debug("debugggg"+world.isRemote);
 		
 		if (world.isRemote) {
-			return true;
+			return false;
 		}
-		
-		if (System.currentTimeMillis() - this.lastBuild < 1000) {
-			return true;
-		}
-		this.lastBuild = System.currentTimeMillis();
 		
 		int metadata = itemStack.getItemDamage();
 		ArrayList<Building> buildings = this.getNBuildingIndex(); 
@@ -91,12 +89,17 @@ public class ItemBuilding extends HItem {
 			subBuilding.z = z;
 			subBuilding.orientation= orientation;
 			
-			ModGollumCoreLib.log.debug("orientation = "+orientation);
+			log.debug("orientation = "+orientation);
 			this.lastBuildings.add(subBuilding);
 			builder.build(world, subBuilding);
 			
 		}
 		
+		return true;
+	}
+	
+	@Override
+	public boolean doesSneakBypassUse(World world, int x, int y, int z, EntityPlayer player) {
 		return true;
 	}
 	
