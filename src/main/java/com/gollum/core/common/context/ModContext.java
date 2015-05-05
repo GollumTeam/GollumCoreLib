@@ -2,6 +2,8 @@ package com.gollum.core.common.context;
 
 import com.gollum.core.common.mod.GollumMod;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+
 public class ModContext {
 	
 	private static ModContext instance = new ModContext();
@@ -18,7 +20,7 @@ public class ModContext {
 				throw new Exception("You should get a current mod by ModContext, but the context is not init. Your mod must extend of GollumMod. after in begin of preInit() and in end of postInit() you must call a super method ");
 			} catch (Exception e) {
 				e.printStackTrace();
-				System.exit(-1);
+				FMLCommonHandler.instance().exitJava(1, true);
 			}
 		}
 		return this.current;
@@ -30,7 +32,7 @@ public class ModContext {
 				throw new Exception("GollumMod.setCurrent() can't be null. use pop ()");
 			} catch (Exception e) {
 				e.printStackTrace();
-				System.exit(-1);
+				FMLCommonHandler.instance().exitJava(1, true);
 			}
 		}
 		this.current = current;
