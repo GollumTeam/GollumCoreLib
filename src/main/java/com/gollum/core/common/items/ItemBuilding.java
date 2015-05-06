@@ -70,8 +70,6 @@ public class ItemBuilding extends HItem {
 	@Override
 	public boolean onItemUseFirst(ItemStack itemStack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
 		
-		log.debug("debugggg"+world.isRemote);
-		
 		if (world.isRemote) {
 			return false;
 		}
