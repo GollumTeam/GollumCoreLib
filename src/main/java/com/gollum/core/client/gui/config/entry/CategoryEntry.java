@@ -15,11 +15,13 @@ import net.minecraft.client.Minecraft;
 public class CategoryEntry extends ButtonEntry {
 	
 	private Object value;
+	public boolean mustBeRestart = false;
 	
 	public CategoryEntry(int index, Minecraft mc, GuiConfigEntries parent, ConfigElement configElement) {
 		super(index, mc, parent, configElement);
 		
 		this.labelDisplay = false;
+		this.mustBeRestart = false;
 		this.updateValueButtonText(this.getLabel());
 		this.value = this.configElement.getValue();
 	}
@@ -43,18 +45,7 @@ public class CategoryEntry extends ButtonEntry {
 	
 	@Override
 	public boolean requiresMcRestart() {
-		
-		if (!this.isChanged()) {
-			return false;
-		}
-		
-		for (Entry<String, ConfigProp> entry : ((CategoryElement)this.configElement).getProps().entrySet()) {
-			if (entry.getValue().mcRestart()) {
-				return true;
-			}
-		}
-		return false;
-		
+		return this.mustBeRestart ;
 	}
 	
 	@Override
