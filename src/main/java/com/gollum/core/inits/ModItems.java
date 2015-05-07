@@ -12,9 +12,9 @@ public class ModItems {
 	public static ItemInfos    itemInfos;
 	
 	public static void init() {
-		ModItems.itemBuilding = new ItemBuilding("ItemBuilding");
-		ModItems.itemWrench   = new ItemWrench  ("ItemWrench");
-		ModItems.itemInfos    = new ItemInfos   ("ItemInfos");
+		ModItems.itemBuilding = new ItemBuilding("Building");
+		ModItems.itemWrench   = new ItemWrench  ("Wrench");
+		ModItems.itemInfos    = new ItemInfos   ("Infos");
 		
 		if (ModGollumCoreLib.config.devTools) {
 			ModItems.itemBuilding.setCreativeTab(ModCreativeTab.tabBuildingStaff);
