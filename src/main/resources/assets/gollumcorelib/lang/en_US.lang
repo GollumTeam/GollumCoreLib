@@ -1,3 +1,25 @@
 itemGroup.BuildingStaff=Building Staff
+itemGroup.GollumDevTools=Developer tools
+
+item.Infos.name=Magnifying glass infos
+item.Wrench.name=Wrench
 
 gollumcorelib.Building staff=Building staff
+
+gollumcorelib.config.level=Log message level
+gollumcorelib.config.numberLogFilesUse=Max number of log file
+gollumcorelib.config.devTools=Developer tools
+gollumcorelib.config.versionChecker=Display version checker message
+
+gollumcorelib.config.Configuration=Configuration
+gollumcorelib.config.BuildingsList=Buildings list
+gollumcorelib.config.General=General
+
+gollumcorelib.config.group=group
+gollumcorelib.config.globalSpawnRate=spawn rate of group
+gollumcorelib.config.building=building
+gollumcorelib.config.disabled=disabled
+gollumcorelib.config.dimention=dimention
+gollumcorelib.config.spawnRate=spawn rate in group
+gollumcorelib.config.spawnHeight=height detection of spawn
+gollumcorelib.config.blocksSpawn=blocks spawn detection
