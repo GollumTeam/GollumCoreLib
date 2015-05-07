@@ -1,5 +1,24 @@
 itemGroup.BuildingStaff=Baguettes de construction
+itemGroup.GollumDevTools=Outils de développement
 
-gollumcorelib.key.blockinfos=Afficher des informations sur le block
+item.Infos.name=Loupe d'infos
+item.Wrench.name=Clef anglaise
 
 gollumcorelib.Building staff=Baguette de construction
+
+gollumcorelib.config.level=Niveau des messages log
+gollumcorelib.config.numberLogFilesUse=Nombre de fichier log max
+gollumcorelib.config.devTools=Outils de développement
+gollumcorelib.config.versionChecker=Message du version checker
+
+gollumcorelib.config.Configuration=Configuration
+gollumcorelib.config.BuildingsList=Liste des batiments
+gollumcorelib.config.General=Générales
+
+gollumcorelib.config.group=groupe
+gollumcorelib.config.globalSpawnRate=taux de spawn du groupe
+gollumcorelib.config.building=batiment
+gollumcorelib.config.disabled=désactivé
+gollumcorelib.config.dimention=dimention
+gollumcorelib.config.spawnRate=taux de spawn le groupe
+gollumcorelib.config.blocksSpawn=blocs de detection de spawn

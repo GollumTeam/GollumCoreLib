@@ -40,7 +40,7 @@ public class GuiSubConfigConfig extends GuiConfig {
 		this.subConfigLoaded = ConfigLoader.getSubConfig(this.mod);
 		
 		for (ConfigLoad configLoad : this.subConfigLoaded) {
-			configElements.add(new CategoryElement(this.subConfigEntry.getLabel(), configLoad, configLoad.config.getFileName()));
+			configElements.add(new CategoryElement(this.subConfigEntry.getName(), configLoad, configLoad.config.getFileName()));
 		}
 	}
 	
