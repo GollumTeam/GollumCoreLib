@@ -3,6 +3,7 @@ package com.gollum.autoreplace;
 import com.gollum.autoreplace.common.CommonProxyGollumAutoReplace;
 import com.gollum.autoreplace.common.config.ConfigGollumAutoReplace;
 import com.gollum.autoreplace.inits.ModBlocks;
+import com.gollum.core.ModGollumCoreLib;
 import com.gollum.core.common.i18n.I18n;
 import com.gollum.core.common.log.Logger;
 import com.gollum.core.common.mod.GollumMod;
@@ -24,7 +25,7 @@ public class ModGollumAutoReplace extends GollumMod {
 	public final static String MODNAME = "Gollum Auto Replace";
 	public final static String VERSION = "1.0.0";
 	public final static String MINECRAFT_VERSION = "1.7.10";
-	public final static String DEPENDENCIES = "required-after:GollumCoreLib";
+	public final static String DEPENDENCIES = "required-after:"+ModGollumCoreLib.MODID;
 	
 	@Instance(ModGollumAutoReplace.MODID)
 	public static ModGollumAutoReplace instance; 
