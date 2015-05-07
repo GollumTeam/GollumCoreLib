@@ -117,6 +117,9 @@ public abstract class ConfigEntry implements IGuiListEntry {
 		} else {
 			this.toolTip.add (EnumChatFormatting.AQUA + I18n.format("fml.configgui.tooltip.default", defaultValueStr));
 		}
+		if (prop.mcRestart()) {
+			toolTip.add(EnumChatFormatting.RED + "[" + I18n.format("fml.configgui.gameRestartTitle") + "]");
+		}
 		
 		this.undoHoverChecker = new HoverChecker(this.btUndo, 800);
 		this.defaultHoverChecker = new HoverChecker(this.btReset, 800);

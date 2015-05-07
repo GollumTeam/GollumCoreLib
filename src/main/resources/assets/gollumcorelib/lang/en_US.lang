@@ -21,4 +21,5 @@ gollumcorelib.config.building=building
 gollumcorelib.config.disabled=disabled
 gollumcorelib.config.dimention=dimention
 gollumcorelib.config.spawnRate=spawn rate in group
+gollumcorelib.config.spawnHeight=height detection of spawn
 gollumcorelib.config.blocksSpawn=blocks spawn detection

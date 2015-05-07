@@ -35,7 +35,7 @@ public class ConfigGollumCoreLib extends Config {
 	//////////////////
 	
 	//CustomEntry
-	@ConfigProp(group="Test", dev=true, entryClass="mods.gollum.core.client.gui.config.entry.ModIdEntry")
+	@ConfigProp(group="Test", dev=true, entryClass="com.gollum.core.client.gui.config.entry.ModIdEntry")
 	public String customEntry = ModGollumCoreLib.MODID;
 			
 	// JsonObject

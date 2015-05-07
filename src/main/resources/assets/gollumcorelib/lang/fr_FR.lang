@@ -20,5 +20,7 @@ gollumcorelib.config.globalSpawnRate=taux de spawn du groupe
 gollumcorelib.config.building=batiment
 gollumcorelib.config.disabled=désactivé
 gollumcorelib.config.dimention=dimention
-gollumcorelib.config.spawnRate=taux de spawn le groupe
+gollumcorelib.config.spawnRate=taux de spawn dans le groupe
+gollumcorelib.config.spawnHeight=hauteur de detection du spawn
 gollumcorelib.config.blocksSpawn=blocs de detection de spawn
+
