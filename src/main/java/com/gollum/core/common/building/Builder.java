@@ -182,14 +182,30 @@ public class Builder {
 				this.placeBlock(dx, dz);
 				this.placeBlockRandom(dx, dz);
 				
-				log.info("End building width matrix : "+building.name+" "+initX+" "+initY+" "+initZ);
+				notifyBlocks(dx, dz);
 				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			
 		}
-
+		
+		private void notifyBlocks(int dx, int dz) {
+			for (Unity3D unity3D : building.unities) {
+				
+				Unity unity = unity3D.unity;
+				
+				// Position réél dans le monde du block
+				int finalX = initX + unity3D.x(rotate)*dx;
+				int finalY = initY + unity3D.y(rotate);
+				int finalZ = initZ + unity3D.z(rotate)*dz;
+				
+				synchronized (lock) {
+					world.markBlockForUpdate(finalX, finalY, finalZ);
+				}
+			}
+		}
+		
 		private void placeBlockStone(int dx, int dz) {
 			// Peut etre inutile
 			for (Unity3D unity3D : building.unities) {
@@ -232,11 +248,11 @@ public class Builder {
 						unity.block instanceof BlockSign
 					) {
 						afters.add(unity3D);
-						world.setBlockToAir (finalX, finalY, finalZ);
+						world.setBlock(finalX, finalY, finalZ, Blocks.air, 0, 0);
 					} else if (unity.block != null) {
 						world.setBlock(finalX, finalY, finalZ, unity.block, unity.metadata, 0);
 					} else {
-						world.setBlockToAir (finalX, finalY, finalZ);
+						world.setBlock(finalX, finalY, finalZ, Blocks.air, 0, 0);
 					}
 					
 					this.setOrientation (finalX, finalY, finalZ, this.rotateOrientation(rotate, unity.orientation));

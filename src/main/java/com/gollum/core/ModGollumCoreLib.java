@@ -154,6 +154,7 @@ public class ModGollumCoreLib extends GollumMod {
 			Reflection.enableSynchronized (Reflection.getObfuscateMethod(WorldServer.class, WorldStub.class, "getPendingBlockUpdates"         ));
 			Reflection.enableSynchronized (Reflection.getObfuscateMethod(WorldServer.class, WorldStub.class, "initialize"                     ));
 			Reflection.enableSynchronized (Reflection.getObfuscateMethod(WorldServer.class, WorldStub.class, "addBlockEvent"                  ));
+			Reflection.enableSynchronized (Reflection.getObfuscateMethod(WorldServer.class, WorldStub.class, "updateEntities"                 ));
 			
 		} catch (Exception e) {
 			e.printStackTrace();
