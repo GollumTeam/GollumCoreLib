@@ -30,6 +30,7 @@ public class HBlock extends Block implements IBlockHelper {
 	/**
 	 * Enregistrement du block. Appelé a la fin du postInit
 	 */
+	@Override
 	public void register () {
 		helper.register();
 	}

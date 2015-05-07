@@ -98,11 +98,6 @@ public class ItemBuilding extends HItem {
 	}
 	
 	@Override
-	public boolean doesSneakBypassUse(World world, int x, int y, int z, EntityPlayer player) {
-		return true;
-	}
-	
-	@Override
 	public String getUnlocalizedName(ItemStack itemStack) {
 		int metadata = itemStack.getItemDamage();
 		

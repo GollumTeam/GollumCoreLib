@@ -20,13 +20,13 @@ public class ItemWrench extends HItem {
 	
 	public ItemWrench(String registerName) {
 		super(registerName);
-
-		setFull3D();
-		setMaxStackSize(1);
-		shiftRotations.add(BlockLever.class);
-		shiftRotations.add(BlockButton.class);
-		shiftRotations.add(BlockChest.class);
-		setHarvestLevel("wrench", 0);
+		
+		this.setFull3D();
+		this.setMaxStackSize(1);
+		this.shiftRotations.add(BlockLever.class);
+		this.shiftRotations.add(BlockButton.class);
+		this.shiftRotations.add(BlockChest.class);
+		this.setHarvestLevel("wrench", 0);
 	}
 
 	private boolean isShiftRotation(Class<? extends Block> cls) {
@@ -57,8 +57,4 @@ public class ItemWrench extends HItem {
 		return false;
 	}
 	
-	@Override
-	public boolean doesSneakBypassUse(World world, int x, int y, int z, EntityPlayer player) {
-		return true;
-	}
 }

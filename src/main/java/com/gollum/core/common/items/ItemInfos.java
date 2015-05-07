@@ -20,7 +20,6 @@ public class ItemInfos extends HItem {
 		this.setMaxStackSize(1);
 	}
 
-
 	@Override
 	public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
 		
@@ -45,9 +44,5 @@ public class ItemInfos extends HItem {
 		
 		return true;
 	}
-	
-	@Override
-	public boolean doesSneakBypassUse(World world, int x, int y, int z, EntityPlayer player) {
-		return true;
-	}
+
 }

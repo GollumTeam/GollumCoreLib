@@ -25,10 +25,9 @@ public class BlockSignBuildingHandler extends BuildingBlockHandler {
 		
 		boolean standing = true;
 		try {
-			// TODO 1.6.4
 			// 1.7.10 field_149967_b
 			// 1.7.2  field_149967_b
-			// 1.6.4  
+			// 1.6.4  b
 			Field f = BlockSign.class.getDeclaredField("field_149967_b");
 			f.setAccessible(true);
 			standing = (Boolean) f.get(block);

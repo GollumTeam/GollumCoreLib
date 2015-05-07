@@ -24,7 +24,7 @@ public class WorldStub extends World {
 
 	// 1.7.10 : func_147446_b
 	// 1.7.2  : func_147446_b
-	// 1.6.4  :
+	// 1.6.4  : scheduleBlockUpdateFromLoad
 	@Override
 	@DeobfuscateName (value="func_147446_b")
 	public void func_147446_b(int p_147446_1_, int p_147446_2_, int p_147446_3_, Block p_147446_4_, int p_147446_5_, int p_147446_6_) {
@@ -55,7 +55,7 @@ public class WorldStub extends World {
 
 //	// 1.7.10 : func_152379_p ?
 //	// 1.7.2  : NOT EXIST
-//	// 1.6.4  :
+//	// 1.6.4  : NOT EXIST
 	@Override
 	@DeobfuscateName ("func_152379_p")
 	protected int func_152379_p() {

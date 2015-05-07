@@ -23,12 +23,12 @@ public class HItemMetadata extends HItem implements IItemMetadataHelper  {
 	// Contructeur //
 	/////////////////
 	
-	public HItemMetadata(int id, String registerName, int listSubBlock[]) {
+	public HItemMetadata(String registerName, int listSubBlock[]) {
 		super(registerName);
 		this.helper = new ItemMetadataHelper(this, registerName, listSubBlock);
 	}
 	
-	public HItemMetadata(int id, String registerName, int numberSubBlock) {
+	public HItemMetadata(String registerName, int numberSubBlock) {
 		super(registerName);
 		this.helper = new ItemMetadataHelper(this, registerName, numberSubBlock);
 	}

@@ -62,6 +62,7 @@ public class EntityTrackerProxy extends EntityTracker {
 		}
 	}
 
+	@Override
 	public void func_151248_b(Entity p_151248_1_, Packet p_151248_2_) {
 		synchronized (lock) {
 			entityTracker.func_151248_b(p_151248_1_, p_151248_2_);

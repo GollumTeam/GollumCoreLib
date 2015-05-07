@@ -40,6 +40,7 @@ public abstract class HBlockContainer extends BlockContainer implements IBlockHe
 	/**
 	 * Enregistrement du block. Appelé a la fin du postInit
 	 */
+	@Override
 	public void register () {
 		helper.register();
 	}

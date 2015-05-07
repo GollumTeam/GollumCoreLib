@@ -123,7 +123,7 @@ public abstract class GollumMod {
 			
 		}
 	}
-
+	
 	public I18n i18n() {
 		I18n i18n = null;
 		
@@ -219,7 +219,7 @@ public abstract class GollumMod {
 		ModContext.instance ().setCurrent(this);
 		
 		this.init(event);
-
+		
 		this.initGuiCommon ();
 		if (ModGollumCoreLib.proxy.isRemote()) {
 			this.initGuiClient();

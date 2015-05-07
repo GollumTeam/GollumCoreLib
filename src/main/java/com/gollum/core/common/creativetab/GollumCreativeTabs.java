@@ -6,12 +6,12 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-public class ToolsCreativeTabs extends CreativeTabs {
+public class GollumCreativeTabs extends CreativeTabs {
 	
 	private Block block = null;
 	private Item item = null;
 
-	public ToolsCreativeTabs(String label) {
+	public GollumCreativeTabs(String label) {
 		super(label);
 	}
 

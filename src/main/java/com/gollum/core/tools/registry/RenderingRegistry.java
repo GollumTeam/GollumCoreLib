@@ -12,7 +12,6 @@ public class RenderingRegistry {
 		return id;
 	}
 	
-
 	public static void registerEntityRenderingHandler(Class<? extends Entity> entityClass, Render renderer) {
 		cpw.mods.fml.client.registry.RenderingRegistry.registerEntityRenderingHandler(entityClass, renderer);
 	}

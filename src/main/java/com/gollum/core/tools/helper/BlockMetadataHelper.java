@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 
 public class BlockMetadataHelper extends BlockHelper implements IBlockMetadataHelper {
 
-	protected TreeSet<Integer>       listSubEnabled = new TreeSet<Integer>();
+	protected TreeSet<Integer>        listSubEnabled = new TreeSet<Integer>();
 	protected TreeMap<Integer, IIcon> blockIcons     = new TreeMap<Integer, IIcon>();
 	
 	public BlockMetadataHelper(Block parent, String registerName) {
