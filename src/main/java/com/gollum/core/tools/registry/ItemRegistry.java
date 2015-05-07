@@ -7,18 +7,18 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Map;
 
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.util.ObjectIntIdentityMap;
+import net.minecraft.util.RegistryNamespaced;
+import net.minecraft.util.RegistrySimple;
+
 import com.gollum.core.tools.helper.IItemHelper;
 import com.gollum.core.tools.registered.RegisteredObjects;
 import com.gollum.core.utils.reflection.Reflection;
 
 import cpw.mods.fml.common.registry.FMLControlledNamespacedRegistry;
 import cpw.mods.fml.common.registry.GameData;
-import net.minecraft.block.Block;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.util.ObjectIntIdentityMap;
-import net.minecraft.util.RegistryNamespaced;
-import net.minecraft.util.RegistrySimple;
 
 
 public class ItemRegistry {

@@ -10,10 +10,10 @@
 
 package argo.format;
 
-import argo.jdom.JsonRootNode;
-
 import java.io.IOException;
 import java.io.Writer;
+
+import argo.jdom.JsonRootNode;
 
 /**
  * A {@code JsonFormatter} provides operations to turn {@code JsonRootNode}s into valid JSON text.

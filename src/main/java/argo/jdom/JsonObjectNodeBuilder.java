@@ -10,9 +10,14 @@
 
 package argo.jdom;
 
-import java.util.*;
-
 import static argo.jdom.JsonFieldBuilder.aJsonFieldBuilder;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Builder for {@code JsonRootNode}s representing JSON objects.

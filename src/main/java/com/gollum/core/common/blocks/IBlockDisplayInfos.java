@@ -1,6 +1,5 @@
 package com.gollum.core.common.blocks;
 
-import net.minecraft.util.IChatComponent;
 import net.minecraft.world.World;
 
 public interface IBlockDisplayInfos {

@@ -10,11 +10,11 @@
 
 package argo.jdom;
 
+import static argo.jdom.JsonNodeType.NUMBER;
+
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
-
-import static argo.jdom.JsonNodeType.NUMBER;
 
 final class JsonNumberNode extends JsonNode implements JsonNodeBuilder<JsonNode> {
 

@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Random;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockLever;
 import net.minecraft.block.BlockMobSpawner;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityMobSpawner;

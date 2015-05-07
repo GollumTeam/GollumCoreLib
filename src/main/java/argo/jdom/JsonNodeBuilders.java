@@ -10,7 +10,9 @@
 
 package argo.jdom;
 
-import static argo.jdom.JsonConstants.*;
+import static argo.jdom.JsonConstants.FALSE;
+import static argo.jdom.JsonConstants.NULL;
+import static argo.jdom.JsonConstants.TRUE;
 
 /**
  * Builders for {@code JsonNode}s.

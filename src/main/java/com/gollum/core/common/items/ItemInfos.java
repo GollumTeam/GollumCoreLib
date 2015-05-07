@@ -1,21 +1,11 @@
 package com.gollum.core.common.items;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import static com.gollum.core.ModGollumCoreLib.log;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockButton;
-import net.minecraft.block.BlockChest;
-import net.minecraft.block.BlockLever;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 import com.gollum.core.common.blocks.IBlockDisplayInfos;
 import com.gollum.core.tools.helper.items.HItem;

@@ -2,17 +2,14 @@ package com.gollum.core.common.reflection;
 
 import java.util.List;
 
-import com.gollum.core.utils.reflection.DeobfuscateName;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.profiler.Profiler;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldSettings;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraft.world.storage.ISaveHandler;
+
+import com.gollum.core.utils.reflection.DeobfuscateName;
 
 public class WorldStub extends World {
 	

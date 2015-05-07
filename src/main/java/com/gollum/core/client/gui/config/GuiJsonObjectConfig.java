@@ -2,19 +2,13 @@ package com.gollum.core.client.gui.config;
 
 import static com.gollum.core.ModGollumCoreLib.log;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
-import java.util.TreeMap;
 
 import com.gollum.core.client.gui.config.element.TypedValueElement;
-import com.gollum.core.client.gui.config.entry.ArrayEntry;
 import com.gollum.core.client.gui.config.entry.JsonObjectEntry;
 import com.gollum.core.common.config.ConfigProp;
-import com.gollum.core.common.config.JsonConfigProp;
 import com.gollum.core.tools.simplejson.Json;
-import com.gollum.core.tools.simplejson.JsonArray;
 import com.gollum.core.tools.simplejson.JsonObject;
 
 public class GuiJsonObjectConfig extends GuiConfig {

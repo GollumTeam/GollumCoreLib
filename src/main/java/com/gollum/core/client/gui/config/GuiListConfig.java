@@ -1,17 +1,13 @@
 package com.gollum.core.client.gui.config;
 
-import static com.gollum.core.ModGollumCoreLib.log;
-
 import java.util.ArrayList;
 
-import org.lwjgl.input.Keyboard;
+import net.minecraft.client.gui.GuiTextField;
 
 import com.gollum.core.ModGollumCoreLib;
 import com.gollum.core.client.gui.config.element.ConfigElement;
 import com.gollum.core.client.gui.config.element.ListElement;
 import com.gollum.core.client.gui.config.entry.ListEntry;
-
-import net.minecraft.client.gui.GuiTextField;
 
 public class GuiListConfig extends GuiConfig {
 	

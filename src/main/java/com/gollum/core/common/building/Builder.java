@@ -1,16 +1,31 @@
 package com.gollum.core.common.building;
 
+import static com.gollum.core.ModGollumCoreLib.log;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Random;
-import java.util.concurrent.Semaphore;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockBed;
+import net.minecraft.block.BlockChest;
+import net.minecraft.block.BlockContainer;
+import net.minecraft.block.BlockDoor;
+import net.minecraft.block.BlockLever;
+import net.minecraft.block.BlockSign;
+import net.minecraft.block.BlockTorch;
+import net.minecraft.init.Blocks;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 
 import com.gollum.core.common.building.Building.GroupSubBuildings;
 import com.gollum.core.common.building.Building.ListSubBuildings;
 import com.gollum.core.common.building.Building.SubBuilding;
 import com.gollum.core.common.building.Building.Unity;
-import com.gollum.core.common.building.Building.Unity3D;
 import com.gollum.core.common.building.Building.Unity.Content;
+import com.gollum.core.common.building.Building.Unity3D;
 import com.gollum.core.common.building.handler.BlockCommandBlockBuildingHandler;
 import com.gollum.core.common.building.handler.BlockDirectionalBuildingHandler;
 import com.gollum.core.common.building.handler.BlockDirectionalWithBit1BuildingHandler;
@@ -24,24 +39,6 @@ import com.gollum.core.common.building.handler.BlockStairsBuildingHandler;
 import com.gollum.core.common.building.handler.BlockTrapDoorBuildingHandler;
 import com.gollum.core.common.building.handler.BuildingBlockHandler;
 import com.gollum.core.tools.registry.BuildingBlockRegistry;
-
-import static com.gollum.core.ModGollumCoreLib.log;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockBed;
-import net.minecraft.block.BlockChest;
-import net.minecraft.block.BlockContainer;
-import net.minecraft.block.BlockDoor;
-import net.minecraft.block.BlockLever;
-import net.minecraft.block.BlockSign;
-import net.minecraft.block.BlockTorch;
-import net.minecraft.client.Minecraft;
-import net.minecraft.init.Blocks;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 
 public class Builder {
 	

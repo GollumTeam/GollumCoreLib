@@ -1,10 +1,7 @@
 package com.gollum.core.common.config.type;
 
-import com.gollum.core.ModGollumCoreLib;
 import com.gollum.core.tools.simplejson.Json;
 import com.gollum.core.tools.simplejson.Json.EntryObject;
-
-import argo.jdom.JsonNodeFactories;
 
 public class MobCapacitiesConfigType extends ConfigJsonType {
 	

@@ -4,12 +4,6 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.EnumSet;
-
-import com.gollum.core.ModGollumCoreLib;
-import com.gollum.core.common.context.ModContext;
-import com.gollum.core.common.log.Logger;
-import com.gollum.core.common.mod.GollumMod;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,6 +13,12 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import argo.jdom.JdomParser;
 import argo.jdom.JsonRootNode;
+
+import com.gollum.core.ModGollumCoreLib;
+import com.gollum.core.common.context.ModContext;
+import com.gollum.core.common.log.Logger;
+import com.gollum.core.common.mod.GollumMod;
+
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

@@ -1,12 +1,11 @@
 package com.gollum.core.common.building.handler;
 
-import com.gollum.core.ModGollumCoreLib;
-import com.gollum.core.common.building.Building.Unity;
-
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockSign;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.world.World;
+
+import com.gollum.core.ModGollumCoreLib;
+import com.gollum.core.common.building.Building.Unity;
 
 public class BlockStairsBuildingHandler extends BuildingBlockHandler {
 	

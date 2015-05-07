@@ -1,6 +1,9 @@
 
 package com.gollum.core;
 
+import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.MinecraftForge;
+
 import com.gollum.core.common.CommonProxyGolumCoreLib;
 import com.gollum.core.common.command.CommandBuilding;
 import com.gollum.core.common.config.ConfigGollumCoreLib;
@@ -21,8 +24,6 @@ import com.gollum.core.tools.registry.BlockRegistry;
 import com.gollum.core.tools.registry.ItemRegistry;
 import com.gollum.core.utils.reflection.Reflection;
 
-import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;

@@ -1,19 +1,12 @@
 package com.gollum.core.client.gui.config.entry;
 
-import org.lwjgl.input.Keyboard;
-
-import com.gollum.core.client.gui.config.GuiConfigEntries;
-import com.gollum.core.client.gui.config.element.ConfigElement;
-import com.gollum.core.client.gui.config.element.TypedValueElement;
-import com.gollum.core.common.config.JsonConfigProp;
-
-import static com.gollum.core.ModGollumCoreLib.log;
-import cpw.mods.fml.client.config.GuiButtonExt;
-import cpw.mods.fml.client.config.GuiUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.resources.I18n;
+
+import com.gollum.core.client.gui.config.GuiConfigEntries;
+import com.gollum.core.client.gui.config.element.TypedValueElement;
+import com.gollum.core.common.config.JsonConfigProp;
 
 public class AddButtonEntry extends ConfigEntry {
 

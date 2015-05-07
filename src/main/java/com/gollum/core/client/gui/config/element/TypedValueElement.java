@@ -1,10 +1,6 @@
 package com.gollum.core.client.gui.config.element;
 
-import java.lang.reflect.Field;
-
-import com.gollum.core.client.gui.config.entry.ConfigEntry;
 import com.gollum.core.common.config.ConfigProp;
-import com.gollum.core.common.config.ConfigLoader.ConfigLoad;
 
 public class TypedValueElement extends ConfigElement {
 	

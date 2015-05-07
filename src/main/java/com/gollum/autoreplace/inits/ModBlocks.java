@@ -5,13 +5,8 @@ import static com.gollum.autoreplace.ModGollumAutoReplace.log;
 
 import java.util.TreeMap;
 
-import com.gollum.autoreplace.ModGollumAutoReplace;
 import com.gollum.autoreplace.common.blocks.BlockAutoReplace;
-import com.gollum.autoreplace.common.blocks.BlockAutoReplace.ReplaceBlock;
 import com.gollum.autoreplace.common.config.type.ReplaceBlockType;
-
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 
 public class ModBlocks {
 

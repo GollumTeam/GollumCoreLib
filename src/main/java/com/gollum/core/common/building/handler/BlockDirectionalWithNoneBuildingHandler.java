@@ -1,12 +1,12 @@
 package com.gollum.core.common.building.handler;
 
-import com.gollum.core.ModGollumCoreLib;
-import com.gollum.core.common.building.Building.Unity;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockButton;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.world.World;
+
+import com.gollum.core.ModGollumCoreLib;
+import com.gollum.core.common.building.Building.Unity;
 
 public class BlockDirectionalWithNoneBuildingHandler extends BuildingBlockHandler {
 	

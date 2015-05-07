@@ -10,12 +10,19 @@
 
 package argo.jdom;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.*;
-
 import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableList;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.AbstractList;
+import java.util.AbstractMap;
+import java.util.AbstractSet;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Factories for {@code JsonNode}s.

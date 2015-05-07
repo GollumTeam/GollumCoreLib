@@ -4,10 +4,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
-import com.gollum.core.common.reflection.WorldStub;
-
-import net.minecraft.world.WorldServer;
-
 public class Reflection {
 	
 	/////////////////////////

@@ -1,10 +1,10 @@
 package com.gollum.core.common.config.type;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
+
+import net.minecraft.block.Block;
 
 import com.gollum.core.ModGollumCoreLib;
 import com.gollum.core.common.config.IConfigMerge;
@@ -12,11 +12,9 @@ import com.gollum.core.common.config.type.BuildingConfigType.Group.Building;
 import com.gollum.core.common.config.type.BuildingConfigType.Group.Building.Dimention;
 import com.gollum.core.tools.registered.RegisteredObjects;
 import com.gollum.core.tools.simplejson.Json;
+import com.gollum.core.tools.simplejson.Json.EntryObject;
 import com.gollum.core.tools.simplejson.JsonArray;
 import com.gollum.core.tools.simplejson.JsonObject;
-import com.gollum.core.tools.simplejson.Json.EntryObject;
-
-import net.minecraft.block.Block;
 
 public class BuildingConfigType extends ConfigJsonType implements IConfigMerge {
 	

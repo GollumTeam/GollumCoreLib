@@ -1,16 +1,15 @@
 package com.gollum.core.common.building.handler;
 
-import com.gollum.core.ModGollumCoreLib;
-import com.gollum.core.common.building.Building.Unity;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
-import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.block.BlockFurnace;
 import net.minecraft.block.BlockLadder;
 import net.minecraft.block.BlockPistonBase;
 import net.minecraft.world.World;
+
+import com.gollum.core.ModGollumCoreLib;
+import com.gollum.core.common.building.Building.Unity;
 
 public class BlockDirectionalWithBit1BuildingHandler extends BuildingBlockHandler {
 

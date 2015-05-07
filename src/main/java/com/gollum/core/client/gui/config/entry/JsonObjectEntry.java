@@ -1,20 +1,12 @@
 package com.gollum.core.client.gui.config.entry;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Set;
-import java.util.Map.Entry;
+import net.minecraft.client.Minecraft;
 
-import com.gollum.core.client.gui.config.GuiArrayConfig;
 import com.gollum.core.client.gui.config.GuiConfigEntries;
 import com.gollum.core.client.gui.config.GuiJsonObjectConfig;
 import com.gollum.core.client.gui.config.element.ConfigElement;
-import com.gollum.core.tools.simplejson.IJsonComplement;
 import com.gollum.core.tools.simplejson.IJsonObjectDisplay;
-import com.gollum.core.tools.simplejson.Json;
 import com.gollum.core.tools.simplejson.JsonObject;
-
-import net.minecraft.client.Minecraft;
 
 public class JsonObjectEntry extends ButtonEntry {
 	

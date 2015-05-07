@@ -2,12 +2,12 @@ package com.gollum.core.tools.registry;
 
 import java.util.Hashtable;
 
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.inventory.Container;
+
 import com.gollum.core.ModGollumCoreLib;
 import com.gollum.core.client.gui.GCLGuiContainer;
 import com.gollum.core.common.container.GCLContainer;
-
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.inventory.Container;
 
 
 public class InventoryRegistry {

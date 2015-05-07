@@ -1,11 +1,5 @@
 package com.gollum.core.tools.helper.blocks;
 
-import javax.swing.Icon;
-
-import com.gollum.core.ModGollumCoreLib;
-import com.gollum.core.tools.helper.BlockHelper;
-import com.gollum.core.tools.helper.IBlockHelper;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPistonBase;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -14,6 +8,11 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.util.Facing;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+
+import com.gollum.core.ModGollumCoreLib;
+import com.gollum.core.tools.helper.BlockHelper;
+import com.gollum.core.tools.helper.IBlockHelper;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

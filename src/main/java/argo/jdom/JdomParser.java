@@ -10,13 +10,13 @@
 
 package argo.jdom;
 
-import argo.saj.InvalidSyntaxException;
-import argo.saj.JsonListener;
-import argo.saj.SajParser;
-
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+
+import argo.saj.InvalidSyntaxException;
+import argo.saj.JsonListener;
+import argo.saj.SajParser;
 
 /**
  * Parses a JSON character stream into a {@code JsonRootNode} object.  Instances of this class can safely be shared

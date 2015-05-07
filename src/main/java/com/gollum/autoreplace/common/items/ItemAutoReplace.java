@@ -1,21 +1,17 @@
 package com.gollum.autoreplace.common.items;
 
 import static com.gollum.autoreplace.ModGollumAutoReplace.log;
-
-import com.gollum.autoreplace.common.blocks.BlockAutoReplace;
-import com.gollum.autoreplace.common.blocks.BlockAutoReplace.ReplaceBlock;
-import com.gollum.core.tools.registered.RegisteredObjects;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+
+import com.gollum.autoreplace.common.blocks.BlockAutoReplace;
+import com.gollum.autoreplace.common.blocks.BlockAutoReplace.ReplaceBlock;
+import com.gollum.core.tools.registered.RegisteredObjects;
 
 public class ItemAutoReplace extends ItemBlock {
 	

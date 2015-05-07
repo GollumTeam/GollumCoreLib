@@ -10,12 +10,18 @@
 
 package argo.jdom;
 
-import argo.saj.JsonListener;
+import static argo.jdom.JsonFieldBuilder.aJsonFieldBuilder;
+import static argo.jdom.JsonNodeBuilders.aFalseBuilder;
+import static argo.jdom.JsonNodeBuilders.aNullBuilder;
+import static argo.jdom.JsonNodeBuilders.aNumberBuilder;
+import static argo.jdom.JsonNodeBuilders.aStringBuilder;
+import static argo.jdom.JsonNodeBuilders.aTrueBuilder;
+import static argo.jdom.JsonNodeBuilders.anArrayBuilder;
+import static argo.jdom.JsonNodeBuilders.anObjectBuilder;
 
 import java.util.Stack;
 
-import static argo.jdom.JsonFieldBuilder.aJsonFieldBuilder;
-import static argo.jdom.JsonNodeBuilders.*;
+import argo.saj.JsonListener;
 
 final class JsonListenerToJdomAdapter implements JsonListener {
 

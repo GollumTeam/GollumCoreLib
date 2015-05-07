@@ -10,11 +10,17 @@
 
 package argo.jdom;
 
+import static argo.jdom.JsonNodeType.ARRAY;
+import static argo.jdom.JsonNodeType.FALSE;
+import static argo.jdom.JsonNodeType.NULL;
+import static argo.jdom.JsonNodeType.NUMBER;
+import static argo.jdom.JsonNodeType.OBJECT;
+import static argo.jdom.JsonNodeType.STRING;
+import static argo.jdom.JsonNodeType.TRUE;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
-import static argo.jdom.JsonNodeType.*;
 
 /**
  * <p>Factories for {@code JsonNodeSelectors}.</p>

@@ -1,6 +1,5 @@
 package com.gollum.core.utils.math;
 
-import com.gollum.core.common.building.Building.Unity3D;
 
 
 public class Integer2d implements Cloneable, Comparable {

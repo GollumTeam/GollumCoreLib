@@ -1,8 +1,8 @@
 package com.gollum.core.common.i18n;
 
-import com.gollum.core.common.context.ModContext;
-
 import net.minecraft.util.StatCollector;
+
+import com.gollum.core.common.context.ModContext;
 
 public class I18n {
 	

@@ -3,15 +3,13 @@ package com.gollum.core.client.gui.config.entry;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
-import com.gollum.core.client.gui.config.GuiConfigEntries;
-import com.gollum.core.client.gui.config.element.ConfigElement;
-import com.gollum.core.client.gui.config.entry.ConfigEntry.Event;
-import com.gollum.core.common.config.ConfigProp;
-import com.gollum.core.common.config.JsonConfigProp;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.resources.I18n;
+
+import com.gollum.core.client.gui.config.GuiConfigEntries;
+import com.gollum.core.client.gui.config.element.ConfigElement;
+
 import cpw.mods.fml.client.config.GuiButtonExt;
 import cpw.mods.fml.client.config.GuiUtils;
 

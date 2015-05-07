@@ -1,13 +1,12 @@
 package com.gollum.core.client.gui.config.entry;
 
-import com.gollum.core.client.gui.config.GuiArrayConfig;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.Tessellator;
+
 import com.gollum.core.client.gui.config.GuiConfigEntries;
-import com.gollum.core.client.gui.config.GuiListConfig;
 import com.gollum.core.client.gui.config.element.ConfigElement;
 
 import cpw.mods.fml.client.config.GuiButtonExt;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.Tessellator;
 
 
 public class ListInlineEntry extends ConfigEntry {

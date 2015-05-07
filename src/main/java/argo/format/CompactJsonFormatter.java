@@ -10,15 +10,15 @@
 
 package argo.format;
 
-import argo.jdom.JsonField;
-import argo.jdom.JsonNode;
-import argo.jdom.JsonRootNode;
+import static argo.format.JsonEscapedString.escapeString;
 
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 
-import static argo.format.JsonEscapedString.escapeString;
+import argo.jdom.JsonField;
+import argo.jdom.JsonNode;
+import argo.jdom.JsonRootNode;
 
 /**
  * JsonFormat that formats JSON as compactly as possible.  Instances of this class can safely be shared between threads.

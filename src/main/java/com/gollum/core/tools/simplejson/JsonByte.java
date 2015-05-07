@@ -1,7 +1,5 @@
 package com.gollum.core.tools.simplejson;
 
-import com.gollum.core.tools.simplejson.Json.TYPE;
-
 import argo.jdom.JsonNodeBuilder;
 import argo.jdom.JsonNodeBuilders;
 

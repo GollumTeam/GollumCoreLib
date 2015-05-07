@@ -9,7 +9,6 @@ import com.gollum.core.common.log.Logger;
 import com.gollum.core.common.mod.GollumMod;
 import com.gollum.core.common.version.VersionChecker;
 
-import net.minecraft.init.Blocks;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;

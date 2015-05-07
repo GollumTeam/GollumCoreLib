@@ -2,15 +2,15 @@ package com.gollum.core.common.command;
 
 import java.util.List;
 
-import com.gollum.core.common.building.Builder;
-import com.gollum.core.common.building.BuildingParser;
-import com.gollum.core.common.building.Building.SubBuilding;
-import com.gollum.core.inits.ModItems;
-
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.util.ChatComponentText;
+
+import com.gollum.core.common.building.Builder;
+import com.gollum.core.common.building.Building.SubBuilding;
+import com.gollum.core.common.building.BuildingParser;
+import com.gollum.core.inits.ModItems;
 
 public class CommandBuilding extends CommandBase {
 

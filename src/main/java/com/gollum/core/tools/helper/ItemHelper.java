@@ -1,14 +1,15 @@
 package com.gollum.core.tools.helper;
 
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.item.Item;
+import net.minecraft.util.IIcon;
+
 import com.gollum.core.ModGollumCoreLib;
 import com.gollum.core.common.context.ModContext;
 import com.gollum.core.common.mod.GollumMod;
 import com.gollum.core.tools.helper.items.HItem;
 import com.gollum.core.tools.registry.ItemRegistry;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.item.Item;
-import net.minecraft.util.IIcon;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ItemHelper implements IItemHelper {

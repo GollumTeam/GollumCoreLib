@@ -7,14 +7,15 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.util.ChatComponentText;
+
 import com.gollum.core.client.gui.config.element.CategoryElement;
 import com.gollum.core.client.gui.config.entry.CategoryEntry;
 import com.gollum.core.common.config.ConfigLoader;
 import com.gollum.core.common.config.ConfigLoader.ConfigLoad;
 
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.ChatComponentText;
 import cpw.mods.fml.client.config.GuiMessageDialog;
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;

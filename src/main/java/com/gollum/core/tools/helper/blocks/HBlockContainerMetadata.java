@@ -3,11 +3,6 @@ package com.gollum.core.tools.helper.blocks;
 import java.util.List;
 import java.util.TreeSet;
 
-import com.gollum.core.tools.helper.BlockHelper;
-import com.gollum.core.tools.helper.BlockMetadataHelper;
-import com.gollum.core.tools.helper.IBlockMetadataHelper;
-import com.gollum.core.tools.helper.items.HItemBlockMetadata;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -16,6 +11,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+
+import com.gollum.core.tools.helper.BlockMetadataHelper;
+import com.gollum.core.tools.helper.IBlockMetadataHelper;
+import com.gollum.core.tools.helper.items.HItemBlockMetadata;
 
 public abstract class HBlockContainerMetadata extends HBlockContainer implements IBlockMetadataHelper {
 

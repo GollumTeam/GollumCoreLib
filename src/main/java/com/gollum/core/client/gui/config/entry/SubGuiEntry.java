@@ -1,13 +1,10 @@
 package com.gollum.core.client.gui.config.entry;
 
-import java.lang.reflect.InvocationTargetException;
-
-import com.gollum.core.client.gui.config.GuiConfigEntries;
-import com.gollum.core.client.gui.config.GuiValueConfig;
-import com.gollum.core.client.gui.config.element.ConfigElement;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+
+import com.gollum.core.client.gui.config.GuiConfigEntries;
+import com.gollum.core.client.gui.config.element.ConfigElement;
 
 public class SubGuiEntry extends ButtonEntry {
 

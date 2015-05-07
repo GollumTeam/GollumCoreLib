@@ -8,13 +8,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-import com.gollum.autoreplace.ModGollumAutoReplace;
-import com.gollum.autoreplace.common.items.ItemAutoReplace;
-import com.gollum.core.tools.helper.blocks.HBlockContainer;
-import com.gollum.core.tools.registered.RegisteredObjects;
-import com.gollum.core.utils.reflection.DeobfuscateName;
-import com.gollum.core.utils.reflection.Reflection;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.MapColor;
@@ -39,6 +32,14 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import com.gollum.autoreplace.ModGollumAutoReplace;
+import com.gollum.autoreplace.common.items.ItemAutoReplace;
+import com.gollum.core.tools.helper.blocks.HBlockContainer;
+import com.gollum.core.tools.registered.RegisteredObjects;
+import com.gollum.core.utils.reflection.DeobfuscateName;
+import com.gollum.core.utils.reflection.Reflection;
+
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.registry.GameRegistry;

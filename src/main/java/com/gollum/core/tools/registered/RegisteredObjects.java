@@ -1,12 +1,11 @@
 package com.gollum.core.tools.registered;
 
-import java.util.HashMap;
 import java.util.TreeMap;
-
-import com.gollum.core.ModGollumCoreLib;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+
+import com.gollum.core.ModGollumCoreLib;
 
 public class RegisteredObjects {
 	

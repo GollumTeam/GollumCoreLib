@@ -10,12 +10,12 @@
 
 package argo.format;
 
-import argo.jdom.JsonField;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import argo.jdom.JsonField;
 
 interface FieldSorter {
 

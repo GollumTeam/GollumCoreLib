@@ -10,10 +10,10 @@
 
 package argo.jdom;
 
+import static java.util.Collections.unmodifiableList;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import static java.util.Collections.unmodifiableList;
 
 final class JsonArray extends AbstractJsonArray {
 

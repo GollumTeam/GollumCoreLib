@@ -1,6 +1,5 @@
 package com.gollum.core.inits;
 
-import com.gollum.core.common.blocks.BlockProximitySpawn;
 import com.gollum.core.common.creativetab.StaffCreativeTabs;
 
 public class ModCreativeTab {

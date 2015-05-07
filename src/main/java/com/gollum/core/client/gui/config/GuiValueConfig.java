@@ -2,23 +2,13 @@ package com.gollum.core.client.gui.config;
 
 import static com.gollum.core.ModGollumCoreLib.log;
 
-import java.util.Map.Entry;
 import java.util.LinkedHashMap;
-
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.ChatComponentText;
+import java.util.Map.Entry;
 
 import com.gollum.core.client.gui.config.element.CategoryElement;
 import com.gollum.core.client.gui.config.element.TypedValueElement;
 import com.gollum.core.client.gui.config.entry.CategoryEntry;
 import com.gollum.core.common.config.ConfigProp;
-
-import cpw.mods.fml.client.config.GuiMessageDialog;
-import cpw.mods.fml.client.event.ConfigChangedEvent;
-import cpw.mods.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
-import cpw.mods.fml.client.event.ConfigChangedEvent.PostConfigChangedEvent;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.Event.Result;
 
 public class GuiValueConfig extends GuiConfig {
 

@@ -10,10 +10,10 @@
 
 package argo.jdom;
 
+import static argo.jdom.JsonNodeDoesNotMatchPathElementsException.jsonNodeDoesNotMatchPathElementsException;
+
 import java.util.List;
 import java.util.Map;
-
-import static argo.jdom.JsonNodeDoesNotMatchPathElementsException.jsonNodeDoesNotMatchPathElementsException;
 
 /**
  * <p>A node (leaf or otherwise) in a JSON document.</p>

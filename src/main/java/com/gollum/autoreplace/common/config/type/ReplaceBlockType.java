@@ -1,16 +1,16 @@
 package com.gollum.autoreplace.common.config.type;
 
+import net.minecraft.init.Blocks;
+
 import com.gollum.autoreplace.common.blocks.BlockAutoReplace.ReplaceBlock;
 import com.gollum.core.common.config.ConfigProp;
 import com.gollum.core.common.config.JsonConfigProp;
 import com.gollum.core.common.config.type.ConfigJsonType;
 import com.gollum.core.tools.simplejson.IJsonObjectDisplay;
 import com.gollum.core.tools.simplejson.Json;
+import com.gollum.core.tools.simplejson.Json.EntryObject;
 import com.gollum.core.tools.simplejson.JsonArray;
 import com.gollum.core.tools.simplejson.JsonObject;
-import com.gollum.core.tools.simplejson.Json.EntryObject;
-
-import net.minecraft.init.Blocks;
 
 public class ReplaceBlockType extends ConfigJsonType {
 	

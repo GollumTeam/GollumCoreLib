@@ -10,9 +10,13 @@
 
 package argo.jdom;
 
-import java.util.*;
-
 import static java.util.Collections.unmodifiableList;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 final class JsonObject extends AbstractJsonObject {
 

@@ -1,12 +1,12 @@
 package com.gollum.core.common.tileentities;
 
-import com.gollum.core.ModGollumCoreLib;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+
+import com.gollum.core.ModGollumCoreLib;
 
 public class TileEntityBlockProximitySpawn extends TileEntity {
 	

@@ -1,17 +1,13 @@
 package com.gollum.core.client.gui.config.element;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 
-import com.gollum.core.client.gui.config.entry.CategoryEntry;
 import com.gollum.core.client.gui.config.entry.ConfigEntry;
 import com.gollum.core.client.gui.config.entry.SubConfigEntry;
 import com.gollum.core.common.config.Config;
+import com.gollum.core.common.config.ConfigLoader.ConfigLoad;
 import com.gollum.core.common.config.ConfigProp;
 import com.gollum.core.common.config.JsonConfigProp;
-import com.gollum.core.common.config.ConfigLoader.ConfigLoad;
 
 public class SubConfigElement extends ConfigElement {
 	

@@ -1,10 +1,5 @@
 package com.gollum.core.tools.simplejson;
 
-import java.util.ArrayList;
-
-import com.gollum.core.tools.simplejson.Json.TYPE;
-
-import argo.jdom.JsonNode;
 import argo.jdom.JsonNodeBuilder;
 import argo.jdom.JsonNodeBuilders;
 
