@@ -15,8 +15,8 @@ public class HItemBlockMetadata extends ItemBlock {
 	
 	public HItemBlockMetadata(int id, Block block) {
 		super(id);
-		this.block = block;
 		this.setHasSubtypes(true);
+		this.block = block;
 	}
 	
 	/**

@@ -21,6 +21,7 @@ public class BlockMetadataHelper extends BlockHelper implements IBlockMetadataHe
 	public BlockMetadataHelper(Block parent, String registerName) {
 		super(parent, registerName);
 		
+		this.listSubEnabled.clear();
 		for (int metadata = 0; metadata < 16; metadata++) {
 			this.listSubEnabled.add (metadata);
 		}
@@ -29,6 +30,7 @@ public class BlockMetadataHelper extends BlockHelper implements IBlockMetadataHe
 	public BlockMetadataHelper(Block parent, String registerName, int listSubBlock[]) {
 		this (parent, registerName);
 		
+		this.listSubEnabled.clear();
 		for (int metadata : listSubBlock) {
 			this.listSubEnabled.add (metadata);
 		}
