@@ -9,6 +9,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.common.registry.GameRegistry.UniqueIdentifier;
 
 public class RegisteredObjects {
 	
@@ -555,7 +556,12 @@ public class RegisteredObjects {
 				}
 			}
 		}
-		return null;
+		
+		UniqueIdentifier identifier = GameRegistry.findUniqueIdentifierFor(block);
+		if (identifier == null) {
+			return null;
+		}
+		return identifier.modId+":"+identifier.name;
 	}
 	
 	public String getRegisterName (Item item) {
@@ -567,7 +573,12 @@ public class RegisteredObjects {
 				}
 			}
 		}
-		return null;
+		
+		UniqueIdentifier identifier = GameRegistry.findUniqueIdentifierFor(item);
+		if (identifier == null) {
+			return null;
+		}
+		return identifier.modId+":"+identifier.name;
 	}
 	
 }
