@@ -101,29 +101,6 @@ public abstract class GollumMod {
 		return ++this.mobId ;
 	}
 	
-	/**
-	 * Set gollum gui config
-	 */
-	protected void initGuiConfig() {
-		ModContainer container = this.getContainer();
-		if (container instanceof FMLModContainer) {
-			
-			// Set gollum gui config
-			try {
-				Field f = (container.getClass().getDeclaredField("descriptor"));
-				f.setAccessible(true);
-				Map<String, Object> descriptor = (Map<String, Object>)f.get(container);
-				if (!descriptor.containsKey("guiFactory")) {
-					descriptor.put ("guiFactory", ConfigModGuiFactory.class.getName());
-				}
-				
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-		}
-	}
-	
 	public I18n i18n() {
 		I18n i18n = null;
 		
@@ -150,11 +127,30 @@ public abstract class GollumMod {
 		return log;
 	}
 	
-	public void handler (FMLPreInitializationEvent event) {
-		
-		ModContext.instance ().setCurrent(this);
-		
-		// Creation du logger
+	/**
+	 * Set gollum gui config
+	 */
+	protected void initGuiConfig() {
+		ModContainer container = this.getContainer();
+		if (container instanceof FMLModContainer) {
+			
+			// Set gollum gui config
+			try {
+				Field f = (container.getClass().getDeclaredField("descriptor"));
+				f.setAccessible(true);
+				Map<String, Object> descriptor = (Map<String, Object>)f.get(container);
+				if (!descriptor.containsKey("guiFactory")) {
+					descriptor.put ("guiFactory", ConfigModGuiFactory.class.getName());
+				}
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+		}
+	}
+	
+	protected void initLog() {
 		try {
 			Field fieldLog = this.getClass().getDeclaredField("log");
 			if (fieldLog != null) {
@@ -168,8 +164,9 @@ public abstract class GollumMod {
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
-		
-		// Creation de l'i18n
+	}
+	
+	protected void initI18n() {
 		try {
 			Field fieldI18n = this.getClass().getDeclaredField("i18n");
 			if (fieldI18n != null) {
@@ -183,11 +180,9 @@ public abstract class GollumMod {
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
-		
-		// Set gollum gui config
-		initGuiConfig();
-		
-		// Creation de la config
+	}
+
+	protected void initConfig() {
 		try {
 			Field fieldConfig = this.getClass().getDeclaredField("config");
 			if (fieldConfig != null) {
@@ -205,6 +200,23 @@ public abstract class GollumMod {
 		} catch (InstantiationException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void handler (FMLPreInitializationEvent event) {
+		
+		ModContext.instance ().setCurrent(this);
+		
+		// Creation du logger
+		this.initLog();
+
+		// Creation de l'i18n
+		this.initI18n();
+		
+		// Set gollum gui config
+		this.initGuiConfig();
+		
+		// Creation de la config
+		this.initConfig();
 		
 		this.preInit(event);
 		

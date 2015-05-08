@@ -1,11 +1,11 @@
 package com.gollum.core.inits;
 
-import com.gollum.core.common.creativetab.StaffCreativeTabs;
+import com.gollum.core.common.creativetab.GollumCreativeTabs;
 
 public class ModCreativeTab {
 	
-	public static StaffCreativeTabs tabBuildingStaff = new StaffCreativeTabs("BuildingStaff");
-	public static StaffCreativeTabs tabDevTools      = new StaffCreativeTabs("GollumDevTools");
+	public static GollumCreativeTabs tabBuildingStaff = new GollumCreativeTabs("BuildingStaff");
+	public static GollumCreativeTabs tabDevTools      = new GollumCreativeTabs("GollumDevTools");
 	
 	public static void init() {
 		ModCreativeTab.tabBuildingStaff.setIcon(ModItems.itemBuilding);
