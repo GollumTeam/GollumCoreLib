@@ -91,7 +91,7 @@ public class BlockHelper implements IBlockHelper {
 	 * Libère les items de l'inventory
 	 */
 	@Override
-	public void breakBlockInventory(World world, int x, int y, int z, Block oldBlock) {
+	public void breakBlockInventory(World world, int x, int y, int z, int oldBlockId) {
 		
 		Random random = new Random();		
 		TileEntity te = world.getBlockTileEntity(x, y, z);
@@ -128,7 +128,7 @@ public class BlockHelper implements IBlockHelper {
 				}
 			}
 			
-			world.func_96440_m(x, y, z, oldBlock != null ? oldBlock.blockID : 0);
+			world.func_96440_m(x, y, z, oldBlockId);
 		}
 	}
 	

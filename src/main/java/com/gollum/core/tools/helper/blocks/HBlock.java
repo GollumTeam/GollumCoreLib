@@ -60,11 +60,12 @@ public class HBlock extends Block implements IBlockHelper {
 	}
 	
 	/**
-	 * Libère les items de l'inventory
+	 * TODO Inutile je croit - Useless i think
+	 * Libère les ite ms de l'inventory
 	 */
 	@Override
-	public void breakBlockInventory(World world, int x, int y, int z, Block oldBlodk) {
-		helper.breakBlockInventory(world, x, y, z, oldBlodk);
+	public void breakBlockInventory(World world, int x, int y, int z, int oldBlodkId) {
+		helper.breakBlockInventory(world, x, y, z, oldBlodkId);
 	}
 	
 	//////////////////////////

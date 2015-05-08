@@ -62,8 +62,8 @@ public class HBlockPistonExtension extends BlockPistonExtension implements IBloc
 	/**
 	 * Libère les items de l'inventory
 	 */
-	public void breakBlockInventory(World world, int x, int y, int z, Block oldBlock) {
-		helper.breakBlockInventory(world, x, y, z, oldBlock);
+	public void breakBlockInventory(World world, int x, int y, int z, int oldBlockId) {
+		helper.breakBlockInventory(world, x, y, z, oldBlockId);
 	}
 	
 	//////////////////////////

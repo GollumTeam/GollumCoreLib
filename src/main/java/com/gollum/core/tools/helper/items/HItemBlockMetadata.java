@@ -11,11 +11,11 @@ import com.gollum.core.tools.helper.IBlockMetadataHelper;
 
 public class HItemBlockMetadata extends ItemBlock {
 	
-	protected int blockID;
+	protected Block block;
 	
-	public HItemBlockMetadata(int id) {
+	public HItemBlockMetadata(int id, Block block) {
 		super(id);
-		this.blockID = id;
+		this.block = block;
 		this.setHasSubtypes(true);
 	}
 	
@@ -29,8 +29,8 @@ public class HItemBlockMetadata extends ItemBlock {
 		int dammage = itemStack.getItemDamage();
 		
 		// Castage du helper
-		BlockHelper         blockHelper         = ((IBlockHelper)         Block.blocksList[this.blockID]).getGollumHelper ();
-		BlockMetadataHelper blockMetadataHelper = ((IBlockMetadataHelper) Block.blocksList[this.blockID]).getGollumHelperMetadata ();
+		BlockHelper         blockHelper         = ((IBlockHelper)         this.block).getGollumHelper ();
+		BlockMetadataHelper blockMetadataHelper = ((IBlockMetadataHelper) this.block).getGollumHelperMetadata ();
 		
 		return this.getUnlocalizedName() + "." + blockMetadataHelper.getEnabledMetadata (dammage);
 	}

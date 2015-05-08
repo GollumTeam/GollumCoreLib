@@ -52,6 +52,6 @@ public interface IBlockHelper {
 	/**
 	 * Libère les items de l'inventory
 	 */
-	public void breakBlockInventory(World world, int x, int y, int z, Block oldBlock);
+	public void breakBlockInventory(World world, int x, int y, int z, int oldBlockId);
 
 }
