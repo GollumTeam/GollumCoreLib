@@ -53,8 +53,8 @@ public class HBlockMetadata extends HBlock implements IBlockMetadataHelper {
 	 * returns 4 blocks)
 	 */
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs ctabs, List list) {
-		((IBlockMetadataHelper) this.helper).getSubBlocks(item, ctabs, list);
+	public void getSubBlocks(int id, CreativeTabs ctabs, List list) {
+		((IBlockMetadataHelper) this.helper).getSubBlocks(id, ctabs, list);
 	}
 	
 	/**

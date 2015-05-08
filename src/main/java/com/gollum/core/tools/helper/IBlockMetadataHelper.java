@@ -15,7 +15,7 @@ public interface IBlockMetadataHelper {
 	
 	public BlockMetadataHelper getGollumHelperMetadata();
 	
-	public void getSubBlocks(Item item, CreativeTabs ctabs, List list);
+	public void getSubBlocks(int id, CreativeTabs ctabs, List list);
 	
 	/**
 	 * Determines the damage on the item the block drops. Used in cloth and

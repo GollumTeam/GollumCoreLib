@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 public class BlockMetadataHelper extends BlockHelper implements IBlockMetadataHelper {
 
 	protected TreeSet<Integer>       listSubEnabled = new TreeSet<Integer>();
-	protected TreeMap<Integer, Icon> blockIcons     = new TreeMap<Integer, Icon>();
+	public    TreeMap<Integer, Icon> blockIcons     = new TreeMap<Integer, Icon>();
 	
 	public BlockMetadataHelper(Block parent, String registerName) {
 		super(parent, registerName);
@@ -53,9 +53,9 @@ public class BlockMetadataHelper extends BlockHelper implements IBlockMetadataHe
 	 * returns 4 blocks)
 	 */
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs ctabs, List list) {
+	public void getSubBlocks(int id, CreativeTabs ctabs, List list) {
 		for (int metadata : this.listSubEnabled) {
-			list.add(new ItemStack(item, 1, metadata));
+			list.add(new ItemStack(id, 1, metadata));
 		}
 	}
 	

@@ -49,8 +49,8 @@ public abstract class HBlockContainerMetadata extends HBlockContainer implements
 	 * returns 4 blocks)
 	 */
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs ctabs, List list) {
-		this.helperMetadata.getSubBlocks(item, ctabs, list);
+	public void getSubBlocks(int id, CreativeTabs ctabs, List list) {
+		this.helperMetadata.getSubBlocks(id, ctabs, list);
 	}
 	
 	/**
