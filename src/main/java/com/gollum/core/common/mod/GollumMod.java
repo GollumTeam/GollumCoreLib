@@ -2,9 +2,9 @@ package com.gollum.core.common.mod;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.Map;
 
 import com.gollum.core.ModGollumCoreLib;
+import com.gollum.core.common.config.Config;
 import com.gollum.core.common.context.ModContext;
 import com.gollum.core.common.i18n.I18n;
 import com.gollum.core.common.log.Logger;
@@ -15,7 +15,6 @@ import com.gollum.core.tools.registry.GCLNetworkRegistry;
 import com.gollum.core.tools.registry.InventoryRegistry;
 import com.gollum.core.tools.registry.ItemRegistry;
 
-import cpw.mods.fml.common.FMLModContainer;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.ModContainer;
@@ -126,11 +125,7 @@ public abstract class GollumMod {
 		return log;
 	}
 	
-	public void handler (FMLPreInitializationEvent event) {
-		
-		ModContext.instance ().setCurrent(this);
-		
-		// Creation du logger
+	protected void initLog() {
 		try {
 			Field fieldLog = this.getClass().getDeclaredField("log");
 			if (fieldLog != null) {
@@ -144,8 +139,9 @@ public abstract class GollumMod {
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
-		
-		// Creation de l'i18n
+	}
+
+	protected void initI18n() {
 		try {
 			Field fieldI18n = this.getClass().getDeclaredField("i18n");
 			if (fieldI18n != null) {
@@ -159,6 +155,40 @@ public abstract class GollumMod {
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
+	}
+
+	protected void initConfig() {
+		try {
+			Field fieldConfig = this.getClass().getDeclaredField("config");
+			if (fieldConfig != null) {
+				fieldConfig.set(null, (fieldConfig.getType().newInstance()));
+				Config config = (Config) fieldConfig.get(null);
+				config.loadConfig();
+			}
+		} catch (NoSuchFieldException e) {
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void handler (FMLPreInitializationEvent event) {
+		
+		ModContext.instance ().setCurrent(this);
+		
+		// Creation du logger
+		this.initLog();
+
+		// Creation de l'i18n
+		this.initI18n();
+		
+		// Creation de la config
+		this.initConfig();
 		
 		this.preInit(event);
 		
