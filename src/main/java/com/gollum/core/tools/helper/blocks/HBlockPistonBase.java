@@ -20,7 +20,7 @@ public class HBlockPistonBase extends BlockPistonBase implements IBlockHelper {
 	
 	protected BlockHelper helper;
 	
-	protected boolean isSticky;
+	protected boolean isStickyPiston;
 	
 	protected IIcon iconTop;
 	protected IIcon iconOpen;
@@ -37,7 +37,7 @@ public class HBlockPistonBase extends BlockPistonBase implements IBlockHelper {
 		ModGollumCoreLib.log.info ("Create block registerName : " + registerName);
 		this.helper = new BlockHelper(this, registerName);
 		
-		this.isSticky = isSticky;
+		this.isStickyPiston = isSticky;
 	}
 	
 	public BlockHelper getGollumHelper () {
@@ -104,7 +104,7 @@ public class HBlockPistonBase extends BlockPistonBase implements IBlockHelper {
 		
 	}
 	protected void registerBlockIconsTop(IIconRegister iconRegister) {
-		this.iconTop = helper.loadTexture(iconRegister, suffixTop + (this.isSticky ? suffixSticky : ""));
+		this.iconTop = helper.loadTexture(iconRegister, suffixTop + (this.isStickyPiston ? suffixSticky : ""));
 	}
 	protected void registerBlockIconsOpen(IIconRegister iconRegister) {
 		this.iconOpen = helper.loadTexture(iconRegister, suffixOpen);
