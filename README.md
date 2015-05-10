@@ -17,7 +17,9 @@ It's library for Minecraft Mod. Add functionalities :
  
  
 For Install :
-  
- - ./gradlew setupDecompWorkspace
- - ./gradlew eclipse
- - ./gradlew build
+
+<pre>
+./gradlew setupDecompWorkspace
+./gradlew eclipse
+./gradlew build
+</pre>
