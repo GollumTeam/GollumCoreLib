@@ -6,6 +6,11 @@
 				"disabled": true,
 				"dimentions": {
 				}
+			},
+			"test-stone": {
+				"disabled": true,
+				"dimentions": {
+				}
 			}
 		}
 	}
