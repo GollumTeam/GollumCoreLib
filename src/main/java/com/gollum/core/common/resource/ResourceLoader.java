@@ -3,8 +3,16 @@ package com.gollum.core.common.resource;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.FileResourcePack;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ResourceLocation;
 
 import com.gollum.core.ModGollumCoreLib;
 
@@ -13,24 +21,25 @@ import cpw.mods.fml.common.ModContainer;
 
 public class ResourceLoader {
 	
+	private static ConcurrentHashMap<String, FileResourcePack> resourcePachs = new ConcurrentHashMap<String, FileResourcePack>();
 	
 	/**
 	 * Renvoie le flux de fichier depuis le jar (depuis le système de fichier en mode DEV)
 	 * @param path
 	 * @return
-	 * @throws FileNotFoundException
+	 * @throws IOException 
 	 */
-	public InputStream asset(String assetPath, String modId) throws FileNotFoundException {
-		return this.get ("assets/"+modId.toLowerCase()+"/"+assetPath, modId);
+	public InputStream asset(String assetPath, String modId) throws IOException {
+		return this.get (assetPath, modId);
 	}
 
 	/**
 	 * Renvoie le flux de fichier depuis le jar (depuis le système de fichier en mode DEV)
 	 * @param path
 	 * @return
-	 * @throws FileNotFoundException
+	 * @throws IOException 
 	 */
-	public InputStream get(String path, String modId) throws FileNotFoundException {
+	protected InputStream get(String path, String modId) throws IOException {
 		
 		InputStream is = null;
 		
@@ -43,17 +52,19 @@ public class ResourceLoader {
 			
 			if (modSource.isDirectory()) {
 				
-				ModGollumCoreLib.log.debug ("Read in directory '" + path + "'.");
+				ModGollumCoreLib.log.debug ("Read in directory 'assets/"+modId.toLowerCase()+"/"+path + "'.");
 				
-				File file = new File (modSource, path);
+				File file = new File (modSource, "assets/"+modId.toLowerCase()+"/"+path);
 				if (file.exists()) {
 					is = new FileInputStream (file);
 				}
 			} else if (modContainer.getMod() != null) {
 				
 				ModGollumCoreLib.log.debug ("Read in jar file '" + path + "'.");
+				ModGollumCoreLib.log.debug ("Read in jar file '" + modId.toLowerCase()+":"+path + "'.");
+				ResourceLocation location = new ResourceLocation(modId.toLowerCase()+":"+path);
 				
-				is = modContainer.getMod().getClass().getResourceAsStream(path);
+				is = this.getResourcePack(modSource).getInputStream(location);
 				
 			}
 		}
@@ -62,10 +73,19 @@ public class ResourceLoader {
 	}
 	
 	public boolean assetExist(String assetPath, String modId) {
-		return this.exist ("assets/"+modId.toLowerCase()+"/"+assetPath, modId);
+		return this.exist (assetPath, modId);
 	}
 	
-	public boolean exist (String path, String modId) {
+	protected FileResourcePack getResourcePack (File file) {
+		
+		if (!resourcePachs.containsKey(file.getPath())) {
+			resourcePachs.put(file.getPath(), new FileResourcePack (file));
+		}
+		
+		return resourcePachs.get(file.getPath());
+	}
+	
+	protected boolean exist (String path, String modId) {
 		
 		boolean rtn = false;
 		
@@ -79,11 +99,15 @@ public class ResourceLoader {
 				File modSource = modContainer.getSource();
 				
 				if (modSource.isDirectory()) {
-					rtn = new File(modSource, path).exists();
+					ModGollumCoreLib.log.debug ("Test in directory '" + "assets/"+modId.toLowerCase()+"/"+path + "'.");
+					rtn = new File(modSource, "assets/"+modId.toLowerCase()+"/"+path).exists();
 				} else if (modContainer.getMod() != null) {
 					try {
-						InputStream is = modContainer.getMod().getClass().getResourceAsStream(path);
-						rtn = is != null;
+						
+						ModGollumCoreLib.log.debug ("Test in jar file '" + modId.toLowerCase()+":"+path + "'.");
+						ResourceLocation location = new ResourceLocation(modId.toLowerCase()+":"+path);
+						
+						rtn = this.getResourcePack(modSource).getInputStream(location) != null;
 					} catch (Exception e) {
 					}
 						

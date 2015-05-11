@@ -87,17 +87,28 @@ public class ItemRegistry {
 				
 				log.message("Override registery item \""+registerName+"\" by "+item.getClass().getSimpleName());
 				
-				FMLControlledNamespacedRegistry<Item> blockRegistry = GameData.getItemRegistry();
-				Field f1 = RegistrySimple.class.getDeclaredField("registryObjects");
+				FMLControlledNamespacedRegistry<Item> itemRegistry = GameData.getItemRegistry();
+				Field f1 = null;
+				try {
+					f1 = RegistrySimple.class.getDeclaredField("field_82596_a");
+				} catch (Exception e) {
+					log.message("Unofuscate property RegistrySimple : field_82596_a => registryObjects");
+					f1 = RegistrySimple.class.getDeclaredField("registryObjects");
+				}
 				f1.setAccessible(true);
-				Map registryObjects = (Map)f1.get(blockRegistry);
+				Map registryObjects = (Map)f1.get(itemRegistry);
 				registryObjects.put(registerName,item);
 				log.debug (" 1 - Replace \""+registerName+"\" registery : registryObjects");
 				
-
-				Field f2 = RegistryNamespaced.class.getDeclaredField("underlyingIntegerMap");
+				Field f2 = null;
+				try {
+					f2 = RegistryNamespaced.class.getDeclaredField("field_148759_a");
+				} catch (Exception e) {
+					log.message("Unofuscate property RegistrySimple : field_148759_a => underlyingIntegerMap");
+					f2 = RegistryNamespaced.class.getDeclaredField("underlyingIntegerMap");
+				}
 				f2.setAccessible(true);
-				ObjectIntIdentityMap underlyingIntegerMap = (ObjectIntIdentityMap)f2.get(blockRegistry);
+				ObjectIntIdentityMap underlyingIntegerMap = (ObjectIntIdentityMap)f2.get(itemRegistry);
 				
 				int id = underlyingIntegerMap.func_148747_b(vanillaItem);
 				if (id == -1) {
