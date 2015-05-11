@@ -27,6 +27,16 @@ version = "2.0.0-"+minecraft.version
 group= "com.gollum.core" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "GollumCoreLib"
 
+task unmappedjar (type: Copy, dependsOn: ':jar') {
+    from 'build/libs/'+archivesBaseName+'-'+version+'.jar'
+    into 'build/libs/'
+    rename { String fileName ->
+        fileName.replace(".jar", "-unmapped.jar")
+    }
+}
+build.dependsOn unmappedjar
+genSrgs.shouldRunAfter unmappedjar
+
 dependencies {
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..
