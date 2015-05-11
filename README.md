@@ -20,6 +20,6 @@ For Install :
 
 <pre>
 ./gradlew setupDecompWorkspace
-./gradlew eclipse
 ./gradlew build
+./gradlew eclipse
 </pre>
