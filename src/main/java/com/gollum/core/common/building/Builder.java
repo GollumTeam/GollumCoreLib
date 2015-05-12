@@ -4,8 +4,6 @@ import static com.gollum.core.ModGollumCoreLib.log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBed;
@@ -45,7 +43,7 @@ import com.gollum.core.tools.registry.BuildingBlockRegistry;
 
 public class Builder {
 	
-	public static ArrayList<Thread> currentBuilds = new ArrayList<Thread>();
+	public static ArrayList<BuilderRunnable> currentBuilds = new ArrayList<BuilderRunnable>();
 	
 	public Builder() {
 		BuildingBlockRegistry.register(new BlockSignBuildingHandler());
@@ -130,7 +128,7 @@ public class Builder {
 		return z;
 	}
 	
-	class BuilderRunnable extends Thread {
+	public static class BuilderRunnable extends Thread {
 		
 		WorldServer world;
 		Building building;
@@ -138,6 +136,9 @@ public class Builder {
 		int initX;
 		int initY;
 		int initZ;
+		
+		private Boolean waitForWorld = true;
+		private long time = System.currentTimeMillis();
 		
 		public BuilderRunnable(World world, Building building, int rotate, int initX, int initY, int initZ) {
 			this.world    = (WorldServer) world;
@@ -190,22 +191,28 @@ public class Builder {
 				e.printStackTrace();
 			}
 			
+			log.info("End create building width matrix : "+building.name+" "+initX+" "+initY+" "+initZ);
+			
 		}
 		
-		private void notifyBlocks(int dx, int dz) {
-			for (Unity3D unity3D : building.unities) {
-				
-				Unity unity = unity3D.unity;
-				
-				// Position réél dans le monde du block
-				int finalX = initX + unity3D.x(rotate)*dx;
-				int finalY = initY + unity3D.y(rotate);
-				int finalZ = initZ + unity3D.z(rotate)*dz;
-
-				WorldAccesssSheduler.instance().lockWorld(world);
-				world.markBlockForUpdate(finalX, finalY, finalZ);
-				WorldAccesssSheduler.instance().unlockWorld(world);
+		public void dontWaitWorld () {
+			synchronized (this.waitForWorld) {
+				this.waitForWorld = false;
 			}
+		}
+		
+		private void lock (World lock) {
+			synchronized (this.waitForWorld) {
+				if (this.waitForWorld && System.currentTimeMillis() - time > 500) {
+					this.time = System.currentTimeMillis();
+					try {
+						this.sleep(100);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+			WorldAccesssSheduler.instance().lockWorld(world);
 		}
 		
 		private boolean setBlock (World world, int x,int y, int z, Block block, int metadata) {
@@ -228,14 +235,29 @@ public class Builder {
 				int finalX = initX + unity3D.x(rotate)*dx;
 				int finalY = initY + unity3D.y(rotate);
 				int finalZ = initZ + unity3D.z(rotate)*dz;
-
-				WorldAccesssSheduler.instance().lockWorld(world);
+				
+				this.lock(world);
 				this.setBlock (world, finalX, finalY, finalZ, Blocks.stone, 0);
 				WorldAccesssSheduler.instance().unlockWorld(world);
 				
 			}
 		}
+		private void notifyBlocks(int dx, int dz) {
+			for (Unity3D unity3D : building.unities) {
+				
+				Unity unity = unity3D.unity;
+				
+				// Position réél dans le monde du block
+				int finalX = initX + unity3D.x(rotate)*dx;
+				int finalY = initY + unity3D.y(rotate);
+				int finalZ = initZ + unity3D.z(rotate)*dz;
 
+				this.lock(world);
+				world.markBlockForUpdate(finalX, finalY, finalZ);
+				WorldAccesssSheduler.instance().unlockWorld(world);
+			}
+		}
+		
 		private void placeBlock(int dx, int dz) {
 			ArrayList<Unity3D> afters = new ArrayList<Unity3D>();
 			
@@ -248,7 +270,7 @@ public class Builder {
 				int finalY = initY + unity3D.y(rotate);
 				int finalZ = initZ + unity3D.z(rotate)*dz;
 
-				WorldAccesssSheduler.instance().lockWorld(world);
+				this.lock(world);
 				
 				boolean isPlaced = false;
 				
@@ -282,7 +304,7 @@ public class Builder {
 			
 			for (Unity3D unity3D : afters) {
 				
-				WorldAccesssSheduler.instance().lockWorld(world);
+				this.lock(world);
 					
 				boolean isPlaced = false;
 				
@@ -301,7 +323,7 @@ public class Builder {
 					this.setExtra       (finalX, finalY, finalZ, unity.extra, building.maxX(rotate), building.maxZ(rotate));
 				}
 				
-				WorldAccesssSheduler.instance().lockWorld(world);
+				WorldAccesssSheduler.instance().unlockWorld(world);
 			}
 		}
 		

@@ -12,6 +12,7 @@ import net.minecraftforge.event.world.WorldEvent.Load;
 import net.minecraftforge.event.world.WorldEvent.Unload;
 
 import com.gollum.core.common.building.Builder;
+import com.gollum.core.common.building.Builder.BuilderRunnable;
 import com.gollum.core.common.concurrent.WorldAccesssSheduler;
 import com.gollum.core.common.reflection.EntityTrackerProxy;
 import com.gollum.core.utils.reflection.Reflection;
@@ -75,10 +76,11 @@ public class WorldHandler {
 			WorldAccesssSheduler.instance().forget(event.world);
 			WorldAccesssSheduler.instance().unlockWorld(event.world);
 			
-			for (Thread thread : Builder.currentBuilds) {
+			for (BuilderRunnable thread : Builder.currentBuilds) {
 				if (thread.isAlive()) {
 					try {
 						log.message("Wait finish building");
+						thread.dontWaitWorld();
 						thread.join();
 					} catch (InterruptedException e) {
 						e.printStackTrace();
@@ -95,6 +97,7 @@ public class WorldHandler {
 				}
 			}
 			Builder.currentBuilds.clear ();
+			WorldAccesssSheduler.instance().clean();
 
 			mustBeSave = false;
 			

@@ -25,6 +25,7 @@ import com.gollum.core.tools.registry.BlockRegistry;
 import com.gollum.core.tools.registry.ItemRegistry;
 import com.gollum.core.utils.reflection.Reflection;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -129,9 +130,9 @@ public class ModGollumCoreLib extends GollumMod {
 		
 		// Set de l'icon du tab creative
 		ModCreativeTab.init();
-
+		
 		MinecraftForge.EVENT_BUS.register(new WorldHandler());
-		MinecraftForge.EVENT_BUS.register(new WorldTickHandler());
+		FMLCommonHandler.instance().bus().register(new WorldTickHandler());
 	}
 
 	/** 3 **/
