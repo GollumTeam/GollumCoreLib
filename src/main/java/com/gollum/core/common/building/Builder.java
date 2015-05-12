@@ -4,6 +4,8 @@ import static com.gollum.core.ModGollumCoreLib.log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBed;
@@ -44,7 +46,34 @@ public class Builder {
 	
 	public static ArrayList<Thread> currentBuilds = new ArrayList<Thread>();
 	
-	private final Object lock = new Object();
+	public static boolean mustLock  = true;
+	private final static Lock mutexWorld   = new ReentrantLock(true);
+	private final static Lock mutexServer = new ReentrantLock(true);
+
+	public static void lockAll () {
+		lockServer();
+		lockWorld();
+	}
+	public static void lockServer () {
+		if (mustLock) {
+			mutexServer.lock();
+		}
+	}
+	public static void lockWorld () {
+		if (mustLock) {
+			mutexWorld.lock();
+		}
+	}
+	public static void unlockAll () {
+		lockServer();
+		lockWorld();
+	}
+	public static void unlockServer () {
+		mutexServer.unlock();
+	}
+	public static void unlockWorld () {
+		mutexWorld.unlock();
+	}
 	
 	public Builder() {
 		BuildingBlockRegistry.register(new BlockSignBuildingHandler());
@@ -200,10 +229,10 @@ public class Builder {
 				int finalX = initX + unity3D.x(rotate)*dx;
 				int finalY = initY + unity3D.y(rotate);
 				int finalZ = initZ + unity3D.z(rotate)*dz;
-				
-				synchronized (lock) {
-					world.markBlockForUpdate(finalX, finalY, finalZ);
-				}
+
+				lockAll();
+				world.markBlockForUpdate(finalX, finalY, finalZ);
+				unlockAll();
 			}
 		}
 		
@@ -211,7 +240,12 @@ public class Builder {
 			if (y < 3) {
 				return false;
 			}
-			return world.setBlock(x, y, z, block, metadata, 0);
+			try {
+				return world.setBlock(x, y, z, block, metadata, 0);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return false;
+			}
 		}
 		
 		private void placeBlockStone(int dx, int dz) {
@@ -223,9 +257,9 @@ public class Builder {
 				int finalY = initY + unity3D.y(rotate);
 				int finalZ = initZ + unity3D.z(rotate)*dz;
 				
-				synchronized (lock) {
-					this.setBlock (world, finalX, finalY, finalZ, Blocks.stone, 0);
-				}
+				lockAll();
+				this.setBlock (world, finalX, finalY, finalZ, Blocks.stone, 0);
+				unlockAll();
 				
 			}
 		}
@@ -242,60 +276,60 @@ public class Builder {
 				int finalY = initY + unity3D.y(rotate);
 				int finalZ = initZ + unity3D.z(rotate)*dz;
 				
-				synchronized (lock) {
-					
-					boolean isPlaced = false;
-					
-					world.removeTileEntity(finalX, finalY, finalZ);
-					
-					if (
-						unity.after  ||
-						unity.block instanceof BlockDoor  ||
-						unity.block instanceof BlockBed   ||
-						unity.block instanceof BlockChest ||
-						unity.block instanceof BlockTorch ||
-						unity.block instanceof BlockLever ||
-						unity.block instanceof BlockSign
-					) {
-						afters.add(unity3D);
-						isPlaced = this.setBlock (world, finalX, finalY, finalZ, Blocks.air, 0);
-					} else if (unity.block != null) {
-						isPlaced = this.setBlock (world, finalX, finalY, finalZ, unity.block, unity.metadata);
-					} else {
-						isPlaced = this.setBlock (world, finalX, finalY, finalZ, Blocks.air, 0);
-					}
-					
-					if (isPlaced) {
-						this.setOrientation (finalX, finalY, finalZ, this.rotateOrientation(rotate, unity.orientation));
-						this.setContents    (finalX, finalY, finalZ, unity.contents);
-						this.setExtra       (finalX, finalY, finalZ, unity.extra, building.maxX(rotate), building.maxZ(rotate));
-					}
-				}	
+				lockAll();
+				
+				boolean isPlaced = false;
+				
+				world.removeTileEntity(finalX, finalY, finalZ);
+				
+				if (
+					unity.after  ||
+					unity.block instanceof BlockDoor  ||
+					unity.block instanceof BlockBed   ||
+					unity.block instanceof BlockChest ||
+					unity.block instanceof BlockTorch ||
+					unity.block instanceof BlockLever ||
+					unity.block instanceof BlockSign
+				) {
+					afters.add(unity3D);
+					isPlaced = this.setBlock (world, finalX, finalY, finalZ, Blocks.air, 0);
+				} else if (unity.block != null) {
+					isPlaced = this.setBlock (world, finalX, finalY, finalZ, unity.block, unity.metadata);
+				} else {
+					isPlaced = this.setBlock (world, finalX, finalY, finalZ, Blocks.air, 0);
+				}
+				
+				if (isPlaced) {
+					this.setOrientation (finalX, finalY, finalZ, this.rotateOrientation(rotate, unity.orientation));
+					this.setContents    (finalX, finalY, finalZ, unity.contents);
+					this.setExtra       (finalX, finalY, finalZ, unity.extra, building.maxX(rotate), building.maxZ(rotate));
+				}
+
+				unlockAll();
 			}
 			
 			for (Unity3D unity3D : afters) {
 
-				synchronized (lock) {
+				lockAll();
 					
-					boolean isPlaced = false;
-					
-					Unity unity = unity3D.unity;
-					
-					// Position réél dans le monde du block
-					int finalX = initX + unity3D.x(rotate)*dx;
-					int finalY = initY + unity3D.y(rotate);
-					int finalZ = initZ + unity3D.z(rotate)*dz;
-					
-					synchronized (lock) {
-						isPlaced = this.setBlock (world, finalX, finalY, finalZ, unity.block, unity.metadata);
-					}
+				boolean isPlaced = false;
+				
+				Unity unity = unity3D.unity;
+				
+				// Position réél dans le monde du block
+				int finalX = initX + unity3D.x(rotate)*dx;
+				int finalY = initY + unity3D.y(rotate);
+				int finalZ = initZ + unity3D.z(rotate)*dz;
+				
+				isPlaced = this.setBlock (world, finalX, finalY, finalZ, unity.block, unity.metadata);
+				
+				if (isPlaced) {
+					this.setOrientation (finalX, finalY, finalZ, this.rotateOrientation(rotate, unity.orientation));
+					this.setContents    (finalX, finalY, finalZ, unity.contents);
+					this.setExtra       (finalX, finalY, finalZ, unity.extra, building.maxX(rotate), building.maxZ(rotate));
+				}
 
-					if (isPlaced) {
-						this.setOrientation (finalX, finalY, finalZ, this.rotateOrientation(rotate, unity.orientation));
-						this.setContents    (finalX, finalY, finalZ, unity.contents);
-						this.setExtra       (finalX, finalY, finalZ, unity.extra, building.maxX(rotate), building.maxZ(rotate));
-					}
-				}	
+				unlockAll();
 			}
 		}
 		

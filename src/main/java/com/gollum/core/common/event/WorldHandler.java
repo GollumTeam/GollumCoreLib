@@ -26,6 +26,8 @@ public class WorldHandler {
 	@SubscribeEvent
 	public void onLoad (Load event) {
 		
+		Builder.mustLock = true;
+		
 		if (!event.world.isRemote) {
 			
 			WorldServer worldServer = (WorldServer) event.world;
@@ -73,6 +75,8 @@ public class WorldHandler {
 				if (thread.isAlive()) {
 					try {
 						log.message("Wait finish building");
+						Builder.mustLock = false;
+						Builder.unlockAll();
 						thread.join();
 					} catch (InterruptedException e) {
 						e.printStackTrace();
