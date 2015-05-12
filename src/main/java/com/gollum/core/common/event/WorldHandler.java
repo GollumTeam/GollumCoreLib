@@ -12,6 +12,7 @@ import net.minecraftforge.event.world.WorldEvent.Load;
 import net.minecraftforge.event.world.WorldEvent.Unload;
 
 import com.gollum.core.common.building.Builder;
+import com.gollum.core.common.concurrent.WorldAccesssSheduler;
 import com.gollum.core.common.reflection.EntityTrackerProxy;
 import com.gollum.core.utils.reflection.Reflection;
 
@@ -26,9 +27,9 @@ public class WorldHandler {
 	@SubscribeEvent
 	public void onLoad (Load event) {
 		
-		Builder.mustLock = true;
-		
 		if (!event.world.isRemote) {
+			
+			WorldAccesssSheduler.instance().observe(event.world);
 			
 			WorldServer worldServer = (WorldServer) event.world;
 			
@@ -71,12 +72,13 @@ public class WorldHandler {
 		
 		if (!event.world.isRemote) {
 			
+			WorldAccesssSheduler.instance().forget(event.world);
+			WorldAccesssSheduler.instance().unlockWorld(event.world);
+			
 			for (Thread thread : Builder.currentBuilds) {
 				if (thread.isAlive()) {
 					try {
 						log.message("Wait finish building");
-						Builder.mustLock = false;
-						Builder.unlockAll();
 						thread.join();
 					} catch (InterruptedException e) {
 						e.printStackTrace();

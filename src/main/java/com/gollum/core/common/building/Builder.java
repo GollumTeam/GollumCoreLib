@@ -40,46 +40,12 @@ import com.gollum.core.common.building.handler.BlockSignBuildingHandler;
 import com.gollum.core.common.building.handler.BlockStairsBuildingHandler;
 import com.gollum.core.common.building.handler.BlockTrapDoorBuildingHandler;
 import com.gollum.core.common.building.handler.BuildingBlockHandler;
+import com.gollum.core.common.concurrent.WorldAccesssSheduler;
 import com.gollum.core.tools.registry.BuildingBlockRegistry;
 
 public class Builder {
 	
 	public static ArrayList<Thread> currentBuilds = new ArrayList<Thread>();
-
-	public static boolean mustLock  = true;
-	private static int numberLockServer  = 0;
-	private static int numberLockWorld  = 0;
-	private final static Lock mutexWorld   = new ReentrantLock(true);
-	private final static Lock mutexServer = new ReentrantLock(true);
-
-	public static void lockAll () {
-		lockServer();
-		lockWorld();
-	}
-	public static void lockServer () {
-		if (mustLock) {
-			log.debug ("NumberLockServer = "+(++numberLockServer));
-			mutexServer.lock();
-		}
-	}
-	public static void lockWorld () {
-		if (mustLock) {
-			log.debug ("NumberLockWorld = "+(++numberLockWorld));
-			mutexWorld.lock();
-		}
-	}
-	public static void unlockAll () {
-		lockServer();
-		lockWorld();
-	}
-	public static void unlockServer () {
-		log.debug ("NumberLockServer = "+(--numberLockServer));
-		mutexServer.unlock();
-	}
-	public static void unlockWorld () {
-		log.debug ("NumberLockWorld = "+(--numberLockWorld));
-		mutexWorld.unlock();
-	}
 	
 	public Builder() {
 		BuildingBlockRegistry.register(new BlockSignBuildingHandler());
@@ -236,9 +202,9 @@ public class Builder {
 				int finalY = initY + unity3D.y(rotate);
 				int finalZ = initZ + unity3D.z(rotate)*dz;
 
-				lockAll();
+				WorldAccesssSheduler.instance().lockWorld(world);
 				world.markBlockForUpdate(finalX, finalY, finalZ);
-				unlockAll();
+				WorldAccesssSheduler.instance().unlockWorld(world);
 			}
 		}
 		
@@ -262,10 +228,10 @@ public class Builder {
 				int finalX = initX + unity3D.x(rotate)*dx;
 				int finalY = initY + unity3D.y(rotate);
 				int finalZ = initZ + unity3D.z(rotate)*dz;
-				
-				lockAll();
+
+				WorldAccesssSheduler.instance().lockWorld(world);
 				this.setBlock (world, finalX, finalY, finalZ, Blocks.stone, 0);
-				unlockAll();
+				WorldAccesssSheduler.instance().unlockWorld(world);
 				
 			}
 		}
@@ -281,8 +247,8 @@ public class Builder {
 				int finalX = initX + unity3D.x(rotate)*dx;
 				int finalY = initY + unity3D.y(rotate);
 				int finalZ = initZ + unity3D.z(rotate)*dz;
-				
-				lockAll();
+
+				WorldAccesssSheduler.instance().lockWorld(world);
 				
 				boolean isPlaced = false;
 				
@@ -310,13 +276,13 @@ public class Builder {
 					this.setContents    (finalX, finalY, finalZ, unity.contents);
 					this.setExtra       (finalX, finalY, finalZ, unity.extra, building.maxX(rotate), building.maxZ(rotate));
 				}
-
-				unlockAll();
+				
+				WorldAccesssSheduler.instance().unlockWorld(world);
 			}
 			
 			for (Unity3D unity3D : afters) {
-
-				lockAll();
+				
+				WorldAccesssSheduler.instance().lockWorld(world);
 					
 				boolean isPlaced = false;
 				
@@ -334,8 +300,8 @@ public class Builder {
 					this.setContents    (finalX, finalY, finalZ, unity.contents);
 					this.setExtra       (finalX, finalY, finalZ, unity.extra, building.maxX(rotate), building.maxZ(rotate));
 				}
-
-				unlockAll();
+				
+				WorldAccesssSheduler.instance().lockWorld(world);
 			}
 		}
 		

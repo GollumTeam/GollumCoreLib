@@ -12,6 +12,7 @@ import net.minecraftforge.event.world.WorldEvent.Load;
 import net.minecraftforge.event.world.WorldEvent.Unload;
 
 import com.gollum.core.common.building.Builder;
+import com.gollum.core.common.concurrent.WorldAccesssSheduler;
 import com.gollum.core.common.reflection.EntityTrackerProxy;
 import com.gollum.core.utils.reflection.Reflection;
 
@@ -26,9 +27,9 @@ public class WorldTickHandler {
 	public void onWorldTickEvent (WorldTickEvent event) {
 		
 		if (event.phase == Phase.START) {
-			Builder.lockWorld();
+			WorldAccesssSheduler.instance().lockWorld(event.world);
 		} else {
-			Builder.unlockWorld();
+			WorldAccesssSheduler.instance().unlockWorld(event.world);
 		}
 		
 	}
