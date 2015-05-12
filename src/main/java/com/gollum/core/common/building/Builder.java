@@ -145,15 +145,20 @@ public class Builder {
 			this.initY    = initY;
 			this.initZ    = initZ;
 		}
-		
+
 		public void run() {
+			this.run(true);
+		}
+		public void run(boolean reTop) {
 			
 			try {
 				
 				log.info("Create building width matrix : "+building.name+" "+initX+" "+initY+" "+initZ);
-	
+				
 				initY = initY + building.height;
-				initY = (initY < 3) ? 3 : initY;
+				if (reTop) {
+					initY = (initY < 3) ? 3 : initY;
+				}
 				
 				int dx = -1; 
 				int dz = 1;
@@ -186,6 +191,18 @@ public class Builder {
 			
 		}
 		
+		private boolean setBlock (World world, int x,int y, int z, Block block, int metadata) {
+			if (y < 3) {
+				return false;
+			}
+			try {
+				return world.setBlock(x, y, z, block!= null ? block.blockID : 0, metadata, 0);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return false;
+			}
+		}
+		
 		private void notifyBlocks(int dx, int dz) {
 			for (Unity3D unity3D : building.unities) {
 				
@@ -212,7 +229,7 @@ public class Builder {
 				int finalZ = initZ + unity3D.z(rotate)*dz;
 				
 				synchronized (lock) {
-					world.setBlock(finalX, finalY, finalZ, Block.stone.blockID, 0, 0);
+					this.setBlock (world, finalX, finalY, finalZ, Block.stone, 0);
 				}
 				
 			}
@@ -244,11 +261,11 @@ public class Builder {
 						unity.block instanceof BlockSign
 					) {
 						afters.add(unity3D);
-						world.setBlock(finalX, finalY, finalZ, 0, 0, 0);
+						this.setBlock (world, finalX, finalY, finalZ, null, 0);
 					} else if (unity.block != null) {
-						world.setBlock(finalX, finalY, finalZ, unity.block.blockID, unity.metadata, 0);
+						this.setBlock (world, finalX, finalY, finalZ, unity.block, unity.metadata);
 					} else {
-						world.setBlock(finalX, finalY, finalZ, 0, 0, 0);
+						this.setBlock (world, finalX, finalY, finalZ, null, 0);
 					}
 					
 					this.setOrientation (finalX, finalY, finalZ, this.rotateOrientation(rotate, unity.orientation));
@@ -267,13 +284,12 @@ public class Builder {
 				int finalZ = initZ + unity3D.z(rotate)*dz;
 				
 				synchronized (lock) {
-					int id = unity.block != null ? unity.block.blockID : 0;
-					world.setBlock(finalX, finalY, finalZ, id, unity.metadata, 0);
+					this.setBlock (world, finalX, finalY, finalZ, unity.block, unity.metadata);
+					
+					this.setOrientation (finalX, finalY, finalZ, this.rotateOrientation(rotate, unity.orientation));
+					this.setContents    (finalX, finalY, finalZ, unity.contents);
+					this.setExtra       (finalX, finalY, finalZ, unity.extra, building.maxX(rotate), building.maxZ(rotate));
 				}
-				
-				this.setOrientation (finalX, finalY, finalZ, this.rotateOrientation(rotate, unity.orientation));
-				this.setContents    (finalX, finalY, finalZ, unity.contents);
-				this.setExtra       (finalX, finalY, finalZ, unity.extra, building.maxX(rotate), building.maxZ(rotate));
 				
 			}
 		}
