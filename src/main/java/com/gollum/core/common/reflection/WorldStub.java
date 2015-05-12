@@ -31,6 +31,11 @@ public class WorldStub extends World {
 	}
 	
 	@Override
+	@DeobfuscateName (value="tick")
+	public void tick(){
+	}
+	
+	@Override
 	@DeobfuscateName (value="tickUpdates")
 	public boolean tickUpdates(boolean p_72955_1_) {
 		return false;
