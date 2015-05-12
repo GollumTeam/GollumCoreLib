@@ -147,7 +147,7 @@ public class ModGollumCoreLib extends GollumMod {
 		try {
 			
 			Reflection.enableSynchronized (Reflection.getObfuscateMethod(WorldServer.class, WorldStub.class, "scheduleBlockUpdateWithPriority"));
-			Reflection.enableSynchronized (Reflection.getObfuscateMethod(WorldServer.class, WorldStub.class, "tick       "                    ));
+			Reflection.enableSynchronized (Reflection.getObfuscateMethod(WorldServer.class, WorldStub.class, "tick"                           ));
 			Reflection.enableSynchronized (Reflection.getObfuscateMethod(WorldServer.class, WorldStub.class, "tickUpdates"                    ));
 			Reflection.enableSynchronized (Reflection.getObfuscateMethod(WorldServer.class, WorldStub.class, "func_147446_b"                  ));
 			Reflection.enableSynchronized (Reflection.getObfuscateMethod(WorldServer.class, WorldStub.class, "getPendingBlockUpdates"         ));
