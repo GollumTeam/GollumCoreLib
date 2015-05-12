@@ -13,12 +13,15 @@ public class WorldAccesssSheduler {
 	private static WorldAccesssSheduler instance = new WorldAccesssSheduler();
 	
 	public static WorldAccesssSheduler instance() { return instance; };
-	
+
 	private final ConcurrentHashMap<World, ReentrantLock> mustBeLock = new ConcurrentHashMap<World, ReentrantLock>();
+	private final ConcurrentHashMap<World, ReentrantLock> allMutex   = new ConcurrentHashMap<World, ReentrantLock>();
 	
 	public void observe (World world) {
 		synchronized (this.mustBeLock) {
-			this.mustBeLock.put(world, new ReentrantLock());
+			ReentrantLock m = new ReentrantLock();
+			this.mustBeLock.put(world, m);
+			this.allMutex.put(world, m);
 		}
 	}
 	
@@ -32,7 +35,10 @@ public class WorldAccesssSheduler {
 			}
 		}
 		if (lock != null) {
-			lock.unlock();
+			try {
+				lock.unlock();
+			} catch (Exception e) {
+			}
 		}
 	}
 	
@@ -51,13 +57,16 @@ public class WorldAccesssSheduler {
 	
 	public void unlockWorld (World world) {
 		ReentrantLock lock = null;
-		synchronized (this.mustBeLock) {
+		synchronized (this.allMutex) {
 			if (this.mustBeLock.containsKey(world)) {
 				lock = this.mustBeLock.get(world);
 			}
 		}
 		if (lock != null) {
-			lock.unlock();
+			try {
+				lock.unlock();
+			} catch (Exception e) {
+			}
 		}
 	}
 	
