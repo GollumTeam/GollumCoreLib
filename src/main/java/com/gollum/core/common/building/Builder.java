@@ -146,16 +146,20 @@ public class Builder {
 			this.initY    = initY;
 			this.initZ    = initZ;
 		}
-		
+
 		public void run() {
+			this.run(true);
+		}
+		public void run(boolean reTop) {
 			
 			try {
 				
 				log.info("Create building width matrix : "+building.name+" "+initX+" "+initY+" "+initZ);
-	
-				initY = initY + building.height;
-				initY = (initY < 3) ? 3 : initY;
 				
+				initY = initY + building.height;
+				if (reTop) {
+					initY = (initY < 3) ? 3 : initY;
+				}
 				int dx = -1; 
 				int dz = 1;
 				switch (rotate) {
@@ -203,6 +207,13 @@ public class Builder {
 			}
 		}
 		
+		private boolean setBlock (World world, int x,int y, int z, Block block, int metadata) {
+			if (y < 3) {
+				return false;
+			}
+			return world.setBlock(x, y, z, block, metadata, 0);
+		}
+		
 		private void placeBlockStone(int dx, int dz) {
 			// Peut etre inutile
 			for (Unity3D unity3D : building.unities) {
@@ -213,7 +224,7 @@ public class Builder {
 				int finalZ = initZ + unity3D.z(rotate)*dz;
 				
 				synchronized (lock) {
-					world.setBlock(finalX, finalY, finalZ, Blocks.stone, 0, 0);
+					this.setBlock (world, finalX, finalY, finalZ, Blocks.stone, 0);
 				}
 				
 			}
@@ -233,6 +244,8 @@ public class Builder {
 				
 				synchronized (lock) {
 					
+					boolean isPlaced = false;
+					
 					world.removeTileEntity(finalX, finalY, finalZ);
 					
 					if (
@@ -245,36 +258,44 @@ public class Builder {
 						unity.block instanceof BlockSign
 					) {
 						afters.add(unity3D);
-						world.setBlock(finalX, finalY, finalZ, Blocks.air, 0, 0);
+						isPlaced = this.setBlock (world, finalX, finalY, finalZ, Blocks.air, 0);
 					} else if (unity.block != null) {
-						world.setBlock(finalX, finalY, finalZ, unity.block, unity.metadata, 0);
+						isPlaced = this.setBlock (world, finalX, finalY, finalZ, unity.block, unity.metadata);
 					} else {
-						world.setBlock(finalX, finalY, finalZ, Blocks.air, 0, 0);
+						isPlaced = this.setBlock (world, finalX, finalY, finalZ, Blocks.air, 0);
 					}
 					
-					this.setOrientation (finalX, finalY, finalZ, this.rotateOrientation(rotate, unity.orientation));
-					this.setContents    (finalX, finalY, finalZ, unity.contents);
-					this.setExtra       (finalX, finalY, finalZ, unity.extra, building.maxX(rotate), building.maxZ(rotate));
+					if (isPlaced) {
+						this.setOrientation (finalX, finalY, finalZ, this.rotateOrientation(rotate, unity.orientation));
+						this.setContents    (finalX, finalY, finalZ, unity.contents);
+						this.setExtra       (finalX, finalY, finalZ, unity.extra, building.maxX(rotate), building.maxZ(rotate));
+					}
 				}	
 			}
 			
 			for (Unity3D unity3D : afters) {
-				
-				Unity unity = unity3D.unity;
-				
-				// Position réél dans le monde du block
-				int finalX = initX + unity3D.x(rotate)*dx;
-				int finalY = initY + unity3D.y(rotate);
-				int finalZ = initZ + unity3D.z(rotate)*dz;
-				
+
 				synchronized (lock) {
-					world.setBlock(finalX, finalY, finalZ, unity.block, unity.metadata, 0);
-				}
-				
-				this.setOrientation (finalX, finalY, finalZ, this.rotateOrientation(rotate, unity.orientation));
-				this.setContents    (finalX, finalY, finalZ, unity.contents);
-				this.setExtra       (finalX, finalY, finalZ, unity.extra, building.maxX(rotate), building.maxZ(rotate));
-				
+					
+					boolean isPlaced = false;
+					
+					Unity unity = unity3D.unity;
+					
+					// Position réél dans le monde du block
+					int finalX = initX + unity3D.x(rotate)*dx;
+					int finalY = initY + unity3D.y(rotate);
+					int finalZ = initZ + unity3D.z(rotate)*dz;
+					
+					synchronized (lock) {
+						isPlaced = this.setBlock (world, finalX, finalY, finalZ, unity.block, unity.metadata);
+					}
+
+					if (isPlaced) {
+						this.setOrientation (finalX, finalY, finalZ, this.rotateOrientation(rotate, unity.orientation));
+						this.setContents    (finalX, finalY, finalZ, unity.contents);
+						this.setExtra       (finalX, finalY, finalZ, unity.extra, building.maxX(rotate), building.maxZ(rotate));
+					}
+				}	
 			}
 		}
 		
@@ -287,7 +308,7 @@ public class Builder {
 				for (SubBuilding subBuilding : randomBuilding) {
 					
 					BuilderRunnable thread = new BuilderRunnable(world, subBuilding.building, rotate, initX+subBuilding.x*dx, initY+subBuilding.y, initZ+subBuilding.z*dz);
-					thread.run();
+					thread.run(false);
 				}
 			}
 		}
