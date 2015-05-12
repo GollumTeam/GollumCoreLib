@@ -148,7 +148,7 @@ public class Builder {
 			this.initY    = initY;
 			this.initZ    = initZ;
 		}
-
+		
 		public void run() {
 			this.run(true);
 		}
@@ -227,21 +227,6 @@ public class Builder {
 			}
 		}
 		
-		private void placeBlockStone(int dx, int dz) {
-			// Peut etre inutile
-			for (Unity3D unity3D : building.unities) {
-				
-				// Position réél dans le monde du block
-				int finalX = initX + unity3D.x(rotate)*dx;
-				int finalY = initY + unity3D.y(rotate);
-				int finalZ = initZ + unity3D.z(rotate)*dz;
-				
-				this.lock(world);
-				this.setBlock (world, finalX, finalY, finalZ, Blocks.stone, 0);
-				WorldAccesssSheduler.instance().unlockWorld(world);
-				
-			}
-		}
 		private void notifyBlocks(int dx, int dz) {
 			for (Unity3D unity3D : building.unities) {
 				
@@ -255,6 +240,22 @@ public class Builder {
 				this.lock(world);
 				world.markBlockForUpdate(finalX, finalY, finalZ);
 				WorldAccesssSheduler.instance().unlockWorld(world);
+			}
+		}
+		
+		private void placeBlockStone(int dx, int dz) {
+			// Peut etre inutile
+			for (Unity3D unity3D : building.unities) {
+				
+				// Position réél dans le monde du block
+				int finalX = initX + unity3D.x(rotate)*dx;
+				int finalY = initY + unity3D.y(rotate);
+				int finalZ = initZ + unity3D.z(rotate)*dz;
+				
+				this.lock(world);
+				this.setBlock (world, finalX, finalY, finalZ, Blocks.stone, 0);
+				WorldAccesssSheduler.instance().unlockWorld(world);
+				
 			}
 		}
 		
