@@ -9,6 +9,7 @@ import com.gollum.core.common.command.CommandBuilding;
 import com.gollum.core.common.config.ConfigGollumCoreLib;
 import com.gollum.core.common.context.ModContext;
 import com.gollum.core.common.event.WorldHandler;
+import com.gollum.core.common.event.WorldTickHandler;
 import com.gollum.core.common.i18n.I18n;
 import com.gollum.core.common.log.Logger;
 import com.gollum.core.common.mod.GollumMod;
@@ -102,13 +103,13 @@ public class ModGollumCoreLib extends GollumMod {
 		
 		// Creation du checker de version
 		new VersionChecker();
-
+		
 		// Initialisation des blocks
 		ModBlocks.init ();
 		
 		// Initialisation des items
 		ModItems.init ();
-
+		
 		// Initialisation des reflection sur vanilla
 		this.initReflection();
 		
@@ -128,8 +129,9 @@ public class ModGollumCoreLib extends GollumMod {
 		
 		// Set de l'icon du tab creative
 		ModCreativeTab.init();
-		
+
 		MinecraftForge.EVENT_BUS.register(new WorldHandler());
+		MinecraftForge.EVENT_BUS.register(new WorldTickHandler());
 	}
 
 	/** 3 **/
