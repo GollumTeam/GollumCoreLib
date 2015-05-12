@@ -45,8 +45,10 @@ import com.gollum.core.tools.registry.BuildingBlockRegistry;
 public class Builder {
 	
 	public static ArrayList<Thread> currentBuilds = new ArrayList<Thread>();
-	
+
 	public static boolean mustLock  = true;
+	private static int numberLockServer  = 0;
+	private static int numberLockWorld  = 0;
 	private final static Lock mutexWorld   = new ReentrantLock(true);
 	private final static Lock mutexServer = new ReentrantLock(true);
 
@@ -56,11 +58,13 @@ public class Builder {
 	}
 	public static void lockServer () {
 		if (mustLock) {
+			log.debug ("NumberLockServer = "+(++numberLockServer));
 			mutexServer.lock();
 		}
 	}
 	public static void lockWorld () {
 		if (mustLock) {
+			log.debug ("NumberLockWorld = "+(++numberLockWorld));
 			mutexWorld.lock();
 		}
 	}
@@ -69,9 +73,11 @@ public class Builder {
 		lockWorld();
 	}
 	public static void unlockServer () {
+		log.debug ("NumberLockServer = "+(--numberLockServer));
 		mutexServer.unlock();
 	}
 	public static void unlockWorld () {
+		log.debug ("NumberLockWorld = "+(--numberLockWorld));
 		mutexWorld.unlock();
 	}
 	
