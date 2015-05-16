@@ -87,8 +87,9 @@ public class ItemRegistry {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		Item.itemsList[newId] = item;
+		Item.itemsList[oldId] = null;
 		
 	}
 	
