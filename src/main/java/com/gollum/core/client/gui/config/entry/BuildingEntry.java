@@ -38,7 +38,8 @@ public class BuildingEntry extends ConfigEntry {
 	private ConfigEntry bDisabled;
 	private ConfigEntry bDimentionList;
 	private ConfigEntry dSpawnRate;
-	private ConfigEntry dSpawnHeight;
+	private ConfigEntry dSpawnMin;;
+	private ConfigEntry dSpawnMax;
 	private ConfigEntry dBlocksSpawn;
 
 	private boolean mutexChangeEvent = true;
@@ -244,14 +245,33 @@ public class BuildingEntry extends ConfigEntry {
 			
 		});
 		
-		this.dSpawnHeight = this.createSubEntry(
-			"spawnHeight",
-			dimentionC.spawnHeight,
-			dimentionD.spawnHeight,
+		this.dSpawnMin = this.createSubEntry(
+			"spawnMin",
+			dimentionC.spawnMin,
+			dimentionD.spawnMin,
 			6,
-			new JsonConfigProp().type(ConfigProp.Type.SLIDER).minValue("0").maxValue("255")
+			new JsonConfigProp().type(ConfigProp.Type.SLIDER).minValue("1").maxValue("256")
 		);
-		this.dSpawnHeight.addEvent(new Event() {
+		this.dSpawnMin.addEvent(new Event() {
+			
+			@Override
+			public void call(Type type, Object... params) {
+				if (_this.mutexChangeEvent()) {
+					_this.saveEntry();
+					_this.mutexChangeEvent = true;
+				}
+			}
+			
+		});
+		
+		this.dSpawnMax = this.createSubEntry(
+			"spawnMax",
+			dimentionC.spawnMax,
+			dimentionD.spawnMax,
+			6,
+			new JsonConfigProp().type(ConfigProp.Type.SLIDER).minValue("1").maxValue("256")
+		);
+		this.dSpawnMax.addEvent(new Event() {
 			
 			@Override
 			public void call(Type type, Object... params) {
@@ -342,7 +362,8 @@ public class BuildingEntry extends ConfigEntry {
 			
 			if (dimentionC != null) {
 				dimentionC.spawnRate   = (Integer) this.dSpawnRate.getValue();
-				dimentionC.spawnHeight = (Integer) this.dSpawnHeight.getValue();
+				dimentionC.spawnMin = (Integer) this.dSpawnMin.getValue();
+				dimentionC.spawnMax = (Integer) this.dSpawnMax.getValue();
 				
 				ArrayList<Block> blocksSpawn = new ArrayList<Block>();
 				for (String blockName : (String[])this.dBlocksSpawn.getValue()) {
@@ -456,9 +477,13 @@ public class BuildingEntry extends ConfigEntry {
 			this.dSpawnRate.configElement.setValue       (dimentionO.spawnRate);
 			this.dSpawnRate.configElement.setDefaultValue(dimentionD.spawnRate);
 	
-			this.dSpawnHeight              .setValue       (dimentionC.spawnHeight);
-			this.dSpawnHeight.configElement.setValue       (dimentionO.spawnHeight);
-			this.dSpawnHeight.configElement.setDefaultValue(dimentionD.spawnHeight);
+			this.dSpawnMin              .setValue       (dimentionC.spawnMin);
+			this.dSpawnMin.configElement.setValue       (dimentionO.spawnMin);
+			this.dSpawnMin.configElement.setDefaultValue(dimentionD.spawnMin);
+	
+			this.dSpawnMax              .setValue       (dimentionC.spawnMax);
+			this.dSpawnMax.configElement.setValue       (dimentionO.spawnMax);
+			this.dSpawnMax.configElement.setDefaultValue(dimentionD.spawnMax);
 			
 	
 			ArrayList<String> blocksC = new ArrayList<String>();
@@ -520,8 +545,9 @@ public class BuildingEntry extends ConfigEntry {
 		
 		if (this.getCurrentDimention() != null) {
 			this.dSpawnRate  .drawEntry(4, x, y + 112, listWidth, 22, tessellator, mouseX, mouseY, isSelected, false);
-			this.dSpawnHeight.drawEntry(4, x, y + 132, listWidth, 22, tessellator, mouseX, mouseY, isSelected, false);
-			this.dBlocksSpawn.drawEntry(4, x, y + 152, listWidth, 22, tessellator, mouseX, mouseY, isSelected);
+			this.dSpawnMin.drawEntry(4, x, y + 132, listWidth, 22, tessellator, mouseX, mouseY, isSelected, false);
+			this.dSpawnMax.drawEntry(4, x, y + 152, listWidth, 22, tessellator, mouseX, mouseY, isSelected, false);
+			this.dBlocksSpawn.drawEntry(4, x, y + 172, listWidth, 22, tessellator, mouseX, mouseY, isSelected);
 		}
 		this.resetControlWidth();
 		
@@ -541,7 +567,8 @@ public class BuildingEntry extends ConfigEntry {
 			mc.fontRenderer.getStringWidth(this.tradIfExist("disabled"   ))+10,
 			mc.fontRenderer.getStringWidth(this.tradIfExist("dimention"  ))+10,
 			mc.fontRenderer.getStringWidth(this.tradIfExist("spawnRate"  ))+20,
-			mc.fontRenderer.getStringWidth(this.tradIfExist("spawnHeight"))+20,
+			mc.fontRenderer.getStringWidth(this.tradIfExist("spawnMin"   ))+20,
+			mc.fontRenderer.getStringWidth(this.tradIfExist("spawnMax"   ))+20,
 			mc.fontRenderer.getStringWidth(this.tradIfExist("blocksSpawn"))+20,
 		};
 		

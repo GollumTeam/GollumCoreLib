@@ -182,7 +182,8 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 			DimentionSpawnInfos dimentionsInfos = building.dimentionsInfos.get(dimention);
 			
 			// Position initial de la génération en hauteur
-			int worldY = dimentionsInfos.spawnHeight;
+			// TODO A revoir
+			int worldY = dimentionsInfos.spawnMin;
 			
 			// Position initiale du batiment
 			int initX = chunkX * 16 + random.nextInt(8) - random.nextInt(8);

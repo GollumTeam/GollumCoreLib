@@ -101,16 +101,18 @@ public class Building {
 	public static class DimentionSpawnInfos {
 
 		public int spawnRate = 0;
-		public int spawnHeight = 0;
+		public int spawnMin = 3;
+		public int spawnMax = 256;
 		public ArrayList<Block> blocksSpawn = new ArrayList<Block>();
 		
 
 		public DimentionSpawnInfos() {
 		}
 		
-		public DimentionSpawnInfos(int spawnRate, int spawnHeight, ArrayList<Block> blocksSpawn) {
+		public DimentionSpawnInfos(int spawnRate, int spawnMin, int spawnMax, ArrayList<Block> blocksSpawn) {
 			this.spawnRate   = spawnRate;
-			this.spawnHeight = spawnHeight;
+			this.spawnMin    = spawnMin;
+			this.spawnMax    = spawnMax;
 			this.blocksSpawn = blocksSpawn;
 		}
 		
