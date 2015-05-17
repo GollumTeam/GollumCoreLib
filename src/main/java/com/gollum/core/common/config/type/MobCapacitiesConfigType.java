@@ -48,6 +48,11 @@ public class MobCapacitiesConfigType extends ConfigJsonType {
 		);
 	}
 	
+	@Override
+	public String toString() {
+		return "M:"+this.moveSpeed+", H:"+this.maxHealt+", A:"+this.attackStrength+", F:"+this.followRange+", T:"+this.timeRange;
+	}
+	
 	/**
 	 * @return Vitesse du mod
 	 */
