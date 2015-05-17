@@ -59,13 +59,17 @@ public class Builder {
 		BuildingBlockRegistry.register(new BlockMobSpawnerBuildingHandler());
 	}
 	
-	public void build(World world, SubBuilding subBuilding) {
-		this.build(world, subBuilding.building, subBuilding.orientation, subBuilding.x, subBuilding.y, subBuilding.z);
+	public void build(World world, SubBuilding subBuilding, boolean isStaff) {
+		this.build(world, subBuilding.building, subBuilding.orientation, subBuilding.x, subBuilding.y, subBuilding.z, isStaff);
 	}
 	
 	public void build(World world, Building building, int rotate, int initX, int initY, int initZ) {
+		this.build(world, building, rotate, initX, initY, initZ, false);
+	}
+	
+	public void build(World world, Building building, int rotate, int initX, int initY, int initZ, boolean isStaff) {
 		
-		BuilderRunnable thread = new BuilderRunnable(world, building, rotate, initX, initY, initZ);
+		BuilderRunnable thread = new BuilderRunnable(world, building, rotate, initX, initY, initZ, isStaff);
 		thread.start();
 		this.currentBuilds.add(thread);
 	}
@@ -139,14 +143,16 @@ public class Builder {
 		
 		private Boolean waitForWorld = true;
 		private long time = System.currentTimeMillis();
+		private boolean isStaff = false;
 		
-		public BuilderRunnable(World world, Building building, int rotate, int initX, int initY, int initZ) {
+		public BuilderRunnable(World world, Building building, int rotate, int initX, int initY, int initZ, boolean isStaff) {
 			this.world    = (WorldServer) world;
 			this.building = building;
 			this.rotate   = rotate;
 			this.initX    = initX;
 			this.initY    = initY;
 			this.initZ    = initZ;
+			this.isStaff  = isStaff;
 		}
 		
 		public void run() {
@@ -236,9 +242,12 @@ public class Builder {
 				int finalX = initX + unity3D.x(rotate)*dx;
 				int finalY = initY + unity3D.y(rotate);
 				int finalZ = initZ + unity3D.z(rotate)*dz;
-
+				
 				this.lock(world);
-				world.markBlockForUpdate(finalX, finalY, finalZ);
+				world.notifyBlocksOfNeighborChange(finalX, finalY, finalZ, unity.block != null ? unity.block : Blocks.air);
+				if (this.isStaff ) {
+					world.markBlockForUpdate(finalX, finalY, finalZ);
+				}
 				WorldAccesssSheduler.instance().unlockWorld(world);
 			}
 		}
@@ -336,7 +345,7 @@ public class Builder {
 				
 				for (SubBuilding subBuilding : randomBuilding) {
 					
-					BuilderRunnable thread = new BuilderRunnable(world, subBuilding.building, rotate, initX+subBuilding.x*dx, initY+subBuilding.y, initZ+subBuilding.z*dz);
+					BuilderRunnable thread = new BuilderRunnable(world, subBuilding.building, rotate, initX+subBuilding.x*dx, initY+subBuilding.y, initZ+subBuilding.z*dz, isStaff);
 					thread.run(false);
 				}
 			}

@@ -90,7 +90,7 @@ public class ItemBuilding extends HItem {
 			
 			log.debug("orientation = "+orientation);
 			this.lastBuildings.add(subBuilding);
-			builder.build(world, subBuilding);
+			builder.build(world, subBuilding, true);
 			
 		}
 		
