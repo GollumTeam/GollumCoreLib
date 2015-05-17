@@ -212,7 +212,7 @@ public class Builder {
 				if (this.waitForWorld && System.currentTimeMillis() - time > 500) {
 					this.time = System.currentTimeMillis();
 					try {
-						this.sleep(100);
+						this.sleep(200);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}

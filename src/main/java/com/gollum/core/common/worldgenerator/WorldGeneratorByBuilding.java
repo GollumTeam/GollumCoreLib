@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 
@@ -100,34 +101,6 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 		return false;
 	}
 	
-//	/**
-//	 * Charge le batiment de maniere aléatoire en fonction du ratio
-//	 * @param buildings
-//	 * @param totalRate
-//	 * @return
-//	 */
-//	private Building getBuildingByRate(ArrayList<Building> buildings, int dimention, Random random) {
-//		
-//		ArrayList<Building>buildingsForRate = new ArrayList<Building>();
-//		
-//		for (Building building : buildings) {
-//			
-//			if (building.dimentionsInfos.containsKey(dimention)) {
-//				DimentionSpawnInfos dimentionsInfos = building.dimentionsInfos.get(dimention);
-//				for (int i = 0; i < dimentionsInfos.spawnRate; i++) {
-//					buildingsForRate.add(building);
-//				}
-//			}
-//			
-//		}
-//		if (buildingsForRate.isEmpty()) {
-//			return null;
-//		}
-//		
-//		
-//		return buildingsForRate.get(random.nextInt(buildingsForRate.size()));
-//	}
-	
 	/**
 	 * Methode de generation
 	 */
@@ -176,17 +149,12 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 			random.nextInt((int)((Math.pow (10 , multiplicateur) * ((float)this.globalSpawnRate.size())/1.5f))) < (Math.pow (Math.min (groupSpawnRate, 10) , multiplicateur))
 		) {
 			
-			
-			int rotate = random.nextInt(Building.ROTATED_360);
+			int     rotate     = random.nextInt(Building.ROTATED_360);
+			Block[] blocksList = new Block[256];
 			
 			buildings = (ArrayList<Building>) buildings.clone();
 			Collections.shuffle(buildings);
 			
-//			Building building = this.getBuildingByRate (buildings, dimention, random);
-//			if (building == null) {
-//				return false;
-//			}
-
 			if (!this.hasBuildingArround (chunkX, chunkZ)) {
 				
 				for (Building building : buildings) {
@@ -197,7 +165,7 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 					
 					DimentionSpawnInfos dimentionsInfos = building.dimentionsInfos.get(dimention);
 					
-					int strengSpawn = random.nextInt(20);
+					int strengSpawn = random.nextInt(50);
 					
 					if (strengSpawn < dimentionsInfos.spawnRate) {
 						
@@ -205,16 +173,35 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 						int initX = chunkX * 16 + random.nextInt(8) - random.nextInt(8);
 						int initZ = chunkZ * 16 + random.nextInt(8) - random.nextInt(8);
 						
-						for (int detectY = dimentionsInfos.spawnMax; detectY >= dimentionsInfos.spawnMin; detectY--) {
+						for (int initY = dimentionsInfos.spawnMax; initY >= dimentionsInfos.spawnMin;initY--) {
 							
-							// Position initiale du batiment
-							int initY = detectY;
+							if (initY > 255) {
+								continue;
+							}
+							if (initY < 3) {
+								continue;
+							}
 							
+							if (blocksList[initY] == null) {
+								blocksList[initY] = world.getBlock(initX + 3, initY, initZ + 3);
+							}
+							if (blocksList[initY+1] == null) {
+								blocksList[initY+1] = world.getBlock(initX + 3, initY+1, initZ + 3);
+							}
 							
-							Block block = world.getBlock(initX + 3, initY, initZ + 3);
+							Block block   = blocksList[initY];
+							Block blockP1 = blocksList[initY+1];
 							
 							//Test si on est sur de la terre (faudrais aps que le batiment vol)
-							if (block != null && world.isAirBlock(initX + 3, initY+1, initZ + 3) && dimentionsInfos.blocksSpawn.contains(block)) {
+							if (
+								block != null && 
+								block != Blocks.air && 
+								(
+									blockP1 == null ||
+									blockP1 == Blocks.air 
+								) &&
+								dimentionsInfos.blocksSpawn.contains(block)
+							) {
 								
 								// Auteur initiale du batiment 
 								initY += 1;

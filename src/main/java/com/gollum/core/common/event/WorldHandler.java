@@ -3,6 +3,9 @@ package com.gollum.core.common.event;
 import static com.gollum.core.ModGollumCoreLib.log;
 
 import java.lang.reflect.Field;
+import java.util.Collections;
+import java.util.Set;
+import java.util.TreeSet;
 
 import net.minecraft.entity.EntityTracker;
 import net.minecraft.util.IProgressUpdate;
@@ -44,8 +47,31 @@ public class WorldHandler {
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
-					}
-					
+					} 
+//					else 
+//					if (f.getType() == TreeSet.class) {
+//						try {
+//							f.setAccessible(true);
+//							TreeSet o = (TreeSet)f.get(worldServer);
+//							Object dd = Collections.synchronizedCollection(o);
+//							
+//							f.set(worldServer, dd);
+//						} catch (Exception e) {
+//							e.printStackTrace();
+//						}
+//					}
+//					else 
+//					if (f.getType() == Set.class) {
+//						try {
+//							f.setAccessible(true);
+//							Set o = (Set)f.get(worldServer);
+//							Object dd = Collections.synchronizedCollection(o);
+//							
+//							f.set(worldServer, dd);
+//						} catch (Exception e) {
+//							e.printStackTrace();
+//						}
+//					}
 					
 					
 				}
