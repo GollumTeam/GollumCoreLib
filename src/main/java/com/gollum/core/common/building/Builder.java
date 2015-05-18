@@ -187,7 +187,7 @@ public class Builder {
 						break;
 				}
 				
-				this.placeBlockStone(dx, dz);
+//				this.placeBlockStone(dx, dz);
 				this.placeBlock(dx, dz);
 				this.placeBlockRandom(dx, dz);
 				
@@ -212,7 +212,7 @@ public class Builder {
 				if (this.waitForWorld && System.currentTimeMillis() - time > 500) {
 					this.time = System.currentTimeMillis();
 					try {
-						this.sleep(200);
+						this.sleep(500);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}

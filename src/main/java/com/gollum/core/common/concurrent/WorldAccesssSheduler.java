@@ -19,8 +19,6 @@ public class WorldAccesssSheduler {
 	private final ConcurrentHashMap<World, ReentrantLock> mustBeLock = new ConcurrentHashMap<World, ReentrantLock>();
 	private final ConcurrentHashMap<World, ReentrantLock> allMutex   = new ConcurrentHashMap<World, ReentrantLock>();
 	
-	int iiii = 0;
-	
 	public void observe (World world) {
 		synchronized (this.mustBeLock) {
 			ReentrantLock m = new ReentrantLock();
