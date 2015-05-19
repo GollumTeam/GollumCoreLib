@@ -42,236 +42,236 @@ public class ConcurrentTreeSet<E> extends TreeSet<E>{
 	}
 	
 	public Iterator<E> iterator() {
-		lock.readLock().lock();
+		if(lock != null)lock.readLock().lock();
 		try {
 			return super.iterator();
 		} finally {
-			lock.readLock().unlock();
+			if(lock != null)lock.readLock().unlock();
 		}
 	}
 	
 	public Iterator<E> descendingIterator() {
-		lock.readLock().lock();
+		if(lock != null)lock.readLock().lock();
 		try {
 			return super.descendingIterator();
 		} finally {
-			lock.readLock().unlock();
+			if(lock != null)lock.readLock().unlock();
 		}
 	}
 	
 	public NavigableSet<E> descendingSet() {
-		lock.readLock().lock();
+		if(lock != null)lock.readLock().lock();
 		try {
 			return super.descendingSet();
 		} finally {
-			lock.readLock().unlock();
+			if(lock != null)lock.readLock().unlock();
 		}
 	}
 	
 	public int size() {
-		lock.readLock().lock();
+		if(lock != null)lock.readLock().lock();
 		try {
 			return super.size();
 		} finally {
-			lock.readLock().unlock();
+			if(lock != null)lock.readLock().unlock();
 		}
 	}
 	
 	public boolean isEmpty() {
-		lock.readLock().lock();
+		if(lock != null)lock.readLock().lock();
 		try {
 			return super.isEmpty();
 		} finally {
-			lock.readLock().unlock();
+			if(lock != null)lock.readLock().unlock();
 		}
 	}
 	
 	public boolean contains(Object o) {
-		lock.readLock().lock();
+		if(lock != null)lock.readLock().lock();
 		try {
 			return super.contains(o);
 		} finally {
-			lock.readLock().unlock();
+			if(lock != null)lock.readLock().unlock();
 		}
 	}
 	
 	public boolean add(E e) {
-		lock.readLock().lock();
+		if(lock != null)lock.writeLock().lock();
 		try {
 			return super.add(e);
 		} finally {
-			lock.readLock().unlock();
+			if(lock != null)lock.writeLock().unlock();
 		}
 	}
 	
 	public boolean remove(Object o) {
-		lock.readLock().lock();
+		if(lock != null)lock.writeLock().lock();
 		try {
 			return super.remove(o);
 		} finally {
-			lock.readLock().unlock();
+			if(lock != null)lock.writeLock().unlock();
 		}
 	}
 	
 	public void clear() {
-		lock.readLock().lock();
+		if(lock != null)lock.writeLock().lock();
 		try {
 			super.clear();
 		} finally {
-			lock.readLock().unlock();
+			if(lock != null)lock.writeLock().unlock();
 		}
 	}
 	
 	public  boolean addAll(Collection<? extends E> c) {
-		lock.readLock().lock();
+		if(lock != null)lock.writeLock().lock();
 		try {
 			return super.addAll(c);
 		} finally {
-			lock.readLock().unlock();
+			if(lock != null)lock.writeLock().unlock();
 		}
 	}
 	
 	public NavigableSet<E> subSet(E fromElement, boolean fromInclusive, E toElement,   boolean toInclusive)  {
-		lock.readLock().lock();
+		if(lock != null)lock.writeLock().lock();
 		try {
 			return super.subSet(fromElement, fromInclusive, toElement, toInclusive);
 		} finally {
-			lock.readLock().unlock();
+			if(lock != null)lock.writeLock().unlock();
 		}
 	}
 	
 	public NavigableSet<E> headSet(E toElement, boolean inclusive) {
-		lock.readLock().lock();
+		if(lock != null)lock.writeLock().lock();
 		try {
 			return super.headSet(toElement, inclusive);
 		} finally {
-			lock.readLock().unlock();
+			if(lock != null)lock.writeLock().unlock();
 		}
 	}
 	
 	public NavigableSet<E> tailSet(E fromElement, boolean inclusive) {
-		lock.readLock().lock();
+		if(lock != null)lock.writeLock().lock();
 		try {
 			return super.tailSet(fromElement, inclusive);
 		} finally {
-			lock.readLock().unlock();
+			if(lock != null)lock.writeLock().unlock();
 		}
 	}
 	
 	public SortedSet<E> subSet(E fromElement, E toElement) {
-		lock.readLock().lock();
+		if(lock != null)lock.writeLock().lock();
 		try {
 			return super.subSet(fromElement, toElement);
 		} finally {
-			lock.readLock().unlock();
+			if(lock != null)lock.writeLock().unlock();
 		}
 	}
 	
 	public SortedSet<E> headSet(E toElement) {
-		lock.readLock().lock();
+		if(lock != null)lock.writeLock().lock();
 		try {
 			return super.headSet(toElement);
 		} finally {
-			lock.readLock().unlock();
+			if(lock != null)lock.writeLock().unlock();
 		}
 	}
 	
 	public SortedSet<E> tailSet(E fromElement) {
-		lock.readLock().lock();
+		if(lock != null)lock.writeLock().lock();
 		try {
 			return super.headSet(fromElement);
 		} finally {
-			lock.readLock().unlock();
+			if(lock != null)lock.writeLock().unlock();
 		}
 	}
 	
 	public Comparator<? super E> comparator() {
-		lock.readLock().lock();
+		if(lock != null)lock.readLock().lock();
 		try {
 			return super.comparator();
 		} finally {
-			lock.readLock().unlock();
+			if(lock != null)lock.readLock().unlock();
 		}
 	}
 	
 	public E first() {
-		lock.readLock().lock();
+		if(lock != null)lock.readLock().lock();
 		try {
 			return super.first();
 		} finally {
-			lock.readLock().unlock();
+			if(lock != null)lock.readLock().unlock();
 		}
 	}
 	
 	public E last() {
-		lock.readLock().lock();
+		if(lock != null)lock.readLock().lock();
 		try {
 			return super.last();
 		} finally {
-			lock.readLock().unlock();
+			if(lock != null)lock.readLock().unlock();
 		}
 	}
 	
 	public E lower(E e) {
-		lock.readLock().lock();
+		if(lock != null)lock.readLock().lock();
 		try {
 			return super.lower(e);
 		} finally {
-			lock.readLock().unlock();
+			if(lock != null)lock.readLock().unlock();
 		}
 	}
 	
 	public E floor(E e) {
-		lock.readLock().lock();
+		if(lock != null)lock.readLock().lock();
 		try {
 			return super.floor(e);
 		} finally {
-			lock.readLock().unlock();
+			if(lock != null)lock.readLock().unlock();
 		}
 	}
 	
 	public E ceiling(E e) {
-		lock.readLock().lock();
+		if(lock != null)lock.writeLock().lock();
 		try {
 			return super.ceiling(e);
 		} finally {
-			lock.readLock().unlock();
+			if(lock != null)lock.writeLock().unlock();
 		}
 	}
 	
 	public E higher(E e) {
-		lock.readLock().lock();
+		if(lock != null)lock.writeLock().lock();
 		try {
 			return super.higher(e);
 		} finally {
-			lock.readLock().unlock();
+			if(lock != null)lock.writeLock().unlock();
 		}
 	}
 	
 	public E pollFirst() {
-		lock.readLock().lock();
+		if(lock != null)lock.writeLock().lock();
 		try {
 			return super.pollFirst();
 		} finally {
-			lock.readLock().unlock();
+			if(lock != null)lock.writeLock().unlock();
 		}
 	}
 	
 	public E pollLast() {
-		lock.readLock().lock();
+		if(lock != null)lock.writeLock().lock();
 		try {
 			return super.pollLast();
 		} finally {
-			lock.readLock().unlock();
+			if(lock != null)lock.writeLock().unlock();
 		}
 	}
 	
 	public Object clone() {
-		lock.readLock().lock();
+		if(lock != null)lock.writeLock().lock();
 		try {
 			return super.clone();
 		} finally {
-			lock.readLock().unlock();
+			if(lock != null)lock.writeLock().unlock();
 		}
 	}
 	

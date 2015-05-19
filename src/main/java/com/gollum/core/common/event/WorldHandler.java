@@ -21,6 +21,7 @@ import com.gollum.core.common.concurrent.WorldAccesssSheduler;
 import com.gollum.core.common.reflection.EntityTrackerProxy;
 import com.gollum.core.utils.reflection.Reflection;
 import com.gollum.core.utils.reflection.collections.ConcurrentTreeMap;
+import com.gollum.core.utils.reflection.collections.ConcurrentTreeSet;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
@@ -55,9 +56,8 @@ public class WorldHandler {
 							f.setAccessible(true);
 							TreeSet o = (TreeSet)f.get(worldServer);
 								
-//							Object dd = new ConcurrentTreeMap(o);
-							Object dd = Collections.synchronizedCollection(o);
-//							
+							Object dd = new ConcurrentTreeSet(o);
+							
 							f.set(worldServer, dd);
 						} catch (Exception e) {
 							e.printStackTrace();
