@@ -4,6 +4,7 @@ import static com.gollum.core.ModGollumCoreLib.log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.locks.ReentrantLock;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBed;
@@ -141,8 +142,10 @@ public class Builder {
 		int initY;
 		int initZ;
 		
+		public ReentrantLock lockWorld = new ReentrantLock();
+		
 		private Boolean waitForWorld = true;
-		private long time = System.currentTimeMillis();
+		private long time = 0;
 		private boolean isStaff = false;
 		
 		public BuilderRunnable(World world, Building building, int rotate, int initX, int initY, int initZ, boolean isStaff) {
@@ -199,6 +202,7 @@ public class Builder {
 			
 			log.info("End create building width matrix : "+building.name+" "+initX+" "+initY+" "+initZ);
 			
+			this.unlock();
 		}
 		
 		public void dontWaitWorld () {
@@ -207,18 +211,51 @@ public class Builder {
 			}
 		}
 		
-		private void lock (World lock) {
+		private void lock () {
+			
 			synchronized (this.waitForWorld) {
-				if (this.waitForWorld && System.currentTimeMillis() - time > 500) {
-					this.time = System.currentTimeMillis();
-					try {
-						this.sleep(500);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
+				
+				try  {
+					if (this.waitForWorld) {
+						long lantency = System.currentTimeMillis() - this.time;
+						if (lantency > 200) {
+							if (lantency >  500 && this.time != 0) {
+								log.warning("Latency of builder is gretter that 500 milliseconds. lantency = "+lantency);
+							}
+							this.time = System.currentTimeMillis();
+							this.unlock();
+							this.wait();
+						}
+						this.lockWorld.lock();
 					}
+					
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
+				
 			}
-			WorldAccesssSheduler.instance().lockWorld(world);
+//			
+//			synchronized (this.waitForWorld) {
+//				if (this.waitForWorld && System.currentTimeMillis() - time > 500) {
+//					this.time = System.currentTimeMillis();
+//					try {
+//						this.sleep(500);
+//					} catch (InterruptedException e) {
+//						e.printStackTrace();
+//					}
+//				}
+//			}
+//			//WorldAccesssSheduler.instance().lockWorld(world);
+		}
+
+		private void unlock () {
+			try {
+				if (this.lockWorld.isLocked()) {
+					this.lockWorld.unlock();
+				}
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
 		}
 		
 		private boolean setBlock (World world, int x,int y, int z, Block block, int metadata) {
@@ -243,12 +280,11 @@ public class Builder {
 				int finalY = initY + unity3D.y(rotate);
 				int finalZ = initZ + unity3D.z(rotate)*dz;
 				
-				this.lock(world);
+				this.lock();
 				world.notifyBlocksOfNeighborChange(finalX, finalY, finalZ, unity.block != null ? unity.block : Blocks.air);
 				if (this.isStaff ) {
 					world.markBlockForUpdate(finalX, finalY, finalZ);
 				}
-				WorldAccesssSheduler.instance().unlockWorld(world);
 			}
 		}
 		
@@ -261,9 +297,8 @@ public class Builder {
 				int finalY = initY + unity3D.y(rotate);
 				int finalZ = initZ + unity3D.z(rotate)*dz;
 				
-				this.lock(world);
+				this.lock();
 				this.setBlock (world, finalX, finalY, finalZ, Blocks.stone, 0);
-				WorldAccesssSheduler.instance().unlockWorld(world);
 				
 			}
 		}
@@ -280,7 +315,7 @@ public class Builder {
 				int finalY = initY + unity3D.y(rotate);
 				int finalZ = initZ + unity3D.z(rotate)*dz;
 
-				this.lock(world);
+				this.lock();
 				
 				boolean isPlaced = false;
 				
@@ -309,12 +344,11 @@ public class Builder {
 					this.setExtra       (finalX, finalY, finalZ, unity.extra, building.maxX(rotate), building.maxZ(rotate));
 				}
 				
-				WorldAccesssSheduler.instance().unlockWorld(world);
 			}
 			
 			for (Unity3D unity3D : afters) {
 				
-				this.lock(world);
+				this.lock();
 					
 				boolean isPlaced = false;
 				
@@ -333,7 +367,6 @@ public class Builder {
 					this.setExtra       (finalX, finalY, finalZ, unity.extra, building.maxX(rotate), building.maxZ(rotate));
 				}
 				
-				WorldAccesssSheduler.instance().unlockWorld(world);
 			}
 		}
 		
