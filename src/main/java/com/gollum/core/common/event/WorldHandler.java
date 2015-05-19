@@ -5,6 +5,7 @@ import static com.gollum.core.ModGollumCoreLib.log;
 import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import net.minecraft.entity.EntityTracker;
@@ -19,6 +20,7 @@ import com.gollum.core.common.building.Builder.BuilderRunnable;
 import com.gollum.core.common.concurrent.WorldAccesssSheduler;
 import com.gollum.core.common.reflection.EntityTrackerProxy;
 import com.gollum.core.utils.reflection.Reflection;
+import com.gollum.core.utils.reflection.collections.ConcurrentTreeMap;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
@@ -27,7 +29,6 @@ public class WorldHandler {
 	
 	boolean mustBeSave = false;
 	
-
 	@SubscribeEvent
 	public void onLoad (Load event) {
 		
@@ -48,18 +49,20 @@ public class WorldHandler {
 							e.printStackTrace();
 						}
 					} 
-//					else 
-//					if (f.getType() == TreeSet.class) {
-//						try {
-//							f.setAccessible(true);
-//							TreeSet o = (TreeSet)f.get(worldServer);
-//							Object dd = Collections.synchronizedCollection(o);
+					else 
+					if (f.getType() == TreeSet.class) {
+						try {
+							f.setAccessible(true);
+							TreeSet o = (TreeSet)f.get(worldServer);
+								
+//							Object dd = new ConcurrentTreeMap(o);
+							Object dd = Collections.synchronizedCollection(o);
 //							
-//							f.set(worldServer, dd);
-//						} catch (Exception e) {
-//							e.printStackTrace();
-//						}
-//					}
+							f.set(worldServer, dd);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
 //					else 
 //					if (f.getType() == Set.class) {
 //						try {
