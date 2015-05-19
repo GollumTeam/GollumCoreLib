@@ -33,13 +33,13 @@ public class WorldHandler {
 	@SubscribeEvent
 	public void onSave (Save event) {
 		
-//		if (!event.world.isRemote) {
-//			for (Thread thread : Builder.currentBuilds) {
-//				if (thread.isAlive()) {
-//					mustBeSave = true;
-//				}
-//			}
-//		}
+		if (!event.world.isRemote) {
+			for (Thread thread : Builder.currentBuilds) {
+				if (thread.isAlive()) {
+					this.mustBeSave = true;
+				}
+			}
+		}
 	}
 	
 	@SubscribeEvent
@@ -50,32 +50,35 @@ public class WorldHandler {
 //			WorldAccesssSheduler.instance().forget(event.world);
 //			WorldAccesssSheduler.instance().unlockWorld(event.world);
 //			
-//			for (BuilderRunnable thread : Builder.currentBuilds) {
-//				if (thread.isAlive()) {
-//					try {
-//						log.message("Wait finish building");
-//						thread.dontWaitWorld();
-//						thread.join();
-//					} catch (InterruptedException e) {
-//						e.printStackTrace();
-//					}
-//				}
-//				mustBeSave = true;
-//			}
-//			if (mustBeSave) {
-//				log.message("Resave after building...");
-//				try {
-//					((WorldServer) event.world).saveAllChunks(true, (IProgressUpdate)null);
-//					log.message("Resave after building : DONE");
-//				} catch (Exception e) {
-//				}
-//			}
-//			Builder.currentBuilds.clear ();
+			for (BuilderRunnable thread : Builder.currentBuilds) {
+				if (thread.isAlive()) {
+					try {
+						log.message("Wait finish building");
+						thread.dontWaitWorld();
+						synchronized (thread.waiter) {
+							thread.waiter.notify();
+						}
+						thread.join();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+				this.mustBeSave = true;
+			}
+			if (this.mustBeSave) {
+				log.message("Resave after building...");
+				try {
+					((WorldServer) event.world).saveAllChunks(true, (IProgressUpdate)null);
+					log.message("Resave after building : DONE");
+				} catch (Exception e) {
+				}
+			}
+			Builder.currentBuilds.clear ();
 //			WorldAccesssSheduler.instance().clean();
-//
-//			mustBeSave = false;
-//			
-//			log.debug("=========== UnloadEvent ===========");
+
+			this.mustBeSave = false;
+			
+			log.debug("=========== UnloadEvent ===========");
 		}
 	}
 	

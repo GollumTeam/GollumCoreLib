@@ -3,6 +3,7 @@ package com.gollum.core.common.event;
 import static com.gollum.core.ModGollumCoreLib.log;
 
 import java.lang.reflect.Field;
+import java.util.Iterator;
 import java.util.concurrent.locks.ReentrantLock;
 
 import net.minecraft.entity.EntityTracker;
@@ -30,17 +31,27 @@ public class WorldTickHandler {
 		
 		if (!event.world.isRemote) {
 			
-			for (BuilderRunnable thread : Builder.currentBuilds) {
+			Iterator<BuilderRunnable> i = Builder.currentBuilds.iterator();
+			while (i.hasNext()) {
+				BuilderRunnable thread = i.next(); 
 				if (!thread.isAlive()) {
-					Builder.currentBuilds.remove (thread);
+					i.remove();
+					log.debug ("Thread "+thread.getId()+" is finish remove of pile.");
 					continue;
 				}
 				
 				try {
-					thread.notify();
+					log.debug ("WorldServer notify Builder");
+					synchronized  (thread.waiter) {
+						thread.waiter.notify();
+					}
 					Thread.sleep(50);
+					log.debug ("WorldServer lock for builder");
 					thread.lockWorld.lock();
+					log.debug ("WorldServer is unlock");
+					thread.unlockWorld();
 				} catch (Exception e) {
+					e.printStackTrace();
 					continue;
 				}
 				break;

@@ -143,6 +143,8 @@ public class Builder {
 		int initZ;
 		
 		public ReentrantLock lockWorld = new ReentrantLock();
+		public Object        waiter    = new Object();
+		
 		
 		private Boolean waitForWorld = true;
 		private long time = 0;
@@ -202,7 +204,7 @@ public class Builder {
 			
 			log.info("End create building width matrix : "+building.name+" "+initX+" "+initY+" "+initZ);
 			
-			this.unlock();
+			this.unlockWorld();
 		}
 		
 		public void dontWaitWorld () {
@@ -213,42 +215,35 @@ public class Builder {
 		
 		private void lock () {
 			
+			boolean waitForWorld = true;
 			synchronized (this.waitForWorld) {
-				
-				try  {
-					if (this.waitForWorld) {
-						long lantency = System.currentTimeMillis() - this.time;
-						if (lantency > 200) {
-							if (lantency >  500 && this.time != 0) {
-								log.warning("Latency of builder is gretter that 500 milliseconds. lantency = "+lantency);
-							}
-							this.time = System.currentTimeMillis();
-							this.unlock();
-							this.wait();
+				waitForWorld = this.waitForWorld;
+			}
+			try  {
+				if (waitForWorld) {
+					long lantency = System.currentTimeMillis() - this.time;
+					if (lantency > 200) {
+						if (lantency >  500 && this.time != 0) {
+							log.warning("Latency of builder is gretter that 500 milliseconds. lantency = "+lantency);
+						}
+						this.time = System.currentTimeMillis();
+						this.unlockWorld();
+						log.debug ("Thread wait server");
+
+						synchronized  (this.waiter) {
+							this.waiter.wait();
 						}
 						this.lockWorld.lock();
+						log.debug ("Thread is free lock world for 200ms");
 					}
-					
-				} catch (Exception e) {
-					e.printStackTrace();
 				}
 				
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-//			
-//			synchronized (this.waitForWorld) {
-//				if (this.waitForWorld && System.currentTimeMillis() - time > 500) {
-//					this.time = System.currentTimeMillis();
-//					try {
-//						this.sleep(500);
-//					} catch (InterruptedException e) {
-//						e.printStackTrace();
-//					}
-//				}
-//			}
-//			//WorldAccesssSheduler.instance().lockWorld(world);
 		}
-
-		private void unlock () {
+		
+		synchronized public void unlockWorld () {
 			try {
 				if (this.lockWorld.isLocked()) {
 					this.lockWorld.unlock();
@@ -282,9 +277,9 @@ public class Builder {
 				
 				this.lock();
 				world.notifyBlocksOfNeighborChange(finalX, finalY, finalZ, unity.block != null ? unity.block : Blocks.air);
-				if (this.isStaff ) {
+//				if (this.isStaff ) {
 					world.markBlockForUpdate(finalX, finalY, finalZ);
-				}
+//				}
 			}
 		}
 		
@@ -379,6 +374,8 @@ public class Builder {
 				for (SubBuilding subBuilding : randomBuilding) {
 					
 					BuilderRunnable thread = new BuilderRunnable(world, subBuilding.building, rotate, initX+subBuilding.x*dx, initY+subBuilding.y, initZ+subBuilding.z*dz, isStaff);
+					thread.waiter    = this.waiter;
+					thread.lockWorld = this.lockWorld;
 					thread.run(false);
 				}
 			}
