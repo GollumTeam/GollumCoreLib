@@ -68,7 +68,6 @@ public class WorldHandler {
 				}
 			}
 			Builder.currentBuilds.clear ();
-//			WorldAccesssSheduler.instance().clean();
 
 			this.mustBeSave = false;
 			
