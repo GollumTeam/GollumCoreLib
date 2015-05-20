@@ -1,6 +1,7 @@
 
 package com.gollum.core;
 
+import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -13,6 +14,7 @@ import com.gollum.core.common.event.WorldTickHandler;
 import com.gollum.core.common.i18n.I18n;
 import com.gollum.core.common.log.Logger;
 import com.gollum.core.common.mod.GollumMod;
+import com.gollum.core.common.reflection.WorldStub;
 import com.gollum.core.common.version.VersionChecker;
 import com.gollum.core.common.worldgenerator.WorldGeneratorByBuilding;
 import com.gollum.core.common.worldgenerator.WorldGeneratorByBuildingLoader;
@@ -130,6 +132,9 @@ public class ModGollumCoreLib extends GollumMod {
 		// Set de l'icon du tab creative
 		ModCreativeTab.init();
 		
+		// Initialisation des reflection sur vanilla
+		this.initReflection();
+		
 		MinecraftForge.EVENT_BUS.register(new WorldHandler());
 		FMLCommonHandler.instance().bus().register(new WorldTickHandler());
 	}
@@ -143,6 +148,27 @@ public class ModGollumCoreLib extends GollumMod {
 	@EventHandler
 	public void serverStarting(FMLServerStartingEvent event) {
 		event.registerServerCommand(new CommandBuilding());
+	}
+	
+	/**
+	 * Initialisation des reflection sur vanilla
+	 */
+	private void initReflection() {
+		try {
+			
+			Reflection.enableSynchronized (Reflection.getObfuscateMethod(World.class      , WorldStub.class, "getChunkFromChunkCoords"        ));
+//			Reflection.enableSynchronized (Reflection.getObfuscateMethod(WorldServer.class, WorldStub.class, "scheduleBlockUpdateWithPriority"));
+//			Reflection.enableSynchronized (Reflection.getObfuscateMethod(WorldServer.class, WorldStub.class, "tick"                           ));
+//			Reflection.enableSynchronized (Reflection.getObfuscateMethod(WorldServer.class, WorldStub.class, "tickUpdates"                    ));
+//			Reflection.enableSynchronized (Reflection.getObfuscateMethod(WorldServer.class, WorldStub.class, "func_147446_b"                  ));
+//			Reflection.enableSynchronized (Reflection.getObfuscateMethod(WorldServer.class, WorldStub.class, "getPendingBlockUpdates"         ));
+//			Reflection.enableSynchronized (Reflection.getObfuscateMethod(WorldServer.class, WorldStub.class, "initialize"                     ));
+//			Reflection.enableSynchronized (Reflection.getObfuscateMethod(WorldServer.class, WorldStub.class, "addBlockEvent"                  ));
+//			Reflection.enableSynchronized (Reflection.getObfuscateMethod(WorldServer.class, WorldStub.class, "updateEntities"                 ));
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**
