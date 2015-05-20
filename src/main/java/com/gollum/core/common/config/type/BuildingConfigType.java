@@ -103,7 +103,7 @@ public class BuildingConfigType extends ConfigJsonType implements IConfigMerge {
 			dimention.spawnRate   = jsonDimention.child("spawnRate").intValue();
 			dimention.spawnMin    = jsonDimention.child("spawnMin").intValue();
 			dimention.spawnMax    = jsonDimention.child("spawnMax").intValue();
-			
+
 			for (Json jsonBlock : jsonDimention.child("blocksSpawn").allChild()) {
 				String key = jsonBlock.strValue();
 				try {
@@ -182,7 +182,7 @@ public class BuildingConfigType extends ConfigJsonType implements IConfigMerge {
 				new EntryObject ("spawnMin"   , Json.create(dimention.spawnMin)),
 				new EntryObject ("spawnMax"   , Json.create(dimention.spawnMax)),
 				new EntryObject ("spawnRate"  , Json.create(dimention.spawnRate)),
-				new EntryObject ("blocksSpawn", this.getJsonBlocksSpawn (dimention.blocksSpawn))
+				new EntryObject ("blocksSpawn", this.getJsonBlocks (dimention.blocksSpawn))
 			);
 			
 			jsonDimentions.add(dimentionId.toString(), jsonDimention);
@@ -191,7 +191,7 @@ public class BuildingConfigType extends ConfigJsonType implements IConfigMerge {
 		return jsonDimentions;
 	}
 
-	private Json getJsonBlocksSpawn(ArrayList<Block> blocksSpawn) {
+	private Json getJsonBlocks(ArrayList<Block> blocksSpawn) {
 		Json jsonBlocksSpawn = new JsonArray();
 		
 		for (Block block : blocksSpawn) {

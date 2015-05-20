@@ -1,4 +1,4 @@
-package com.gollum.core.common.event;
+package com.gollum.core.common.handlers;
 
 import static com.gollum.core.ModGollumCoreLib.log;
 

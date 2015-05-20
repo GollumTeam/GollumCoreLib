@@ -1,9 +1,10 @@
 package com.gollum.core.common.worldgenerator;
 
+import static com.gollum.core.ModGollumCoreLib.log;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
 
@@ -11,10 +12,13 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraftforge.common.MinecraftForge;
 
 import com.gollum.core.common.building.Builder;
 import com.gollum.core.common.building.Building;
 import com.gollum.core.common.building.Building.DimentionSpawnInfos;
+import com.gollum.core.common.events.BuildingGenerateEvent;
+import com.gollum.core.utils.math.Integer3d;
 
 import cpw.mods.fml.common.IWorldGenerator;
 
@@ -173,46 +177,57 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 						int initX = chunkX * 16 + random.nextInt(8) - random.nextInt(8);
 						int initZ = chunkZ * 16 + random.nextInt(8) - random.nextInt(8);
 						
-						for (int initY = dimentionsInfos.spawnMax; initY >= dimentionsInfos.spawnMin;initY--) {
-							
-							if (initY > 255) {
-								continue;
-							}
-							if (initY < 3) {
-								continue;
-							}
-							
-							if (blocksList[initY] == null) {
-								blocksList[initY] = world.getBlock(initX + 3, initY, initZ + 3);
-							}
-							if (blocksList[initY+1] == null) {
-								blocksList[initY+1] = world.getBlock(initX + 3, initY+1, initZ + 3);
-							}
-							
-							Block block   = blocksList[initY];
-							Block blockP1 = blocksList[initY+1];
-							
-							//Test si on est sur de la terre (faudrais aps que le batiment vol)
-							if (
-								block != null && 
-								block != Blocks.air && 
-								(
-									blockP1 == null ||
-									blockP1 == Blocks.air 
-								) &&
-								dimentionsInfos.blocksSpawn.contains(block)
-							) {
+						if (dimentionsInfos.spawnMax >= dimentionsInfos.spawnMin) {
+							int initY = dimentionsInfos.spawnMax;
+							for (; initY >= dimentionsInfos.spawnMin;initY--) {
 								
-								// Auteur initiale du batiment 
-								initY += 1;
+								if (initY > 255) {
+									continue;
+								}
+								if (initY < 3) {
+									continue;
+								}
 								
-								// Garde en mémoire que le chunk à généré un batiment (évite que tous se monte dessus)
-								// N'est pas sauvegardé enc as d'arret du serveur mais ca devrais pas dérangé
-								WorldGeneratorByBuilding.chunkHasABuilding.add(chunkX+"x"+chunkZ);
+								if (blocksList[initY] == null) {
+									blocksList[initY] = world.getBlock(initX + 3, initY, initZ + 3);
+								}
+								if (blocksList[initY+1] == null) {
+									blocksList[initY+1] = world.getBlock(initX + 3, initY+1, initZ + 3);
+								}
 								
-								builder.build(world, building, rotate, initX, initY, initZ);
+								Block block   = blocksList[initY];
+								Block blockP1 = blocksList[initY+1];
 								
-								return true;
+								//Test si on est sur de la terre (faudrais pas que le batiment vol)
+								if (
+									block != null && 
+									block != Blocks.air && 
+									(
+										blockP1 == null ||
+										blockP1 == Blocks.air 
+									) &&
+									dimentionsInfos.blocksSpawn.contains(block)
+								) {
+									
+									// Auteur initiale du batiment 
+									initY += 1;
+									
+									// Garde en mémoire que le chunk à généré un batiment (évite que tous se monte dessus)
+									// N'est pas sauvegardé enc as d'arret du serveur mais ca devrais pas dérangé
+									WorldGeneratorByBuilding.chunkHasABuilding.add(chunkX+"x"+chunkZ);
+									
+									BuildingGenerateEvent event = new BuildingGenerateEvent(world, building, rotate, new Integer3d(initX, initY, initZ));
+									MinecraftForge.EVENT_BUS.post(event);
+									if (event.isCanceled()) {
+										return false;
+									}
+									builder.build(world, building, rotate, initX, initY, initZ);
+									
+									return true;
+								}
+							}
+							if (initY > dimentionsInfos.spawnMin) {
+								log.debug ("No block found for building "+building.name);
 							}
 						}
 					}
