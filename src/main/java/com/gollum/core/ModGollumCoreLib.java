@@ -156,7 +156,7 @@ public class ModGollumCoreLib extends GollumMod {
 	private void initReflection() {
 		try {
 			
-			Reflection.enableSynchronized (Reflection.getObfuscateMethod(World.class      , WorldStub.class, "getChunkFromChunkCoords"        ));
+//			Reflection.enableSynchronized (Reflection.getObfuscateMethod(World.class      , WorldStub.class, "getChunkFromChunkCoords"        ));
 //			Reflection.enableSynchronized (Reflection.getObfuscateMethod(WorldServer.class, WorldStub.class, "scheduleBlockUpdateWithPriority"));
 //			Reflection.enableSynchronized (Reflection.getObfuscateMethod(WorldServer.class, WorldStub.class, "tick"                           ));
 //			Reflection.enableSynchronized (Reflection.getObfuscateMethod(WorldServer.class, WorldStub.class, "tickUpdates"                    ));
