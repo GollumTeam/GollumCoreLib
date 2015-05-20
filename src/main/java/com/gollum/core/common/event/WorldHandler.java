@@ -17,11 +17,8 @@ import net.minecraftforge.event.world.WorldEvent.Unload;
 
 import com.gollum.core.common.building.Builder;
 import com.gollum.core.common.building.Builder.BuilderRunnable;
-import com.gollum.core.common.concurrent.WorldAccesssSheduler;
 import com.gollum.core.common.reflection.EntityTrackerProxy;
 import com.gollum.core.utils.reflection.Reflection;
-import com.gollum.core.utils.reflection.collections.ConcurrentTreeMap;
-import com.gollum.core.utils.reflection.collections.ConcurrentTreeSet;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
@@ -47,9 +44,6 @@ public class WorldHandler {
 		
 		if (!event.world.isRemote) {
 			
-//			WorldAccesssSheduler.instance().forget(event.world);
-//			WorldAccesssSheduler.instance().unlockWorld(event.world);
-//			
 			for (BuilderRunnable thread : Builder.currentBuilds) {
 				if (thread.isAlive()) {
 					try {

@@ -39,7 +39,6 @@ import com.gollum.core.common.building.handler.BlockSignBuildingHandler;
 import com.gollum.core.common.building.handler.BlockStairsBuildingHandler;
 import com.gollum.core.common.building.handler.BlockTrapDoorBuildingHandler;
 import com.gollum.core.common.building.handler.BuildingBlockHandler;
-import com.gollum.core.common.concurrent.WorldAccesssSheduler;
 import com.gollum.core.tools.registry.BuildingBlockRegistry;
 
 public class Builder {
