@@ -17,7 +17,6 @@ import net.minecraftforge.event.world.WorldEvent.Unload;
 
 import com.gollum.core.common.building.Builder;
 import com.gollum.core.common.building.Builder.BuilderRunnable;
-import com.gollum.core.common.reflection.EntityTrackerProxy;
 import com.gollum.core.utils.reflection.Reflection;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
