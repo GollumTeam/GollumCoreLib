@@ -91,6 +91,9 @@ public class ModGollumCoreLib extends GollumMod {
 		
 		// Creation du logger
 		this.i18n = new I18n();
+
+		// Create tab creative
+		ModCreativeTab.create();
 		
 		// Set gollum gui config
 		initGuiConfig();
