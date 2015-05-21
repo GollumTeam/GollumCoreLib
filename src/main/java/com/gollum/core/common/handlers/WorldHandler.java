@@ -47,11 +47,15 @@ public class WorldHandler {
 				if (thread.isAlive()) {
 					try {
 						log.message("Wait finish building");
-						thread.dontWaitWorld();
-						synchronized (thread.waiter) {
-							thread.waiter.notify();
+						
+						while (thread.isAlive()) {
+							thread.dontWaitWorld();
+							synchronized (thread.waiter) {
+								thread.waiter.notify();
+							}
+							Thread.sleep(500);
 						}
-						thread.join();
+						
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}

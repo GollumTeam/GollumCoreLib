@@ -20,5 +20,5 @@ public class BuildingGenerateEvent extends Event {
 		this.rotate   = rotate;
 		this.position = position;
 	}
-
+	
 }
