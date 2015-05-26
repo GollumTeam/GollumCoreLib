@@ -46,20 +46,6 @@ public class Builder {
 	
 	public static ArrayList<BuilderRunnable> currentBuilds = new ArrayList<BuilderRunnable>();
 	
-	public Builder() {
-		BuildingBlockRegistry.register(new BlockSignBuildingHandler());
-		BuildingBlockRegistry.register(new BlockDirectionalBuildingHandler());
-		BuildingBlockRegistry.register(new BlockDirectionalWithNoneBuildingHandler());
-		BuildingBlockRegistry.register(new BlockDirectionalWithBit1BuildingHandler());
-		BuildingBlockRegistry.register(new BlockTrapDoorBuildingHandler());
-		BuildingBlockRegistry.register(new BlockLeverBuildingHandler());
-		BuildingBlockRegistry.register(new BlockDoorBuildingHandler());
-		BuildingBlockRegistry.register(new BlockStairsBuildingHandler());
-		BuildingBlockRegistry.register(new BlockCommandBlockBuildingHandler());
-		BuildingBlockRegistry.register(new BlockProximitySpawnBuildingHandler());
-		BuildingBlockRegistry.register(new BlockMobSpawnerBuildingHandler());
-	}
-	
 	public void build(World world, SubBuilding subBuilding, boolean isStaff) {
 		this.build(world, subBuilding.building, subBuilding.orientation, subBuilding.x, subBuilding.y, subBuilding.z, isStaff);
 	}
@@ -385,13 +371,7 @@ public class Builder {
 				
 				// TODO Add register
 				if (
-					unity.after  ||
-					unity.block instanceof BlockDoor  ||
-					unity.block instanceof BlockBed   ||
-					unity.block instanceof BlockChest ||
-					unity.block instanceof BlockTorch ||
-					unity.block instanceof BlockLever ||
-					unity.block instanceof BlockSign
+					unity.after || BuildingBlockRegistry.instance().isAfterBlock(unity.block)
 				) {
 					afters.add(unity3D);
 					isPlaced = this.setBlock (world, finalX, finalY, finalZ, Blocks.air, 0);
