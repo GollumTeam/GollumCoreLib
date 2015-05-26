@@ -2,8 +2,8 @@ package com.gollum.core.common.handlers;
 
 import static com.gollum.core.ModGollumCoreLib.log;
 
-import com.gollum.castledefenders.client.gui.achievement.GollumGuiStats;
 import com.gollum.core.ModGollumCoreLib;
+import com.gollum.core.client.gui.achievement.GollumGuiStats;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngameMenu;

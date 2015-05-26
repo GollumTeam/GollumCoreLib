@@ -21,4 +21,16 @@ public class BuildingGenerateEvent extends Event {
 		this.position = position;
 	}
 	
+	public static class Pre extends BuildingGenerateEvent {
+		public Pre(World world, Building building, int rotate, Integer3d position) {
+			super(world, building, rotate, position);
+		}
+	}
+	
+	public static class Post extends BuildingGenerateEvent {
+		public Post(World world, Building building, int rotate, Integer3d position) {
+			super(world, building, rotate, position);
+		}
+	}
+	
 }

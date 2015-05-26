@@ -41,6 +41,7 @@ import com.gollum.core.common.building.handler.BlockStairsBuildingHandler;
 import com.gollum.core.common.building.handler.BlockTrapDoorBuildingHandler;
 import com.gollum.core.common.building.handler.BuildingBlockHandler;
 import com.gollum.core.tools.registry.BuildingBlockRegistry;
+import com.gollum.core.utils.math.Integer3d;
 
 public class Builder {
 	
@@ -138,6 +139,18 @@ public class Builder {
 		private int placeBlockCount = 0;
 		private long timeDisplayProgress = System.currentTimeMillis();
 		
+		
+		public int getRotate() {
+			return this.rotate;
+		}
+		
+		public Building getBuilding() {
+			return this.building;
+		}
+
+		public Integer3d getPosition() {
+			return new Integer3d(this.initX, this.initY, this.initZ);
+		}
 		
 //		private class BlockPlacer extends Thread {
 //			
