@@ -9,6 +9,7 @@ import com.gollum.core.common.CommonProxyGolumCoreLib;
 import com.gollum.core.common.command.CommandBuilding;
 import com.gollum.core.common.config.ConfigGollumCoreLib;
 import com.gollum.core.common.context.ModContext;
+import com.gollum.core.common.handlers.GuiScreenHandler;
 import com.gollum.core.common.handlers.WorldHandler;
 import com.gollum.core.common.handlers.WorldTickHandler;
 import com.gollum.core.common.i18n.I18n;
@@ -134,8 +135,9 @@ public class ModGollumCoreLib extends GollumMod {
 		
 		// Initialisation des reflection sur vanilla
 		this.initReflection();
-		
+
 		MinecraftForge.EVENT_BUS.register(new WorldHandler());
+		MinecraftForge.EVENT_BUS.register(new GuiScreenHandler());
 		FMLCommonHandler.instance().bus().register(new WorldTickHandler());
 	}
 
