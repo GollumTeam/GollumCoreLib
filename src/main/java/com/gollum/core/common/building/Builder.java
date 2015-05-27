@@ -315,7 +315,7 @@ public class Builder {
 			}
 		}
 		
-		private boolean setBlock (World world, int x,int y, int z, Block block, int metadata) {
+		private boolean setBlock (int x,int y, int z, Block block, int metadata) {
 			if (y < 3) {
 				return false;
 			}
@@ -331,7 +331,7 @@ public class Builder {
 			for (Unity3D unity3D : building.unities) {
 				
 				Unity unity = unity3D.unity;
-				
+					
 				// Position réél dans le monde du block
 				int finalX = initX + unity3D.x(rotate)*dx;
 				int finalY = initY + unity3D.y(rotate);
@@ -355,7 +355,7 @@ public class Builder {
 				int finalZ = initZ + unity3D.z(rotate)*dz;
 				
 				this.lock();
-				this.setBlock (world, finalX, finalY, finalZ, Blocks.stone, 0);
+				this.setBlock (finalX, finalY, finalZ, Blocks.stone, 0);
 				
 			}
 		}
@@ -382,17 +382,16 @@ public class Builder {
 				
 				world.removeTileEntity(finalX, finalY, finalZ);
 				
-				// TODO Add register
-				if (
-					unity.after || BuildingBlockRegistry.instance().isAfterBlock(unity.block)
-				) {
+				if (unity.after || BuildingBlockRegistry.instance().isAfterBlock(unity.block)) {
+					
 					afters.add(unity3D);
-					isPlaced = this.setBlock (world, finalX, finalY, finalZ, Blocks.air, 0);
+					isPlaced = this.setBlock (finalX, finalY, finalZ, Blocks.air, 0);
+					
 				} else 
 				if (unity.block != null) {
-					isPlaced = this.setBlock (world, finalX, finalY, finalZ, unity.block, unity.metadata);
+					isPlaced = this.setBlock (finalX, finalY, finalZ, unity.block, unity.metadata);
 				} else {
-					isPlaced = this.setBlock (world, finalX, finalY, finalZ, Blocks.air, 0);
+					isPlaced = this.setBlock (finalX, finalY, finalZ, Blocks.air, 0);
 				}
 				
 				if (isPlaced) {
@@ -444,7 +443,7 @@ public class Builder {
 				int finalY = initY + unity3D.y(rotate);
 				int finalZ = initZ + unity3D.z(rotate)*dz;
 				
-				isPlaced = this.setBlock (world, finalX, finalY, finalZ, unity.block, unity.metadata);
+				isPlaced = this.setBlock (finalX, finalY, finalZ, unity.block, unity.metadata);
 				
 				if (isPlaced) {
 					this.setOrientation (finalX, finalY, finalZ, this.rotateOrientation(rotate, unity.orientation));
