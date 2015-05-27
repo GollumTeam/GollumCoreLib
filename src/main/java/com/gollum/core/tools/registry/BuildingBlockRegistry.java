@@ -75,7 +75,7 @@ public class BuildingBlockRegistry {
 	public boolean isAfterBlock (Block block) {
 		
 		for (Class clazz : this.aftersBlock) {
-			if (block != null && block.getClass().isAssignableFrom(clazz)) {
+			if (block != null && clazz.isAssignableFrom(block.getClass())) {
 				return true;
 			}
 		}
