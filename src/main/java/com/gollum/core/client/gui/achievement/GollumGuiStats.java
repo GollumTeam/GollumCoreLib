@@ -3,9 +3,11 @@ package com.gollum.core.client.gui.achievement;
 import static com.gollum.core.ModGollumCoreLib.i18n;
 import static com.gollum.core.ModGollumCoreLib.log;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
-
-import scala.collection.mutable.HashMap;
+import java.util.List;
 
 import com.gollum.core.common.stats.StatsPage;
 
@@ -29,9 +31,13 @@ public class GollumGuiStats extends GuiStats {
 	protected GuiButton buttonMod;
 	protected GuiButton buttonModPrev;
 	protected GuiButton buttonModNext;
-	protected String    currenTButton;
+	protected String    currentButton;
+	protected int       currentIndex = 0;
+	protected boolean   isCustomStat = false;
 	
-	protected HashMap<String, GuiSlot> slots = new HashMap<String, GuiSlot>();
+	protected GuiSlot slotGeneral;
+	protected HashMap<String, GuiSlot> customSlots = new HashMap<String, GuiSlot>();
+
 	
 	public GollumGuiStats(GuiScreen parent, StatFileWriter statFileWriter) {
 		super(parent, statFileWriter);
@@ -41,7 +47,7 @@ public class GollumGuiStats extends GuiStats {
 	public void func_146541_h() {
 		
 		super.func_146541_h ();
-
+		
 		this.init ();
 		
 		StatsPage page = null;
@@ -51,7 +57,8 @@ public class GollumGuiStats extends GuiStats {
 		}
 		
 		if (page != null) {
-			this.currenTButton = page.getName();
+			this.currentIndex  = 0;
+			this.currentButton = page.getName();
 			this.buttonMod     = new GuiButton(10, this.width / 2 - 160, this.height - 28, 120, 20, page.getName());
 			this.buttonModPrev = new GuiButton(11, this.width / 2 - 172, this.height - 28, 12, 20, "<");
 			this.buttonModNext = new GuiButton(12, this.width / 2 - 40, this.height - 28, 12, 20, ">");
@@ -64,27 +71,67 @@ public class GollumGuiStats extends GuiStats {
 	}
 	
 	protected void init() {
-		
 		for (StatsPage p : StatsPage.getStatsPages()) {
-			
+			GuiSlot slot = new StatsCustom(p.getName());
+			slot.registerScrollButtons(1, 1);
+			this.customSlots.put(p.getName(), slot);
 		}
+		this.slotGeneral = new StatsGeneralCustom();
+		this.slotGeneral.registerScrollButtons(1, 1);
 		
-        this.field_146550_h = new GuiStats.StatsGeneral();
-        this.field_146550_h.registerScrollButtons(1, 1);
+		this.setCurentSlot(this.slotGeneral);
 	}
-
+	
+	protected void setCurentSlot (GuiSlot slot) {
+		try {
+			Field f = GuiStats.class.getDeclaredField("field_146545_u");
+			f.setAccessible(true);
+			f.set(this, slot);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	protected void actionPerformed(GuiButton button) {
 		
+		
 		if (button.id == 10) {
-//			 this.field_146545_u = this.field_146550_h;
-			log.debug("COOOOOOLLLLL");
+			
+			this.setCurentSlot(this.customSlots.get(this.currentButton));
+			this.isCustomStat = true;
 			
 		} else if (button.id == 11) {
-			log.debug("Prev");
+			
+			this.currentIndex = (this.currentIndex + StatsPage.getStatsPages().size()-1) % StatsPage.getStatsPages().size();
+			this.currentButton = StatsPage.getStatsPages().get(this.currentIndex).getName();
+			this.buttonMod.displayString = this.currentButton;
+			if (this.isCustomStat) {
+				this.setCurentSlot(this.customSlots.get(this.currentButton));
+			} else {
+				this.isCustomStat = false;
+			}
+			
 		} else if (button.id == 12) {
-			log.debug("Next");
+			
+			this.currentIndex = (this.currentIndex + 1) % StatsPage.getStatsPages().size();
+			this.currentButton = StatsPage.getStatsPages().get(this.currentIndex).getName();
+			this.buttonMod.displayString = this.currentButton;
+			if (this.isCustomStat) {
+				this.setCurentSlot(this.customSlots.get(this.currentButton));
+			} else {
+				this.isCustomStat = false;
+			}
+			
+		} else if (button.id == 1) {
+			
+			this.setCurentSlot (this.slotGeneral);
+			this.isCustomStat = false;
+			
 		} else {
+			
+			this.isCustomStat = false;
 			super.actionPerformed(button);
+			
 		}
 	}
 	
@@ -100,7 +147,7 @@ public class GollumGuiStats extends GuiStats {
 		}
 		
 		protected int getSize() {
-			return StatList.generalStats.size();
+			return StatsPage.getStatsPage(this.name).getStats().size();
 		}
 		
 		protected void elementClicked(int p_148144_1_, boolean p_148144_2_, int p_148144_3_, int p_148144_4_) {}
@@ -118,10 +165,55 @@ public class GollumGuiStats extends GuiStats {
 		}
 		
 		protected void drawSlot(int slot, int x, int y, int p_148126_4_, Tessellator tessellator, int p_148126_6_, int p_148126_7_) {
-			StatBase statbase = (StatBase)StatList.generalStats.get(slot);
+			StatBase statbase = StatsPage.getStatsPage(this.name).getStats().get(slot);
 			GollumGuiStats.this.drawString(GollumGuiStats.this.fontRendererObj, statbase.func_150951_e().getUnformattedText(), x + 2, y + 1, slot % 2 == 0 ? 16777215 : 9474192);
 			String s = statbase.func_75968_a(GollumGuiStats.this.statFileWriter.writeStat(statbase));
 			GollumGuiStats.this.drawString(GollumGuiStats.this.fontRendererObj, s, x + 2 + 213 - GollumGuiStats.this.fontRendererObj.getStringWidth(s), y + 1, slot % 2 == 0 ? 16777215 : 9474192);
+		}
+	}
+	
+	@SideOnly(Side.CLIENT)
+	class StatsGeneralCustom extends GuiSlot {
+		
+		private List<StatBase> generalStats;
+		
+		public StatsGeneralCustom() {
+			super(GollumGuiStats.this.mc, GollumGuiStats.this.width, GollumGuiStats.this.height, 32, GollumGuiStats.this.height - 64, 10);
+			this.setShowSelectionBox(false);
+			
+			this.generalStats = new ArrayList<StatBase>();
+			for (Object stat : StatList.generalStats) {
+				if (stat instanceof StatBase) {
+					if (!StatsPage.inPages((StatBase) stat)) {
+						this.generalStats.add((StatBase) stat);
+					}
+				}
+			}
+		}
+		
+		protected int getSize() {
+			return this.generalStats.size();
+		}
+		
+		protected void elementClicked(int p_148144_1_, boolean p_148144_2_, int p_148144_3_, int p_148144_4_) {}
+		
+		protected boolean isSelected(int p_148131_1_) {
+			return false;
+		}
+		
+		protected int getContentHeight() {
+			return this.getSize() * 10;
+		}
+		
+		protected void drawBackground() {
+			GollumGuiStats.this.drawDefaultBackground();
+		}
+
+		protected void drawSlot(int p_148126_1_, int p_148126_2_, int p_148126_3_, int p_148126_4_, Tessellator p_148126_5_, int p_148126_6_, int p_148126_7_) {
+			StatBase statbase = this.generalStats.get(p_148126_1_);
+			GollumGuiStats.this.drawString(GollumGuiStats.this.fontRendererObj, statbase.func_150951_e().getUnformattedText(), p_148126_2_ + 2, p_148126_3_ + 1, p_148126_1_ % 2 == 0 ? 16777215 : 9474192);
+			String s = statbase.func_75968_a(GollumGuiStats.this.statFileWriter.writeStat(statbase));
+			GollumGuiStats.this.drawString(GollumGuiStats.this.fontRendererObj, s, p_148126_2_ + 2 + 213 - GollumGuiStats.this.fontRendererObj.getStringWidth(s), p_148126_3_ + 1, p_148126_1_ % 2 == 0 ? 16777215 : 9474192);
 		}
 	}
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -36,8 +37,8 @@ public class StatsPage {
 		return null;
 	}
 	
-	public static Collection<StatsPage> getStatsPages() {
-		return statsPages.values();
+	public static List<StatsPage> getStatsPages() {
+		return new ArrayList<StatsPage>(statsPages.values());
 	}
 	
 	public static boolean inPages(StatBase stat) {

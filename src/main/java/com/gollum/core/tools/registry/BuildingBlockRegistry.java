@@ -25,12 +25,15 @@ import com.gollum.core.common.building.handler.BuildingBlockHandler;
 
 public class BuildingBlockRegistry {
 
-	private static BuildingBlockRegistry instance = new BuildingBlockRegistry();
+	private static BuildingBlockRegistry instance = null;
 	
 	private ArrayList<BuildingBlockHandler>   handlers    = new ArrayList<BuildingBlockHandler>();
 	private ArrayList<Class<? extends Block>> aftersBlock = new ArrayList<Class<? extends Block>>();
 	
-	public static BuildingBlockRegistry instance () {
+	public synchronized static BuildingBlockRegistry instance () {
+		if (instance == null) {
+			instance = new BuildingBlockRegistry();
+		}
 		return instance;
 	}
 	
@@ -45,24 +48,24 @@ public class BuildingBlockRegistry {
 	}
 	
 	protected BuildingBlockRegistry () {
-		BuildingBlockRegistry.register(new BlockSignBuildingHandler());
-		BuildingBlockRegistry.register(new BlockDirectionalBuildingHandler());
-		BuildingBlockRegistry.register(new BlockDirectionalWithNoneBuildingHandler());
-		BuildingBlockRegistry.register(new BlockDirectionalWithBit1BuildingHandler());
-		BuildingBlockRegistry.register(new BlockTrapDoorBuildingHandler());
-		BuildingBlockRegistry.register(new BlockLeverBuildingHandler());
-		BuildingBlockRegistry.register(new BlockDoorBuildingHandler());
-		BuildingBlockRegistry.register(new BlockStairsBuildingHandler());
-		BuildingBlockRegistry.register(new BlockCommandBlockBuildingHandler());
-		BuildingBlockRegistry.register(new BlockProximitySpawnBuildingHandler());
-		BuildingBlockRegistry.register(new BlockMobSpawnerBuildingHandler());
+		this.handlers.add(new BlockSignBuildingHandler());
+		this.handlers.add(new BlockDirectionalBuildingHandler());
+		this.handlers.add(new BlockDirectionalWithNoneBuildingHandler());
+		this.handlers.add(new BlockDirectionalWithBit1BuildingHandler());
+		this.handlers.add(new BlockTrapDoorBuildingHandler());
+		this.handlers.add(new BlockLeverBuildingHandler());
+		this.handlers.add(new BlockDoorBuildingHandler());
+		this.handlers.add(new BlockStairsBuildingHandler());
+		this.handlers.add(new BlockCommandBlockBuildingHandler());
+		this.handlers.add(new BlockProximitySpawnBuildingHandler());
+		this.handlers.add(new BlockMobSpawnerBuildingHandler());
 		
-		BuildingBlockRegistry.registerAfterBlock(BlockDoor.class);
-		BuildingBlockRegistry.registerAfterBlock(BlockBed.class);
-		BuildingBlockRegistry.registerAfterBlock(BlockChest.class);
-		BuildingBlockRegistry.registerAfterBlock(BlockTorch.class);
-		BuildingBlockRegistry.registerAfterBlock(BlockLever.class);
-		BuildingBlockRegistry.registerAfterBlock(BlockSign.class);
+		this.aftersBlock.add(BlockDoor.class);
+		this.aftersBlock.add(BlockBed.class);
+		this.aftersBlock.add(BlockChest.class);
+		this.aftersBlock.add(BlockTorch.class);
+		this.aftersBlock.add(BlockLever.class);
+		this.aftersBlock.add(BlockSign.class);
 	}
 	
 	public ArrayList<BuildingBlockHandler> getHandlers () {
@@ -72,7 +75,7 @@ public class BuildingBlockRegistry {
 	public boolean isAfterBlock (Block block) {
 		
 		for (Class clazz : this.aftersBlock) {
-			if (block.getClass().isAssignableFrom(clazz)) {
+			if (block != null && block.getClass().isAssignableFrom(clazz)) {
 				return true;
 			}
 		}
