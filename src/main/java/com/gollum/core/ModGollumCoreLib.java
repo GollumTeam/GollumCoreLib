@@ -127,6 +127,8 @@ public class ModGollumCoreLib extends GollumMod {
 		ModCreativeTab.init();
 		
 		MinecraftForge.EVENT_BUS.register(new WorldHandler());
+		MinecraftForge.EVENT_BUS.register(new GuiScreenHandler());
+		FMLCommonHandler.instance().bus().register(new WorldTickHandler());
 	}
 
 	/** 3 **/
