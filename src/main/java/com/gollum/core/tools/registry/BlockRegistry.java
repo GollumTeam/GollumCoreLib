@@ -7,11 +7,9 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 
 import net.minecraft.block.Block;
-import net.minecraft.item.Item;
 
 import com.gollum.core.tools.helper.IBlockHelper;
 import com.gollum.core.utils.reflection.Reflection;
-import com.gollum.morepistons.common.item.ItemMorePistonsVanillaProxy;
 
 
 public class BlockRegistry {

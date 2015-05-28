@@ -10,7 +10,6 @@ import net.minecraft.item.Item;
 
 import com.gollum.core.tools.helper.IItemHelper;
 import com.gollum.core.utils.reflection.Reflection;
-import com.gollum.morepistons.common.item.ItemMorePistonsVanillaProxy;
 
 
 public class ItemRegistry {

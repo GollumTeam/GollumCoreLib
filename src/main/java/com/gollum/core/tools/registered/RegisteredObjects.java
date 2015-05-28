@@ -3,11 +3,12 @@ package com.gollum.core.tools.registered;
 import java.util.Hashtable;
 import java.util.Map.Entry;
 
-import com.gollum.core.ModGollumCoreLib;
-
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
+import com.gollum.core.ModGollumCoreLib;
+
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.GameRegistry.UniqueIdentifier;
 

@@ -3,8 +3,6 @@ package com.gollum.core.common.config;
 import com.gollum.core.ModGollumCoreLib;
 import com.gollum.core.common.config.ConfigProp.Type;
 import com.gollum.core.common.config.type.ItemStackConfigType;
-import com.gollum.core.common.items.ItemInfos;
-import com.gollum.core.inits.ModItems;
 import com.gollum.core.tools.simplejson.IJsonObjectDisplay;
 import com.gollum.core.tools.simplejson.Json;
 

@@ -1,7 +1,5 @@
 package com.gollum.core.common.reflection;
 
-import java.util.Set;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityTracker;
 import net.minecraft.entity.player.EntityPlayerMP;

@@ -1,9 +1,5 @@
 package com.gollum.core.tools.helper.blocks;
 
-import com.gollum.core.ModGollumCoreLib;
-import com.gollum.core.tools.helper.BlockHelper;
-import com.gollum.core.tools.helper.IBlockHelper;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -12,6 +8,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
+
+import com.gollum.core.ModGollumCoreLib;
+import com.gollum.core.tools.helper.BlockHelper;
+import com.gollum.core.tools.helper.IBlockHelper;
 
 public abstract class HBlockContainer extends BlockContainer implements IBlockHelper {
 
