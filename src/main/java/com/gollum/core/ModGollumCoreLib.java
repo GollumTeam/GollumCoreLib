@@ -26,7 +26,6 @@ import com.gollum.core.tools.registry.BlockRegistry;
 import com.gollum.core.tools.registry.ItemRegistry;
 import com.gollum.core.utils.reflection.Reflection;
 
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -36,6 +35,8 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.common.registry.TickRegistry;
+import cpw.mods.fml.relauncher.Side;
 
 @Mod(
 	modid                     = ModGollumCoreLib.MODID,
@@ -131,7 +132,7 @@ public class ModGollumCoreLib extends GollumMod {
 		
 		MinecraftForge.EVENT_BUS.register(new WorldHandler());
 		MinecraftForge.EVENT_BUS.register(new GuiScreenHandler());
-		FMLCommonHandler.instance().bus().register(new WorldTickHandler());
+		TickRegistry.registerTickHandler(new WorldTickHandler(), Side.SERVER);
 	}
 
 	/** 3 **/

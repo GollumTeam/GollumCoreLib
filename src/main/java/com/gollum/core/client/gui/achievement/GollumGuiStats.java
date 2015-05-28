@@ -172,10 +172,10 @@ public class GollumGuiStats extends GuiStats {
 		
 		@Override
 		protected void drawSlot(int slot, int x, int y, int p_148126_4_, Tessellator tessellator) {
-			StatBase statbase = StatsPage.getStatsPage(this.name).getStats().get(slot);
-			GollumGuiStats.this.drawString(GollumGuiStats.this.fontRenderer, statbase.func_150951_e().getUnformattedText(), x + 2, y + 1, slot % 2 == 0 ? 16777215 : 9474192);
-			String s = statbase.func_75968_a(GollumGuiStats.this.statFileWriter.writeStat(statbase));
-			GollumGuiStats.this.drawString(GollumGuiStats.this.fontRenderer, s, x + 2 + 213 - GollumGuiStats.this.fontRenderer.getStringWidth(s), y + 1, slot % 2 == 0 ? 16777215 : 9474192);
+//			StatBase statbase = StatsPage.getStatsPage(this.name).getStats().get(slot);
+//			GollumGuiStats.this.drawString(GollumGuiStats.this.fontRenderer, statbase.func_150951_e().getUnformattedText(), x + 2, y + 1, slot % 2 == 0 ? 16777215 : 9474192);
+//			String s = statbase.func_75968_a(GollumGuiStats.this.statFileWriter.writeStat(statbase));
+//			GollumGuiStats.this.drawString(GollumGuiStats.this.fontRenderer, s, x + 2 + 213 - GollumGuiStats.this.fontRenderer.getStringWidth(s), y + 1, slot % 2 == 0 ? 16777215 : 9474192);
 		}
 	}
 	
@@ -222,10 +222,10 @@ public class GollumGuiStats extends GuiStats {
 		
 		@Override
 		protected void drawSlot(int p_148126_1_, int p_148126_2_, int p_148126_3_, int p_148126_4_, Tessellator p_148126_5) {
-			StatBase statbase = this.generalStats.get(p_148126_1_);
-			GollumGuiStats.this.drawString(GollumGuiStats.this.fontRenderer, statbase.func_150951_e().getUnformattedText(), p_148126_2_ + 2, p_148126_3_ + 1, p_148126_1_ % 2 == 0 ? 16777215 : 9474192);
-			String s = statbase.func_75968_a(GollumGuiStats.this.statFileWriter.writeStat(statbase));
-			GollumGuiStats.this.drawString(GollumGuiStats.this.fontRenderer, s, p_148126_2_ + 2 + 213 - GollumGuiStats.this.fontRenderer.getStringWidth(s), p_148126_3_ + 1, p_148126_1_ % 2 == 0 ? 16777215 : 9474192);
+//			StatBase statbase = this.generalStats.get(p_148126_1_);
+//			GollumGuiStats.this.drawString(GollumGuiStats.this.fontRenderer, statbase.func_150951_e().getUnformattedText(), p_148126_2_ + 2, p_148126_3_ + 1, p_148126_1_ % 2 == 0 ? 16777215 : 9474192);
+//			String s = statbase.func_75968_a(GollumGuiStats.this.statFileWriter.writeStat(statbase));
+//			GollumGuiStats.this.drawString(GollumGuiStats.this.fontRenderer, s, p_148126_2_ + 2 + 213 - GollumGuiStats.this.fontRenderer.getStringWidth(s), p_148126_3_ + 1, p_148126_1_ % 2 == 0 ? 16777215 : 9474192);
 		}
 	}
 }
