@@ -15,7 +15,7 @@ public class GuiScreenHandler {
 	@ForgeSubscribe
 	public void onGuiOpen (GuiOpenEvent event) {
 		
-		if (ModGollumCoreLib.proxy.isRemote() && event.gui.getClass() == GuiStats.class) {
+		if (ModGollumCoreLib.proxy.isRemote() && event.gui != null && event.gui.getClass() == GuiStats.class) {
 			
 			Minecraft mc = Minecraft.getMinecraft();
 			
