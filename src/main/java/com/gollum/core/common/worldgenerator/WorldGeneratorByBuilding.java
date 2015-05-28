@@ -169,7 +169,7 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 					
 					DimentionSpawnInfos dimentionsInfos = building.dimentionsInfos.get(dimention);
 					
-					int strengSpawn = random.nextInt(100);
+					int strengSpawn = random.nextInt(200);
 					
 					if (strengSpawn < dimentionsInfos.spawnRate) {
 						
