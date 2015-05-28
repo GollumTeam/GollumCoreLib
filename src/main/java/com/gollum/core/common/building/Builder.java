@@ -4,6 +4,8 @@ import static com.gollum.core.ModGollumCoreLib.log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.concurrent.locks.ReentrantLock;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBed;
@@ -38,34 +40,23 @@ import com.gollum.core.common.building.handler.BlockStairsBuildingHandler;
 import com.gollum.core.common.building.handler.BlockTrapDoorBuildingHandler;
 import com.gollum.core.common.building.handler.BuildingBlockHandler;
 import com.gollum.core.tools.registry.BuildingBlockRegistry;
+import com.gollum.core.utils.math.Integer3d;
 
 public class Builder {
 	
-	public static ArrayList<Thread> currentBuilds = new ArrayList<Thread>();
+	public static ArrayList<BuilderRunnable> currentBuilds = new ArrayList<BuilderRunnable>();
 	
-	private final Object lock = new Object();
-	
-	public Builder() {
-		BuildingBlockRegistry.register(new BlockSignBuildingHandler());
-		BuildingBlockRegistry.register(new BlockDirectionalBuildingHandler());
-		BuildingBlockRegistry.register(new BlockDirectionalWithNoneBuildingHandler());
-		BuildingBlockRegistry.register(new BlockDirectionalWithBit1BuildingHandler());
-		BuildingBlockRegistry.register(new BlockTrapDoorBuildingHandler());
-		BuildingBlockRegistry.register(new BlockLeverBuildingHandler());
-		BuildingBlockRegistry.register(new BlockDoorBuildingHandler());
-		BuildingBlockRegistry.register(new BlockStairsBuildingHandler());
-		BuildingBlockRegistry.register(new BlockCommandBlockBuildingHandler());
-		BuildingBlockRegistry.register(new BlockProximitySpawnBuildingHandler());
-		BuildingBlockRegistry.register(new BlockMobSpawnerBuildingHandler());
-	}
-	
-	public void build(World world, SubBuilding subBuilding) {
-		this.build(world, subBuilding.building, subBuilding.orientation, subBuilding.x, subBuilding.y, subBuilding.z);
+	public void build(World world, SubBuilding subBuilding, boolean isStaff) {
+		this.build(world, subBuilding.building, subBuilding.orientation, subBuilding.x, subBuilding.y, subBuilding.z, isStaff);
 	}
 	
 	public void build(World world, Building building, int rotate, int initX, int initY, int initZ) {
+		this.build(world, building, rotate, initX, initY, initZ, false);
+	}
+	
+	public void build(World world, Building building, int rotate, int initX, int initY, int initZ, boolean isStaff) {
 		
-		BuilderRunnable thread = new BuilderRunnable(world, building, rotate, initX, initY, initZ);
+		BuilderRunnable thread = new BuilderRunnable(world, building, rotate, initX, initY, initZ, isStaff);
 		thread.start();
 		this.currentBuilds.add(thread);
 	}
@@ -128,7 +119,7 @@ public class Builder {
 		return z;
 	}
 	
-	class BuilderRunnable extends Thread {
+	public static class BuilderRunnable extends Thread {
 		
 		WorldServer world;
 		Building building;
@@ -137,20 +128,44 @@ public class Builder {
 		int initY;
 		int initZ;
 		
-		public BuilderRunnable(World world, Building building, int rotate, int initX, int initY, int initZ) {
+		public ReentrantLock lockWorld = new ReentrantLock();
+		public Object        waiter    = new Object();
+		
+		
+		private Boolean waitForWorld = true;
+		private long time = 0;
+		private boolean isStaff = false;
+		private int placeBlockCount = 0;
+		private long timeDisplayProgress = System.currentTimeMillis();
+		
+		
+		public int getRotate() {
+			return this.rotate;
+		}
+		
+		public Building getBuilding() {
+			return this.building;
+		}
+		
+		public Integer3d getPosition() {
+			return new Integer3d(this.initX, this.initY, this.initZ);
+		}
+		
+		public BuilderRunnable(World world, Building building, int rotate, int initX, int initY, int initZ, boolean isStaff) {
 			this.world    = (WorldServer) world;
 			this.building = building;
 			this.rotate   = rotate;
 			this.initX    = initX;
 			this.initY    = initY;
 			this.initZ    = initZ;
+			this.isStaff  = isStaff;
 		}
-
+		
 		public void run() {
 			this.run(true);
 		}
 		public void run(boolean reTop) {
-			
+
 			try {
 				
 				log.info("Create building width matrix : "+building.name+" "+initX+" "+initY+" "+initZ);
@@ -159,7 +174,6 @@ public class Builder {
 				if (reTop) {
 					initY = (initY < 3) ? 3 : initY;
 				}
-				
 				int dx = -1; 
 				int dz = 1;
 				switch (rotate) {
@@ -179,19 +193,70 @@ public class Builder {
 						break;
 				}
 				
-				this.placeBlockStone(dx, dz);
+//				this.placeBlockStone(dx, dz);
+				log.debug ("Building placeBlock : "+building.name+" "+initX+" "+initY+" "+initZ);
 				this.placeBlock(dx, dz);
+				log.debug ("Building placeBlockRandom : "+building.name+" "+initX+" "+initY+" "+initZ);
 				this.placeBlockRandom(dx, dz);
-				
+				log.debug ("Building notifyBlocks : "+building.name+" "+initX+" "+initY+" "+initZ);
 				notifyBlocks(dx, dz);
 				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			
+			log.info("End create building width matrix : "+building.name+" "+initX+" "+initY+" "+initZ);
+			
+			this.unlockWorld();
 		}
 		
-		private boolean setBlock (World world, int x,int y, int z, Block block, int metadata) {
+		public void dontWaitWorld () {
+			synchronized (this.waitForWorld) {
+				this.waitForWorld = false;
+			}
+		}
+		
+		private void lock () {
+			
+			boolean waitForWorld = true;
+			synchronized (this.waitForWorld) {
+				waitForWorld = this.waitForWorld;
+			}
+			try  {
+				if (waitForWorld) {
+					long lantency = System.currentTimeMillis() - this.time;
+					if (lantency > 200) {
+						if (lantency >  500 && this.time != 0) {
+							log.warning("Latency of builder is gretter that 300 milliseconds. lantency = "+lantency);
+						}
+						this.unlockWorld();
+//						log.debug ("Thread wait server");
+
+						synchronized  (this.waiter) {
+							this.waiter.wait();
+						}
+						this.lockWorld.lock();
+						this.time = System.currentTimeMillis();
+//						log.debug ("Thread is free lock world for 200ms");
+					}
+				}
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		synchronized public void unlockWorld () {
+			try {
+				if (this.lockWorld.isLocked()) {
+					this.lockWorld.unlock();
+				}
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		private boolean setBlock (int x,int y, int z, Block block, int metadata) {
 			if (y < 3) {
 				return false;
 			}
@@ -207,15 +272,17 @@ public class Builder {
 			for (Unity3D unity3D : building.unities) {
 				
 				Unity unity = unity3D.unity;
-				
+					
 				// Position réél dans le monde du block
 				int finalX = initX + unity3D.x(rotate)*dx;
 				int finalY = initY + unity3D.y(rotate);
 				int finalZ = initZ + unity3D.z(rotate)*dz;
 				
-				synchronized (lock) {
+				this.lock();
+				world.notifyBlocksOfNeighborChange(finalX, finalY, finalZ, unity.block != null ? unity.block.blockID : 0);
+//				if (this.isStaff ) {
 					world.markBlockForUpdate(finalX, finalY, finalZ);
-				}
+//				}
 			}
 		}
 		
@@ -228,18 +295,23 @@ public class Builder {
 				int finalY = initY + unity3D.y(rotate);
 				int finalZ = initZ + unity3D.z(rotate)*dz;
 				
-				synchronized (lock) {
-					this.setBlock (world, finalX, finalY, finalZ, Block.stone, 0);
-				}
+				this.lock();
+				this.setBlock (finalX, finalY, finalZ, Block.stone, 0);
 				
 			}
 		}
-
+		
 		private void placeBlock(int dx, int dz) {
 			ArrayList<Unity3D> afters = new ArrayList<Unity3D>();
 			
-			for (Unity3D unity3D : building.unities) {
+//			ArrayList<BlockPlacer> threadsBlockSetter = new ArrayList<BlockPlacer>();
+			
+			Iterator<Unity3D> i = building.unities.iterator();
+			while (i.hasNext()) {
 				
+				this.lock();
+				
+				Unity3D unity3D = i.next();
 				Unity unity = unity3D.unity;
 				
 				// Position réél dans le monde du block
@@ -247,35 +319,40 @@ public class Builder {
 				int finalY = initY + unity3D.y(rotate);
 				int finalZ = initZ + unity3D.z(rotate)*dz;
 				
-				synchronized (lock) {
+				boolean isPlaced = false;
+				
+				world.removeBlockTileEntity(finalX, finalY, finalZ);
+				
+				if (unity.after || BuildingBlockRegistry.instance().isAfterBlock(unity.block)) {
 					
-					world.removeBlockTileEntity(finalX, finalY, finalZ);
+					afters.add(unity3D);
+					isPlaced = this.setBlock (finalX, finalY, finalZ, null, 0);
 					
-					if (
-						unity.after  ||
-						unity.block instanceof BlockDoor  ||
-						unity.block instanceof BlockBed   ||
-						unity.block instanceof BlockChest ||
-						unity.block instanceof BlockTorch ||
-						unity.block instanceof BlockLever ||
-						unity.block instanceof BlockSign
-					) {
-						afters.add(unity3D);
-						this.setBlock (world, finalX, finalY, finalZ, null, 0);
-					} else if (unity.block != null) {
-						this.setBlock (world, finalX, finalY, finalZ, unity.block, unity.metadata);
-					} else {
-						this.setBlock (world, finalX, finalY, finalZ, null, 0);
-					}
-					
+				} else 
+				if (unity.block != null) {
+					isPlaced = this.setBlock (finalX, finalY, finalZ, unity.block, unity.metadata);
+				} else {
+					isPlaced = this.setBlock (finalX, finalY, finalZ, null, 0);
+				}
+				
+				if (isPlaced) {
 					this.setOrientation (finalX, finalY, finalZ, this.rotateOrientation(rotate, unity.orientation));
 					this.setContents    (finalX, finalY, finalZ, unity.contents);
 					this.setExtra       (finalX, finalY, finalZ, unity.extra, building.maxX(rotate), building.maxZ(rotate));
-				}	
+				}
+				
+				if (System.currentTimeMillis() - this.timeDisplayProgress > 5000) {
+					this.timeDisplayProgress = System.currentTimeMillis();
+					log.message("Building progress "+building.name+" : " + ( (float)this.placeBlockCount / (float)building.unities.size() * 100.0F  ) + "%");
+				}
 			}
 			
 			for (Unity3D unity3D : afters) {
 				
+				this.lock();
+					
+				boolean isPlaced = false;
+				
 				Unity unity = unity3D.unity;
 				
 				// Position réél dans le monde du block
@@ -283,9 +360,9 @@ public class Builder {
 				int finalY = initY + unity3D.y(rotate);
 				int finalZ = initZ + unity3D.z(rotate)*dz;
 				
-				synchronized (lock) {
-					this.setBlock (world, finalX, finalY, finalZ, unity.block, unity.metadata);
-					
+				isPlaced = this.setBlock (finalX, finalY, finalZ, unity.block, unity.metadata);
+				
+				if (isPlaced) {
 					this.setOrientation (finalX, finalY, finalZ, this.rotateOrientation(rotate, unity.orientation));
 					this.setContents    (finalX, finalY, finalZ, unity.contents);
 					this.setExtra       (finalX, finalY, finalZ, unity.extra, building.maxX(rotate), building.maxZ(rotate));
@@ -302,8 +379,10 @@ public class Builder {
 				
 				for (SubBuilding subBuilding : randomBuilding) {
 					
-					BuilderRunnable thread = new BuilderRunnable(world, subBuilding.building, rotate, initX+subBuilding.x*dx, initY+subBuilding.y, initZ+subBuilding.z*dz);
-					thread.run();
+					BuilderRunnable thread = new BuilderRunnable(world, subBuilding.building, rotate, initX+subBuilding.x*dx, initY+subBuilding.y, initZ+subBuilding.z*dz, isStaff);
+					thread.waiter    = this.waiter;
+					thread.lockWorld = this.lockWorld;
+					thread.run(false);
 				}
 			}
 		}
@@ -361,8 +440,7 @@ public class Builder {
 		 */
 		private void setContents(int x, int y, int z, ArrayList<ArrayList<Content>> contents) {
 			
-			int id  = world.getBlockId (x, y, z);
-			Block block  = Block.blocksList[id];
+			Block block  = Block.blocksList[world.getBlockId (x, y, z)];
 			
 			if (block instanceof BlockContainer) {
 				
@@ -400,8 +478,7 @@ public class Builder {
 		 */
 		private void setExtra(int x, int y, int z, HashMap<String, String> extra, int maxX, int maxZ) {
 			
-			int id  = world.getBlockId (x, y, z);
-			Block block  = Block.blocksList[id];
+			Block block  = Block.blocksList[world.getBlockId(x, y, z)];
 	
 			int dx = -1; 
 			int dz = 1;
@@ -433,8 +510,7 @@ public class Builder {
 		 */
 		private void setOrientation(int x, int y, int z, int orientation) {
 			
-			int id  = world.getBlockId (x, y, z);
-			Block block  = Block.blocksList[id];
+			Block block  = Block.blocksList[world.getBlockId(x, y, z)];
 			int metadata = world.getBlockMetadata (x, y, z);
 			
 			for (BuildingBlockHandler handler : BuildingBlockRegistry.instance().getHandlers()) {

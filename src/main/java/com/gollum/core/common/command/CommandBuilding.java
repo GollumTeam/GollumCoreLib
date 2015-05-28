@@ -55,7 +55,7 @@ public class CommandBuilding extends CommandBase {
 				sender.sendChatToPlayer(ChatMessageComponent.createFromText("Rebuild last building "+subBuilding.building.modId+":"+subBuilding.building.name));
 				
 				subBuilding.building = new BuildingParser().parse(subBuilding.building.name, subBuilding.building.modId);
-				new Builder().build(sender.getEntityWorld(), subBuilding);
+				new Builder().build(sender.getEntityWorld(), subBuilding, true);
 				
 			} catch (Exception e) {
 				e.printStackTrace();

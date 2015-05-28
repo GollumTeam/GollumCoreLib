@@ -12,6 +12,7 @@ import net.minecraft.entity.EntityTracker;
 import net.minecraft.util.IProgressUpdate;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.world.ChunkDataEvent.Save;
 import net.minecraftforge.event.world.WorldEvent.Load;
 import net.minecraftforge.event.world.WorldEvent.Unload;
@@ -21,14 +22,11 @@ import com.gollum.core.common.building.Builder.BuilderRunnable;
 import com.gollum.core.common.events.BuildingGenerateEvent;
 import com.gollum.core.utils.reflection.Reflection;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-
-
 public class WorldHandler {
 	
 	boolean mustBeSave = false;
 	
-	@SubscribeEvent
+	@ForgeSubscribe
 	public void onSave (Save event) {
 		
 		if (!event.world.isRemote) {
@@ -40,7 +38,7 @@ public class WorldHandler {
 		}
 	}
 	
-	@SubscribeEvent
+	@ForgeSubscribe
 	public void onUnload (Unload event) {
 		
 		if (!event.world.isRemote) {

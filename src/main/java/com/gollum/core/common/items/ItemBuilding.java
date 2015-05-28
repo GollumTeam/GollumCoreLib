@@ -86,7 +86,7 @@ public class ItemBuilding extends HItem {
 			
 			ModGollumCoreLib.log.debug("orientation = "+orientation);
 			this.lastBuildings.add(subBuilding);
-			builder.build(world, subBuilding);
+			builder.build(world, subBuilding, true);
 			
 		}
 		
