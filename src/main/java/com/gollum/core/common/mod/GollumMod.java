@@ -227,6 +227,13 @@ public abstract class GollumMod {
 		ModContext.instance ().pop();
 	}
 	
+	public boolean equals (Object o) {
+		if (o instanceof GollumMod) {
+			return this.getModId().equals(((GollumMod) o).getModId());
+		}
+		return this == o;
+	}
+	
 	/////////////////////
 	// Extends methods //
 	/////////////////////

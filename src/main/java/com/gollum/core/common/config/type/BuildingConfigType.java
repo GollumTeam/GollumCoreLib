@@ -32,7 +32,8 @@ public class BuildingConfigType extends ConfigJsonType implements IConfigMerge {
 			public static class Dimention {
 				
 				public Integer spawnRate = 1;
-				public Integer spawnHeight = 64;
+				public Integer spawnMin = 3;
+				public Integer spawnMax = 256;
 				public ArrayList<Block> blocksSpawn = new ArrayList<Block>();
 				
 			}
@@ -100,8 +101,9 @@ public class BuildingConfigType extends ConfigJsonType implements IConfigMerge {
 			
 			Dimention dimention = new Dimention();
 			dimention.spawnRate   = jsonDimention.child("spawnRate").intValue();
-			dimention.spawnHeight = jsonDimention.child("spawnHeight").intValue();
-			
+			dimention.spawnMin    = jsonDimention.child("spawnMin").intValue();
+			dimention.spawnMax    = jsonDimention.child("spawnMax").intValue();
+
 			for (Json jsonBlock : jsonDimention.child("blocksSpawn").allChild()) {
 				String key = jsonBlock.strValue();
 				try {
@@ -177,9 +179,10 @@ public class BuildingConfigType extends ConfigJsonType implements IConfigMerge {
 			Dimention dimention = entryDimentions.getValue();
 			
 			Json jsonDimention = Json.create (
-				new EntryObject ("spawnHeight", Json.create(dimention.spawnHeight)),
+				new EntryObject ("spawnMin"   , Json.create(dimention.spawnMin)),
+				new EntryObject ("spawnMax"   , Json.create(dimention.spawnMax)),
 				new EntryObject ("spawnRate"  , Json.create(dimention.spawnRate)),
-				new EntryObject ("blocksSpawn", this.getJsonBlocksSpawn (dimention.blocksSpawn))
+				new EntryObject ("blocksSpawn", this.getJsonBlocks (dimention.blocksSpawn))
 			);
 			
 			jsonDimentions.add(dimentionId.toString(), jsonDimention);
@@ -188,7 +191,7 @@ public class BuildingConfigType extends ConfigJsonType implements IConfigMerge {
 		return jsonDimentions;
 	}
 
-	private Json getJsonBlocksSpawn(ArrayList<Block> blocksSpawn) {
+	private Json getJsonBlocks(ArrayList<Block> blocksSpawn) {
 		Json jsonBlocksSpawn = new JsonArray();
 		
 		for (Block block : blocksSpawn) {

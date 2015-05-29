@@ -21,7 +21,8 @@ public class HBlock extends Block implements IBlockHelper {
 		ModGollumCoreLib.log.info ("Create block id : " + id + " registerName : " + registerName);
 		this.helper = new BlockHelper(this, registerName);
 	}
-	
+
+	@Override
 	public BlockHelper getGollumHelper () {
 		return helper;
 	}
@@ -29,6 +30,7 @@ public class HBlock extends Block implements IBlockHelper {
 	/**
 	 * Enregistrement du block. Appelé a la fin du postInit
 	 */
+	@Override
 	public void register () {
 		helper.register();
 	}

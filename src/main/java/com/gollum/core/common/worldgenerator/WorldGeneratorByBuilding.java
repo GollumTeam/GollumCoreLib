@@ -1,5 +1,7 @@
 package com.gollum.core.common.worldgenerator;
 
+import static com.gollum.core.ModGollumCoreLib.log;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -9,10 +11,13 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraftforge.common.MinecraftForge;
 
 import com.gollum.core.common.building.Builder;
 import com.gollum.core.common.building.Building;
 import com.gollum.core.common.building.Building.DimentionSpawnInfos;
+import com.gollum.core.common.events.BuildingGenerateEvent;
+import com.gollum.core.utils.math.Integer3d;
 
 import cpw.mods.fml.common.IWorldGenerator;
 
@@ -100,34 +105,6 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 	}
 	
 	/**
-	 * Charge le batiment de maniere aléatoire en fonction du ratio
-	 * @param buildings
-	 * @param totalRate
-	 * @return
-	 */
-	private Building getBuildingByRate(ArrayList<Building> buildings, int dimention, Random random) {
-		
-		ArrayList<Building>buildingsForRate = new ArrayList<Building>();
-		
-		for (Building building : buildings) {
-			
-			if (building.dimentionsInfos.containsKey(dimention)) {
-				DimentionSpawnInfos dimentionsInfos = building.dimentionsInfos.get(dimention);
-				for (int i = 0; i < dimentionsInfos.spawnRate; i++) {
-					buildingsForRate.add(building);
-				}
-			}
-			
-		}
-		if (buildingsForRate.isEmpty()) {
-			return null;
-		}
-		
-		
-		return buildingsForRate.get(random.nextInt(buildingsForRate.size()));
-	}
-	
-	/**
 	 * Methode de generation
 	 */
 	@Override
@@ -171,42 +148,84 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 		
 		// test du Spawn global du groupe si echoue apsse au group suivant
 		float multiplicateur = 2;
-		if (random.nextInt((int)((Math.pow (10 , multiplicateur) * ((float)this.globalSpawnRate.size())/1.5f))) < (Math.pow (Math.min (groupSpawnRate, 10) , multiplicateur)) ) {
+		if (
+			random.nextInt((int)((Math.pow (10 , multiplicateur) * ((float)this.globalSpawnRate.size())/1.5f))) < (Math.pow (Math.min (groupSpawnRate, 10) , multiplicateur))
+		) {
 			
+			int     rotate     = random.nextInt(Building.ROTATED_360);
+			Block[] blocksList = new Block[256];
 			
-			int rotate = random.nextInt(Building.ROTATED_360);
-			Building building = this.getBuildingByRate (buildings, dimention, random);
-			if (building == null) {
-				return false;
-			}
-			DimentionSpawnInfos dimentionsInfos = building.dimentionsInfos.get(dimention);
-			
-			// Position initial de la génération en hauteur
-			int worldY = dimentionsInfos.spawnHeight;
-			
-			// Position initiale du batiment
-			int initX = chunkX * 16 + random.nextInt(8) - random.nextInt(8);
-			int initY = worldY      + random.nextInt(8) - random.nextInt(8);
-			int initZ = chunkZ * 16 + random.nextInt(8) - random.nextInt(8);
+			buildings = (ArrayList<Building>) buildings.clone();
+			Collections.shuffle(buildings);
 			
 			if (!this.hasBuildingArround (chunkX, chunkZ)) {
 				
-				int id = world.getBlockId(initX + 3, initY, initZ + 3);
-				Block block = Block.blocksList[id];
-				
-				//Test si on est sur de la terre (faudrais aps que le batiment vol)
-				if (block != null && world.isAirBlock(initX + 3, initY+1, initZ + 3) && dimentionsInfos.blocksSpawn.contains(block)) {
+				for (Building building : buildings) {
 					
-					// Auteur initiale du batiment 
-					initY += 1;
+					if (building == null) {
+						continue;
+					}
 					
-					// Garde en mémoire que le chunk à généré un batiment (évite que tous se monte dessus)
-					// N'est pas sauvegardé enc as d'arret du serveur mais ca devrais pas dérangé
-					WorldGeneratorByBuilding.chunkHasABuilding.add(chunkX+"x"+chunkZ);
+					DimentionSpawnInfos dimentionsInfos = building.dimentionsInfos.get(dimention);
 					
-					builder.build(world, building, rotate, initX, initY, initZ);
+					int strengSpawn = random.nextInt(200);
 					
-					return true;
+					if (strengSpawn < dimentionsInfos.spawnRate) {
+						
+						// Position initiale du batiment
+						int initX = chunkX * 16 + random.nextInt(8) - random.nextInt(8);
+						int initZ = chunkZ * 16 + random.nextInt(8) - random.nextInt(8);
+						
+						if (dimentionsInfos.spawnMax >= dimentionsInfos.spawnMin) {
+							int initY = dimentionsInfos.spawnMax;
+							for (; initY >= dimentionsInfos.spawnMin;initY--) {
+								
+								if (initY > 255) {
+									continue;
+								}
+								if (initY < 3) {
+									continue;
+								}
+								
+								if (blocksList[initY] == null) {
+									blocksList[initY] = Block.blocksList[world.getBlockId(initX + 3, initY, initZ + 3)];
+								}
+								if (blocksList[initY+1] == null) {
+									blocksList[initY+1] = Block.blocksList[world.getBlockId(initX + 3, initY+1, initZ + 3)];
+								}
+								
+								Block block   = blocksList[initY];
+								Block blockP1 = blocksList[initY+1];
+								
+								//Test si on est sur de la terre (faudrais pas que le batiment vol)
+								if (
+									block != null && 
+									blockP1 == null &&
+									dimentionsInfos.blocksSpawn.contains(block)
+								) {
+									
+									// Auteur initiale du batiment 
+									initY += 1;
+									
+									// Garde en mémoire que le chunk à généré un batiment (évite que tous se monte dessus)
+									// N'est pas sauvegardé enc as d'arret du serveur mais ca devrais pas dérangé
+									WorldGeneratorByBuilding.chunkHasABuilding.add(chunkX+"x"+chunkZ);
+									
+									BuildingGenerateEvent event = new BuildingGenerateEvent.Pre(world, building, rotate, new Integer3d(initX, initY, initZ));
+									MinecraftForge.EVENT_BUS.post(event);
+									if (event.isCanceled()) {
+										return false;
+									}
+									builder.build(world, building, rotate, initX, initY, initZ);
+									
+									return true;
+								}
+							}
+							if (initY > dimentionsInfos.spawnMin) {
+								log.debug ("No block found for building "+building.name);
+							}
+						}
+					}
 				}
 			}
 		}
