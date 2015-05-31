@@ -140,6 +140,10 @@ public class Builder {
 		private long timeDisplayProgress = System.currentTimeMillis();
 		
 		
+		public WorldServer getWorld() {
+			return this.world;
+		}
+		
 		public int getRotate() {
 			return this.rotate;
 		}

@@ -30,7 +30,7 @@ public class WorldTickHandler {
 				Iterator<BuilderRunnable> i = Builder.currentBuilds.iterator();
 				while (i.hasNext()) {
 					BuilderRunnable thread = i.next(); 
-					if (!thread.isAlive()) {
+					if (thread.getWorld() == event.world && !thread.isAlive()) {
 						i.remove();
 						
 						BuildingGenerateEvent newEvent = new BuildingGenerateEvent.Post(event.world, thread.getBuilding(), thread.getRotate(), thread.getPosition());
