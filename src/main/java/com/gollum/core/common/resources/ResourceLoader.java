@@ -1,17 +1,12 @@
-package com.gollum.core.common.resource;
+package com.gollum.core.common.resources;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.FileResourcePack;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 
 import com.gollum.core.ModGollumCoreLib;

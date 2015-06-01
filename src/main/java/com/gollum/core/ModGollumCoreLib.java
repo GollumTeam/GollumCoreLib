@@ -124,9 +124,6 @@ public class ModGollumCoreLib extends GollumMod {
 	/** 2 **/
 	public void init(FMLInitializationEvent event) {
 		
-		// Enregistre les events
-		this.proxy.registerEvents();
-		
 		// Initialisation les TileEntities
 		ModTileEntities.init();
 		
@@ -135,10 +132,9 @@ public class ModGollumCoreLib extends GollumMod {
 		
 		// Initialisation des reflection sur vanilla
 		this.initReflection();
-
-		MinecraftForge.EVENT_BUS.register(new WorldHandler());
-		MinecraftForge.EVENT_BUS.register(new GuiScreenHandler());
-		FMLCommonHandler.instance().bus().register(new WorldTickHandler());
+		
+		// Enregistre les events
+		this.proxy.registerEvents();
 	}
 
 	/** 3 **/

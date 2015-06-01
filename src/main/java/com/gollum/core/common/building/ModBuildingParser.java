@@ -11,7 +11,7 @@ import com.gollum.core.common.config.ConfigBuildings;
 import com.gollum.core.common.config.ConfigLoader;
 import com.gollum.core.common.config.type.BuildingConfigType;
 import com.gollum.core.common.config.type.BuildingConfigType.Group;
-import com.gollum.core.common.resource.ResourceLoader;
+import com.gollum.core.common.resources.ResourceLoader;
 import com.gollum.core.tools.simplejson.Json;
 
 public class ModBuildingParser {
