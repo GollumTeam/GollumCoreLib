@@ -84,7 +84,7 @@ public class ItemBuilding extends HItem {
 			SubBuilding subBuilding = new SubBuilding();
 			subBuilding.building = buildings.get(metadata);
 			subBuilding.x = x;
-			subBuilding.y = y;
+			subBuilding.y = y+1;
 			subBuilding.z = z;
 			subBuilding.orientation= orientation;
 			
