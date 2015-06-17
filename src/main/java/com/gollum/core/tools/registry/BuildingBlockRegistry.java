@@ -4,11 +4,16 @@ import java.util.ArrayList;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBed;
+import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.BlockDoor;
+import net.minecraft.block.BlockFlower;
 import net.minecraft.block.BlockLever;
+import net.minecraft.block.BlockSapling;
 import net.minecraft.block.BlockSign;
 import net.minecraft.block.BlockTorch;
+import net.minecraft.block.BlockTrapDoor;
+import net.minecraft.block.BlockTripWire;
 
 import com.gollum.core.common.building.handler.BlockCommandBlockBuildingHandler;
 import com.gollum.core.common.building.handler.BlockDirectionalBuildingHandler;
@@ -66,6 +71,9 @@ public class BuildingBlockRegistry {
 		this.aftersBlock.add(BlockTorch.class);
 		this.aftersBlock.add(BlockLever.class);
 		this.aftersBlock.add(BlockSign.class);
+		this.aftersBlock.add(BlockTripWire.class);
+		this.aftersBlock.add(BlockTrapDoor.class);
+		this.aftersBlock.add(BlockBush.class);
 	}
 	
 	public ArrayList<BuildingBlockHandler> getHandlers () {
