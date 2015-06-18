@@ -3,7 +3,7 @@
 	"color" : [
 		{ "block": "minecraft:wool" },
 		{ "block": "minecraft:grass" },
-		{ "block": "CastleDefenders:BlockMerc" },
+		{ "block": "minecraft:planks" },
 		{ "block": "minecraft:fence" },
 		{ "block": "minecraft:torch", "orientation": "up"},
 		{ "block": "minecraft:fire" },
@@ -92,7 +92,22 @@
 		"2x4x2": {
 			"block": "minecraft:netherrack",
 			"orientation":"down"
-		}
+		},
+		
+		"25x1x3": { "block": "minecraft:ladder", "orientation": "down"  },
+		"26x1x2": { "block": "minecraft:ladder", "orientation": "left"  },
+		"24x1x2": { "block": "minecraft:ladder", "orientation": "right" },
+		"25x1x1": { "block": "minecraft:ladder", "orientation": "up"    },
+		
+		"25x2x3": { "block": "minecraft:tripwire_hook", "orientation": "down"  },
+		"26x2x2": { "block": "minecraft:tripwire_hook", "orientation": "left"  },
+		"24x2x2": { "block": "minecraft:tripwire_hook", "orientation": "right" },
+		"25x2x1": { "block": "minecraft:tripwire_hook", "orientation": "up"    },
+		
+		"25x3x3": { "block": "minecraft:trapdoor", "orientation": "down"  },
+		"26x3x2": { "block": "minecraft:trapdoor", "orientation": "left"  },
+		"24x3x2": { "block": "minecraft:trapdoor", "orientation": "right" },
+		"25x3x1": { "block": "minecraft:trapdoor", "orientation": "up"    }
 	},
 	
 	"buildings": {

@@ -274,10 +274,36 @@ public class Builder {
 		}
 		
 		private void notifyBlocks(int dx, int dz) {
+			
+			ArrayList<Unity3D> afters = new ArrayList<Unity3D>();
+			
 			for (Unity3D unity3D : building.unities) {
 				
 				Unity unity = unity3D.unity;
+				
+				if (unity.after || BuildingBlockRegistry.instance().isAfterBlock(unity.block)) {
+					afters.add(unity3D);
+					continue;
+				}
+				
+				// Position réél dans le monde du block
+				int finalX = initX + unity3D.x(rotate)*dx;
+				int finalY = initY + unity3D.y(rotate);
+				int finalZ = initZ + unity3D.z(rotate)*dz;
+				
+				this.lock();
+				world.notifyBlocksOfNeighborChange(finalX, finalY, finalZ, unity.block != null ? unity.block : Blocks.air);
+//				if (this.isStaff ) {
+					world.markBlockForUpdate(finalX, finalY, finalZ);
+//				}
+			}
+			
+			for (Unity3D unity3D : afters) {
+				
+				this.lock();
 					
+				Unity unity = unity3D.unity;
+				
 				// Position réél dans le monde du block
 				int finalX = initX + unity3D.x(rotate)*dx;
 				int finalY = initY + unity3D.y(rotate);
