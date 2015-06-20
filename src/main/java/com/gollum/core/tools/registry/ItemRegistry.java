@@ -5,10 +5,15 @@ import static com.gollum.core.ModGollumCoreLib.log;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.stats.StatBase;
+import net.minecraft.stats.StatCrafting;
+import net.minecraft.stats.StatList;
 import net.minecraft.util.ObjectIntIdentityMap;
 import net.minecraft.util.RegistryNamespaced;
 import net.minecraft.util.RegistrySimple;
@@ -117,6 +122,11 @@ public class ItemRegistry {
 				underlyingIntegerMap.func_148746_a(item, id);
 				log.debug (" 2 - Replace \""+registerName+"\" registery : underlyingIntegerMap id="+id);
 				
+				overrideStatItem(StatList.objectMineStats , item, vanillaItem);
+				overrideStatItem(StatList.itemStats       , item, vanillaItem);
+				overrideStatItem(StatList.objectBreakStats, item, vanillaItem);
+				log.debug (" 3 - Replace \""+registerName+"\" stats");
+				
 			} else {
 				log.severe("The original item \""+registerName+"\" not found for replace registery.");
 			}
@@ -125,6 +135,40 @@ public class ItemRegistry {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	private void overrideStatItem(StatBase[] itemStats, Item item, Item vanillaItem) throws Exception {
+		for(int i = 0; i < itemStats.length; i++) {
+			if (itemStats[i] instanceof StatCrafting) {
+				StatCrafting stat = (StatCrafting) itemStats[i];
+				if (stat.func_150959_a() == vanillaItem) {
+					
+					// 1.6.4  ?
+					// 1.7.2  field_150960_a
+					// 1.7.10 field_150960_a
+					Field f = StatCrafting.class.getDeclaredField("field_150960_a");
+					f.setAccessible(true);
+					f.set(stat, item);
+				}
+			}
+		}
+		
+	}
+
+	private void overrideStatItem(List itemStats, Item item, Item vanillaItem) throws Exception {
+		Iterator it = itemStats.iterator();
+		while(it.hasNext()) {
+			StatCrafting stat = (StatCrafting) it.next();
+			if (stat.func_150959_a() == vanillaItem) {
+				
+				// 1.6.4  ?
+				// 1.7.2  field_150960_a
+				// 1.7.10 field_150960_a
+				Field f = StatCrafting.class.getDeclaredField("field_150960_a");
+				f.setAccessible(true);
+				f.set(stat, item);
+			}
+		}
 	}
 	
 }
