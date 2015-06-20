@@ -67,7 +67,7 @@ public class BlockSignBuildingHandler extends BuildingBlockHandler {
 		int dx, int dz,
 		int maxX, int maxZ
 	) {
-		TileEntity te  = world.getTileEntity (x, y, z);
+		TileEntity te = world.getTileEntity (x, y, z);
 		if (te instanceof TileEntitySign) {
 			
 			try {

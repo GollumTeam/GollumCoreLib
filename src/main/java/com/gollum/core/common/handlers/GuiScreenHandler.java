@@ -21,12 +21,12 @@ public class GuiScreenHandler {
 		
 		if (ModGollumCoreLib.proxy.isRemote() && event.gui instanceof GuiIngameMenu && event.button.id == 6) {
 			
-			Minecraft mc = Minecraft.getMinecraft();
-			
-			if (mc.thePlayer != null) {
-				mc.displayGuiScreen(new GollumGuiStats(event.gui, mc.thePlayer.getStatFileWriter()));
-			}
-			event.setCanceled(true);
+//			Minecraft mc = Minecraft.getMinecraft();
+//			
+//			if (mc.thePlayer != null) {
+//				mc.displayGuiScreen(new GollumGuiStats(event.gui, mc.thePlayer.getStatFileWriter()));
+//			}
+//			event.setCanceled(true);
 		}
 		
 	}

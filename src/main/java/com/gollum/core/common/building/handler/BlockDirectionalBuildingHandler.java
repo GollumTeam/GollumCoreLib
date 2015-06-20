@@ -2,6 +2,7 @@ package com.gollum.core.common.building.handler;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirectional;
+import net.minecraft.block.BlockTripWireHook;
 import net.minecraft.world.World;
 
 import com.gollum.core.ModGollumCoreLib;
@@ -11,7 +12,9 @@ public class BlockDirectionalBuildingHandler extends BuildingBlockHandler {
 	
 	@Override
 	protected boolean mustApply (World world, int x, int y, int z, Block block) {
-		return block instanceof BlockDirectional;
+		return
+			block instanceof BlockDirectional
+		;
 	}
 	
 	@Override
