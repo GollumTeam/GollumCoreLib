@@ -378,7 +378,7 @@ public class Builder {
 					log.debug("Place after block : "+RegisteredObjects.instance().getRegisterName(unity.block));
 					isPlaced = this.setBlock (finalX, finalY, finalZ, unity.block, unity.metadata);
 				} else {
-					this.setBlock (finalX, finalY, finalZ, Blocks.air, 0);
+					this.setBlock (finalX, finalY, finalZ, null, 0);
 				}
 				
 				if (isPlaced) {

@@ -4,12 +4,10 @@ import java.util.ArrayList;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBed;
-import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.BlockFlower;
 import net.minecraft.block.BlockLever;
-import net.minecraft.block.BlockSapling;
 import net.minecraft.block.BlockSign;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.BlockTrapDoor;
@@ -77,7 +75,7 @@ public class BuildingBlockRegistry {
 		this.aftersBlock.add(BlockTripWire.class);
 		this.aftersBlock.add(BlockTripWireSource.class);
 		this.aftersBlock.add(BlockTrapDoor.class);
-		this.aftersBlock.add(BlockBush.class);
+		this.aftersBlock.add(BlockFlower.class);
 	}
 	
 	public ArrayList<BuildingBlockHandler> getHandlers () {

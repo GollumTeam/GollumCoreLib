@@ -1,5 +1,15 @@
 package com.gollum.core.common.resources;
 
+import static com.gollum.core.ModGollumCoreLib.log;
+
+import com.gollum.core.common.resources.data.MetadataSection;
+import com.gollum.core.common.resources.data.MetadataSerializer;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -9,75 +19,58 @@ import java.io.InputStreamReader;
 
 import javax.imageio.ImageIO;
 
+import net.minecraft.logging.ILogAgent;
 import net.minecraft.util.ResourceLocation;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
-import com.gollum.core.common.resources.data.IMetadataSection;
-import com.gollum.core.common.resources.data.IMetadataSerializer;
-import com.google.common.base.Charsets;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonParser;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-public abstract class AbstractResourcePack implements IResourcePack {
-	private static final Logger resourceLog = LogManager.getLogger();
+public abstract class AbstractResourcePack implements ResourcePack {
 	protected final File resourcePackFile;
-	private static final String __OBFID = "CL_00001072";
 
-	public AbstractResourcePack(File p_i1287_1_) {
-		this.resourcePackFile = p_i1287_1_;
+	public AbstractResourcePack(File par1File) {
+		this.resourcePackFile = par1File;
 	}
 
-	private static String locationToName(ResourceLocation p_110592_0_) {
-		return String.format("%s/%s/%s", new Object[] { "assets", p_110592_0_.getResourceDomain(), p_110592_0_.getResourcePath() });
+	private static String locationToName(ResourceLocation par0ResourceLocation) {
+		return String.format("%s/%s/%s", new Object[] { "assets", par0ResourceLocation.getResourceDomain(), par0ResourceLocation.getResourcePath() });
 	}
 
-	protected static String getRelativeName(File p_110595_0_, File p_110595_1_) {
-		return p_110595_0_.toURI().relativize(p_110595_1_.toURI()).getPath();
+	protected static String getRelativeName(File par0File, File par1File) {
+		return par0File.toURI().relativize(par1File.toURI()).getPath();
 	}
 
-	public InputStream getInputStream(ResourceLocation p_110590_1_)
-			throws IOException {
-		return this.getInputStreamByName(locationToName(p_110590_1_));
+	public InputStream getInputStream(ResourceLocation par1ResourceLocation) throws IOException {
+		return this.getInputStreamByName(locationToName(par1ResourceLocation));
 	}
 
-	public boolean resourceExists(ResourceLocation p_110589_1_) {
-		return this.hasResourceName(locationToName(p_110589_1_));
+	public boolean resourceExists(ResourceLocation par1ResourceLocation) {
+		return this.hasResourceName(locationToName(par1ResourceLocation));
 	}
 
-	protected abstract InputStream getInputStreamByName(String p_110591_1_)
-			throws IOException;
+	protected abstract InputStream getInputStreamByName(String s) throws IOException;
 
-	protected abstract boolean hasResourceName(String p_110593_1_);
+	protected abstract boolean hasResourceName(String s);
 
-	protected void logNameNotLowercase(String p_110594_1_) {
-		resourceLog.warn("ResourcePack: ignored non-lowercase namespace: {} in {}", new Object[] { p_110594_1_, this.resourcePackFile });
+	protected void logNameNotLowercase(String par1Str) {
+		log.warning("ResourcePack: ignored non-lowercase namespace: %s in %s", new Object[] { par1Str, this.resourcePackFile });
 	}
 
-	public IMetadataSection getPackMetadata(IMetadataSerializer p_135058_1_, String p_135058_2_) throws IOException {
-		return readMetadata(p_135058_1_, this.getInputStreamByName("pack.mcmeta"), p_135058_2_);
+	public MetadataSection getPackMetadata(MetadataSerializer par1MetadataSerializer, String par2Str) throws IOException {
+		return readMetadata(par1MetadataSerializer, this.getInputStreamByName("pack.mcmeta"), par2Str);
 	}
 
-	static IMetadataSection readMetadata(IMetadataSerializer p_110596_0_, InputStream p_110596_1_, String p_110596_2_) {
+	static MetadataSection readMetadata(MetadataSerializer par0MetadataSerializer, InputStream par1InputStream, String par2Str) {
 		JsonObject jsonobject = null;
 		BufferedReader bufferedreader = null;
 
 		try {
-			bufferedreader = new BufferedReader(new InputStreamReader(p_110596_1_, Charsets.UTF_8));
+			bufferedreader = new BufferedReader(new InputStreamReader(par1InputStream));
 			jsonobject = (new JsonParser()).parse(bufferedreader).getAsJsonObject();
-		} catch (RuntimeException runtimeexception) {
-			throw new JsonParseException(runtimeexception);
 		} finally {
 			IOUtils.closeQuietly(bufferedreader);
 		}
 
-		return p_110596_0_.parseMetadataSection(p_110596_2_, jsonobject);
+		return par0MetadataSerializer.parseMetadataSection(par2Str, jsonobject);
 	}
 
 	public BufferedImage getPackImage() throws IOException {

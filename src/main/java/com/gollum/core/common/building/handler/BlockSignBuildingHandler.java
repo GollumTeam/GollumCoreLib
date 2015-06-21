@@ -1,5 +1,6 @@
 package com.gollum.core.common.building.handler;
 
+import static com.gollum.core.ModGollumCoreLib.log;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Random;
