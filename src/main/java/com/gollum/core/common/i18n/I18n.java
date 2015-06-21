@@ -11,7 +11,7 @@ public class I18n {
 	public I18n() {
 		modId = ModContext.instance().getCurrent().getModId().toLowerCase();
 	}
-
+	
 	public String trans (String key, Object ... args) {
 		return StatCollector.translateToLocalFormatted(this.key(key), args);
 	}
@@ -40,7 +40,7 @@ public class I18n {
 		String s = StatCollector.translateToLocalFormatted(this.key(key), args);
 		double rtn = 0; try { rtn = Double.parseDouble(s); } catch (Exception e) {}
 		return rtn;
-	}	
+	}
 	
 	public String key (String key) {
 		return this.modId+"."+key;
@@ -49,4 +49,5 @@ public class I18n {
 	public boolean transExist (String key) {
 		return !this.key(key).equals(this.trans(key));
 	}
+	
 }

@@ -1,5 +1,7 @@
 package com.gollum.core.common.items;
 
+import static com.gollum.core.ModGollumCoreLib.log;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
@@ -80,11 +82,11 @@ public class ItemBuilding extends HItem {
 			SubBuilding subBuilding = new SubBuilding();
 			subBuilding.building = buildings.get(metadata);
 			subBuilding.x = x;
-			subBuilding.y = y;
+			subBuilding.y = y+1;
 			subBuilding.z = z;
 			subBuilding.orientation= orientation;
 			
-			ModGollumCoreLib.log.debug("orientation = "+orientation);
+			log.debug("orientation = "+orientation);
 			this.lastBuildings.add(subBuilding);
 			builder.build(world, subBuilding, true);
 			

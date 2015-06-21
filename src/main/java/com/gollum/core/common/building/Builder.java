@@ -39,6 +39,7 @@ import com.gollum.core.common.building.handler.BlockSignBuildingHandler;
 import com.gollum.core.common.building.handler.BlockStairsBuildingHandler;
 import com.gollum.core.common.building.handler.BlockTrapDoorBuildingHandler;
 import com.gollum.core.common.building.handler.BuildingBlockHandler;
+import com.gollum.core.tools.registered.RegisteredObjects;
 import com.gollum.core.tools.registry.BuildingBlockRegistry;
 import com.gollum.core.utils.math.Integer3d;
 
@@ -169,7 +170,7 @@ public class Builder {
 			this.run(true);
 		}
 		public void run(boolean reTop) {
-
+			
 			try {
 				
 				log.info("Create building width matrix : "+building.name+" "+initX+" "+initY+" "+initZ);
@@ -198,12 +199,12 @@ public class Builder {
 				}
 				
 //				this.placeBlockStone(dx, dz);
-				log.debug ("Building placeBlock : "+building.name+" "+initX+" "+initY+" "+initZ);
-				this.placeBlock(dx, dz);
+				log.debug ("Building placeBlocks : "+building.name+" "+initX+" "+initY+" "+initZ);
+				this.placeBlocks(dx, dz);
+				log.debug ("Building placeAfterBlocks : "+building.name+" "+initX+" "+initY+" "+initZ);
+				placeAfterBlock(dx, dz);
 				log.debug ("Building placeBlockRandom : "+building.name+" "+initX+" "+initY+" "+initZ);
 				this.placeBlockRandom(dx, dz);
-				log.debug ("Building notifyBlocks : "+building.name+" "+initX+" "+initY+" "+initZ);
-				notifyBlocks(dx, dz);
 				
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -272,24 +273,6 @@ public class Builder {
 			}
 		}
 		
-		private void notifyBlocks(int dx, int dz) {
-			for (Unity3D unity3D : building.unities) {
-				
-				Unity unity = unity3D.unity;
-					
-				// Position réél dans le monde du block
-				int finalX = initX + unity3D.x(rotate)*dx;
-				int finalY = initY + unity3D.y(rotate);
-				int finalZ = initZ + unity3D.z(rotate)*dz;
-				
-				this.lock();
-				world.notifyBlocksOfNeighborChange(finalX, finalY, finalZ, unity.block != null ? unity.block.blockID : 0);
-//				if (this.isStaff ) {
-					world.markBlockForUpdate(finalX, finalY, finalZ);
-//				}
-			}
-		}
-		
 		private void placeBlockStone(int dx, int dz) {
 			// Peut etre inutile
 			for (Unity3D unity3D : building.unities) {
@@ -305,8 +288,8 @@ public class Builder {
 			}
 		}
 		
-		private void placeBlock(int dx, int dz) {
-			ArrayList<Unity3D> afters = new ArrayList<Unity3D>();
+		private void placeBlocks(int dx, int dz) {
+			ArrayList<Unity3D> placed = new ArrayList<Unity3D>();
 			
 //			ArrayList<BlockPlacer> threadsBlockSetter = new ArrayList<BlockPlacer>();
 			
@@ -328,30 +311,29 @@ public class Builder {
 				world.removeBlockTileEntity(finalX, finalY, finalZ);
 				
 				if (unity.after || BuildingBlockRegistry.instance().isAfterBlock(unity.block)) {
-					
-					afters.add(unity3D);
-					isPlaced = this.setBlock (finalX, finalY, finalZ, null, 0);
-					
+					this.setBlock (finalX, finalY, finalZ, null, 0);
 				} else 
 				if (unity.block != null) {
 					isPlaced = this.setBlock (finalX, finalY, finalZ, unity.block, unity.metadata);
 				} else {
-					isPlaced = this.setBlock (finalX, finalY, finalZ, null, 0);
+					this.setBlock (finalX, finalY, finalZ, null, 0);
 				}
 				
 				if (isPlaced) {
 					this.setOrientation (finalX, finalY, finalZ, this.rotateOrientation(rotate, unity.orientation));
 					this.setContents    (finalX, finalY, finalZ, unity.contents);
 					this.setExtra       (finalX, finalY, finalZ, unity.extra, building.maxX(rotate), building.maxZ(rotate));
+					
+					placed.add(unity3D);
 				}
 				
 				if (System.currentTimeMillis() - this.timeDisplayProgress > 5000) {
 					this.timeDisplayProgress = System.currentTimeMillis();
-					log.message("Building progress "+building.name+" : " + ( (float)this.placeBlockCount / (float)building.unities.size() * 100.0F  ) + "%");
+					log.message("Building step 1 progress "+building.name+" : " + ( (float)this.placeBlockCount / (float)building.unities.size() * 100.0F  ) + "%");
 				}
 			}
 			
-			for (Unity3D unity3D : afters) {
+			for (Unity3D unity3D : placed) {
 				
 				this.lock();
 					
@@ -364,14 +346,73 @@ public class Builder {
 				int finalY = initY + unity3D.y(rotate);
 				int finalZ = initZ + unity3D.z(rotate)*dz;
 				
-				isPlaced = this.setBlock (finalX, finalY, finalZ, unity.block, unity.metadata);
+				this.lock();
+				world.notifyBlocksOfNeighborChange(finalX, finalY, finalZ, unity.block != null ? unity.block.blockID : 0);
+//				if (this.isStaff ) {
+					world.markBlockForUpdate(finalX, finalY, finalZ);
+//				}
+			}
+		}
+		
+
+		private void placeAfterBlock(int dx, int dz) {
+			
+			ArrayList<Unity3D> placed = new ArrayList<Unity3D>();
+			
+			for (Unity3D unity3D : building.unities) {
+				
+				Unity unity = unity3D.unity;
+				
+				if (!unity.after && !BuildingBlockRegistry.instance().isAfterBlock(unity.block)) {
+					continue;
+				}
+				
+				boolean isPlaced = false;
+				
+				// Position réél dans le monde du block
+				int finalX = initX + unity3D.x(rotate)*dx;
+				int finalY = initY + unity3D.y(rotate);
+				int finalZ = initZ + unity3D.z(rotate)*dz;
+				
+				if (unity.block != null) {
+					log.debug("Place after block : "+RegisteredObjects.instance().getRegisterName(unity.block));
+					isPlaced = this.setBlock (finalX, finalY, finalZ, unity.block, unity.metadata);
+				} else {
+					this.setBlock (finalX, finalY, finalZ, Blocks.air, 0);
+				}
 				
 				if (isPlaced) {
 					this.setOrientation (finalX, finalY, finalZ, this.rotateOrientation(rotate, unity.orientation));
 					this.setContents    (finalX, finalY, finalZ, unity.contents);
 					this.setExtra       (finalX, finalY, finalZ, unity.extra, building.maxX(rotate), building.maxZ(rotate));
+					
+					placed.add(unity3D);
 				}
 				
+				if (System.currentTimeMillis() - this.timeDisplayProgress > 5000) {
+					this.timeDisplayProgress = System.currentTimeMillis();
+					log.message("Building step 2 progress "+building.name+" : " + ( (float)this.placeBlockCount / (float)building.unities.size() * 100.0F  ) + "%");
+				}
+			}
+			
+			for (Unity3D unity3D : placed) {
+				
+				this.lock();
+					
+				boolean isPlaced = false;
+				
+				Unity unity = unity3D.unity;
+				
+				// Position réél dans le monde du block
+				int finalX = initX + unity3D.x(rotate)*dx;
+				int finalY = initY + unity3D.y(rotate);
+				int finalZ = initZ + unity3D.z(rotate)*dz;
+				
+				this.lock();
+				world.notifyBlocksOfNeighborChange(finalX, finalY, finalZ, unity.block != null ? unity.block.blockID : 0);
+//				if (this.isStaff ) {
+					world.markBlockForUpdate(finalX, finalY, finalZ);
+//				}
 			}
 		}
 		

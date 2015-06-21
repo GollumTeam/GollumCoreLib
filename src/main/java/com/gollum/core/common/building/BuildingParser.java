@@ -26,7 +26,7 @@ import com.gollum.core.common.building.Building.ListSubBuildings;
 import com.gollum.core.common.building.Building.SubBuilding;
 import com.gollum.core.common.building.Building.Unity;
 import com.gollum.core.common.building.Building.Unity.Content;
-import com.gollum.core.common.resource.ResourceLoader;
+import com.gollum.core.common.resources.ResourceLoader;
 import com.gollum.core.tools.registered.RegisteredObjects;
 
 public class BuildingParser {

@@ -11,6 +11,7 @@ public abstract class BuildingBlockHandler {
 	/**
 	 * Affecte l'orientation
 	 */
+	
 	public final void setOrientation(World world, int x, int y, int z, Block block, int metadata, int orientation, int rotate) {
 		if (this.mustApply(world, x, y, z, block)) {
 			this.applyOrientation(world, x, y, z, block, metadata, orientation, rotate);

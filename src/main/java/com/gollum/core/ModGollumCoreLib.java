@@ -1,15 +1,11 @@
 
 package com.gollum.core;
 
-import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.MinecraftForge;
-
 import com.gollum.core.common.CommonProxyGolumCoreLib;
 import com.gollum.core.common.command.CommandBuilding;
 import com.gollum.core.common.config.ConfigGollumCoreLib;
 import com.gollum.core.common.context.ModContext;
 import com.gollum.core.common.handlers.WorldHandler;
-import com.gollum.core.common.handlers.WorldTickHandler;
 import com.gollum.core.common.i18n.I18n;
 import com.gollum.core.common.log.Logger;
 import com.gollum.core.common.mod.GollumMod;
@@ -33,8 +29,6 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.TickRegistry;
-import cpw.mods.fml.relauncher.Side;
 
 @Mod(
 	modid                     = ModGollumCoreLib.MODID,
@@ -92,6 +86,9 @@ public class ModGollumCoreLib extends GollumMod {
 		
 		// Creation du logger
 		this.i18n = new I18n();
+
+		// Create tab creative
+		ModCreativeTab.create();
 		
 		// Affecte la config
 		VersionChecker.setDisplay(this.config.versionChecker);
@@ -101,13 +98,13 @@ public class ModGollumCoreLib extends GollumMod {
 		
 		// Creation du checker de version
 		new VersionChecker();
-
+		
 		// Initialisation des blocks
 		ModBlocks.init ();
 		
 		// Initialisation des items
 		ModItems.init ();
-
+		
 		BlockRegistry.instance().registerAll();
 		ItemRegistry.instance().registerAll();
 		
@@ -116,17 +113,14 @@ public class ModGollumCoreLib extends GollumMod {
 	/** 2 **/
 	public void init(FMLInitializationEvent event) {
 		
-		// Enregistre les events
-		this.proxy.registerEvents();
-		
 		// Initialisation les TileEntities
 		ModTileEntities.init();
 		
 		// Set de l'icon du tab creative
 		ModCreativeTab.init();
 		
-		MinecraftForge.EVENT_BUS.register(new WorldHandler());
-		TickRegistry.registerTickHandler(new WorldTickHandler(), Side.SERVER);
+		// Enregistre les events
+		this.proxy.registerEvents();
 	}
 
 	/** 3 **/
