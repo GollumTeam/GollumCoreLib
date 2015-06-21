@@ -58,7 +58,7 @@ public class WorldGeneratorByBuildingLoader {
 					String                            buildingName   = buildingEntry.getKey();
 					BuildingConfigType.Group.Building configBuilding = buildingEntry.getValue();
 					
-					if (!configBuilding.disabled) {
+					if (configBuilding.enabled) {
 						
 						Building building = parser.parse (buildingName, modId);
 						

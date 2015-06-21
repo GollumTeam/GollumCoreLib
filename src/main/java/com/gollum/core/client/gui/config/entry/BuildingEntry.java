@@ -35,7 +35,7 @@ public class BuildingEntry extends ConfigEntry {
 	private ConfigEntry group;
 	private ConfigEntry globalSpawnRate;
 	private ConfigEntry building;
-	private ConfigEntry bDisabled;
+	private ConfigEntry bEnabled;
 	private ConfigEntry bDimentionList;
 	private ConfigEntry dSpawnRate;
 	private ConfigEntry dSpawnMin;;
@@ -158,15 +158,15 @@ public class BuildingEntry extends ConfigEntry {
 		Building buildingC = this.getCurrentBuilding();
 		Building buildingD = this.getCurrentDefaultBuilding();
 		
-		this.bDisabled = this.createSubEntry(
+		this.bEnabled = this.createSubEntry(
 			"disabled",
-			buildingC.disabled,
-			buildingD.disabled,
+			buildingC.enabled,
+			buildingD.enabled,
 			3,
 			new JsonConfigProp()
 		);
 		
-		this.bDisabled.addEvent(new Event() {
+		this.bEnabled.addEvent(new Event() {
 			
 			@Override
 			public void call(Type type, Object... params) {
@@ -339,7 +339,7 @@ public class BuildingEntry extends ConfigEntry {
 			Dimention dimentionC = this.getCurrentDimention();
 			
 			group.globalSpawnRate = (Integer) this.globalSpawnRate.getValue();
-			building.disabled     = (Boolean) this.bDisabled.getValue();
+			building.enabled     = (Boolean) this.bEnabled.getValue();
 			
 			List<String> dimentionKeys = Arrays.asList((String[])this.bDimentionList.getValue());
 			
@@ -428,9 +428,9 @@ public class BuildingEntry extends ConfigEntry {
 			Building buildingO = this.getCurrentOldBuilding();
 			Building buildingD = this.getCurrentDefaultBuilding();
 			
-			this.bDisabled              .setValue       (buildingC.disabled);
-			this.bDisabled.configElement.setValue       (buildingO.disabled);
-			this.bDisabled.configElement.setDefaultValue(buildingD.disabled);
+			this.bEnabled              .setValue       (buildingC.enabled);
+			this.bEnabled.configElement.setValue       (buildingO.enabled);
+			this.bEnabled.configElement.setDefaultValue(buildingD.enabled);
 			
 			String[] dimC = new String[buildingC.dimentions.size()];
 			String[] dimO = new String[buildingO.dimentions.size()];
@@ -536,7 +536,7 @@ public class BuildingEntry extends ConfigEntry {
 		
 		this.parent.labelX += 10;
 		
-		this.bDisabled     .drawEntry(3, x, y + 72, listWidth, 22, tessellator, mouseX, mouseY, isSelected, false);
+		this.bEnabled     .drawEntry(3, x, y + 72, listWidth, 22, tessellator, mouseX, mouseY, isSelected, false);
 		this.bDimentionList.drawEntry(4, x, y + 92, listWidth, 22, tessellator, mouseX, mouseY, isSelected, false);
 		
 		this.drawRec(this.parent.labelX, y + 111, this.parent.scrollBarX - this.parent.labelX - 3, 109, 0x08FFFFFF);
