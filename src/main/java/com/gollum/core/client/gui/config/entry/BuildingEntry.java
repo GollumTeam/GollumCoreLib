@@ -159,7 +159,7 @@ public class BuildingEntry extends ConfigEntry {
 		Building buildingD = this.getCurrentDefaultBuilding();
 		
 		this.bEnabled = this.createSubEntry(
-			"disabled",
+			"enabled",
 			buildingC.enabled,
 			buildingD.enabled,
 			3,
