@@ -30,7 +30,7 @@ public class WorldTickHandler implements ITickHandler {
 			return;
 		}
 		World world = (World) tickData[0];
-
+		
 		if (!world.isRemote) {
 			
 			if (System.currentTimeMillis() - this.time > 200) {
