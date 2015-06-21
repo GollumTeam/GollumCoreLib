@@ -2,7 +2,6 @@ package com.gollum.core.common;
 
 import net.minecraftforge.common.MinecraftForge;
 
-import com.gollum.core.common.handlers.GuiScreenHandler;
 import com.gollum.core.common.handlers.WorldHandler;
 import com.gollum.core.common.handlers.WorldTickHandler;
 

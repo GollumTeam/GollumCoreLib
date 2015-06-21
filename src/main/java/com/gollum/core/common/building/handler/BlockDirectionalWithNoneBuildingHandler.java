@@ -3,7 +3,6 @@ package com.gollum.core.common.building.handler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockButton;
 import net.minecraft.block.BlockTorch;
-import net.minecraft.block.BlockTripWireHook;
 import net.minecraft.world.World;
 
 import com.gollum.core.ModGollumCoreLib;
@@ -14,6 +13,7 @@ public class BlockDirectionalWithNoneBuildingHandler extends BuildingBlockHandle
 	@Override
 	protected boolean mustApply (World world, int x, int y, int z, Block block) {
 		return
+			block instanceof BlockTorch ||
 			block instanceof BlockButton
 		;
 	}

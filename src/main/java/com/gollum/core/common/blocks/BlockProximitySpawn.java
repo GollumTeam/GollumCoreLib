@@ -88,4 +88,5 @@ public class BlockProximitySpawn extends HBlockContainer {
 	public boolean renderAsNormalBlock() {
 		return false;
 	}
+	
 }

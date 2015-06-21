@@ -2,7 +2,6 @@ package com.gollum.core.common.building.handler;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirectional;
-import net.minecraft.block.BlockTripWireHook;
 import net.minecraft.world.World;
 
 import com.gollum.core.ModGollumCoreLib;

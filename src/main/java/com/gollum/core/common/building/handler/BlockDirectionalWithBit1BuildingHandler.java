@@ -6,7 +6,6 @@ import net.minecraft.block.BlockDispenser;
 import net.minecraft.block.BlockFurnace;
 import net.minecraft.block.BlockLadder;
 import net.minecraft.block.BlockPistonBase;
-import net.minecraft.block.BlockTripWireHook;
 import net.minecraft.world.World;
 
 import com.gollum.core.ModGollumCoreLib;
