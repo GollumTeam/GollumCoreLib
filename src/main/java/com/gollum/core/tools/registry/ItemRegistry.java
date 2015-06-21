@@ -222,13 +222,14 @@ public class ItemRegistry {
 		for(int i = 0; i < itemStats.length; i++) {
 			if (itemStats[i] instanceof StatCrafting) {
 				StatCrafting stat = (StatCrafting) itemStats[i];
-				if (stat.func_150959_a() == vanillaItem) {
+				Field f = StatCrafting.class.getDeclaredField("field_150960_a");
+				f.setAccessible(true);
+				Item subItem = (Item)f.get(stat);
+				if (subItem == vanillaItem) {
 					
 					// 1.6.4  ?
 					// 1.7.2  field_150960_a
 					// 1.7.10 field_150960_a
-					Field f = StatCrafting.class.getDeclaredField("field_150960_a");
-					f.setAccessible(true);
 					f.set(stat, item);
 				}
 			}
@@ -238,15 +239,19 @@ public class ItemRegistry {
 
 	private void overrideStatItem(List itemStats, Item item, Item vanillaItem) throws Exception {
 		Iterator it = itemStats.iterator();
+		for (Field jj: StatCrafting.class.getDeclaredFields()) {
+			log.debug("cdc : "+jj.getName());
+		}
 		while(it.hasNext()) {
 			StatCrafting stat = (StatCrafting) it.next();
-			if (stat.func_150959_a() == vanillaItem) {
+			Field f = StatCrafting.class.getDeclaredField("field_150960_a");
+			f.setAccessible(true);
+			Item subItem = (Item)f.get(stat);
+			if (subItem == vanillaItem) {
 				
 				// 1.6.4  ?
 				// 1.7.2  field_150960_a
 				// 1.7.10 field_150960_a
-				Field f = StatCrafting.class.getDeclaredField("field_150960_a");
-				f.setAccessible(true);
 				f.set(stat, item);
 			}
 		}
