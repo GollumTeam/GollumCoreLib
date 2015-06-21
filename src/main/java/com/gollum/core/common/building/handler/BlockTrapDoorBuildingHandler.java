@@ -2,7 +2,6 @@ package com.gollum.core.common.building.handler;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockTrapDoor;
-import net.minecraft.block.BlockTripWireSource;
 import net.minecraft.world.World;
 
 import com.gollum.core.ModGollumCoreLib;
@@ -13,8 +12,7 @@ public class BlockTrapDoorBuildingHandler extends BuildingBlockHandler {
 	@Override
 	protected boolean mustApply (World world, int x, int y, int z, Block block) {
 		return 
-			block instanceof BlockTrapDoor ||
-			block instanceof BlockTripWireSource
+			block instanceof BlockTrapDoor
 		;
 	}
 	

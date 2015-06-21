@@ -140,7 +140,7 @@ public abstract class GollumMod {
 			e.printStackTrace();
 		}
 	}
-
+	
 	protected void initI18n() {
 		try {
 			Field fieldI18n = this.getClass().getDeclaredField("i18n");
@@ -193,7 +193,7 @@ public abstract class GollumMod {
 		this.preInit(event);
 		
 		BlockRegistry.instance().registerAll();
-		ItemRegistry.instance().registerAll();
+		ItemRegistry .instance().registerAll();
 		
 		ModContext.instance ().pop();
 	}

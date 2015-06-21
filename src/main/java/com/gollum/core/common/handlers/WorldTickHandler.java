@@ -39,7 +39,7 @@ public class WorldTickHandler implements ITickHandler {
 				Iterator<BuilderRunnable> i = Builder.currentBuilds.iterator();
 				while (i.hasNext()) {
 					BuilderRunnable thread = i.next(); 
-					if (!thread.isAlive()) {
+					if (thread.getWorld() == world && !thread.isAlive()) {
 						i.remove();
 						
 						BuildingGenerateEvent newEvent = new BuildingGenerateEvent.Post(world, thread.getBuilding(), thread.getRotate(), thread.getPosition());
