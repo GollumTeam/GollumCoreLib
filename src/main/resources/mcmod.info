@@ -1,22 +1,10 @@
 [
 {
-  "modid": "MorePistons",
-  "name": "More Pistons",
-  "description": "Add new Pistons",
-  "version": "2.0.0",
-  "updateUrl": "",
-  "authors": ["SmeagolWorms4"],
-  "screenshots": [],
-  "dependencies": ["GollumCoreLib"]
-},
-{
-  "modid": "GollumCoreLib",
-  "name": "Gollum Core Lib",
-  "description": "",
-  "version": "2.0.0",
-  "updateUrl": "",
-  "authors": ["SmeagolWorms4"],
-  "screenshots": [],
-  "dependencies": []
+	"modid": "GollumCoreLib",
+	"name": "Gollum Core Lib",
+	"description": "Framework for Minecraft development mod.",
+	"version": "2.0.0",
+	"url": "http://www.smeagol-mods.com",
+	"authorList": ["SmeagolWorms4"]
 }
 ]
