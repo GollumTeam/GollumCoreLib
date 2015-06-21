@@ -26,7 +26,7 @@ public class BuildingConfigType extends ConfigJsonType implements IConfigMerge {
 		
 		public static class Building {
 
-			public boolean disabled = false;
+			public boolean enabled = true;
 			public TreeMap<Integer, Dimention> dimentions = new TreeMap<Integer, Dimention>();
 			
 			public static class Dimention {
@@ -81,7 +81,7 @@ public class BuildingConfigType extends ConfigJsonType implements IConfigMerge {
 			Json   jsonBuilding = entryBuilding.getValue();
 			
 			Building building   = new Building ();
-			building.disabled   = jsonBuilding.child("disabled").boolValue();
+			building.enabled   = jsonBuilding.child("enabled").boolValue();
 			building.dimentions = this.readDimentions (jsonBuilding.child("dimentions"));
 			
 			rtn.put(buildingName, building);
@@ -160,7 +160,7 @@ public class BuildingConfigType extends ConfigJsonType implements IConfigMerge {
 			Building building     = entryBuilding.getValue();
 			
 			Json jsonBuilding = Json.create (
-				new EntryObject ("disabled"  , Json.create(building.disabled)),
+				new EntryObject ("enabled"  , Json.create(building.enabled)),
 				new EntryObject ("dimentions", this.getJsonDimentions (building.dimentions))
 			);
 			
