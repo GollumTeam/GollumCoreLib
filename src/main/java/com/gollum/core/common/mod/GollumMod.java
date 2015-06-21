@@ -241,7 +241,6 @@ public abstract class GollumMod {
 		GCLNetworkRegistry.instance().registerGuiHandler(new GCLGuiHandler(InventoryRegistry.instance().getGuiInventoryList()));
 		
 		// Enregistrement de tous les Gui groupé
-		// TODO a verifier
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GCLArrayGuiHandler(GCLNetworkRegistry.instance().getGuiHandlers()));
 		
 		ModContext.instance ().pop();
