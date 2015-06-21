@@ -13,8 +13,7 @@ public class BlockTrapDoorBuildingHandler extends BuildingBlockHandler {
 	@Override
 	protected boolean mustApply (World world, int x, int y, int z, Block block) {
 		return 
-			block instanceof BlockTrapDoor ||
-			block instanceof BlockTripWireHook
+			block instanceof BlockTrapDoor
 		;
 	}
 	
