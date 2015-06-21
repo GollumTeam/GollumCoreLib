@@ -11,12 +11,18 @@ import java.util.Map;
 
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.ShapedRecipes;
+import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.stats.StatBase;
 import net.minecraft.stats.StatCrafting;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.ObjectIntIdentityMap;
 import net.minecraft.util.RegistryNamespaced;
 import net.minecraft.util.RegistrySimple;
+import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import com.gollum.core.tools.helper.IItemHelper;
 import com.gollum.core.tools.registered.RegisteredObjects;
@@ -127,6 +133,9 @@ public class ItemRegistry {
 				overrideStatItem(StatList.objectBreakStats, item, vanillaItem);
 				log.debug (" 3 - Replace \""+registerName+"\" stats");
 				
+				overrideCraftings(item, vanillaItem);
+				log.debug (" 4 - Replace \""+registerName+"\" crafting");
+				
 			} else {
 				log.severe("The original item \""+registerName+"\" not found for replace registery.");
 			}
@@ -135,6 +144,78 @@ public class ItemRegistry {
 			e.printStackTrace();
 		}
 		
+	}
+
+	private void overrideCraftings(Item item, Item vanillaItem) {
+		Iterator it = CraftingManager.getInstance().getRecipeList().iterator();
+		while (it.hasNext()) {
+			Object o = it.next();
+			if (o instanceof ShapedRecipes) {
+				ShapedRecipes recipes = (ShapedRecipes)o;
+				if (recipes.getRecipeOutput().getItem() == vanillaItem) {
+					log.debug (" 4 - Block found in ShapedRecipes out");
+					recipes.getRecipeOutput().func_150996_a(item);
+				}
+				for (int i = 0; i < recipes.recipeItems.length; i++) {
+					ItemStack is = recipes.recipeItems[i];
+					if (is != null && is.getItem() == vanillaItem) {
+						log.debug (" 4 - Block found in ShapedRecipes");
+						is.func_150996_a(item);
+					}
+				}
+			} else
+			if (o instanceof ShapelessRecipes) {
+				ShapelessRecipes recipes = (ShapelessRecipes)o;
+				if (recipes.getRecipeOutput().getItem() == vanillaItem) {
+					recipes.getRecipeOutput().func_150996_a(item);
+					log.debug (" 4 - Block found in ShapelessRecipes out");
+				}
+				Iterator subIt = recipes.recipeItems.iterator();
+				while (subIt.hasNext()) {
+					Object subO = subIt.next();
+					if (subO instanceof ItemStack) {
+						ItemStack is = (ItemStack)subO;
+						if (is != null && is.getItem() == vanillaItem) {
+							log.debug (" 4 - Block found in ShapelessRecipes");
+							is.func_150996_a(item);
+						}
+					}
+				}
+			} else if (o instanceof ShapedOreRecipe) {
+				ShapedOreRecipe recipes = (ShapedOreRecipe)o;
+				if (recipes.getRecipeOutput().getItem() == vanillaItem) {
+					recipes.getRecipeOutput().func_150996_a(item);
+					log.debug (" 4 - Block found in ShapedOreRecipe out");
+				}
+				 Object[] subList = recipes.getInput();
+				for (int i = 0; i < subList.length; i++) {
+					if (subList[i] instanceof ItemStack) {
+						ItemStack is = (ItemStack) subList[i];
+						if (is != null && is.getItem() == vanillaItem) {
+							log.debug (" 4 - Block found in ShapedOreRecipe");
+							is.func_150996_a(item);
+						}
+					}
+				}
+			} else if (o instanceof ShapelessOreRecipe) {
+				ShapelessOreRecipe recipes = (ShapelessOreRecipe)o;
+				if (recipes.getRecipeOutput().getItem() == vanillaItem) {
+					recipes.getRecipeOutput().func_150996_a(item);
+					log.debug (" 4 - Block found in ShapelessOreRecipe out");
+				}
+				Iterator subIt = recipes.getInput().iterator();
+				while (subIt.hasNext()) {
+					Object subO = subIt.next();
+					if (subO instanceof ItemStack) {
+						ItemStack is = (ItemStack)subO;
+						if (is != null && is.getItem() == vanillaItem) {
+							log.debug (" 4 - Block found in ShapelessOreRecipe");
+							is.func_150996_a(item);
+						}
+					}
+				}
+			}
+		}
 	}
 	
 	private void overrideStatItem(StatBase[] itemStats, Item item, Item vanillaItem) throws Exception {
