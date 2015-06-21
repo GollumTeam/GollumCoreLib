@@ -7,6 +7,8 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 
 import com.gollum.core.tools.helper.IBlockHelper;
 import com.gollum.core.utils.reflection.Reflection;
@@ -77,14 +79,33 @@ public class BlockRegistry {
 			try {
 				f = Block.class.getDeclaredField("=======");
 			} catch (Exception e) {
-				log.message("Unofuscate property RegistrySimple : ======= => blockId");
+				log.message("Unofuscate property RegistrySimple : ======= => blockID");
 				f = Block.class.getDeclaredField("blockID");
 			}
 			Reflection.setFinalField(f, block, newId);
-			log.message("Override block field fieldName=\"blockID by "+newId);
+			log.message("Override Block field fieldName=\"blockID\" from "+oldId+" by "+newId);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+		
+		Item item = Item.itemsList[oldId];
+		if (item instanceof ItemBlock) {
+			ItemBlock itemBlock = (ItemBlock)item;
+			try {
+				Field f = null;
+				try {
+					f = ItemBlock.class.getDeclaredField("=======");
+				} catch (Exception e) {
+					log.message("Unofuscate property ItemBlock : ======= => blockID");
+					f = ItemBlock.class.getDeclaredField("blockID");
+				}
+				f.setAccessible(true);
+				f.set(itemBlock, newId);
+				log.message("Override ItemBlock field fieldName=\"blockID\" from "+oldId+" by "+newId);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		
 		Block.blocksList[newId] = block;
