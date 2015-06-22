@@ -239,9 +239,7 @@ public class ItemRegistry {
 
 	private void overrideStatItem(List itemStats, Item item, Item vanillaItem) throws Exception {
 		Iterator it = itemStats.iterator();
-		for (Field jj: StatCrafting.class.getDeclaredFields()) {
-			log.debug("cdc : "+jj.getName());
-		}
+		
 		while(it.hasNext()) {
 			StatCrafting stat = (StatCrafting) it.next();
 			Field f = StatCrafting.class.getDeclaredField("field_150960_a");
