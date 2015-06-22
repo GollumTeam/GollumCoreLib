@@ -268,10 +268,10 @@ public class GuiConfigEntries extends GuiListExtended {
 		try {
 			
 			try {
-				Reflection.setFinalField(GuiSlot.class.getDeclaredField("slotHeight"), this, height);
-			} catch (Exception e) {
-				e.printStackTrace();
 				Reflection.setFinalField(GuiSlot.class.getDeclaredField("field_148149_f"), this, height);
+			} catch (Exception e) {
+				log.message("Get GuiSlot/slotHeight unofuscate : field_148149_f => slotHeight");
+				Reflection.setFinalField(GuiSlot.class.getDeclaredField("slotHeight"), this, height);
 			}
 			
 		} catch (Exception e) {
