@@ -29,12 +29,16 @@ public class BlockSignBuildingHandler extends BuildingBlockHandler {
 			// 1.7.10 field_149967_b
 			// 1.7.2  field_149967_b
 			// 1.6.4  b
-			Field f = null; 
+			Field f = null;
 			try {
-				f = BlockSign.class.getDeclaredField("b");
+				f = BlockSign.class.getDeclaredField("field_72278_b");
 			} catch (Exception e) {
-				log.debug("Is desofuscate BlockSign");
-				f = BlockSign.class.getDeclaredField("isFreestanding");
+				try {
+					f = BlockSign.class.getDeclaredField("b");
+				} catch (Exception e2) {
+					log.debug("Is desofuscate BlockSign");
+					f = BlockSign.class.getDeclaredField("isFreestanding");
+				}
 			}
 			f.setAccessible(true);
 			standing = (Boolean) f.get(block);

@@ -77,10 +77,14 @@ public class BlockRegistry {
 			
 			Field f = null;
 			try {
-				f = Block.class.getDeclaredField("cF");
+				f = Block.class.getDeclaredField("field_71990_ca");
 			} catch (Exception e) {
-				log.message("Unofuscate property "+Block.class.getName()+" : cF => blockID");
-				f = Block.class.getDeclaredField("blockID");
+				try {
+					f = Block.class.getDeclaredField("cF");
+				} catch (Exception e2) {
+					log.message("Unofuscate property "+Block.class.getName()+" : cF => blockID");
+					f = Block.class.getDeclaredField("blockID");
+				}
 			}
 			Reflection.setFinalField(f, block, newId);
 			log.message("Override Block field fieldName=\"blockID\" from "+oldId+" by "+newId);
@@ -95,10 +99,14 @@ public class BlockRegistry {
 			try {
 				Field f = null;
 				try {
-					f = ItemBlock.class.getDeclaredField("a");
+					f = ItemBlock.class.getDeclaredField("field_77885_a");
 				} catch (Exception e) {
-					log.message("Unofuscate property "+ItemBlock.class.getName()+" : a => blockID");
-					f = ItemBlock.class.getDeclaredField("blockID");
+					try {
+						f = ItemBlock.class.getDeclaredField("a");
+					} catch (Exception e2) {
+						log.message("Unofuscate property "+ItemBlock.class.getName()+" : a => blockID");
+						f = ItemBlock.class.getDeclaredField("blockID");
+					}
 				}
 				f.setAccessible(true);
 				f.set(itemBlock, newId);

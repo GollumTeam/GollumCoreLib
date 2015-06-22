@@ -75,10 +75,14 @@ public class ItemRegistry {
 			
 			Field f = null;
 			try {
-				f = Item.class.getDeclaredField("cv");
+				f = Item.class.getDeclaredField("field_77779_bT");
 			} catch (Exception e) {
-				log.message("Unofuscate property "+Item.class.getName()+" : cv => blockId");
-				f = Item.class.getDeclaredField("itemID");
+				try {
+					f = Item.class.getDeclaredField("cv");
+				} catch (Exception e2) {
+					log.message("Unofuscate property "+Item.class.getName()+" : cv => blockId");
+					f = Item.class.getDeclaredField("itemID");
+				}
 			}
 			Reflection.setFinalField(f, item, newId);
 			log.message("Override Item field fieldName=\"itemID by "+newId);
