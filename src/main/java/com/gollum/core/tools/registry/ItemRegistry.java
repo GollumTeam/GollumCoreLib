@@ -75,9 +75,9 @@ public class ItemRegistry {
 			
 			Field f = null;
 			try {
-				f = Item.class.getDeclaredField("=======");
+				f = Item.class.getDeclaredField("cv");
 			} catch (Exception e) {
-				log.message("Unofuscate property RegistrySimple : ======= => blockId");
+				log.message("Unofuscate property "+Item.class.getName()+" : cv => blockId");
 				f = Item.class.getDeclaredField("itemID");
 			}
 			Reflection.setFinalField(f, item, newId);

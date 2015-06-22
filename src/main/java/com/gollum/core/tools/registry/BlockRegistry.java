@@ -77,9 +77,9 @@ public class BlockRegistry {
 			
 			Field f = null;
 			try {
-				f = Block.class.getDeclaredField("=======");
+				f = Block.class.getDeclaredField("cF");
 			} catch (Exception e) {
-				log.message("Unofuscate property RegistrySimple : ======= => blockID");
+				log.message("Unofuscate property "+Block.class.getName()+" : cF => blockID");
 				f = Block.class.getDeclaredField("blockID");
 			}
 			Reflection.setFinalField(f, block, newId);
@@ -95,9 +95,9 @@ public class BlockRegistry {
 			try {
 				Field f = null;
 				try {
-					f = ItemBlock.class.getDeclaredField("=======");
+					f = ItemBlock.class.getDeclaredField("a");
 				} catch (Exception e) {
-					log.message("Unofuscate property ItemBlock : ======= => blockID");
+					log.message("Unofuscate property "+ItemBlock.class.getName()+" : a => blockID");
 					f = ItemBlock.class.getDeclaredField("blockID");
 				}
 				f.setAccessible(true);
