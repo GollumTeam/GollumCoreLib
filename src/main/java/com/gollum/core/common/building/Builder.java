@@ -376,7 +376,7 @@ public class Builder {
 				int finalZ = initZ + unity3D.z(rotate)*dz;
 				
 				if (unity.block != null) {
-					log.debug("Place after block : "+RegisteredObjects.instance().getRegisterName(unity.block));
+//					log.debug("Place after block : "+RegisteredObjects.instance().getRegisterName(unity.block));
 					isPlaced = this.setBlock (finalX, finalY, finalZ, unity.block, unity.metadata);
 				} else {
 					this.setBlock (finalX, finalY, finalZ, Blocks.air, 0);
