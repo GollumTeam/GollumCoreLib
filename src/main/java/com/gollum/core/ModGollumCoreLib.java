@@ -28,6 +28,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 @Mod(
@@ -36,6 +37,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 	version                   = ModGollumCoreLib.VERSION,
 	acceptedMinecraftVersions = ModGollumCoreLib.MINECRAFT_VERSION
 )
+@NetworkMod(clientSideRequired = true, serverSideRequired = false)
 public class ModGollumCoreLib extends GollumMod {
 
 	public final static String MODID = "GollumCoreLib";
