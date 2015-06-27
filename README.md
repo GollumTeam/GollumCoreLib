@@ -14,3 +14,12 @@ It's library for Minecraft Mod. Add functionalities :
  - Mod metadatas getter
  - Annotation config loader
  - Several Helper 
+ 
+ 
+For Install :
+
+<pre>
+./gradlew setupDecompWorkspace
+./gradlew build
+./gradlew eclipse
+</pre>

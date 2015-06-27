@@ -10,13 +10,13 @@
 
 package argo.saj;
 
-import argo.staj.InvalidSyntaxRuntimeException;
-import argo.staj.JsonStreamElement;
-import argo.staj.StajParser;
-
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+
+import argo.staj.InvalidSyntaxRuntimeException;
+import argo.staj.JsonStreamElement;
+import argo.staj.StajParser;
 
 /**
  * Converts a character stream into calls to a {@code JsonListener}.

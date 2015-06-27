@@ -10,12 +10,26 @@
 
 package argo.staj;
 
+import static argo.staj.InvalidSyntaxRuntimeException.END_OF_STREAM;
+import static argo.staj.InvalidSyntaxRuntimeException.invalidSyntaxRuntimeException;
+import static argo.staj.InvalidSyntaxRuntimeException.unexpectedCharacterInvalidSyntaxRuntimeException;
+import static argo.staj.JsonStreamElement.endArray;
+import static argo.staj.JsonStreamElement.endDocument;
+import static argo.staj.JsonStreamElement.endField;
+import static argo.staj.JsonStreamElement.endObject;
+import static argo.staj.JsonStreamElement.falseValue;
+import static argo.staj.JsonStreamElement.nullValue;
+import static argo.staj.JsonStreamElement.number;
+import static argo.staj.JsonStreamElement.startArray;
+import static argo.staj.JsonStreamElement.startDocument;
+import static argo.staj.JsonStreamElement.startField;
+import static argo.staj.JsonStreamElement.startObject;
+import static argo.staj.JsonStreamElement.string;
+import static argo.staj.JsonStreamElement.trueValue;
+
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.Stack;
-
-import static argo.staj.InvalidSyntaxRuntimeException.*;
-import static argo.staj.JsonStreamElement.*;
 
 /**
  * Types of element a {@code StajParser} can produce.

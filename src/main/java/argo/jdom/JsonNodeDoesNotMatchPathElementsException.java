@@ -10,10 +10,9 @@
 
 package argo.jdom;
 
+import static argo.jdom.JsonNodeDoesNotMatchChainedJsonNodeSelectorException.getShortFormFailPath;
 import argo.format.CompactJsonFormatter;
 import argo.format.JsonFormatter;
-
-import static argo.jdom.JsonNodeDoesNotMatchChainedJsonNodeSelectorException.getShortFormFailPath;
 
 final class JsonNodeDoesNotMatchPathElementsException extends JsonNodeDoesNotMatchJsonNodeSelectorException {
 

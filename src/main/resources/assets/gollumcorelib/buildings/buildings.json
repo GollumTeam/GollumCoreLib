@@ -3,13 +3,13 @@
 		"globalSpawnRate":0,
 		"buildings": {
 			"test": {
-				"disabled": true,
+				"enabled": false,
 				"dimentions": {
-					"0": {
-						"spawnRate":0,
-						"spawnHeight":3,
-						"blocksSpawn":["minecraft:grass"]
-					}
+				}
+			},
+			"test-stone": {
+				"enabled": false,
+				"dimentions": {
 				}
 			}
 		}

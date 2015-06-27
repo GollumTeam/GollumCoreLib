@@ -10,9 +10,7 @@
 
 package argo.format;
 
-import argo.jdom.JsonField;
-import argo.jdom.JsonNode;
-import argo.jdom.JsonRootNode;
+import static argo.format.JsonEscapedString.escapeString;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -20,7 +18,9 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Iterator;
 
-import static argo.format.JsonEscapedString.escapeString;
+import argo.jdom.JsonField;
+import argo.jdom.JsonNode;
+import argo.jdom.JsonRootNode;
 
 /**
  * JsonFormat that formats JSON in a human-readable form.  Instances of this class can safely be shared between threads.
