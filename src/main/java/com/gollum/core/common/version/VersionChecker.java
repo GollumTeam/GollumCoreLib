@@ -91,8 +91,9 @@ public class VersionChecker extends Thread {
 			String versionEnc = URLEncoder.encode(mod.getVersion (), "UTF-8");
 			String playerEnc = URLEncoder.encode(player, "UTF-8");
 			String mcVersionEnc = URLEncoder.encode(mod.getMinecraftVersion (), "UTF-8");
+			String localeEnc = URLEncoder.encode(this.getCurrentLanguage (), "UTF-8");
 			
-			URL url = new URL ("http://minecraft-mods.elewendyl.fr/index.php/mmods/default/version?mod="+modidEnc+"&version="+versionEnc+"&player="+playerEnc+"&mversion="+mcVersionEnc);
+			URL url = new URL ("http://minecraft-mods.elewendyl.fr/index.php/mmods/default/version?mod="+modidEnc+"&version="+versionEnc+"&player="+playerEnc+"&mversion="+mcVersionEnc+"&locale="+localeEnc);
 			ModGollumCoreLib.log.debug("URL Checker : "+url);
 			
 			BufferedReader bufferedreader = new BufferedReader(new InputStreamReader(url.openStream()));
@@ -113,6 +114,15 @@ public class VersionChecker extends Thread {
 		} catch (Exception exception) {
 			exception.printStackTrace();
 		}
+	}
+	
+	private String getCurrentLanguage() {
+		
+		if (ModGollumCoreLib.proxy.isRemote ()) {
+			return Minecraft.getMinecraft().gameSettings.language;
+		}
+		
+		return "";
 	}
 	
 	
