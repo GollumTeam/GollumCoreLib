@@ -100,9 +100,12 @@ public class ConfigGollumCoreLib extends Config {
 	@ConfigProp(group="Test", dev=true, type=Type.BLOCK)
 	public String block = "minecraft:tnt";
 	
+	@ConfigProp(group="Test", dev=true, type=Type.BLOCK)
+	public String arBlocks[] = new String[] { "minecraft:planks" };
+	
 	@ConfigProp(group="Test", dev=true, type=Type.MOD)
 	public String mod = ModGollumCoreLib.MODID;
-	
+
 	@ConfigProp(group="Test", dev=true, type=Type.MOD, newValue=ModGollumCoreLib.MODID)
 	public String arMod[] = new String[] { ModGollumCoreLib.MODID };
 	

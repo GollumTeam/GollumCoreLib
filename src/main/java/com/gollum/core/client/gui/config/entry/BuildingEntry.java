@@ -50,7 +50,7 @@ public class BuildingEntry extends ConfigEntry {
 		
 		this.value = (BuildingConfigType) configElement.getValue();
 		
-		parent.setSlotHeight (175);
+		parent.setSlotHeight (200);
 		
 		this.init ();
 	}
