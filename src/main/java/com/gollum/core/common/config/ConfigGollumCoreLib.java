@@ -93,14 +93,17 @@ public class ConfigGollumCoreLib extends Config {
 	
 	@ConfigProp(group="Test", dev=true, type=Type.SLIDER)
 	public double slider2 = 20.5;
-	
+
 	@ConfigProp(group="Test", dev=true, type=Type.ITEM)
 	public String item = "minecraft:iron_axe";
+	
+	@ConfigProp(group="Test", dev=true, type=Type.ITEM, newValue="minecraft:iron_axe")
+	public String arItem[] = new String[] { "minecraft:iron_axe" };
 	
 	@ConfigProp(group="Test", dev=true, type=Type.BLOCK)
 	public String block = "minecraft:tnt";
 	
-	@ConfigProp(group="Test", dev=true, type=Type.BLOCK)
+	@ConfigProp(group="Test", dev=true, type=Type.BLOCK, newValue="minecraft:iron_axe")
 	public String arBlocks[] = new String[] { "minecraft:planks" };
 	
 	@ConfigProp(group="Test", dev=true, type=Type.MOD)

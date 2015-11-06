@@ -16,4 +16,9 @@ public class ModIdEntry extends ListEntry {
 	public void valueButtonPressed(int slotIndex) {
 		this.mc.displayGuiScreen(new GuiModIdConfig(this));
 	}
+	
+	@Override
+	public boolean hasSearch () {
+		return true;
+	}
 }

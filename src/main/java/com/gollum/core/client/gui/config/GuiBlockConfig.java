@@ -31,7 +31,6 @@ public class GuiBlockConfig extends GuiListConfig {
 	 */
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-
 		for (int i = 0; i < this.entryList.getSize(); i++) {
 			ConfigEntry entry = this.entryList.getEntry(i);
 			if (entry instanceof ListSlotEntry) {

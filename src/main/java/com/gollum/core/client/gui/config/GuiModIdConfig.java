@@ -16,10 +16,10 @@ public class GuiModIdConfig extends GuiListConfig {
 	
 	@Override
 	protected void initConfigElement() {
-
 		for (Entry<String, ModContainer> entry : Loader.instance().getIndexedModList().entrySet()) {
 			this.configElements.add(new ListElement(entry.getKey(), entry.getValue().getName() + " ("+entry.getKey()+")"));
 		}
+		this.filter();
  	}
 
 }
