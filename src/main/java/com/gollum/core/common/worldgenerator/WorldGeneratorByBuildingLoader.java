@@ -73,7 +73,7 @@ public class WorldGeneratorByBuildingLoader {
 							ModGollumCoreLib.log.info(" -     spawnMin  : "+configDimention.spawnMin);
 							ModGollumCoreLib.log.info(" -     spawnMax  : "+configDimention.spawnMax);
 							
-							building.dimentionsInfos.put (dimentionId, new Building.DimentionSpawnInfos(configDimention.spawnRate, configDimention.spawnMin, configDimention.spawnMax, configDimention.blocksSpawn));
+							building.dimentionsInfos.put (dimentionId, new Building.DimentionSpawnInfos(configDimention.spawnRate, configDimention.spawnMin, configDimention.spawnMax, configDimention.blocksSpawn, configDimention.biomes));
 							
 						}
 						

@@ -12,6 +12,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.init.Blocks;
+import net.minecraft.world.biome.BiomeGenBase;
 
 import com.gollum.core.client.gui.config.GuiConfigEntries;
 import com.gollum.core.client.gui.config.element.ConfigElement;
@@ -41,6 +42,7 @@ public class BuildingEntry extends ConfigEntry {
 	private ConfigEntry dSpawnMin;;
 	private ConfigEntry dSpawnMax;
 	private ConfigEntry dBlocksSpawn;
+	private ConfigEntry dBiomes;
 
 	private boolean mutexChangeEvent = true;
 	private boolean mutexChange = true;
@@ -50,7 +52,7 @@ public class BuildingEntry extends ConfigEntry {
 		
 		this.value = (BuildingConfigType) configElement.getValue();
 		
-		parent.setSlotHeight (200);
+		parent.setSlotHeight (220);
 		
 		this.init ();
 	}
@@ -317,6 +319,33 @@ public class BuildingEntry extends ConfigEntry {
 			
 		});
 		
+		ArrayList<String> biomesC = new ArrayList<String>();
+		for (BiomeGenBase biome : dimentionC.biomes) {
+			biomesC.add(biome.biomeName);
+		}
+		ArrayList<String> biomesD = new ArrayList<String>();
+		for (BiomeGenBase biome : dimentionD.biomes) {
+			biomesD.add(biome.biomeName);
+		}
+		
+		this.dBiomes = this.createSubEntry(
+			"biomesFilter",
+			biomesC.toArray(new String[0]),
+			biomesD.toArray(new String[0]),
+			7,
+			new JsonConfigProp().type(ConfigProp.Type.BIOME).newValue(BiomeGenBase.ocean.biomeName)
+		);
+		this.dBiomes.addEvent(new Event() {
+			
+			@Override
+			public void call(Type type, Object... params) {
+				if (_this.mutexChangeEvent()) {
+					_this.saveEntry();
+					_this.mutexChangeEvent = true;
+				}
+			}
+			
+		});
 	}
 
 	private boolean mutexChangeEvent () {
@@ -364,7 +393,7 @@ public class BuildingEntry extends ConfigEntry {
 				dimentionC.spawnRate   = (Integer) this.dSpawnRate.getValue();
 				dimentionC.spawnMin = (Integer) this.dSpawnMin.getValue();
 				dimentionC.spawnMax = (Integer) this.dSpawnMax.getValue();
-				
+
 				ArrayList<Block> blocksSpawn = new ArrayList<Block>();
 				for (String blockName : (String[])this.dBlocksSpawn.getValue()) {
 					Block b = RegisteredObjects.instance().getBlock(blockName);
@@ -374,6 +403,17 @@ public class BuildingEntry extends ConfigEntry {
 				}
 				
 				dimentionC.blocksSpawn = blocksSpawn;
+				
+
+				ArrayList<BiomeGenBase> biomes = new ArrayList<BiomeGenBase>();
+				for (String biomeName : (String[])this.dBiomes.getValue()) {
+					BiomeGenBase b = RegisteredObjects.instance().getBiome(biomeName);
+					if (b != null) {
+						biomes.add(b);
+					}
+				}
+				
+				dimentionC.biomes = biomes;
 			}
 			
 			this.fireEvent(Type.CHANGE);
@@ -485,7 +525,7 @@ public class BuildingEntry extends ConfigEntry {
 			this.dSpawnMax.configElement.setValue       (dimentionO.spawnMax);
 			this.dSpawnMax.configElement.setDefaultValue(dimentionD.spawnMax);
 			
-	
+			
 			ArrayList<String> blocksC = new ArrayList<String>();
 			for (Block block : dimentionC.blocksSpawn) {
 				String name = RegisteredObjects.instance().getRegisterName(block);
@@ -511,6 +551,24 @@ public class BuildingEntry extends ConfigEntry {
 			this.dBlocksSpawn              .setValue       (blocksC.toArray(new String[0]));
 			this.dBlocksSpawn.configElement.setValue       (blocksO.toArray(new String[0]));
 			this.dBlocksSpawn.configElement.setDefaultValue(blocksD.toArray(new String[0]));
+			
+			
+			ArrayList<String> biomesC = new ArrayList<String>();
+			for (BiomeGenBase biome: dimentionC.biomes) {
+				blocksC.add(biome.biomeName);
+			}
+			ArrayList<String> biomesD = new ArrayList<String>();
+			for (BiomeGenBase biome : dimentionD.biomes) {
+				biomesD.add(biome.biomeName);
+			}
+			ArrayList<String> biomesO = new ArrayList<String>();
+			for (BiomeGenBase biome : dimentionO.biomes) {
+				biomesO.add(biome.biomeName);
+			}
+			
+			this.dBiomes              .setValue       (biomesC.toArray(new String[0]));
+			this.dBiomes.configElement.setValue       (biomesO.toArray(new String[0]));
+			this.dBiomes.configElement.setDefaultValue(biomesD.toArray(new String[0]));
 			
 			this.fireEvent(Type.CHANGE);
 
@@ -548,6 +606,8 @@ public class BuildingEntry extends ConfigEntry {
 			this.dSpawnMin.drawEntry(4, x, y + 132, listWidth, 22, tessellator, mouseX, mouseY, isSelected, false);
 			this.dSpawnMax.drawEntry(4, x, y + 152, listWidth, 22, tessellator, mouseX, mouseY, isSelected, false);
 			this.dBlocksSpawn.drawEntry(4, x, y + 172, listWidth, 22, tessellator, mouseX, mouseY, isSelected);
+			this.parent.labelX += 20;
+			this.dBiomes.drawEntry(4, x, y + 192, listWidth, 22, tessellator, mouseX, mouseY, isSelected);
 		}
 		this.resetControlWidth();
 		
@@ -570,6 +630,7 @@ public class BuildingEntry extends ConfigEntry {
 			mc.fontRenderer.getStringWidth(this.tradIfExist("spawnMin"   ))+20,
 			mc.fontRenderer.getStringWidth(this.tradIfExist("spawnMax"   ))+20,
 			mc.fontRenderer.getStringWidth(this.tradIfExist("blocksSpawn"))+20,
+			mc.fontRenderer.getStringWidth(this.tradIfExist("biomesFilter"))+20,
 		};
 		
 		int size = 0;

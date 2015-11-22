@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
-import net.minecraft.block.Block;
-
 import com.gollum.core.ModGollumCoreLib;
 import com.gollum.core.common.config.IConfigMerge;
 import com.gollum.core.common.config.type.BuildingConfigType.Group.Building;
@@ -15,6 +13,9 @@ import com.gollum.core.tools.simplejson.Json;
 import com.gollum.core.tools.simplejson.Json.EntryObject;
 import com.gollum.core.tools.simplejson.JsonArray;
 import com.gollum.core.tools.simplejson.JsonObject;
+
+import net.minecraft.block.Block;
+import net.minecraft.world.biome.BiomeGenBase;
 
 public class BuildingConfigType extends ConfigJsonType implements IConfigMerge {
 	
@@ -35,6 +36,7 @@ public class BuildingConfigType extends ConfigJsonType implements IConfigMerge {
 				public Integer spawnMin = 3;
 				public Integer spawnMax = 256;
 				public ArrayList<Block> blocksSpawn = new ArrayList<Block>();
+				public ArrayList<BiomeGenBase> biomes = new ArrayList<BiomeGenBase>();
 				
 			}
 		}
@@ -81,7 +83,7 @@ public class BuildingConfigType extends ConfigJsonType implements IConfigMerge {
 			Json   jsonBuilding = entryBuilding.getValue();
 			
 			Building building   = new Building ();
-			building.enabled   = jsonBuilding.child("enabled").boolValue();
+			building.enabled    = jsonBuilding.child("enabled").boolValue();
 			building.dimentions = this.readDimentions (jsonBuilding.child("dimentions"));
 			
 			rtn.put(buildingName, building);
@@ -103,7 +105,7 @@ public class BuildingConfigType extends ConfigJsonType implements IConfigMerge {
 			dimention.spawnRate   = jsonDimention.child("spawnRate").intValue();
 			dimention.spawnMin    = jsonDimention.child("spawnMin").intValue();
 			dimention.spawnMax    = jsonDimention.child("spawnMax").intValue();
-
+			
 			for (Json jsonBlock : jsonDimention.child("blocksSpawn").allChild()) {
 				String key = jsonBlock.strValue();
 				try {
@@ -116,6 +118,21 @@ public class BuildingConfigType extends ConfigJsonType implements IConfigMerge {
 					}
 				} catch (Exception e) {
 					ModGollumCoreLib.log.severe("Error block not found : "+key);
+				}
+			}
+			
+			for (Json jsonBiome : jsonDimention.child("biomesFilter").allChild()) {
+				String key = jsonBiome.strValue();
+				try {
+					BiomeGenBase b = RegisteredObjects.instance().getBiome(key);
+					
+					if (b != null) {
+						dimention.biomes.add(b);
+					} else {
+						ModGollumCoreLib.log.severe("Error biome not found : "+key);
+					}
+				} catch (Exception e) {
+					ModGollumCoreLib.log.severe("Error biome not found : "+key);
 				}
 			}
 			
@@ -182,7 +199,8 @@ public class BuildingConfigType extends ConfigJsonType implements IConfigMerge {
 				new EntryObject ("spawnMin"   , Json.create(dimention.spawnMin)),
 				new EntryObject ("spawnMax"   , Json.create(dimention.spawnMax)),
 				new EntryObject ("spawnRate"  , Json.create(dimention.spawnRate)),
-				new EntryObject ("blocksSpawn", this.getJsonBlocks (dimention.blocksSpawn))
+				new EntryObject ("blocksSpawn", this.getJsonBlocks (dimention.blocksSpawn)),
+				new EntryObject ("biomesFilter", this.getJsonBiomes (dimention.biomes))
 			);
 			
 			jsonDimentions.add(dimentionId.toString(), jsonDimention);
@@ -203,6 +221,20 @@ public class BuildingConfigType extends ConfigJsonType implements IConfigMerge {
 		}
 		
 		return jsonBlocksSpawn;
+	}
+	
+	private Json getJsonBiomes(ArrayList<BiomeGenBase> biomes) {
+		Json jsonBiomes = new JsonArray();
+		
+		for (BiomeGenBase biome : biomes) {
+			try {
+				jsonBiomes.add(Json.create(biome.biomeName) );
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return jsonBiomes;
 	}
 	
 	@Override
