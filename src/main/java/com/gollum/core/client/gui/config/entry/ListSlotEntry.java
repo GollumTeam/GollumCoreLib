@@ -69,6 +69,6 @@ public class ListSlotEntry extends ConfigEntry {
 	
 	@Override
 	public void setSlot (int slotIndex) {
-		((GuiListConfig)this.parent.parent).currentValue = (String) this.getValue();
+		((GuiListConfig)this.parent.parent).currentValue = this.getValue();
 	}
 }

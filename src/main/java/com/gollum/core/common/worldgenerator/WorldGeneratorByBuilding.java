@@ -11,6 +11,7 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -131,6 +132,20 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 			
 		}
 	}
+
+	private ArrayList<Building> filterByBiome(BiomeGenBase biomeGenBase, ArrayList<Building> buildings, int dimention) {
+		
+		ArrayList<Building> rtn = new ArrayList<Building>();
+		
+		for (Building building: buildings) {
+			DimentionSpawnInfos dim = buildings.get(dimention).dimentionsInfos.get(dimention);
+			if (dim.biomes.size() == 0 && dim.biomes.contains(biomeGenBase)) {
+				rtn.add(building);
+			}
+		}
+		
+		return rtn;
+	}
 	
 	/**
 	 * Genere le batiment dans le terrain correspondant
@@ -142,6 +157,8 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 	 * @param random
 	 */
 	private boolean generateBuilding(World world, Random random, int chunkX, int chunkZ, ArrayList<Building> buildings, int groupSpawnRate, int dimention) {
+		
+		buildings = this.filterByBiome(world.getBiomeGenForCoords(chunkX, chunkZ), buildings, dimention);
 		
 		if (buildings.size() == 0) {
 			return false;
@@ -156,7 +173,6 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 			int     rotate     = random.nextInt(Building.ROTATED_360);
 			Block[] blocksList = new Block[256];
 			
-			buildings = (ArrayList<Building>) buildings.clone();
 			Collections.shuffle(buildings);
 			
 			if (!this.hasBuildingArround (chunkX, chunkZ)) {
