@@ -3,7 +3,7 @@
 	"modid": "GollumCoreLib",
 	"name": "Gollum Core Lib",
 	"description": "Framework for Minecraft development mod.",
-	"version": "2.0.0",
+	"version": "2.0.1",
 	"mcversion": "1.6.4",
 	"url": "http://www.smeagol-mods.com",
 	"authors": [ "SmeagolWorms4" ]

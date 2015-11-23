@@ -6,6 +6,8 @@ import com.gollum.core.common.config.type.ItemStackConfigType;
 import com.gollum.core.tools.simplejson.IJsonObjectDisplay;
 import com.gollum.core.tools.simplejson.Json;
 
+import net.minecraft.world.biome.BiomeGenBase;
+
 
 public class ConfigGollumCoreLib extends Config {
 
@@ -51,7 +53,7 @@ public class ConfigGollumCoreLib extends Config {
 	//CustomEntry
 	@ConfigProp(group="Test", dev=true, entryClass="com.gollum.core.client.gui.config.entry.ModIdEntry")
 	public String customEntry = ModGollumCoreLib.MODID;
-	
+			
 	// JsonObject
 	@ConfigProp(group="Test", dev=true)
 	public Json json1 = Json.create(
@@ -107,15 +109,33 @@ public class ConfigGollumCoreLib extends Config {
 	
 	@ConfigProp(group="Test", dev=true, type=Type.SLIDER)
 	public double slider2 = 20.5;
-	
+
 	@ConfigProp(group="Test", dev=true, type=Type.ITEM)
 	public String item = "minecraft:iron_axe";
+	
+	@ConfigProp(group="Test", dev=true, type=Type.ITEM, newValue="minecraft:iron_axe")
+	public String arItem[] = new String[] { "minecraft:iron_axe" };
 	
 	@ConfigProp(group="Test", dev=true, type=Type.BLOCK)
 	public String block = "minecraft:tnt";
 	
+	@ConfigProp(group="Test", dev=true, type=Type.BLOCK, newValue="minecraft:iron_axe")
+	public String arBlocks[] = new String[] { "minecraft:planks" };
+	
 	@ConfigProp(group="Test", dev=true, type=Type.MOD)
 	public String mod = ModGollumCoreLib.MODID;
+	
+	@ConfigProp(group="Test", dev=true, type=Type.BIOME)
+	public int biomeId = 0;
+	
+	@ConfigProp(group="Test", dev=true, type=Type.BIOME, newValue="5")
+	public int arBiomeId[] = new int[] { 0, 2 , 3 };
+	
+	@ConfigProp(group="Test", dev=true, type=Type.BIOME)
+	public String biomeName = BiomeGenBase.desert.biomeName;
+	
+	@ConfigProp(group="Test", dev=true, type=Type.BIOME, newValue="Birch Forest")
+	public String arBiomeName[] = new String[] { BiomeGenBase.jungleHills.biomeName, BiomeGenBase.desert.biomeName };
 	
 	@ConfigProp(group="Test", dev=true, type=Type.MOD, newValue=ModGollumCoreLib.MODID)
 	public String arMod[] = new String[] { ModGollumCoreLib.MODID };

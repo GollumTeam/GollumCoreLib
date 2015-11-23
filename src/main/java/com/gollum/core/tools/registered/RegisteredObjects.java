@@ -3,14 +3,14 @@ package com.gollum.core.tools.registered;
 import java.util.Hashtable;
 import java.util.Map.Entry;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
 import com.gollum.core.ModGollumCoreLib;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.GameRegistry.UniqueIdentifier;
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.biome.BiomeGenBase;
 
 public class RegisteredObjects {
 	
@@ -580,6 +580,19 @@ public class RegisteredObjects {
 			return null;
 		}
 		return identifier.modId+":"+identifier.name;
+	}
+	
+	public BiomeGenBase[] getAllBiomes() {
+		return BiomeGenBase.biomeList;
+	}
+	
+	public BiomeGenBase getBiome(String name) {
+		for (BiomeGenBase biome: this.getAllBiomes()) {
+			if (biome != null && biome.biomeName.equals(name)) {
+				return biome;
+			}
+		}
+		return null;
 	}
 	
 }
