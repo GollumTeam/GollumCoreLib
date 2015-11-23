@@ -9,8 +9,8 @@ public class ListElement extends ConfigElement {
 	
 	public String label;
 	
-	public ListElement(String value, String label) {
-		super(value);
+	public ListElement(Object value, String label) {
+		super(value.toString());
 		this.value = value;
 		this.label = label;
 	}

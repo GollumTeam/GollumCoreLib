@@ -115,7 +115,7 @@ public class VersionChecker extends Thread {
 			exception.printStackTrace();
 		}
 	}
-	
+
 	private String getCurrentLanguage() {
 		
 		if (ModGollumCoreLib.proxy.isRemote ()) {

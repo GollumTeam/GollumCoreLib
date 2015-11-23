@@ -6,6 +6,7 @@ import java.util.TreeSet;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.world.biome.BiomeGenBase;
 
 import com.gollum.core.utils.math.Integer3d;
 
@@ -104,16 +105,18 @@ public class Building {
 		public int spawnMin = 3;
 		public int spawnMax = 256;
 		public ArrayList<Block> blocksSpawn = new ArrayList<Block>();
+		public ArrayList<BiomeGenBase> biomes = new ArrayList<BiomeGenBase>();
 		
 
 		public DimentionSpawnInfos() {
 		}
 		
-		public DimentionSpawnInfos(int spawnRate, int spawnMin, int spawnMax, ArrayList<Block> blocksSpawn) {
+		public DimentionSpawnInfos(int spawnRate, int spawnMin, int spawnMax, ArrayList<Block> blocksSpawn, ArrayList<BiomeGenBase> biomes) {
 			this.spawnRate   = spawnRate;
 			this.spawnMin    = spawnMin;
 			this.spawnMax    = spawnMax;
 			this.blocksSpawn = blocksSpawn;
+			this.biomes      = biomes;
 		}
 		
 	}

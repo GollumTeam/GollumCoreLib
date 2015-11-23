@@ -14,13 +14,13 @@ public class GuiListConfig extends GuiConfig {
 	protected ListEntry parentEntry;
 	protected GuiTextField search = null;
 	protected String searchValue = "";
-	public String currentValue;
+	public Object currentValue;
 	
 	public GuiListConfig(ListEntry listEntry) {
 		super(listEntry.parent.parent);
 		this.parentEntry  = listEntry;
 		this.titleLine2   = ((GuiConfig)this.getParent()).titleLine2 + " > " + listEntry.getLabel();
-		this.currentValue = this.parentEntry.getValue().toString();
+		this.currentValue = this.parentEntry.getValue();
 	}
 	
 	@Override

@@ -6,6 +6,8 @@ import com.gollum.core.common.config.type.ItemStackConfigType;
 import com.gollum.core.tools.simplejson.IJsonObjectDisplay;
 import com.gollum.core.tools.simplejson.Json;
 
+import net.minecraft.world.biome.BiomeGenBase;
+
 
 public class ConfigGollumCoreLib extends Config {
 
@@ -108,7 +110,19 @@ public class ConfigGollumCoreLib extends Config {
 	
 	@ConfigProp(group="Test", dev=true, type=Type.MOD)
 	public String mod = ModGollumCoreLib.MODID;
-
+	
+	@ConfigProp(group="Test", dev=true, type=Type.BIOME)
+	public int biomeId = 0;
+	
+	@ConfigProp(group="Test", dev=true, type=Type.BIOME, newValue="5")
+	public int arBiomeId[] = new int[] { 0, 2 , 3 };
+	
+	@ConfigProp(group="Test", dev=true, type=Type.BIOME)
+	public String biomeName = BiomeGenBase.desert.biomeName;
+	
+	@ConfigProp(group="Test", dev=true, type=Type.BIOME, newValue="Birch Forest")
+	public String arBiomeName[] = new String[] { BiomeGenBase.jungleHills.biomeName, BiomeGenBase.desert.biomeName };
+	
 	@ConfigProp(group="Test", dev=true, type=Type.MOD, newValue=ModGollumCoreLib.MODID)
 	public String arMod[] = new String[] { ModGollumCoreLib.MODID };
 	

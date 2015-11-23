@@ -12,6 +12,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.init.Blocks;
+import net.minecraft.world.biome.BiomeGenBase;
 
 import com.gollum.core.client.gui.config.GuiConfigEntries;
 import com.gollum.core.client.gui.config.element.ConfigElement;
@@ -41,6 +42,7 @@ public class BuildingEntry extends ConfigEntry {
 	private ConfigEntry dSpawnMin;;
 	private ConfigEntry dSpawnMax;
 	private ConfigEntry dBlocksSpawn;
+	private ConfigEntry dBiomes;
 
 	private boolean mutexChangeEvent = true;
 	private boolean mutexChange = true;

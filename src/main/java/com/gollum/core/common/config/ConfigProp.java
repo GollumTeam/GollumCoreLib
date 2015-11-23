@@ -12,6 +12,7 @@ public @interface ConfigProp {
 		DEFAULT,
 		ITEM,
 		BLOCK,
+		BIOME,
 		MOD,
 		SLIDER,
 		LIST_INLINE,

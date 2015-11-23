@@ -2,10 +2,11 @@ package com.gollum.core.tools.registered;
 
 import java.util.TreeMap;
 
+import com.gollum.core.ModGollumCoreLib;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
-
-import com.gollum.core.ModGollumCoreLib;
+import net.minecraft.world.biome.BiomeGenBase;
 
 public class RegisteredObjects {
 	
@@ -101,6 +102,19 @@ public class RegisteredObjects {
 		for (Object key: Item.itemRegistry.getKeys()) {
 			if (item == Item.itemRegistry.getObject(key)) {
 				return (String) key;
+			}
+		}
+		return null;
+	}
+	
+	public BiomeGenBase[] getAllBiomes() {
+		return BiomeGenBase.getBiomeGenArray();
+	}
+	
+	public BiomeGenBase getBiome(String name) {
+		for (BiomeGenBase biome: this.getAllBiomes()) {
+			if (biome != null && biome.biomeName.equals(name)) {
+				return biome;
 			}
 		}
 		return null;

@@ -3,6 +3,8 @@ package com.gollum.core.client.gui.config.element;
 import java.util.Set;
 
 import com.gollum.core.client.gui.config.entry.ArrayEntry;
+import com.gollum.core.client.gui.config.entry.BiomeEntry;
+import com.gollum.core.client.gui.config.entry.BiomeIdEntry;
 import com.gollum.core.client.gui.config.entry.BlockEntry;
 import com.gollum.core.client.gui.config.entry.BooleanEntry;
 import com.gollum.core.client.gui.config.entry.ByteEntry;
@@ -77,9 +79,10 @@ public abstract class ConfigElement {
 			) {
 				return ListEntry.class;
 			}
-			if (prop.type() == ConfigProp.Type.MOD)   { return ModIdEntry  .class; }
+			if (prop.type() == ConfigProp.Type.MOD)   { return ModIdEntry.class; }
 			if (prop.type() == ConfigProp.Type.ITEM)  { return ItemEntry .class; }
 			if (prop.type() == ConfigProp.Type.BLOCK) { return BlockEntry.class; }
+			if (prop.type() == ConfigProp.Type.BIOME) { return BiomeEntry.class; }
 			
 			return StringEntry.class;
 		}
@@ -95,6 +98,7 @@ public abstract class ConfigElement {
 			if (prop.type() == ConfigProp.Type.SLIDER) {
 				return SliderEntry.class;
 			}
+			if (prop.type() == ConfigProp.Type.BIOME) { return BiomeIdEntry.class; }
 			if (Byte           .class.isAssignableFrom(clazz) || Byte   .TYPE.isAssignableFrom(clazz)) { return ByteEntry   .class; }
 			if (Short          .class.isAssignableFrom(clazz) || Short  .TYPE.isAssignableFrom(clazz)) { return ShortEntry  .class; }
 			if (Integer        .class.isAssignableFrom(clazz) || Integer.TYPE.isAssignableFrom(clazz)) { return IntegerEntry.class; }
