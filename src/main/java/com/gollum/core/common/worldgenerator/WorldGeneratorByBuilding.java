@@ -27,7 +27,7 @@ import cpw.mods.fml.common.IWorldGenerator;
 public class WorldGeneratorByBuilding implements IWorldGenerator {
 	
 	private final static int ARROUND_CHUNK_NOBUILDING = 6;
-	private static ArrayList<String> chunkHasABuilding = new ArrayList<String>();
+	private HashMap<Integer, ArrayList<String>> chunkHasABuilding = new HashMap<Integer, ArrayList<String>>();
 	
 	private Builder builder = new Builder();
 	
@@ -79,12 +79,32 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 	
 	/**
 	 * Le chunk exist
+	 * @param world 
 	 * @param chunkX
 	 * @param chunkZ
 	 * @return
 	 */
-	public boolean chunkHasBuilding (int chunkX, int chunkZ) {
-		return WorldGeneratorByBuilding.chunkHasABuilding.contains(chunkX+"x"+chunkZ);
+	public boolean chunkHasBuilding (World world, int chunkX, int chunkZ) {
+		int wId = System.identityHashCode(world);
+		return
+			this.chunkHasABuilding.containsKey(wId) &&
+			this.chunkHasABuilding.get(wId).contains(chunkX+"x"+chunkZ)
+		;
+	}
+	
+	/**
+	 * Le chunk exist
+	 * @param world 
+	 * @param chunkX
+	 * @param chunkZ
+	 * @return
+	 */
+	protected void chunkMarkHasBuilding (World world, int chunkX, int chunkZ) {
+		int wId = System.identityHashCode(world);
+		if (!this.chunkHasABuilding.containsKey(wId)) {
+			this.chunkHasABuilding.put(wId, new ArrayList<String>());
+		}
+		this.chunkHasABuilding.get(wId).add(chunkX+"x"+chunkZ);
 	}
 	
 	/**
@@ -93,11 +113,11 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 	 * @param chunkZ
 	 * @return
 	 */
-	public boolean hasBuildingArround (int chunkX, int chunkZ) {
+	public boolean hasBuildingArround (World world, int chunkX, int chunkZ) {
 
 		for (int x = chunkX - ARROUND_CHUNK_NOBUILDING; x < chunkX + ARROUND_CHUNK_NOBUILDING; x++) {
 			for (int z = chunkZ - ARROUND_CHUNK_NOBUILDING; z < chunkZ + ARROUND_CHUNK_NOBUILDING; z++) {
-				if (this.chunkHasBuilding (x, z)) {
+				if (this.chunkHasBuilding (world, x, z)) {
 					return true;
 				}
 			}
@@ -175,7 +195,7 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 			
 			Collections.shuffle(buildings);
 			
-			if (!this.hasBuildingArround (chunkX, chunkZ)) {
+			if (!this.hasBuildingArround (world, chunkX, chunkZ)) {
 				
 				for (Building building : buildings) {
 					
@@ -230,7 +250,7 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 									
 									// Garde en mémoire que le chunk à généré un batiment (évite que tous se monte dessus)
 									// N'est pas sauvegardé enc as d'arret du serveur mais ca devrais pas dérangé
-									WorldGeneratorByBuilding.chunkHasABuilding.add(chunkX+"x"+chunkZ);
+									this.chunkMarkHasBuilding (world, chunkX, chunkZ);
 									
 									BuildingGenerateEvent event = new BuildingGenerateEvent.Pre(world, building, rotate, new Integer3d(initX, initY, initZ));
 									MinecraftForge.EVENT_BUS.post(event);
