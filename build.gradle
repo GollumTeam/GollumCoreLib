@@ -23,6 +23,8 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 plugins {
     id "net.minecraftforge.gradle.forge" version "2.0.2"
 }
+*/
+
 minecraft {
     version = "1.8.8-11.14.4.1589-1.8.8"
     runDir = "run"
@@ -35,6 +37,7 @@ minecraft {
     mappings = "snapshot_20151122"
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
+
 */
 version = "2.0.1-"+minecraft.version
 group= "com.gollum.core" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
