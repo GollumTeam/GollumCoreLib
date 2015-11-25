@@ -4,5 +4,6 @@
 /.project
 /bin/
 /build/
+/eclipse/
 *.launch
 /run/
