@@ -68,9 +68,12 @@ public class ItemHelper implements IItemHelper {
 	* @param key
 	* @return
 	*/
+	/* TODO
 	public IIcon loadTexture(IIconRegister iconRegister) {
 		return this.loadTexture(iconRegister, "");
 	}
+	*/
+	
 	/**
 	* Charge une texture et affiche dans le log.
 	* Utilise le register name comme prefixe sauf si useTextureKey est à false
@@ -79,9 +82,12 @@ public class ItemHelper implements IItemHelper {
 	* @param key
 	* @return
 	*/
+	/* TODO
 	public IIcon loadTexture(IIconRegister iconRegister, String sufixe) {
 		return this.loadTexture(iconRegister, sufixe, false);
 	}
+	*/
+	
 	/**
 	* Charge une texture et affiche dans le log.
 	* Utilise le register name comme prefixe sauf si dontUseTextureKey est à false
@@ -90,6 +96,7 @@ public class ItemHelper implements IItemHelper {
 	* @param key
 	* @return
 	*/
+	/* TODO
 	public IIcon loadTexture(IIconRegister iconRegister, String sufixe, boolean dontUseTextureKey) {
 		
 		String key = (dontUseTextureKey ?  "" : ((IItemHelper)this.parent).getTextureKey ())+sufixe;
@@ -98,22 +105,27 @@ public class ItemHelper implements IItemHelper {
 		ModGollumCoreLib.log.debug ("Register icon " + texture + "\"");
 		return iconRegister.registerIcon(texture);
 	}
+	*/
 	
 	/**
 	 * Enregistre les textures
 	 * Depuis la 1.5 on est obligé de charger les texture fichier par fichier
 	 */
+	/* TODO
 	@Override
 	public void registerIcons(IIconRegister iconRegister) {
 		((IItemHelper)this.parent).setIcon (this.loadTexture(iconRegister));
 	}
+	*/
 	
 	/**
 	 * Setter de l'icon de l'objet
 	 * @param icon
 	 */
+	/* TODO
 	@Override
 	public void setIcon (IIcon icon) {
 		ModGollumCoreLib.log.warning("setIcon don't be call by helper. It's stub");
 	}
+	*/
 }

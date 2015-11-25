@@ -20,15 +20,15 @@ public class StringEntry extends ConfigEntry {
 	public StringEntry(int index, Minecraft mc, GuiConfigEntries parent, ConfigElement configElement) {
 		super(index, mc, parent, configElement);
 		
-		this.textFieldValue = new GuiTextField(this.mc.fontRenderer, this.parent.controlX + 1, 0, this.parent.controlWidth - 3, 16);
+		this.textFieldValue = new GuiTextField(0, this.mc.fontRendererObj, this.parent.controlX + 1, 0, this.parent.controlWidth - 3, 16);
 		this.textFieldValue.setMaxStringLength(10000);
 		this.setValue(this.configElement.getValue().toString());
 	}
 	
 	@Override
-	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, Tessellator tessellator, int mouseX, int mouseY, boolean isSelected, boolean resetControlWidth) {
+	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight , int mouseX, int mouseY, boolean isSelected, boolean resetControlWidth) {
 		
-		super.drawEntry(slotIndex, x, y, listWidth, slotHeight, tessellator, mouseX, mouseY, isSelected, resetControlWidth);
+		super.drawEntry(slotIndex, x, y, listWidth, slotHeight, mouseX, mouseY, isSelected, resetControlWidth);
 		
 		if (this.first) {
 			this.first = false;

@@ -19,11 +19,11 @@ public class AddButtonEntry extends ConfigEntry {
 	}
 	
 	@Override
-	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, Tessellator tessellator, int mouseX, int mouseY, boolean isSelected, boolean resetControlWidth) {
+	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight , int mouseX, int mouseY, boolean isSelected, boolean resetControlWidth) {
 		this.btnRemove.visible = false;
 		this.btUndoIsVisible   = false;
 		this.btResetIsVisible  = false;
-		super.drawEntry(slotIndex, x, y, listWidth, slotHeight, tessellator, mouseX, mouseY, isSelected, resetControlWidth);
+		super.drawEntry(slotIndex, x, y, listWidth, slotHeight, mouseX, mouseY, isSelected, resetControlWidth);
 	}
 	
 	public Object getValue() {

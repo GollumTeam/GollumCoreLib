@@ -21,6 +21,7 @@ public class HItemBlockMetadata extends ItemBlock {
 	 * ItemStack so different stacks can have different names based on their
 	 * damage or NBT.
 	 */
+	/* TODO
 	public String getUnlocalizedName(ItemStack itemStack) {
 		
 		int dammage = itemStack.getItemDamage();
@@ -31,6 +32,7 @@ public class HItemBlockMetadata extends ItemBlock {
 		
 		return this.getUnlocalizedName() + "." + blockMetadataHelper.getEnabledMetadata (dammage);
 	}
+	*/
 	
 	/**
 	 * Returns the metadata of the block which this Item (ItemBlock) can place

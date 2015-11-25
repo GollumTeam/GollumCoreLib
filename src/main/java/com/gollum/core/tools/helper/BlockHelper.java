@@ -8,6 +8,7 @@ import com.gollum.core.common.mod.GollumMod;
 import com.gollum.core.tools.registry.BlockRegistry;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -15,6 +16,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -39,7 +41,7 @@ public class BlockHelper implements IBlockHelper {
 		this.mod          = ModContext.instance().getCurrent();
 		
 		BlockRegistry.instance().add((IBlockHelper) this.parent);
-		this.parent.setBlockName(this.registerName);
+		this.parent.setUnlocalizedName(this.registerName);
 		
 	}
 	
@@ -88,10 +90,10 @@ public class BlockHelper implements IBlockHelper {
 	 * Libère les items de l'inventory
 	 */
 	@Override
-	public void breakBlockInventory(World world, int x, int y, int z, Block oldBlock) {
+	public void breakBlock(World world, BlockPos pos, IBlockState state) {
 		
 		Random random = new Random();		
-		TileEntity te = world.getTileEntity(x, y, z);
+		TileEntity te = world.getTileEntity(pos);
 		
 		if (te != null && te instanceof IInventory) {
 			IInventory inventory = (IInventory)te;
@@ -112,7 +114,7 @@ public class BlockHelper implements IBlockHelper {
 						}
 						
 						itemStack.stackSize -= k1;
-						entityItem = new EntityItem(world, (double) ((float) x + f), (double) ((float) y + f1), (double) ((float) z + f2), new ItemStack(itemStack.getItem(), k1, itemStack.getItemDamage()));
+						entityItem = new EntityItem(world, (double) ((float) pos.getX() + f), (double) ((float) pos.getY() + f1), (double) ((float) pos.getZ() + f2), new ItemStack(itemStack.getItem(), k1, itemStack.getItemDamage()));
 						float f3 = 0.05F;
 						entityItem.motionX = (double) ((float) random.nextGaussian() * f3);
 						entityItem.motionY = (double) ((float) random.nextGaussian() * f3 + 0.2F);
@@ -124,8 +126,6 @@ public class BlockHelper implements IBlockHelper {
 					}
 				}
 			}
-			
-			world.func_147453_f(x, y, z, oldBlock);
 		}
 	}
 	
@@ -151,9 +151,12 @@ public class BlockHelper implements IBlockHelper {
 	* @param key
 	* @return
 	*/
+	/* TODO
 	public IIcon loadTexture(IIconRegister iconRegister) {
 		return this.loadTexture(iconRegister, "");
 	}
+	*/
+	
 	/**
 	* Charge une texture et affiche dans le log.
 	* Utilise le register name comme prefixe sauf si useTextureKey est à false
@@ -162,9 +165,12 @@ public class BlockHelper implements IBlockHelper {
 	* @param key
 	* @return
 	*/
+	/* TODO
 	public IIcon loadTexture(IIconRegister iconRegister, String sufixe) {
 		return this.loadTexture(iconRegister, sufixe, false);
 	}
+	*/
+	
 	/**
 	* Charge une texture et affiche dans le log.
 	* Utilise le register name comme prefixe sauf si dontUseTextureKey est à false
@@ -173,6 +179,7 @@ public class BlockHelper implements IBlockHelper {
 	* @param key
 	* @return
 	*/
+	/* TODO
 	public IIcon loadTexture(IIconRegister iconRegister, String sufixe, boolean dontUseTextureKey) {
 		
 		String key = (dontUseTextureKey) ?  sufixe : (((IBlockHelper)this.parent).getTextureKey ()+sufixe);
@@ -181,24 +188,29 @@ public class BlockHelper implements IBlockHelper {
 		ModGollumCoreLib.log.debug ("Register icon " + texture + "\"");
 		return iconRegister.registerIcon(texture);
 	}
+	*/
 	
 	/**
 	 * Enregistre les textures
 	 * Depuis la 1.5 on est obligé de charger les texture fichier par fichier
 	 */
+	/* TODO
 	@Override
 	public void registerBlockIcons(IIconRegister iconRegister) {
 		((IBlockHelper)this.parent).setIcon (this.loadTexture(iconRegister));
 	}
+	*/
 	
 	/**
 	 * Setter de l'icon de l'objet
 	 * @param icon
 	 */
+	/* TODO
 	@Override
 	public IBlockHelper setIcon (IIcon icon) {
 		ModGollumCoreLib.log.warning("setIcon don't be call by helper. It's stub");
 		((IBlockHelper)this.parent).setIcon(icon);
 		return this;
 	}
+	*/
 }

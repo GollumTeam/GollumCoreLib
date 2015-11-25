@@ -38,19 +38,23 @@ public class HItem extends Item implements IItemHelper {
 	 * Setter de l'icon de l'objet
 	 * @param icon
 	 */
+	/* TODO
 	@Override
 	public void setIcon (IIcon icon) {
 		this.itemIcon = icon;
 	}
+	*/
 	
 	//////////////////////////
 	//Gestion des textures  //
 	//////////////////////////
 	
+	/* TODO
 	@Override
 	public void registerIcons(IIconRegister iconRegister) {
 		if (helper.vanillaTexture) super.registerIcons(iconRegister); else helper.registerIcons(iconRegister);
 	}
+	*/
 	
 	/**
 	 * Clef qui permet de générer le nom du fichier de texture 

@@ -10,6 +10,7 @@ import com.gollum.core.tools.helper.ItemMetadataHelper;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class HItemMetadata extends HItem implements IItemMetadataHelper  {
@@ -71,11 +72,13 @@ public class HItemMetadata extends HItem implements IItemMetadataHelper  {
 	public int getEnabledMetadata (int dammage) {
 		return ((IItemMetadataHelper) this.helper).getEnabledMetadata(dammage);
 	}
-
+	
+	/* TODO
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIconFromDamage (int metadata) {
 		return  (helper.vanillaTexture) ? super.getIconFromDamage(metadata) : ((IItemMetadataHelper) this.helper).getIconFromDamage (metadata);
 	}
+	*/
 	
 }

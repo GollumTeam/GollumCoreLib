@@ -1,5 +1,6 @@
 package com.gollum.core.client.gui.config;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import com.gollum.core.ModGollumCoreLib;
@@ -57,7 +58,7 @@ public class GuiListConfig extends GuiConfig {
 		
 		super.initGui();
 		
-		this.search = new GuiTextField(this.mc.fontRenderer, 0, 0, 0, 16);
+		this.search = new GuiTextField(1, this.mc.fontRendererObj, 0, 0, 0, 16);
 		
 	}
 	
@@ -146,7 +147,7 @@ public class GuiListConfig extends GuiConfig {
 	}
 	
 	@Override
-	protected void mouseClicked(int x, int y, int mouseEvent) {
+	protected void mouseClicked(int x, int y, int mouseEvent) throws IOException {
 		super.mouseClicked(x, y, mouseEvent);
 		this.search.mouseClicked(x, y, mouseEvent);
 	}

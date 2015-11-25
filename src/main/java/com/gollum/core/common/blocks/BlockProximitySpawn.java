@@ -30,10 +30,12 @@ public class BlockProximitySpawn extends HBlockContainer {
 	public TileEntity createNewTileEntity(World world, int i) {
 		return new TileEntityBlockProximitySpawn();
 	}
-	
+
+	/* TODO
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister iconRegister) {
 	}
+	*/
 	
 	@Override
 	public boolean isAir(IBlockAccess world, BlockPos pos) {
@@ -84,9 +86,11 @@ public class BlockProximitySpawn extends HBlockContainer {
 	 * If this block doesn't render as an ordinary block it will return False
 	 * (examples: signs, buttons, stairs, etc)
 	 */
+	/* TODO
 	@Override
 	public boolean renderAsNormalBlock() {
 		return false;
 	}
+	*/
 	
 }

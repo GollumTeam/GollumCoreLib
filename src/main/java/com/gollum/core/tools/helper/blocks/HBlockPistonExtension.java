@@ -6,8 +6,10 @@ import com.gollum.core.tools.helper.IBlockHelper;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPistonExtension;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 public class HBlockPistonExtension extends BlockPistonExtension implements IBlockHelper {
@@ -60,28 +62,34 @@ public class HBlockPistonExtension extends BlockPistonExtension implements IBloc
 	/**
 	 * Libère les items de l'inventory
 	 */
-	public void breakBlockInventory(World world, int x, int y, int z, Block oldBlock) {
-		helper.breakBlockInventory(world, x, y, z, oldBlock);
+	@Override
+	public void breakBlock(World world, BlockPos pos, IBlockState state) {
+		helper.breakBlock(world, pos, state);
+		super.breakBlock(world, pos, state);
 	}
 	
 	//////////////////////////
 	//Gestion des textures  //
 	//////////////////////////
 	
+	/* TODO
 	@Override
 	public void registerBlockIcons(IIconRegister iconRegister) {
 		if (helper.vanillaTexture) super.registerBlockIcons(iconRegister); else helper.registerBlockIcons(iconRegister);
 	}
+	*/
 	
 	/**
 	 * Setter de l'icon de l'objet
 	 * @param icon
 	 */
+	/* TODO
 	@Override
 	public IBlockHelper setIcon (IIcon icon) {
 		this.blockIcon = icon;
 		return this;
 	}
+	*/
 	
 	/**
 	 * Clef qui permet de générer le nom du fichier de texture 

@@ -14,13 +14,17 @@ public interface IItemHelper {
 	 */
 	public String getRegisterName();
 	
+	/* TODO
 	public void registerIcons(IIconRegister iconRegister);
+	*/
 	
 	/**
 	 * Setter de l'icon de l'objet
 	 * @param icon
 	 */
+	/* TODO
 	public void setIcon (IIcon icon);
+	*/
 	
 	/**
 	 * Clef qui permet de générer le nom du fichier de texture 

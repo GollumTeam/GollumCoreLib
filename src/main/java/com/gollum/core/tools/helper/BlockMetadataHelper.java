@@ -12,9 +12,12 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 public class BlockMetadataHelper extends BlockHelper implements IBlockMetadataHelper {
-
+	
 	protected TreeSet<Integer>        listSubEnabled = new TreeSet<Integer>();
-	public    TreeMap<Integer, IIcon> blockIcons     = new TreeMap<Integer, IIcon>();
+	
+	/* TODO
+	 * public    TreeMap<Integer, IIcon> blockIcons     = new TreeMap<Integer, IIcon>();
+	 */
 	
 	public BlockMetadataHelper(Block parent, String registerName) {
 		super(parent, registerName);
@@ -63,10 +66,12 @@ public class BlockMetadataHelper extends BlockHelper implements IBlockMetadataHe
 	 * Determines the damage on the item the block drops. Used in cloth and
 	 * wood.
 	 */
+	/* TODO
 	@Override
 	public int damageDropped(int dammage) {
 		return this.getEnabledMetadata(dammage);
 	}
+	*/
 	
 	/**
 	 * Called when a user uses the creative pick block button on this block
@@ -76,11 +81,14 @@ public class BlockMetadataHelper extends BlockHelper implements IBlockMetadataHe
 	 * @return A ItemStack to add to the player's inventory, Null if nothing
 	 *         should be added.
 	 */
+	/* TODO
 	@Override
 	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
 		return this.parent.getPickBlock(target, world, x, y, z);
 	}
+	*/
 	
+	/* TODO
 	public ItemStack getPickBlock(ItemStack is, World world, int x, int y, int z) {
 		
 		if (is == null) {
@@ -91,6 +99,7 @@ public class BlockMetadataHelper extends BlockHelper implements IBlockMetadataHe
 		
 		return new ItemStack(is.getItem(), 1, this.getEnabledMetadata (dammage));
 	}
+	*/
 	
 	/**
 	 * Liste des metadata enabled pour le subtype
@@ -118,13 +127,16 @@ public class BlockMetadataHelper extends BlockHelper implements IBlockMetadataHe
 	 * Enregistre les textures
 	 * Depuis la 1.5 on est obligé de charger les texture fichier par fichier
 	 */
+	/* TODO
 	@Override
 	public void registerBlockIcons(IIconRegister iconRegister) {
 		for (int metadata : this.listSubEnabled) {
 			this.blockIcons.put(metadata, this.loadTexture(iconRegister, "_"+metadata));
 		}
 	}
+	*/
 	
+	/* TODO
 	@Override
 	public IIcon getIcon(int side, int metadata) {
 		
@@ -134,5 +146,6 @@ public class BlockMetadataHelper extends BlockHelper implements IBlockMetadataHe
 		}
 		return null;
 	}
+	*/
 	
 }

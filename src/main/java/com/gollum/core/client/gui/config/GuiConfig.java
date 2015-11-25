@@ -1,5 +1,6 @@
 package com.gollum.core.client.gui.config;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -89,13 +90,13 @@ public abstract class GuiConfig extends GuiScreen {
 		
 		// Init Button action
 		
-		int undoGlyphWidth  = this.mc.fontRenderer.getStringWidth(UNDO_CHAR)  * 2;
-		int resetGlyphWidth = this.mc.fontRenderer.getStringWidth(RESET_CHAR) * 2;
+		int undoGlyphWidth  = this.mc.fontRendererObj.getStringWidth("UNDO_CHAR")  * 2; // TODO
+		int resetGlyphWidth = this.mc.fontRendererObj.getStringWidth("RESET_CHAR") * 2; // TODO
 		
 		// Calculate size
-		int doneWidth       = Math.max(this.mc.fontRenderer.getStringWidth(I18n.format("gui.done")) + 20, 100);
-		int undoWidth       = this.mc.fontRenderer.getStringWidth(" " + I18n.format("fml.configgui.tooltip.undoChanges")) + undoGlyphWidth + 20;
-		int resetWidth      = this.mc.fontRenderer.getStringWidth(" " + I18n.format("fml.configgui.tooltip.resetToDefault")) + resetGlyphWidth + 20;
+		int doneWidth       = Math.max(this.mc.fontRendererObj.getStringWidth(I18n.format("gui.done")) + 20, 100);
+		int undoWidth       = this.mc.fontRendererObj.getStringWidth(" " + I18n.format("fml.configgui.tooltip.undoChanges")) + undoGlyphWidth + 20;
+		int resetWidth      = this.mc.fontRendererObj.getStringWidth(" " + I18n.format("fml.configgui.tooltip.resetToDefault")) + resetGlyphWidth + 20;
 		int buttonWidthHalf = (doneWidth + 5 + undoWidth + 5 + resetWidth) / 2;
 		
 		this.buttonList.clear();
@@ -115,7 +116,7 @@ public abstract class GuiConfig extends GuiScreen {
 			this.height - 29, 
 			undoWidth,
 			20,
-			" " + I18n.format("fml.configgui.tooltip.undoChanges"), UNDO_CHAR, 
+			" " + I18n.format("fml.configgui.tooltip.undoChanges"), "UNDO_CHAR", // TODO
 			2.0F
 		));
 			
@@ -125,7 +126,7 @@ public abstract class GuiConfig extends GuiScreen {
 			this.height - 29,
 			resetWidth,
 			20,
-			" " + I18n.format("fml.configgui.tooltip.resetToDefault"), RESET_CHAR, 
+			" " + I18n.format("fml.configgui.tooltip.resetToDefault"), "RESET_CHAR", // TODO
 			2.0F
 		));
 		
@@ -191,10 +192,10 @@ public abstract class GuiConfig extends GuiScreen {
 		
 		String title2 = this.titleLine2;
 		if (this.titleLine2 != null) {
-			int strWidth = mc.fontRenderer.getStringWidth(title2);
-			int elipsisWidth = mc.fontRenderer.getStringWidth("...");
+			int strWidth = mc.fontRendererObj.getStringWidth(title2);
+			int elipsisWidth = mc.fontRendererObj.getStringWidth("...");
 			if (strWidth > width - 6 && strWidth > elipsisWidth) {
-				title2 = mc.fontRenderer.trimStringToWidth(title2, width - 6 - elipsisWidth).trim() + "...";
+				title2 = mc.fontRendererObj.trimStringToWidth(title2, width - 6 - elipsisWidth).trim() + "...";
 			}
 			this.drawCenteredString(this.fontRendererObj, title2, this.width / 2, 18, 16777215);
 		}
@@ -209,10 +210,10 @@ public abstract class GuiConfig extends GuiScreen {
 		super.drawScreen(mouseX, mouseY, partialTicks);
 		
 		if (this.undoHoverChecker.checkHover(mouseX, mouseY)) {
-			this.drawToolTip(this.mc.fontRenderer.listFormattedStringToWidth(I18n.format("fml.configgui.tooltip.undoAll"), 300), mouseX, mouseY);
+			this.drawToolTip(this.mc.fontRendererObj.listFormattedStringToWidth(I18n.format("fml.configgui.tooltip.undoAll"), 300), mouseX, mouseY);
 		}
 		if (this.resetHoverChecker.checkHover(mouseX, mouseY)) {
-			this.drawToolTip(this.mc.fontRenderer.listFormattedStringToWidth(I18n.format("fml.configgui.tooltip.resetAll"), 300), mouseX, mouseY);
+			this.drawToolTip(this.mc.fontRendererObj.listFormattedStringToWidth(I18n.format("fml.configgui.tooltip.resetAll"), 300), mouseX, mouseY);
 		}
 		
 		this.entryList.drawScreenPost (mouseX, mouseY, partialTicks);
@@ -252,15 +253,16 @@ public abstract class GuiConfig extends GuiScreen {
 	}
 	
 	public void drawToolTip(List stringList, int x, int y) {
-		this.func_146283_a(stringList, x, y);
+		this.drawHoveringText(stringList, x, y);// TODO tester
 	}
 	
 	/**
 	 * Called when the mouse is clicked.
+	 * @throws IOException 
 	 */
 	@Override
-	protected void mouseClicked(int x, int y, int mouseEvent) {
-		if (mouseEvent != 0 || !this.entryList.func_148179_a(x, y, mouseEvent)) {
+	protected void mouseClicked(int x, int y, int mouseEvent) throws IOException {
+		if (mouseEvent != 0 || !this.entryList.mouseReleased(x, y, mouseEvent)) {
 			this.entryList.mouseClicked(x, y, mouseEvent);
 			super.mouseClicked(x, y, mouseEvent);
 		}
@@ -272,9 +274,9 @@ public abstract class GuiConfig extends GuiScreen {
 	 * mouseUp
 	 */
 	@Override
-	protected void mouseMovedOrUp(int x, int y, int mouseEvent) {
-		if (mouseEvent != 0 || !this.entryList.func_148181_b(x, y, mouseEvent)) {
-			super.mouseMovedOrUp(x, y, mouseEvent);
+	protected void mouseReleased(int x, int y, int mouseEvent) {
+		if (mouseEvent != 0 || !this.entryList.mouseReleased(x, y, mouseEvent)) {
+			super.mouseReleased(x, y, mouseEvent);
 		}
 	}
 

@@ -6,6 +6,7 @@ import java.util.TreeSet;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public interface IItemMetadataHelper {
@@ -25,7 +26,8 @@ public interface IItemMetadataHelper {
 	int getEnabledMetadata(int dammage);
 	
 	public String getUnlocalizedName(ItemStack stack);
-	
+
+	/* TODO
 	public IIcon getIconFromDamage(int metadata);
-	
+	*/
 }

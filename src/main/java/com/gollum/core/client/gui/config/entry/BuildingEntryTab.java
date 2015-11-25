@@ -51,7 +51,7 @@ public class BuildingEntryTab extends ConfigEntry {
 		this.btnAdd   .packedFGColour = GuiUtils.getColorCode('2', true);
 		this.btnRemove.packedFGColour = GuiUtils.getColorCode('c', true);
 		
-		this.btnAddDone = new GuiButtonExt(0, 0, 0, mc.fontRenderer.getStringWidth(I18n.format("gui.done")) + 10, 18, I18n.format("gui.done"));
+		this.btnAddDone = new GuiButtonExt(0, 0, 0, mc.fontRendererObj.getStringWidth(I18n.format("gui.done")) + 10, 18, I18n.format("gui.done"));
 		this.addEntry   = this.createSubEntry("", 0, 0, 0);
 		
 		this.addEntry.btUndoIsVisible  = false;
@@ -59,9 +59,9 @@ public class BuildingEntryTab extends ConfigEntry {
 	}
 
 	@Override
-	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, Tessellator tessellator, int mouseX, int mouseY, boolean isSelected, boolean resetControlWidth) {
+	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight , int mouseX, int mouseY, boolean isSelected, boolean resetControlWidth) {
 		
-		super.drawEntry(slotIndex, x, y, listWidth, slotHeight, tessellator, mouseX, mouseY, isSelected, resetControlWidth);
+		super.drawEntry(slotIndex, x, y, listWidth, slotHeight, mouseX, mouseY, isSelected, resetControlWidth);
 		
 		if (this.modalEnabled) {
 			
@@ -70,7 +70,7 @@ public class BuildingEntryTab extends ConfigEntry {
 			this.btnAddDone.drawButton(this.mc, mouseX, mouseY);
 			
 			this.parent.controlWidth -= this.btnAddDone.width;
-			this.addEntry.drawEntry(0, x, y, listWidth, slotHeight, tessellator, mouseX, mouseY, isSelected, false);
+			this.addEntry.drawEntry(0, x, y, listWidth, slotHeight, mouseX, mouseY, isSelected, false);
 			this.parent.controlWidth += this.btnAddDone.width;
 			
 		} else {
@@ -150,7 +150,7 @@ public class BuildingEntryTab extends ConfigEntry {
 	
 	public ConfigEntry addValues(String value) {
 		
-		this.values.put(value, new GuiButtonExt(0, parent.controlX, 0, mc.fontRenderer.getStringWidth(value)+10, 18, value));
+		this.values.put(value, new GuiButtonExt(0, parent.controlX, 0, mc.fontRendererObj.getStringWidth(value)+10, 18, value));
 		this.select (value);
 		
 		return this;
@@ -204,7 +204,7 @@ public class BuildingEntryTab extends ConfigEntry {
 		
 		if (this.modalEnabled) {
 			if (this.btnAddDone.mousePressed(this.mc, x, y)) {
-				btnAddDone.func_146113_a(mc.getSoundHandler());
+				btnAddDone.playPressSound(mc.getSoundHandler());
 				this.modalEnabled = false;
 				
 				String tab = this.addEntry.getValue().toString().trim();
@@ -217,22 +217,22 @@ public class BuildingEntryTab extends ConfigEntry {
 			}
 		} else {
 			if (this.btnNext.mousePressed(this.mc, x, y)) {
-				btnNext.func_146113_a(mc.getSoundHandler());
+				btnNext.playPressSound(mc.getSoundHandler());
 				this.next();
 				return true;
 			}
 			if (this.btnPrev.mousePressed(this.mc, x, y)) {
-				btnPrev.func_146113_a(mc.getSoundHandler());
+				btnPrev.playPressSound(mc.getSoundHandler());
 				this.prev();
 				return true;
 			}
 			if (this.btnAdd.mousePressed(this.mc, x, y)) {
-				btnAdd.func_146113_a(mc.getSoundHandler());
+				btnAdd.playPressSound(mc.getSoundHandler());
 				this.modalEnabled = true;
 				return true;
 			}
 			if (this.btnRemove.mousePressed(this.mc, x, y)) {
-				btnRemove.func_146113_a(mc.getSoundHandler());
+				btnRemove.playPressSound(mc.getSoundHandler());
 				this.remove();
 				return true;
 			}
@@ -241,7 +241,7 @@ public class BuildingEntryTab extends ConfigEntry {
 				GuiButtonExt bt = entry.getValue();
 				
 				if (bt.mousePressed(this.mc, x, y)) {
-					bt.func_146113_a(mc.getSoundHandler());
+					bt.playPressSound(mc.getSoundHandler());
 					this.select (bt.displayString);
 					return true;
 				}

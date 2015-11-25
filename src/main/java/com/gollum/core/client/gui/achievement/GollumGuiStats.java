@@ -1,5 +1,6 @@
 package com.gollum.core.client.gui.achievement;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,6 +16,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.stats.StatBase;
 import net.minecraft.stats.StatFileWriter;
 import net.minecraft.stats.StatList;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class GollumGuiStats extends GuiStats {
@@ -36,10 +38,11 @@ public class GollumGuiStats extends GuiStats {
 		this.statFileWriter = statFileWriter;
 	}
 	
+	// TODO a verifier
 	@Override
-	public void func_146541_h() {
+	public void func_175366_f() {
 		
-		super.func_146541_h ();
+		super.func_175366_f ();
 		
 		this.init ();
 		
@@ -62,6 +65,7 @@ public class GollumGuiStats extends GuiStats {
 		}
 		
 	}
+	
 	
 	protected void init() {
 		for (StatsPage p : StatsPage.getStatsPages()) {
@@ -86,7 +90,7 @@ public class GollumGuiStats extends GuiStats {
 	}
 	
 	@Override
-	protected void actionPerformed(GuiButton button) {
+	protected void actionPerformed(GuiButton button) throws IOException {
 		
 		
 		if (button.id == 10) {
@@ -164,10 +168,10 @@ public class GollumGuiStats extends GuiStats {
 		}
 		
 		@Override
-		protected void drawSlot(int slot, int x, int y, int p_148126_4_, Tessellator tessellator, int p_148126_6_, int p_148126_7_) {
+		protected void drawSlot(int slot, int x, int y, int p_148126_4_, int p_148126_6_, int p_148126_7_) {
 			StatBase statbase = StatsPage.getStatsPage(this.name).getStats().get(slot);
-			GollumGuiStats.this.drawString(GollumGuiStats.this.fontRendererObj, statbase.func_150951_e().getUnformattedText(), x + 2, y + 1, slot % 2 == 0 ? 16777215 : 9474192);
-			String s = statbase.func_75968_a(GollumGuiStats.this.statFileWriter.writeStat(statbase));
+			GollumGuiStats.this.drawString(GollumGuiStats.this.fontRendererObj, statbase.getStatName().getUnformattedText(), x + 2, y + 1, slot % 2 == 0 ? 16777215 : 9474192);
+			String s = statbase.format(GollumGuiStats.this.statFileWriter.readStat(statbase));
 			GollumGuiStats.this.drawString(GollumGuiStats.this.fontRendererObj, s, x + 2 + 213 - GollumGuiStats.this.fontRendererObj.getStringWidth(s), y + 1, slot % 2 == 0 ? 16777215 : 9474192);
 		}
 	}
@@ -214,10 +218,10 @@ public class GollumGuiStats extends GuiStats {
 		}
 		
 		@Override
-		protected void drawSlot(int p_148126_1_, int p_148126_2_, int p_148126_3_, int p_148126_4_, Tessellator p_148126_5_, int p_148126_6_, int p_148126_7_) {
+		protected void drawSlot(int p_148126_1_, int p_148126_2_, int p_148126_3_, int p_148126_4_, int p_148126_6_, int p_148126_7_) {
 			StatBase statbase = this.generalStats.get(p_148126_1_);
-			GollumGuiStats.this.drawString(GollumGuiStats.this.fontRendererObj, statbase.func_150951_e().getUnformattedText(), p_148126_2_ + 2, p_148126_3_ + 1, p_148126_1_ % 2 == 0 ? 16777215 : 9474192);
-			String s = statbase.func_75968_a(GollumGuiStats.this.statFileWriter.writeStat(statbase));
+			GollumGuiStats.this.drawString(GollumGuiStats.this.fontRendererObj, statbase.getStatName().getUnformattedText(), p_148126_2_ + 2, p_148126_3_ + 1, p_148126_1_ % 2 == 0 ? 16777215 : 9474192);
+			String s = statbase.format(GollumGuiStats.this.statFileWriter.readStat(statbase));
 			GollumGuiStats.this.drawString(GollumGuiStats.this.fontRendererObj, s, p_148126_2_ + 2 + 213 - GollumGuiStats.this.fontRendererObj.getStringWidth(s), p_148126_3_ + 1, p_148126_1_ % 2 == 0 ? 16777215 : 9474192);
 		}
 	}

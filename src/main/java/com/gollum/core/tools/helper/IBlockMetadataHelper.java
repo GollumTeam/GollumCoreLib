@@ -19,8 +19,10 @@ public interface IBlockMetadataHelper {
 	 * Determines the damage on the item the block drops. Used in cloth and
 	 * wood.
 	 */
+	/* TODO
 	public int damageDropped(int dommage);
-
+	*/
+	
 	/**
 	 * Called when a user uses the creative pick block button on this block
 	 * 
@@ -29,7 +31,9 @@ public interface IBlockMetadataHelper {
 	 * @return A ItemStack to add to the player's inventory, Null if nothing
 	 *         should be added.
 	 */
+	/* TODO
 	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z);
+	*/
 	
 	/**
 	 * Liste des metadata enabled pour le subtype
@@ -38,8 +42,12 @@ public interface IBlockMetadataHelper {
 	
 	public int getEnabledMetadata (int dammage);
 	
+	/* TODO
 	public void registerBlockIcons(IIconRegister iconRegister);
+	*/
 	
+	/* TODO
 	public IIcon getIcon(int side, int metadata);
+	*/
 	
 }

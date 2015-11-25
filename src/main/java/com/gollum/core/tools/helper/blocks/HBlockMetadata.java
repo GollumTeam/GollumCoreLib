@@ -60,10 +60,12 @@ public class HBlockMetadata extends HBlock implements IBlockMetadataHelper {
 	 * Determines the damage on the item the block drops. Used in cloth and
 	 * wood.
 	 */
+	/* TODO
 	@Override
 	public int damageDropped(int damage) {
 		return (helper.vanillaDamageDropped) ? super.damageDropped(damage) : ((IBlockMetadataHelper) this.helper).damageDropped (damage);
 	}
+	*/
 	
 	/**
 	 * Called when a user uses the creative pick block button on this block
@@ -73,10 +75,12 @@ public class HBlockMetadata extends HBlock implements IBlockMetadataHelper {
 	 * @return A ItemStack to add to the player's inventory, Null if nothing
 	 *         should be added.
 	 */
+	/* TODO
 	@Override
 	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
 		return (helper.vanillaPicked) ? super.getPickBlock(target, world, x, y, z) : ((BlockMetadataHelper) helper).getPickBlock(super.getPickBlock(null, world, x, y, z), world, x, y, z);
 	}
+	*/
 	
 	/**
 	 * Liste des metadata enabled pour le subtype
@@ -91,8 +95,10 @@ public class HBlockMetadata extends HBlock implements IBlockMetadataHelper {
 		return ((IBlockMetadataHelper) this.helper).getEnabledMetadata(dammage);
 	}
 	
+	/* TODO
 	@Override
 	public IIcon getIcon(int side, int metadata) {
 		return  (helper.vanillaTexture) ? super.getIcon(side, metadata) : ((IBlockMetadataHelper) this.helper).getIcon(side, metadata);
 	}
+	*/
 }

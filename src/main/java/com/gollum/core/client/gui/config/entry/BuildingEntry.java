@@ -577,37 +577,37 @@ public class BuildingEntry extends ConfigEntry {
 	}
 	
 	@Override
-	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, Tessellator tessellator, int mouseX, int mouseY, boolean isSelected, boolean resetControlWidth) {
+	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected, boolean resetControlWidth) {
 		
 		this.parent.controlWidth -= 7;
 		
 		this.parent.labelX -= 10;
-		this.group.drawEntry(0, x, y     , listWidth, 22, tessellator, mouseX, mouseY, isSelected, false);
+		this.group.drawEntry(0, x, y     , listWidth, 22, mouseX, mouseY, isSelected, false);
 		this.parent.labelX += 10;
 		
 		this.drawRec(this.parent.labelX-10, y + 20, this.parent.scrollBarX - this.parent.labelX + 7, 200, 0x08FFFFFF);
 		
-		this.globalSpawnRate.drawEntry(1, x, y + 24, listWidth, 22, tessellator, mouseX, mouseY, isSelected, false);
-		this.building       .drawEntry(2, x, y + 46, listWidth, 22, tessellator, mouseX, mouseY, isSelected, false);
+		this.globalSpawnRate.drawEntry(1, x, y + 24, listWidth, 22, mouseX, mouseY, isSelected, false);
+		this.building       .drawEntry(2, x, y + 46, listWidth, 22, mouseX, mouseY, isSelected, false);
 		
 		this.drawRec(this.parent.labelX, y + 68, this.parent.scrollBarX - this.parent.labelX - 3, 152, 0x08FFFFFF);
 		
 		this.parent.labelX += 10;
 		
-		this.bEnabled     .drawEntry(3, x, y + 72, listWidth, 22, tessellator, mouseX, mouseY, isSelected, false);
-		this.bDimentionList.drawEntry(4, x, y + 92, listWidth, 22, tessellator, mouseX, mouseY, isSelected, false);
+		this.bEnabled     .drawEntry(3, x, y + 72, listWidth, 22, mouseX, mouseY, isSelected, false);
+		this.bDimentionList.drawEntry(4, x, y + 92, listWidth, 22, mouseX, mouseY, isSelected, false);
 		
 		this.drawRec(this.parent.labelX, y + 111, this.parent.scrollBarX - this.parent.labelX - 3, 109, 0x08FFFFFF);
 		
 		this.parent.labelX += 10;
 		
 		if (this.getCurrentDimention() != null) {
-			this.dSpawnRate  .drawEntry(4, x, y + 112, listWidth, 22, tessellator, mouseX, mouseY, isSelected, false);
-			this.dSpawnMin.drawEntry(4, x, y + 132, listWidth, 22, tessellator, mouseX, mouseY, isSelected, false);
-			this.dSpawnMax.drawEntry(4, x, y + 152, listWidth, 22, tessellator, mouseX, mouseY, isSelected, false);
-			this.dBlocksSpawn.drawEntry(4, x, y + 172, listWidth, 22, tessellator, mouseX, mouseY, isSelected);
+			this.dSpawnRate  .drawEntry(4, x, y + 112, listWidth, 22, mouseX, mouseY, isSelected, false);
+			this.dSpawnMin.drawEntry(4, x, y + 132, listWidth, 22, mouseX, mouseY, isSelected, false);
+			this.dSpawnMax.drawEntry(4, x, y + 152, listWidth, 22, mouseX, mouseY, isSelected, false);
+			this.dBlocksSpawn.drawEntry(4, x, y + 172, listWidth, 22, mouseX, mouseY, isSelected);
 			this.parent.labelX += 20;
-			this.dBiomes.drawEntry(4, x, y + 192, listWidth, 22, tessellator, mouseX, mouseY, isSelected);
+			this.dBiomes.drawEntry(4, x, y + 192, listWidth, 22, mouseX, mouseY, isSelected);
 		}
 		this.resetControlWidth();
 		
@@ -621,16 +621,16 @@ public class BuildingEntry extends ConfigEntry {
 		}
 		
 		int[] sizes = new int[] {
-			mc.fontRenderer.getStringWidth(this.tradIfExist("group"      ))-10,
-			mc.fontRenderer.getStringWidth(this.tradIfExist("globalSpawnRate")),
-			mc.fontRenderer.getStringWidth(this.tradIfExist("building"   ))+10,
-			mc.fontRenderer.getStringWidth(this.tradIfExist("disabled"   ))+10,
-			mc.fontRenderer.getStringWidth(this.tradIfExist("dimention"  ))+10,
-			mc.fontRenderer.getStringWidth(this.tradIfExist("spawnRate"  ))+20,
-			mc.fontRenderer.getStringWidth(this.tradIfExist("spawnMin"   ))+20,
-			mc.fontRenderer.getStringWidth(this.tradIfExist("spawnMax"   ))+20,
-			mc.fontRenderer.getStringWidth(this.tradIfExist("blocksSpawn"))+20,
-			mc.fontRenderer.getStringWidth(this.tradIfExist("biomesFilter"))+20,
+			mc.fontRendererObj.getStringWidth(this.tradIfExist("group"      ))-10,
+			mc.fontRendererObj.getStringWidth(this.tradIfExist("globalSpawnRate")),
+			mc.fontRendererObj.getStringWidth(this.tradIfExist("building"   ))+10,
+			mc.fontRendererObj.getStringWidth(this.tradIfExist("disabled"   ))+10,
+			mc.fontRendererObj.getStringWidth(this.tradIfExist("dimention"  ))+10,
+			mc.fontRendererObj.getStringWidth(this.tradIfExist("spawnRate"  ))+20,
+			mc.fontRendererObj.getStringWidth(this.tradIfExist("spawnMin"   ))+20,
+			mc.fontRendererObj.getStringWidth(this.tradIfExist("spawnMax"   ))+20,
+			mc.fontRendererObj.getStringWidth(this.tradIfExist("blocksSpawn"))+20,
+			mc.fontRendererObj.getStringWidth(this.tradIfExist("biomesFilter"))+20,
 		};
 		
 		int size = 0;

@@ -77,8 +77,8 @@ public abstract class ConfigEntry implements IGuiListEntry {
 		
 		this.btnAdd     = new GuiButtonExt(0, 0, 0, 18, 18, "+");
 		this.btnRemove  = new GuiButtonExt(0, 0, 0, 18, 18, "x");
-		this.btUndo  = new GuiButtonExt(0, 0, 0, 18, 18, UNDO_CHAR);
-		this.btReset = new GuiButtonExt(0, 0, 0, 18, 18, RESET_CHAR);
+		this.btUndo  = new GuiButtonExt(0, 0, 0, 18, 18, "UNDO_CHAR"); // TODO
+		this.btReset = new GuiButtonExt(0, 0, 0, 18, 18, "RESET_CHAR"); // TODO
 		
 		this.btnAdd    .packedFGColour = GuiUtils.getColorCode('2', true);
 		this.btnRemove .packedFGColour = GuiUtils.getColorCode('c', true);
@@ -125,7 +125,7 @@ public abstract class ConfigEntry implements IGuiListEntry {
 		if (!this.getLabelDisplay()) {
 			return 0;
 		}
-		return mc.fontRenderer.getStringWidth(this.getLabel());
+		return mc.fontRendererObj.getStringWidth(this.getLabel());
 	}
 	
 	public String tradIfExist (String name) {
@@ -150,13 +150,13 @@ public abstract class ConfigEntry implements IGuiListEntry {
 	public boolean getLabelDisplay () {
 		return this.labelDisplay && this.parent.parent.displayEntriesLabel();
 	}
-
 	
-	public final void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, Tessellator tessellator, int mouseX, int mouseY, boolean isSelected) {
-		this.drawEntry(slotIndex, x, y, listWidth, slotHeight, tessellator, mouseX, mouseY, isSelected, true);
+	@Override
+	public final void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected) {
+		this.drawEntry(slotIndex, x, y, listWidth, slotHeight, mouseX, mouseY, isSelected, true);
 	}
 	
-	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, Tessellator tessellator, int mouseX, int mouseY, boolean isSelected, boolean resetControlWidth) {
+	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected, boolean resetControlWidth) {
 		
 		if (this.getLabelDisplay()) {
 			String label = this.getLabel();
@@ -165,7 +165,7 @@ public abstract class ConfigEntry implements IGuiListEntry {
 				label = (!this.isValidValue() ? EnumChatFormatting.RED.toString() : (this.isChanged() ? EnumChatFormatting.WHITE.toString() : EnumChatFormatting.GRAY.toString())) + (this.isChanged() ? EnumChatFormatting.ITALIC.toString() : "") + label;
 			}
 			
-			this.mc.fontRenderer.drawString(label, this.parent.labelX, y + slotHeight / 2 - this.mc.fontRenderer.FONT_HEIGHT / 2, 0xFFFFFF);
+			this.mc.fontRendererObj.drawString(label, this.parent.labelX, y + slotHeight / 2 - this.mc.fontRendererObj.FONT_HEIGHT / 2, 0xFFFFFF);
 		}
 		
 		int posArBt = 66;
@@ -328,22 +328,22 @@ public abstract class ConfigEntry implements IGuiListEntry {
 	public boolean mousePressed(int index, int x, int y, int mouseEvent, int relativeX, int relativeY) {
 		
 		if (this.btnAdd.mousePressed(this.mc, x, y)) {
-			btReset.func_146113_a(mc.getSoundHandler());
+			btReset.playPressSound(mc.getSoundHandler());
 			this.parent.add(index);
 			return true;
 		} else
 		if (this.btnRemove.mousePressed(this.mc, x, y)) {
-			btReset.func_146113_a(mc.getSoundHandler());
+			btReset.playPressSound(mc.getSoundHandler());
 			this.parent.remove(index);
 			return true;
 		} else
 		if (this.btReset.mousePressed(this.mc, x, y)) {
-			btReset.func_146113_a(mc.getSoundHandler());
+			btReset.playPressSound(mc.getSoundHandler());
 			this.setToDefault();
 			return true;
 		} else
 		if (this.btUndo.mousePressed(this.mc, x, y)) {
-			btUndo.func_146113_a(mc.getSoundHandler());
+			btUndo.playPressSound(mc.getSoundHandler());
 			this.undoChanges();
 			return true;
 		}
@@ -391,6 +391,11 @@ public abstract class ConfigEntry implements IGuiListEntry {
 	}
 
 	public void setSlot(int slotIndex) {
+	}
+	
+	@Override
+	public void setSelected(int p_178011_1_, int p_178011_2_, int p_178011_3_) {
+		// TODO Auto-generated method stub
 	}
 	
 	public void drawToolTip(int mouseX, int mouseY) {

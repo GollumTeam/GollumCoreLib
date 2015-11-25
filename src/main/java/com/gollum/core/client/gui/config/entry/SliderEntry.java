@@ -5,6 +5,7 @@ import com.gollum.core.client.gui.config.element.ConfigElement;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraftforge.fml.client.config.GuiSlider;
 
 public class SliderEntry extends ConfigEntry {
 	
@@ -45,9 +46,9 @@ public class SliderEntry extends ConfigEntry {
 		this.setValue(this.configElement.getValue());
 	}
 	@Override
-	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, Tessellator tessellator, int mouseX, int mouseY, boolean isSelected, boolean resetControlWidth) {
+	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight , int mouseX, int mouseY, boolean isSelected, boolean resetControlWidth) {
 		
-		super.drawEntry(slotIndex, x, y, listWidth, slotHeight, tessellator, mouseX, mouseY, isSelected, resetControlWidth);
+		super.drawEntry(slotIndex, x, y, listWidth, slotHeight, mouseX, mouseY, isSelected, resetControlWidth);
 		
 		this.slider.width = this.parent.controlWidth;
 		this.slider.xPosition = this.parent.controlX;
@@ -124,7 +125,7 @@ public class SliderEntry extends ConfigEntry {
 	@Override
 	public boolean mousePressed(int index, int x, int y, int mouseEvent, int relativeX, int relativeY) {
 		if (this.slider.mousePressed(this.mc, x, y)) {
-			slider.func_146113_a(mc.getSoundHandler());
+			slider.playPressSound(mc.getSoundHandler());
 			return true;
 		}
 		return super.mousePressed(index, x, y, mouseEvent, relativeX, relativeY);

@@ -62,8 +62,8 @@ public class GCLGuiContainer extends GuiContainer {
 		
 		int posX = (GCLContainer.SIZE_ITEM * (9 - this.numColumns)) / 2;
 		
-		this.fontRendererObj.drawString(StatCollector.translateToLocal(this.inventoryBlock.getInventoryName()) , 8 + posX , top-13                                   , 0x404040);
-		this.fontRendererObj.drawString(StatCollector.translateToLocal(this.inventoryPlayer.getInventoryName()), 8        , top+this.numRows*GCLContainer.SIZE_ITEM+6, 0x404040);
+		this.fontRendererObj.drawString(StatCollector.translateToLocal(this.inventoryBlock.getDisplayName().getUnformattedText()) , 8 + posX , top-13                                   , 0x404040);
+		this.fontRendererObj.drawString(StatCollector.translateToLocal(this.inventoryPlayer.getDisplayName().getUnformattedText()), 8        , top+this.numRows*GCLContainer.SIZE_ITEM+6, 0x404040);
 		
 	}
 

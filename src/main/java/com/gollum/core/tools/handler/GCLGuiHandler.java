@@ -9,6 +9,7 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 
@@ -22,10 +23,9 @@ public class GCLGuiHandler implements IGuiHandler {
 
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 		
-		TileEntity te = world.getTileEntity(x, y, z);
+		TileEntity te = world.getTileEntity(new BlockPos(x, y, z));
 		Container container = null;
 		
-		boolean bE   = world.blockExists(x, y, z); // bE = Block Exist
 		boolean tENN = te != null;                 // tENN = tileEntity not null
 		
 		try {
@@ -44,9 +44,13 @@ public class GCLGuiHandler implements IGuiHandler {
 								case 0: container = (Container) constructor.newInstance(player, world, x, y, z, guiContainerInventoryClass.parameter);              break;
 								case 1: container = (Container) constructor.newInstance(player, world, x, y, z);                                                    break;
 								case 2: container = (Container) constructor.newInstance(player.inventory, world, x, y, z, guiContainerInventoryClass.parameter);    break;
-								case 3: container = (Container) constructor.newInstance(player.inventory, world, x, y, z);                                          break;
-								case 4: if (bE && tENN) container = (Container) constructor.newInstance(player.inventory, te, guiContainerInventoryClass.parameter);break;
-								case 5: if (bE && tENN) container = (Container) constructor.newInstance(player.inventory, te);                                      break;
+								case 3: container = (Container) constructor.newInstance(player.inventory, player, world, x, y, z);                                          break;
+								case 4: container = (Container) constructor.newInstance(player.inventory, player, world, x, y, z, guiContainerInventoryClass.parameter);    break;
+								case 5: container = (Container) constructor.newInstance(player.inventory, world, x, y, z);                                          break;
+								case 6: if (tENN) container = (Container) constructor.newInstance(player.inventory, te, guiContainerInventoryClass.parameter);break;
+								case 7: if (tENN) container = (Container) constructor.newInstance(player.inventory, te);                                      break;
+								case 8: if (tENN) container = (Container) constructor.newInstance(player.inventory, te, player, guiContainerInventoryClass.parameter);break;
+								case 9: if (tENN) container = (Container) constructor.newInstance(player.inventory, te, player);                                      break;
 								default: break;
 							}
 						} catch (Exception e) {
@@ -75,10 +79,9 @@ public class GCLGuiHandler implements IGuiHandler {
 
 	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 
-		TileEntity te = world.getTileEntity(x, y, z);
+		TileEntity te = world.getTileEntity(new BlockPos(x, y, z));
 		GuiContainer gui = null;
 		
-		boolean bE   = world.blockExists(x, y, z); // bE = Block Exist
 		boolean tENN = te != null;                 // tENN = tileEntity not null
 		
 		try {
@@ -97,8 +100,12 @@ public class GCLGuiHandler implements IGuiHandler {
 								case 1: gui = (GuiContainer) constructor.newInstance(player, world, x, y, z);                                                    break;
 								case 2: gui = (GuiContainer) constructor.newInstance(player.inventory, world, x, y, z, guiContainerInventoryClass.parameter);    break;
 								case 3: gui = (GuiContainer) constructor.newInstance(player.inventory, world, x, y, z);                                          break;
-								case 4: if (bE && tENN) gui = (GuiContainer) constructor.newInstance(player.inventory, te, guiContainerInventoryClass.parameter);break;
-								case 5: if (bE && tENN) gui = (GuiContainer) constructor.newInstance(player.inventory, te);                                      break;
+								case 4: gui = (GuiContainer) constructor.newInstance(player.inventory, player, world, x, y, z, guiContainerInventoryClass.parameter);    break;
+								case 5: gui = (GuiContainer) constructor.newInstance(player.inventory, player, world, x, y, z);                                          break;
+								case 6: if (tENN) gui = (GuiContainer) constructor.newInstance(player.inventory, te, guiContainerInventoryClass.parameter);break;
+								case 7: if (tENN) gui = (GuiContainer) constructor.newInstance(player.inventory, te);                                      break;
+								case 8: if (tENN) gui = (GuiContainer) constructor.newInstance(player.inventory, player, te, guiContainerInventoryClass.parameter);break;
+								case 9: if (tENN) gui = (GuiContainer) constructor.newInstance(player.inventory, player, te);                                      break;
 								default: break;
 							}
 						} catch (Exception e) {

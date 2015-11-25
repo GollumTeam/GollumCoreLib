@@ -55,10 +55,12 @@ public abstract class HBlockContainerMetadata extends HBlockContainer implements
 	 * Determines the damage on the item the block drops. Used in cloth and
 	 * wood.
 	 */
+	/* TODO
 	@Override
 	public int damageDropped(int damage) {
 		return (helper.vanillaDamageDropped) ? super.damageDropped(damage) : this.helperMetadata.damageDropped (damage);
 	}
+	*/
 	
 	/**
 	 * Called when a user uses the creative pick block button on this block
@@ -68,10 +70,12 @@ public abstract class HBlockContainerMetadata extends HBlockContainer implements
 	 * @return A ItemStack to add to the player's inventory, Null if nothing
 	 *         should be added.
 	 */
+	/* TODO
 	@Override
 	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
 		return (helper.vanillaPicked) ? super.getPickBlock(target, world, x, y, z) : helperMetadata.getPickBlock(super.getPickBlock(null, world, x, y, z), world, x, y, z);
 	}
+	*/
 
 	/**
 	 * Liste des metadata enabled pour le subtype
@@ -87,14 +91,18 @@ public abstract class HBlockContainerMetadata extends HBlockContainer implements
 	//////////////////////////
 	//Gestion des textures  //
 	//////////////////////////
-	
+
+	/* TODO
 	@Override
 	public void registerBlockIcons(IIconRegister iconRegister) {
 		if (helper.vanillaTexture) super.registerBlockIcons(iconRegister); else helperMetadata.registerBlockIcons(iconRegister);
 	}
+	*/
 	
+	/* TODO
 	@Override
 	public IIcon getIcon(int side, int metadata) {
 		return (helper.vanillaTexture) ? super.getIcon(side, metadata) : this.helperMetadata.getIcon(side, metadata);
 	}
+	*/
 }

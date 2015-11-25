@@ -1,8 +1,10 @@
 package com.gollum.core.tools.helper;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 public interface IBlockHelper {
@@ -19,13 +21,17 @@ public interface IBlockHelper {
 	 */
 	public String getRegisterName();
 	
+	/* TODO
 	public void registerBlockIcons(IIconRegister iconRegister);
+	*/
 	
 	/**
 	 * Setter de l'icon de l'objet
 	 * @param icon
 	 */
+	/* TODO
 	public IBlockHelper setIcon (IIcon icon);
+	*/
 	
 	/**
 	 * Clef qui permet de générer le nom du fichier de texture 
@@ -50,6 +56,6 @@ public interface IBlockHelper {
 	/**
 	 * Libère les items de l'inventory
 	 */
-	public void breakBlockInventory(World world, int x, int y, int z, Block oldBlock);
+	public void breakBlock(World world, BlockPos pos, IBlockState state);
 
 }

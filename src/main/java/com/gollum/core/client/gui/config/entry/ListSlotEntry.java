@@ -13,7 +13,6 @@ import net.minecraft.item.ItemStack;
 
 public class ListSlotEntry extends ConfigEntry {
 
-	protected static RenderItem itemRender = new RenderItem();
 	public ItemStack itemStackIcon = null;
 	
 	public ListSlotEntry(int index, Minecraft mc, GuiConfigEntries parent, ConfigElement configElement) {
@@ -21,7 +20,7 @@ public class ListSlotEntry extends ConfigEntry {
 	}
 	
 	@Override
-	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, Tessellator tessellator, int mouseX, int mouseY, boolean isSelected, boolean resetControlWidth) {
+	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight , int mouseX, int mouseY, boolean isSelected, boolean resetControlWidth) {
 		
 		int x1 = this.parent.controlX;
 		int y1 = y + this.parent.getSlotHeight ();
@@ -33,7 +32,7 @@ public class ListSlotEntry extends ConfigEntry {
 				this.drawRec(x1-19, y+1, 18, 18, 0xFFCCCCCC);
 				this.drawRec(x1-18, y+2, 16, 16, 0xFF999999);
 				RenderHelper.enableGUIStandardItemLighting();
-				this.itemRender.renderItemIntoGUI(this.mc.fontRenderer, this.mc.getTextureManager(), this.itemStackIcon, x1-18, y+2);
+				this.mc.getRenderItem().renderItemIntoGUI(this.itemStackIcon, x1-18, y+2);
 				
 			} catch (Exception e) {
 			}
@@ -46,11 +45,11 @@ public class ListSlotEntry extends ConfigEntry {
 		
 		String label = ((ListElement)this.configElement).label;
 		
-		while (!label.equals("") && this.mc.fontRenderer.getStringWidth(label) > x2 - x1 - 7) {
+		while (!label.equals("") && this.mc.fontRendererObj.getStringWidth(label) > x2 - x1 - 7) {
 			label = label.substring(0, label.length() - 1);
 		}
 		
-		this.mc.fontRenderer.drawString(label, this.parent.controlX + 7, y+6, this.isSelected() ? 0xFFFFFF : 0x888888, true);
+		this.mc.fontRendererObj.drawString(label, this.parent.controlX + 7, y+6, this.isSelected() ? 0xFFFFFF : 0x888888, true);
 	}
 	
 	public boolean isSelected() {

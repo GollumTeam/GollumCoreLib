@@ -16,10 +16,12 @@ public class HBlockPistonBase extends BlockPistonBase implements IBlockHelper {
 	protected BlockHelper helper;
 	
 	protected boolean isStickyPiston;
-	
+
+	/* TODO
 	protected IIcon iconTop;
 	protected IIcon iconOpen;
 	protected IIcon iconBottom;
+	*/
 	
 	protected String suffixTop    = "_top";
 	protected String suffixSticky = "_sticky";
@@ -72,9 +74,11 @@ public class HBlockPistonBase extends BlockPistonBase implements IBlockHelper {
 	/**
 	 * Libère les items de l'inventory
 	 */
+	/* TODO
 	public void breakBlockInventory(World world, int x, int y, int z, Block oldBlock) {
 		helper.breakBlockInventory(world, x, y, z, oldBlock);
 	}
+	*/
 	
 	//////////////////////////
 	//Gestion des textures  //
@@ -84,6 +88,7 @@ public class HBlockPistonBase extends BlockPistonBase implements IBlockHelper {
 	 * Enregistre les textures
 	 * Depuis la 1.5 on est obligé de charger les texture fichier par fichier
 	 */
+	/* TODO
 	@Override
 	public void registerBlockIcons(IIconRegister iconRegister) {
 		
@@ -110,17 +115,21 @@ public class HBlockPistonBase extends BlockPistonBase implements IBlockHelper {
 	protected void registerBlockIconsSide(IIconRegister iconRegister) {
 		this.blockIcon = helper.loadTexture(iconRegister, suffixSide);
 	}
+	*/
 	
 	/**
 	 * Setter de l'icon de l'objet
 	 * @param icon
 	 */
+	/* TODO
 	@Override
 	public IBlockHelper setIcon (IIcon icon) {
 		this.blockIcon = icon;
 		return this;
 	}
-	
+	*/
+
+	/* TODO
 	@Override
 	public IIcon getIcon(int side, int metadata) {
 		
@@ -144,17 +153,20 @@ public class HBlockPistonBase extends BlockPistonBase implements IBlockHelper {
 		
 		return side != Facing.oppositeSide[orientation] ? this.blockIcon : this.iconBottom;
 	}
+	*/
 	
 	@Override
 	public String getTextureKey() {
 		return helper.getTextureKey();
 	}
-	
+
+	/* TODO
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getPistonExtensionTexture() {
 		if (helper.vanillaTexture) return super.getPistonExtensionTexture();
 		return this.iconTop;
 	}
+	*/
 	
 }

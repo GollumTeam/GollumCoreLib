@@ -11,8 +11,10 @@ import net.minecraft.item.ItemStack;
 public class ItemMetadataHelper extends ItemHelper implements IItemMetadataHelper {
 	
 	protected TreeSet<Integer>        listSubEnabled = new TreeSet<Integer>();
+	/* TODO
 	protected TreeMap<Integer, IIcon> blockIcons     = new TreeMap<Integer, IIcon>();
-
+	*/
+	
 	/////////////////
 	// Contructeur //
 	/////////////////
@@ -81,13 +83,16 @@ public class ItemMetadataHelper extends ItemHelper implements IItemMetadataHelpe
 	 * Enregistre les textures
 	 * Depuis la 1.5 on est obligé de charger les texture fichier par fichier
 	 */
+	/* TODO
 	@Override
 	public void registerIcons(IIconRegister iconRegister) {
 		for (int metadata : this.listSubEnabled) {
 			this.blockIcons.put(metadata, this.loadTexture(iconRegister, "_"+metadata));
 		}
 	}
+	*/
 	
+	/* TODO
 	@Override
 	public IIcon getIconFromDamage(int metadata) {
 		
@@ -97,4 +102,5 @@ public class ItemMetadataHelper extends ItemHelper implements IItemMetadataHelpe
 		}
 		return null;
 	}
+	*/
 }

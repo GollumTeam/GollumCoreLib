@@ -40,9 +40,9 @@ public abstract class ButtonEntry extends ConfigEntry {
 	
 	
 	@Override
-	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, Tessellator tessellator, int mouseX, int mouseY, boolean isSelected, boolean resetControlWidth) {
+	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected, boolean resetControlWidth) {
 		
-		super.drawEntry(slotIndex, x, y, listWidth, slotHeight, tessellator, mouseX, mouseY, isSelected, resetControlWidth);
+		super.drawEntry(slotIndex, x, y, listWidth, slotHeight, mouseX, mouseY, isSelected, resetControlWidth);
 		
 		this.btnValue.width = this.parent.controlWidth;
 		this.btnValue.xPosition = this.parent.controlX;
@@ -61,7 +61,7 @@ public abstract class ButtonEntry extends ConfigEntry {
 	@Override
 	public boolean mousePressed(int index, int x, int y, int mouseEvent, int relativeX, int relativeY) {
 		if (this.btnValue.mousePressed(this.mc, x, y)) {
-			btnValue.func_146113_a(mc.getSoundHandler());
+			btnValue.playPressSound(mc.getSoundHandler());
 			this.valueButtonPressed(index);
 			return true;
 		}
@@ -76,5 +76,4 @@ public abstract class ButtonEntry extends ConfigEntry {
 		super.mouseReleased(index, x, y, mouseEvent, relativeX, relativeY);
 		this.btnValue.mouseReleased(x, y);
 	}
-	
 }

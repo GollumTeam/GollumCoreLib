@@ -34,9 +34,9 @@ public class ListInlineEntry extends ConfigEntry {
 	}
 	
 	@Override
-	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, Tessellator tessellator, int mouseX, int mouseY, boolean isSelected, boolean resetControlWidth) {
+	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight , int mouseX, int mouseY, boolean isSelected, boolean resetControlWidth) {
 		
-		super.drawEntry(slotIndex, x, y, listWidth, slotHeight, tessellator, mouseX, mouseY, isSelected, resetControlWidth);
+		super.drawEntry(slotIndex, x, y, listWidth, slotHeight, mouseX, mouseY, isSelected, resetControlWidth);
 		
 		this.btnPrev.xPosition = this.parent.controlX;
 		this.btnPrev.yPosition = y;
@@ -102,12 +102,12 @@ public class ListInlineEntry extends ConfigEntry {
 	@Override
 	public boolean mousePressed(int index, int x, int y, int mouseEvent, int relativeX, int relativeY) {
 		if (this.btnNext.mousePressed(this.mc, x, y)) {
-			btnNext.func_146113_a(mc.getSoundHandler());
+			btnNext.playPressSound(mc.getSoundHandler());
 			this.next();
 			return true;
 		}
 		if (this.btnPrev.mousePressed(this.mc, x, y)) {
-			btnPrev.func_146113_a(mc.getSoundHandler());
+			btnPrev.playPressSound(mc.getSoundHandler());
 			this.prev();
 			return true;
 		}
