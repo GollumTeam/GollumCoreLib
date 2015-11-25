@@ -1,15 +1,8 @@
 package com.gollum.core.client.gui.config;
 
-import static cpw.mods.fml.client.config.GuiUtils.RESET_CHAR;
-import static cpw.mods.fml.client.config.GuiUtils.UNDO_CHAR;
-
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.resources.I18n;
 
 import org.lwjgl.input.Keyboard;
 
@@ -18,11 +11,14 @@ import com.gollum.core.common.config.ConfigProp;
 import com.gollum.core.common.config.JsonConfigProp;
 import com.gollum.core.common.mod.GollumMod;
 
-import cpw.mods.fml.client.GuiModList;
-import cpw.mods.fml.client.config.GuiButtonExt;
-import cpw.mods.fml.client.config.GuiUnicodeGlyphButton;
-import cpw.mods.fml.client.config.HoverChecker;
-import cpw.mods.fml.common.ModContainer;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.resources.I18n;
+import net.minecraftforge.fml.client.GuiModList;
+import net.minecraftforge.fml.client.config.GuiButtonExt;
+import net.minecraftforge.fml.client.config.GuiUnicodeGlyphButton;
+import net.minecraftforge.fml.client.config.HoverChecker;
+import net.minecraftforge.fml.common.ModContainer;
 
 public abstract class GuiConfig extends GuiScreen {
 	

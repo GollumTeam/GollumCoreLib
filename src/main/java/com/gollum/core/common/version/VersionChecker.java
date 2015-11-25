@@ -5,23 +5,22 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLEncoder;
 
+import com.gollum.core.ModGollumCoreLib;
+import com.gollum.core.common.context.ModContext;
+import com.gollum.core.common.log.Logger;
+import com.gollum.core.common.mod.GollumMod;
+
+import argo.jdom.JdomParser;
+import argo.jdom.JsonRootNode;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import argo.jdom.JdomParser;
-import argo.jdom.JsonRootNode;
-
-import com.gollum.core.ModGollumCoreLib;
-import com.gollum.core.common.context.ModContext;
-import com.gollum.core.common.log.Logger;
-import com.gollum.core.common.mod.GollumMod;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class VersionChecker extends Thread {
 	

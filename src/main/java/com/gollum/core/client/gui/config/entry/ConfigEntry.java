@@ -1,17 +1,8 @@
 package com.gollum.core.client.gui.config.entry;
 
-import static cpw.mods.fml.client.config.GuiUtils.RESET_CHAR;
-import static cpw.mods.fml.client.config.GuiUtils.UNDO_CHAR;
-
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiListExtended.IGuiListEntry;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.EnumChatFormatting;
 
 import com.gollum.core.client.gui.config.GuiConfigEntries;
 import com.gollum.core.client.gui.config.element.ConfigElement;
@@ -19,9 +10,14 @@ import com.gollum.core.client.gui.config.element.TypedValueElement;
 import com.gollum.core.common.config.ConfigProp;
 import com.gollum.core.common.config.JsonConfigProp;
 
-import cpw.mods.fml.client.config.GuiButtonExt;
-import cpw.mods.fml.client.config.GuiUtils;
-import cpw.mods.fml.client.config.HoverChecker;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiListExtended.IGuiListEntry;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraftforge.fml.client.config.GuiButtonExt;
+import net.minecraftforge.fml.client.config.GuiUtils;
+import net.minecraftforge.fml.client.config.HoverChecker;
 
 public abstract class ConfigEntry implements IGuiListEntry {
 	

@@ -1,15 +1,15 @@
 package com.gollum.core.client.gui.config.entry;
 
+import com.gollum.core.client.gui.config.GuiConfigEntries;
+import com.gollum.core.client.gui.config.GuiListConfig;
+import com.gollum.core.client.gui.config.element.ConfigElement;
+import com.gollum.core.client.gui.config.element.ListElement;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.item.ItemStack;
-
-import com.gollum.core.client.gui.config.GuiConfigEntries;
-import com.gollum.core.client.gui.config.GuiListConfig;
-import com.gollum.core.client.gui.config.element.ConfigElement;
-import com.gollum.core.client.gui.config.element.ListElement;
 
 public class ListSlotEntry extends ConfigEntry {
 

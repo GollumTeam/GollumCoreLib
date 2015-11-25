@@ -2,7 +2,7 @@ package com.gollum.core.tools.registry;
 
 import java.util.ArrayList;
 
-import cpw.mods.fml.common.network.IGuiHandler;
+import net.minecraftforge.fml.common.network.IGuiHandler;
 
 
 public class GCLNetworkRegistry {

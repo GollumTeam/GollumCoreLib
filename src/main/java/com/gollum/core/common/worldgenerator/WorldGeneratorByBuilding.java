@@ -8,20 +8,20 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Random;
 
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraftforge.common.MinecraftForge;
-
 import com.gollum.core.common.building.Builder;
 import com.gollum.core.common.building.Building;
 import com.gollum.core.common.building.Building.DimentionSpawnInfos;
 import com.gollum.core.common.events.BuildingGenerateEvent;
 import com.gollum.core.utils.math.Integer3d;
 
-import cpw.mods.fml.common.IWorldGenerator;
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.IWorldGenerator;
 
 
 public class WorldGeneratorByBuilding implements IWorldGenerator {
@@ -132,7 +132,7 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
 		
-		int dimention = world.provider.dimensionId;
+		int dimention = world.provider.getDimensionId();
 		
 		if (this.buildings.containsKey(dimention)) {
 			
@@ -178,7 +178,7 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 	 */
 	private boolean generateBuilding(World world, Random random, int chunkX, int chunkZ, ArrayList<Building> buildings, int groupSpawnRate, int dimention) {
 		
-		buildings = this.filterByBiome(world.getBiomeGenForCoords(chunkX, chunkZ), buildings, dimention);
+		buildings = this.filterByBiome(world.getBiomeGenForCoords(new BlockPos(chunkX*16, 1, chunkZ*16)), buildings, dimention);
 		
 		if (buildings.size() == 0) {
 			return false;
@@ -225,10 +225,10 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 								}
 								
 								if (blocksList[initY] == null) {
-									blocksList[initY] = world.getBlock(initX + 3, initY, initZ + 3);
+									blocksList[initY] = world.getBlockState(new BlockPos(initX + 3, initY, initZ + 3)).getBlock();
 								}
 								if (blocksList[initY+1] == null) {
-									blocksList[initY+1] = world.getBlock(initX + 3, initY+1, initZ + 3);
+									blocksList[initY+1] = world.getBlockState(new BlockPos(initX + 3, initY+1, initZ + 3)).getBlock();
 								}
 								
 								Block block   = blocksList[initY];

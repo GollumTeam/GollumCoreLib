@@ -3,15 +3,14 @@ package com.gollum.core.tools.handler;
 import java.lang.reflect.Constructor;
 import java.util.Hashtable;
 
+import com.gollum.core.tools.registry.InventoryRegistry.GuiContainerInventoryClass;
+
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-
-import com.gollum.core.tools.registry.InventoryRegistry.GuiContainerInventoryClass;
-
-import cpw.mods.fml.common.network.IGuiHandler;
+import net.minecraftforge.fml.common.network.IGuiHandler;
 
 public class GCLGuiHandler implements IGuiHandler {
 	

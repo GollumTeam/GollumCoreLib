@@ -5,8 +5,7 @@ import java.util.Map.Entry;
 import com.gollum.core.client.gui.config.element.ListElement;
 import com.gollum.core.client.gui.config.entry.ListEntry;
 
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.ModContainer;
+import net.minecraftforge.fml.common.ModContainer;
 
 public class GuiModIdConfig extends GuiListConfig {
 

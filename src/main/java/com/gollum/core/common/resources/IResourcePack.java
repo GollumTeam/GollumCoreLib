@@ -9,8 +9,6 @@ import com.gollum.core.common.resources.data.IMetadataSection;
 import com.gollum.core.common.resources.data.IMetadataSerializer;
 
 import net.minecraft.util.ResourceLocation;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public interface IResourcePack
 {

@@ -2,12 +2,12 @@ package com.gollum.core.client.gui.config.entry;
 
 import java.util.ArrayList;
 
-import net.minecraft.client.Minecraft;
-
 import com.gollum.core.client.gui.config.GuiConfigEntries;
 import com.gollum.core.client.gui.config.GuiSubConfigConfig;
 import com.gollum.core.client.gui.config.element.ConfigElement;
 import com.gollum.core.common.config.Config;
+
+import net.minecraft.client.Minecraft;
 
 public class SubConfigEntry extends ButtonEntry {
 	

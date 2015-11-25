@@ -1,8 +1,5 @@
 package com.gollum.core.tools.helper;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.util.IIcon;
-
 public interface IItemHelper {
 	
 	public ItemHelper getGollumHelper ();

@@ -3,7 +3,7 @@ package com.gollum.core.common.facory;
 import com.gollum.core.common.context.ModContext;
 import com.gollum.core.common.mod.GollumMod;
 
-import cpw.mods.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
 
 public class Mobactory {
 	

@@ -5,11 +5,6 @@ import static com.gollum.core.ModGollumCoreLib.log;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiListExtended;
-import net.minecraft.client.gui.GuiSlot;
-import net.minecraft.client.renderer.Tessellator;
-
 import com.gollum.core.ModGollumCoreLib;
 import com.gollum.core.client.gui.config.element.ConfigElement;
 import com.gollum.core.client.gui.config.element.TypedValueElement;
@@ -17,6 +12,11 @@ import com.gollum.core.client.gui.config.entry.AddButtonEntry;
 import com.gollum.core.client.gui.config.entry.ConfigEntry;
 import com.gollum.core.common.config.ConfigProp;
 import com.gollum.core.utils.reflection.Reflection;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiListExtended;
+import net.minecraft.client.gui.GuiSlot;
+import net.minecraft.client.renderer.Tessellator;
 
 public class GuiConfigEntries extends GuiListExtended {
 

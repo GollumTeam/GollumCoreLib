@@ -2,8 +2,12 @@ package com.gollum.core.tools.helper;
 
 import java.util.Random;
 
+import com.gollum.core.ModGollumCoreLib;
+import com.gollum.core.common.context.ModContext;
+import com.gollum.core.common.mod.GollumMod;
+import com.gollum.core.tools.registry.BlockRegistry;
+
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -11,15 +15,8 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-
-import com.gollum.core.ModGollumCoreLib;
-import com.gollum.core.common.context.ModContext;
-import com.gollum.core.common.mod.GollumMod;
-import com.gollum.core.tools.registry.BlockRegistry;
-
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class BlockHelper implements IBlockHelper {
 	

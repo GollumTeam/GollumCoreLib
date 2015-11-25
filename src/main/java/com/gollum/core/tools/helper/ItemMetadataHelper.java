@@ -4,11 +4,9 @@ import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 
 public class ItemMetadataHelper extends ItemHelper implements IItemMetadataHelper {
 	

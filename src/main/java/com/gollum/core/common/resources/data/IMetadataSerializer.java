@@ -3,8 +3,7 @@ package com.gollum.core.common.resources.data;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumTypeAdapterFactory;
 import net.minecraft.util.IChatComponent;

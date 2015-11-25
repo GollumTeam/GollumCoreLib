@@ -2,14 +2,10 @@ package com.gollum.core.common.stats;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.TreeMap;
 
 import net.minecraft.stats.StatBase;
-import net.minecraftforge.common.AchievementPage;
 
 public class StatsPage {
 	

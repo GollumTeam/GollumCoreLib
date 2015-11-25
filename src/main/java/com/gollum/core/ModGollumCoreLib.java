@@ -5,7 +5,6 @@ import com.gollum.core.common.CommonProxyGolumCoreLib;
 import com.gollum.core.common.command.CommandBuilding;
 import com.gollum.core.common.config.ConfigGollumCoreLib;
 import com.gollum.core.common.context.ModContext;
-import com.gollum.core.common.handlers.WorldHandler;
 import com.gollum.core.common.i18n.I18n;
 import com.gollum.core.common.log.Logger;
 import com.gollum.core.common.mod.GollumMod;
@@ -18,17 +17,16 @@ import com.gollum.core.inits.ModItems;
 import com.gollum.core.inits.ModTileEntities;
 import com.gollum.core.tools.registry.BlockRegistry;
 import com.gollum.core.tools.registry.ItemRegistry;
-import com.gollum.core.utils.reflection.Reflection;
 
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.Mod.Instance;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 @Mod(
 	modid                     = ModGollumCoreLib.MODID,
@@ -41,7 +39,7 @@ public class ModGollumCoreLib extends GollumMod {
 	public final static String MODID = "GollumCoreLib";
 	public final static String MODNAME = "Gollum Core Lib";
 	public final static String VERSION = "2.0.1DEV";
-	public final static String MINECRAFT_VERSION = "1.7.10";
+	public final static String MINECRAFT_VERSION = "1.8.8";
 
 	@Instance(ModGollumCoreLib.MODID)
 	public static ModGollumCoreLib instance;

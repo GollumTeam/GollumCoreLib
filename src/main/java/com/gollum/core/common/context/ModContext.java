@@ -2,7 +2,7 @@ package com.gollum.core.common.context;
 
 import com.gollum.core.common.mod.GollumMod;
 
-import cpw.mods.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class ModContext {
 	

@@ -7,6 +7,7 @@ import com.gollum.core.ModGollumCoreLib;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class RegisteredObjects {
 	
@@ -50,13 +51,7 @@ public class RegisteredObjects {
 			String modId = registerName.substring(0, registerName.indexOf(":"));
 			String name  = registerName.substring(registerName.indexOf(":")+1);
 			
-			if (modId.equals("minecraft")) {
-				
-				return (Block)Block.blockRegistry.getObject(name);
-				
-			} else {
-				return (Block)Block.blockRegistry.getObject(registerName);
-			}
+			return GameRegistry.findBlock(modId, name);
 		} catch (Exception e) {
 		}
 		
@@ -70,17 +65,9 @@ public class RegisteredObjects {
 		try {
 			
 			String modId = "minecraft";
-			String name  = registerName;			
-			if (registerName.contains(":")) {	
-				modId = registerName.substring(0, registerName.indexOf(":"));
-				name  = registerName.substring(registerName.indexOf(":")+1);
-			}
+			String name  = registerName;
 			
-			if (modId.equals("minecraft")) {
-				return (Item)Item.itemRegistry.getObject(name);
-			} else {
-				return (Item)Item.itemRegistry.getObject(registerName);
-			}
+			return GameRegistry.findItem(modId, name);
 		} catch (Exception e) {
 		}
 		

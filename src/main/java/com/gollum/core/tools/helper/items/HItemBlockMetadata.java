@@ -1,13 +1,13 @@
 package com.gollum.core.tools.helper.items;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
-
 import com.gollum.core.tools.helper.BlockHelper;
 import com.gollum.core.tools.helper.BlockMetadataHelper;
 import com.gollum.core.tools.helper.IBlockHelper;
 import com.gollum.core.tools.helper.IBlockMetadataHelper;
+
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 
 public class HItemBlockMetadata extends ItemBlock {
 	

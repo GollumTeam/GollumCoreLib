@@ -9,7 +9,7 @@ import com.gollum.core.common.building.BuildingParser;
 import com.gollum.core.common.building.ModBuildingParser;
 import com.gollum.core.common.config.type.BuildingConfigType;
 
-import cpw.mods.fml.common.Loader;
+import net.minecraftforge.fml.common.Loader;
 
 public class WorldGeneratorByBuildingLoader {
 	
