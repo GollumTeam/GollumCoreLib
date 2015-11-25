@@ -22,7 +22,7 @@ public class BlockSignBuildingHandler extends BuildingBlockHandler {
 	
 	@Override
 	public void applyOrientation(World world, int x, int y, int z, Block block, int metadata, int orientation, int rotate) {
-		
+		/* FIXME
 		boolean standing = true;
 		try {
 			// 1.7.10 field_149967_b
@@ -48,7 +48,7 @@ public class BlockSignBuildingHandler extends BuildingBlockHandler {
 			}
 		}
 		world.setBlockMetadataWithNotify(x, y, z, metadata, 0);
-		
+		*/
 	}
 	
 	/**
@@ -67,6 +67,7 @@ public class BlockSignBuildingHandler extends BuildingBlockHandler {
 		int dx, int dz,
 		int maxX, int maxZ
 	) {
+		/* FIXME
 		TileEntity te = world.getTileEntity (x, y, z);
 		if (te instanceof TileEntitySign) {
 			
@@ -84,6 +85,7 @@ public class BlockSignBuildingHandler extends BuildingBlockHandler {
 				e.printStackTrace();
 			}
 		}
+		*/
 	}
 	
 }

@@ -7,8 +7,9 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ITickable;
 
-public class TileEntityBlockProximitySpawn extends TileEntity {
+public class TileEntityBlockProximitySpawn extends TileEntity implements ITickable {
 	
 	// Le mob
 	private String mobID;
@@ -26,7 +27,7 @@ public class TileEntityBlockProximitySpawn extends TileEntity {
 	 * inside its implementation.
 	 */
 	@Override
-	public void updateEntity() {
+	public void update() {
 		
 		if (this.mobID != null && !this.worldObj.isRemote) {
 			
@@ -43,18 +44,18 @@ public class TileEntityBlockProximitySpawn extends TileEntity {
 				return;
 			}
 			
-			this.worldObj.setBlockToAir(this.xCoord , this.yCoord , this.zCoord);
+			this.worldObj.setBlockToAir(this.pos);
 			
-			double x = (double)this.xCoord + 0.5D;
-			double y = (double)(this.yCoord);// + this.worldObj.rand.nextInt(3) - 1);
-			double z = (double)this.zCoord + 0.5D;
+			double x = (double)this.pos.getX() + 0.5D;
+			double y = (double)this.pos.getY();// + this.worldObj.rand.nextInt(3) - 1);
+			double z = (double)this.pos.getZ() + 0.5D;
 			EntityLiving entityLiving = entity instanceof EntityLiving ? (EntityLiving)entity : null;
 			entity.setLocationAndAngles(x, y, z, this.worldObj.rand.nextFloat() * 360.0F, this.worldObj.rand.nextFloat() * 360.0F);
 			this.worldObj.spawnEntityInWorld(entity);
 			
 			if (entityLiving == null || entityLiving.getCanSpawnHere()) {
 				
-				this.worldObj.playSoundEffect (this.xCoord, this.yCoord, this.zCoord, "dig.stone", 0.5F, this.worldObj.rand.nextFloat() * 0.25F + 0.6F);
+				this.worldObj.playSoundEffect (this.pos.getX()+0.5f, this.pos.getY()+0.5f, this.pos.getZ()+0.5f, "dig.stone", 0.5F, this.worldObj.rand.nextFloat() * 0.25F + 0.6F);
 				
 				if (entityLiving != null) {
 					entityLiving.spawnExplosionParticle();

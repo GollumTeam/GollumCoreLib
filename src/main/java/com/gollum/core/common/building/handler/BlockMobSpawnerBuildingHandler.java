@@ -28,12 +28,13 @@ public class BlockMobSpawnerBuildingHandler extends BuildingBlockHandler {
 		int dx, int dz,
 		int maxX, int maxZ
 	) {
-		
+		/* FIXME
 		TileEntity te  = world.getTileEntity (x, y, z);
 		if (te instanceof TileEntityMobSpawner) {
 			String entity = ""; try { entity = extra.get("entity"); } catch (Exception e) {} entity = (entity != null) ? entity : "Pig";
 			((TileEntityMobSpawner) te).func_145881_a().setEntityName(entity);
 		}
+		*/
 	}
 	
 }

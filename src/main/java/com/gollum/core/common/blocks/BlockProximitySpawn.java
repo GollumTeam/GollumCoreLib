@@ -6,13 +6,16 @@ import com.gollum.core.common.tileentities.TileEntityBlockProximitySpawn;
 import com.gollum.core.tools.helper.blocks.HBlockContainer;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockProximitySpawn extends HBlockContainer {
@@ -33,7 +36,7 @@ public class BlockProximitySpawn extends HBlockContainer {
 	}
 	
 	@Override
-	public boolean isAir(IBlockAccess world, int x, int y, int z) {
+	public boolean isAir(IBlockAccess world, BlockPos pos) {
 		return true;
 	}
 	
@@ -42,12 +45,12 @@ public class BlockProximitySpawn extends HBlockContainer {
 	 * inventory.setCurrentItem (along with isCreative)
 	 */
 	@Override
-	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
-	return null;
+	public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos) {
+		return null;
 	}
 	
 	@Override
-	public Item getItemDropped(int par1, Random par2Random, int par3) {
+	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
 		return null;
 	}
 	
@@ -55,7 +58,7 @@ public class BlockProximitySpawn extends HBlockContainer {
 	 * Enleve les collisions
 	 */
 	@Override
-	public AxisAlignedBB getCollisionBoundingBoxFromPool(World var1, int var2, int var3, int var4) {
+	public AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos, IBlockState state) {
 		return null;
 	}
 	

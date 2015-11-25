@@ -6,6 +6,7 @@ import com.gollum.core.ModGollumCoreLib;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -77,18 +78,24 @@ public class RegisteredObjects {
 	}
 	
 	public String getRegisterName (Block block) {
-		for (Object key: Block.blockRegistry.getKeys()) {
+		
+		for (ResourceLocation key: Block.blockRegistry.getKeys()) {
 			if (block == Block.blockRegistry.getObject(key)) {
-				return (String) key;
+				if (key != null) {
+					return key.toString();
+				}
 			}
 		}
 		return null;
 	}
 	
 	public String getRegisterName (Item item) {
-		for (Object key: Item.itemRegistry.getKeys()) {
+		
+		for (ResourceLocation key: Item.itemRegistry.getKeys()) {
 			if (item == Item.itemRegistry.getObject(key)) {
-				return (String) key;
+				if (key != null) {
+					return key.toString();
+				}
 			}
 		}
 		return null;

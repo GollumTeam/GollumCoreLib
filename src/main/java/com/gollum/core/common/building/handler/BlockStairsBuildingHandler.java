@@ -19,7 +19,7 @@ public class BlockStairsBuildingHandler extends BuildingBlockHandler {
 	 */
 	@Override
 	public void applyOrientation(World world, int x, int y, int z, Block block, int metadata, int orientation, int rotate) {
-		
+		/* FIXME
 		if (orientation == Unity.ORIENTATION_UP)    { metadata = (metadata & 0xC) + 2; } else 
 		if (orientation == Unity.ORIENTATION_DOWN)  { metadata = (metadata & 0xC) + 3; } else 
 		if (orientation == Unity.ORIENTATION_LEFT)  { metadata = (metadata & 0xC) + 0; } else 
@@ -30,7 +30,7 @@ public class BlockStairsBuildingHandler extends BuildingBlockHandler {
 		
 		world.setBlockMetadataWithNotify(x, y, z, metadata, 0);
 		return;
-		
+		*/
 	}
 	
 }

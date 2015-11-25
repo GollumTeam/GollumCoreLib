@@ -16,7 +16,7 @@ public class BlockDoorBuildingHandler extends BuildingBlockHandler {
 	
 	@Override
 	public void applyOrientation(World world, int x, int y, int z, Block block, int metadata, int orientation, int rotate) {
-		
+		/* FIXME
 		if ((metadata & 0x8) != 0x8) {
 			if (orientation == Unity.ORIENTATION_UP)    { metadata = (metadata & 0x3) + 3; } else 
 			if (orientation == Unity.ORIENTATION_DOWN)  { metadata = (metadata & 0x3) + 1; } else 
@@ -31,7 +31,7 @@ public class BlockDoorBuildingHandler extends BuildingBlockHandler {
 		
 		world.setBlockMetadataWithNotify(x, y, z, metadata, 0);
 		return;
-		
+		*/
 	}
 	
 }

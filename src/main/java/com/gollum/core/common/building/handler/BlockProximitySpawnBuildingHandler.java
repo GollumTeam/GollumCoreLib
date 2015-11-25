@@ -33,12 +33,13 @@ public class BlockProximitySpawnBuildingHandler extends BuildingBlockHandler {
 		int dx, int dz,
 		int maxX, int maxZ
 	) {
-		
+		/* FIXME
 		TileEntity te  = world.getTileEntity (x, y, z);
 		if (te instanceof TileEntityBlockProximitySpawn) {
 			String entity = ""; try { entity = extra.get("entity"); } catch (Exception e) {} entity = (entity != null) ? entity : "Chicken";
 			((TileEntityBlockProximitySpawn) te).setModId (entity);
 		}
+		*/
 	}
 	
 }

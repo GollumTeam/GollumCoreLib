@@ -246,15 +246,17 @@ public class Builder {
 		}
 		
 		private boolean setBlock (int x,int y, int z, Block block, int metadata) {
+			return false;/* FIXME
 			if (y < 3) {
 				return false;
 			}
 			try {
-				return world.setBlock(new BlockPos(x, y, z), block, metadata, 0);
+				return world.setBlock(x, y, z, block, metadata, 0);
 			} catch (Exception e) {
 				e.printStackTrace();
 				return false;
 			}
+			*/
 		}
 		
 		private void placeBlockStone(int dx, int dz) {
@@ -273,6 +275,9 @@ public class Builder {
 		}
 		
 		private void placeBlocks(int dx, int dz) {
+			
+			/* FIXME
+			
 			ArrayList<Unity3D> placed = new ArrayList<Unity3D>();
 			
 //			ArrayList<BlockPlacer> threadsBlockSetter = new ArrayList<BlockPlacer>();
@@ -292,7 +297,7 @@ public class Builder {
 				
 				boolean isPlaced = false;
 				
-				world.removeTileEntity(finalX, finalY, finalZ);
+				world.removeTileEntity(new BlockPos(finalX, finalY, finalZ));
 				
 				if (unity.after || BuildingBlockRegistry.instance().isAfterBlock(unity.block)) {
 					this.setBlock (finalX, finalY, finalZ, Blocks.air, 0);
@@ -336,11 +341,12 @@ public class Builder {
 					world.markBlockForUpdate(new BlockPos(finalX, finalY, finalZ));
 //				}
 			}
+			*/
 		}
 		
 
 		private void placeAfterBlock(int dx, int dz) {
-			
+			/* FIXME
 			ArrayList<Unity3D> placed = new ArrayList<Unity3D>();
 			
 			for (Unity3D unity3D : building.unities) {
@@ -398,6 +404,7 @@ public class Builder {
 					world.markBlockForUpdate(finalX, finalY, finalZ);
 //				}
 			}
+			*/
 		}
 		
 		private void placeBlockRandom(int dx, int dz) {
@@ -468,7 +475,7 @@ public class Builder {
 		 * @param contents
 		 */
 		private void setContents(int x, int y, int z, ArrayList<ArrayList<Content>> contents) {
-			
+			/* FIXME
 			Block block  = world.getBlock (x, y, z);
 			
 			if (block instanceof BlockContainer) {
@@ -499,14 +506,14 @@ public class Builder {
 					}
 				}
 			}
-			
+			*/
 		}
 		
 		/**
 		 * Insert les extras informations du block
 		 */
 		private void setExtra(int x, int y, int z, HashMap<String, String> extra, int maxX, int maxZ) {
-			
+			/* FIXME
 			Block block  = world.getBlock (x, y, z);
 	
 			int dx = -1; 
@@ -531,21 +538,21 @@ public class Builder {
 			for (BuildingBlockHandler handler : BuildingBlockRegistry.instance().getHandlers()) {
 				handler.setExtra(block, world, world.rand, x, y, z, extra, initX, initY, initZ, rotate, dx, dz, maxX, maxZ);
 			}
-			
+			*/
 		}
 		
 		/**
 		 * Affecte l'orientation
 		 */
 		private void setOrientation(int x, int y, int z, int orientation) {
-			
+			/* FIXME
 			Block block  = world.getBlock (x, y, z);
 			int metadata = world.getBlockMetadata (x, y, z);
 			
 			for (BuildingBlockHandler handler : BuildingBlockRegistry.instance().getHandlers()) {
 				handler.setOrientation(world, x, y, z, block, metadata, orientation, rotate);
 			}
-			
+			*/
 		}
 	}
 	

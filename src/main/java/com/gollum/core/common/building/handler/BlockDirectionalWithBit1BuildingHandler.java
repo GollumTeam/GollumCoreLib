@@ -26,7 +26,7 @@ public class BlockDirectionalWithBit1BuildingHandler extends BuildingBlockHandle
 	
 	@Override
 	public void applyOrientation(World world, int x, int y, int z, Block block, int metadata, int orientation, int rotate) {
-	
+		/* FIXME
 		if (orientation == Unity.ORIENTATION_UP)    { metadata = (metadata & 0x8) + 2; } else 
 		if (orientation == Unity.ORIENTATION_DOWN)  { metadata = (metadata & 0x8) + 3; } else 
 		if (orientation == Unity.ORIENTATION_LEFT)  { metadata = (metadata & 0x8) + 4; } else 
@@ -37,6 +37,7 @@ public class BlockDirectionalWithBit1BuildingHandler extends BuildingBlockHandle
 		
 		world.setBlockMetadataWithNotify(x, y, z, metadata, 0);
 		return;
+		*/
 	}
 	
 }

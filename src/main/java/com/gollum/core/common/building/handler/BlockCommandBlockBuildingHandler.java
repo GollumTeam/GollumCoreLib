@@ -31,7 +31,7 @@ public class BlockCommandBlockBuildingHandler extends BuildingBlockHandler {
 		int dx, int dz,
 		int maxX, int maxZ
 	) {
-		
+		/* FIXME
 		TileEntity te  = world.getTileEntity (x, y, z);
 		if (te instanceof TileEntityCommandBlock) {
 			
@@ -50,6 +50,7 @@ public class BlockCommandBlockBuildingHandler extends BuildingBlockHandler {
 			((TileEntityCommandBlock) te).func_145993_a().func_145752_a(command);
 				
 		}
+		*/
 	}
 	
 }

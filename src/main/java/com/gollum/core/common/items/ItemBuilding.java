@@ -17,8 +17,11 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemBuilding extends HItem {
@@ -61,13 +64,18 @@ public class ItemBuilding extends HItem {
 		return this.buildingIndex;
 	}
 	
-	/**
-	 * Callback for item usage. If the item does something special on right
-	 * clicking, he will have one of those. Return True if something happen and
-	 * false if it don't. This is for ITEMS, not BLOCKS
-	 */
+
+    /**
+     * This is called when the item is used, before the block is activated.
+     * @param stack The Item Stack
+     * @param player The Player that used the item
+     * @param world The Current World
+     * @param pos Target position
+     * @param side The side of the target hit
+     * @return Return true to prevent any further processing.
+     */
 	@Override
-	public boolean onItemUseFirst(ItemStack itemStack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+    public boolean onItemUseFirst(ItemStack itemStack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
 		
 		if (world.isRemote) {
 			return false;
@@ -81,9 +89,9 @@ public class ItemBuilding extends HItem {
 			
 			SubBuilding subBuilding = new SubBuilding();
 			subBuilding.building = buildings.get(metadata);
-			subBuilding.x = x;
-			subBuilding.y = y+1;
-			subBuilding.z = z;
+			subBuilding.x = pos.getX();
+			subBuilding.y = pos.getY();
+			subBuilding.z = pos.getZ();
 			subBuilding.orientation= orientation;
 			
 			log.debug("orientation = "+orientation);
