@@ -86,7 +86,7 @@ public class HBlock extends Block implements IBlockHelper {
 	@Override
 	public IBlockHelper setIcon (Icon icon) {
 		this.blockIcon = icon;
-		return helper.setIcon(icon);
+		return this;
 	}
 	
 	/**
