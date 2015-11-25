@@ -23,6 +23,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
@@ -249,7 +250,7 @@ public class Builder {
 				return false;
 			}
 			try {
-				return world.setBlock(x, y, z, block, metadata, 0);
+				return world.setBlock(new BlockPos(x, y, z), block, metadata, 0);
 			} catch (Exception e) {
 				e.printStackTrace();
 				return false;
@@ -332,7 +333,7 @@ public class Builder {
 				this.lock();
 				world.notifyBlocksOfNeighborChange(finalX, finalY, finalZ, unity.block != null ? unity.block : Blocks.air);
 //				if (this.isStaff ) {
-					world.markBlockForUpdate(finalX, finalY, finalZ);
+					world.markBlockForUpdate(new BlockPos(finalX, finalY, finalZ));
 //				}
 			}
 		}

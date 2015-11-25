@@ -18,6 +18,8 @@ import com.gollum.core.tools.registry.InventoryRegistry;
 import com.gollum.core.tools.registry.ItemRegistry;
 
 import net.minecraftforge.fml.common.FMLModContainer;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
