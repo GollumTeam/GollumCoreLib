@@ -6,6 +6,7 @@ import com.gollum.core.ModGollumCoreLib;
 import com.gollum.core.common.container.GCLContainer;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
@@ -20,8 +21,8 @@ public class GCLGuiContainer extends GuiContainer {
 	protected int numRows = 0;
 	protected int numColumns;
 
-	public GCLGuiContainer(IInventory inventoryPlayer, IInventory inventoryBlock, int numColumns) {
-		super(new GCLContainer (inventoryPlayer, inventoryBlock, numColumns));
+	public GCLGuiContainer(IInventory inventoryPlayer, IInventory inventoryBlock, EntityPlayer player, int numColumns) {
+		super(new GCLContainer (inventoryPlayer, inventoryBlock, player, numColumns));
 		init(inventoryPlayer, inventoryBlock);
 	}
 	

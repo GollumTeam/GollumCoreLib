@@ -18,13 +18,13 @@ public class GCLContainer extends Container {
 	protected int numRows;
 	protected int numColumns;
 	
-	public GCLContainer(IInventory inventoryPlayer, IInventory inventoryBlock, int numColumns) {
+	public GCLContainer(IInventory inventoryPlayer, IInventory inventoryBlock, EntityPlayer player, int numColumns) {
 		
 		this.inventoryBlock = inventoryBlock;
 		this.numColumns     = numColumns;
 		this.numRows        = (int)Math.ceil ((double)inventoryBlock.getSizeInventory() / (double)this.numColumns);
 		
-		inventoryBlock.openInventory();
+		inventoryBlock.openInventory(player);
 		
 		int height = (this.numRows - 4) * SIZE_ITEM;
 		int distance = 106;
@@ -102,10 +102,10 @@ public class GCLContainer extends Container {
 	 * Called when the container is closed.
 	 */
 	@Override
-	public void onContainerClosed(EntityPlayer par1EntityPlayer) {
+	public void onContainerClosed(EntityPlayer player) {
 		
-		super.onContainerClosed(par1EntityPlayer);
-		this.inventoryBlock.closeInventory();
+		super.onContainerClosed(player);
+		this.inventoryBlock.closeInventory(player);
 		
 	}
 	

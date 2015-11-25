@@ -1,14 +1,16 @@
 package com.gollum.core.common.tileentities;
 
+import net.minecraft.block.BlockChest;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityLockable;
+import net.minecraft.util.ITickable;
 import net.minecraftforge.common.util.Constants;
 
-public abstract class GCLInventoryTileEntity extends TileEntity implements IInventory {
+public abstract class GCLInventoryTileEntity extends TileEntityLockable implements ITickable, IInventory {
 
 	protected ItemStack[] inventory;
 	protected int maxSize;
@@ -128,26 +130,27 @@ public abstract class GCLInventoryTileEntity extends TileEntity implements IInve
 	}
 	
 	@Override
-	public void openInventory() {
-		if (this.numUsingPlayers < 0) {
-			this.numUsingPlayers = 0;
+	public void openInventory(EntityPlayer player) {
+		if (!player.isSpectator()) {
+			if (this.numUsingPlayers < 0) {
+				this.numUsingPlayers = 0;
+			}
+			
+			++this.numUsingPlayers;
+			this.worldObj.addBlockEvent(this.pos, this.getBlockType(), 1, this.numUsingPlayers);
+			this.worldObj.notifyNeighborsOfStateChange(this.pos, this.getBlockType());
+			this.worldObj.notifyNeighborsOfStateChange(this.pos.down(), this.getBlockType());
 		}
-		
-		++this.numUsingPlayers;
-		this.worldObj.addBlockEvent(this.xCoord, this.yCoord, this.zCoord, this.getBlockType(), 1, this.numUsingPlayers);
-		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType());
-		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord - 1, this.zCoord, this.getBlockType());
 	}
 	
 	@Override
-	public void closeInventory () {
-		if (this.getBlockType() != null && this.getBlockType() == this.worldObj.getBlock(this.xCoord, this.yCoord, this.zCoord)) {
-			--this.numUsingPlayers;
-			
-			this.worldObj.addBlockEvent(this.xCoord, this.yCoord, this.zCoord, this.getBlockType(), 1, this.numUsingPlayers);
-			this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType());
-			this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord - 1, this.zCoord, this.getBlockType());
-		}
+	public void closeInventory (EntityPlayer player) {
+		if (!player.isSpectator() &&  this.getBlockType() == this.worldObj.getBlockState(pos).getBlock()) {
+            --this.numUsingPlayers;
+            this.worldObj.addBlockEvent(this.pos, this.getBlockType(), 1, this.numUsingPlayers);
+            this.worldObj.notifyNeighborsOfStateChange(this.pos, this.getBlockType());
+            this.worldObj.notifyNeighborsOfStateChange(this.pos.down(), this.getBlockType());
+        }
 	}
 	
 	/**
@@ -169,7 +172,7 @@ public abstract class GCLInventoryTileEntity extends TileEntity implements IInve
 	 * used directly.
 	 */
 	@Override
-	public boolean hasCustomInventoryName() {
+	public boolean hasCustomName() {
 		return true;
 	}
 	
@@ -190,8 +193,8 @@ public abstract class GCLInventoryTileEntity extends TileEntity implements IInve
 	public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer) {
 		
 		boolean rtn = false;
-		if (this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord) == this) {
-			rtn = par1EntityPlayer.getDistanceSq((double) this.xCoord + 0.5D, (double) this.yCoord + 0.5D, (double) this.zCoord + 0.5D) <= 64.0D;
+		if (this.worldObj.getTileEntity(this.pos) == this) {
+			rtn = par1EntityPlayer.getDistanceSq((double) this.pos.getX() + 0.5D, (double) this.pos.getY() + 0.5D, (double) this.pos.getZ() + 0.5D) <= 64.0D;
 		}
 		return rtn;
 	}
@@ -206,16 +209,16 @@ public abstract class GCLInventoryTileEntity extends TileEntity implements IInve
 	}
 
 	protected void playSoundClosedInventory() {
-		double x = (double) this.xCoord + 0.5D;
-		double y = (double) this.yCoord + 0.5D;
-		double z = (double) this.zCoord + 0.5D;
+		double x = (double) this.pos.getX() + 0.5D;
+		double y = (double) this.pos.getY() + 0.5D;
+		double z = (double) this.pos.getZ() + 0.5D;
 		this.worldObj.playSoundEffect(x, y, z, this.soundClosedInventory, this.volumeSoundOpenClosedInventory, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
 	}
 
 	protected void playSoundOpenInventory() {
-		double x = (double) this.xCoord + 0.5D;
-		double y = (double) this.yCoord + 0.5D;
-		double z = (double) this.zCoord + 0.5D;
+		double x = (double) this.pos.getX() + 0.5D;
+		double y = (double) this.pos.getY() + 0.5D;
+		double z = (double) this.pos.getZ() + 0.5D;
 		this.worldObj.playSoundEffect(x, y, z, this.soundOpenInventory, this.volumeSoundOpenClosedInventory, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
 	}
 	
@@ -228,8 +231,7 @@ public abstract class GCLInventoryTileEntity extends TileEntity implements IInve
 	 * e.g. the mob spawner uses this to count ticks and creates a new spawn
 	 * inside its implementation.
 	 */
-	public void updateEntity() {
-		super.updateEntity();
+	public void update() {
 		
 		this.prevDoorOpenProgress = this.doorOpenProgress;
 		
