@@ -110,11 +110,11 @@ public class BlockRegistry {
 				f2.setAccessible(true);
 				ObjectIntIdentityMap underlyingIntegerMap = (ObjectIntIdentityMap)f2.get(blockRegistry);
 				
-				int id = underlyingIntegerMap.func_148747_b(vanillaBlock);
+				int id = underlyingIntegerMap.get(vanillaBlock);
 				if (id == -1) {
 					throw new Exception(" 2 - Replace \""+registerName+"\" registery is KO because id not found");
 				}
-				underlyingIntegerMap.func_148746_a(block, id);
+				underlyingIntegerMap.put(block, id);
 				log.debug (" 2 - Replace \""+registerName+"\" registery : underlyingIntegerMap id="+id);
 				
 			} else {

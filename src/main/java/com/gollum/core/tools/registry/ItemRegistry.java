@@ -120,11 +120,11 @@ public class ItemRegistry {
 				f2.setAccessible(true);
 				ObjectIntIdentityMap underlyingIntegerMap = (ObjectIntIdentityMap)f2.get(itemRegistry);
 				
-				int id = underlyingIntegerMap.func_148747_b(vanillaItem);
+				int id = underlyingIntegerMap.get(vanillaItem);
 				if (id == -1) {
 					throw new Exception(" 2 - Replace \""+registerName+"\" registery is KO because id not found");
 				}
-				underlyingIntegerMap.func_148746_a(item, id);
+				underlyingIntegerMap.put(item, id);
 				log.debug (" 2 - Replace \""+registerName+"\" registery : underlyingIntegerMap id="+id);
 				
 				overrideStatItem(StatList.objectMineStats , item, vanillaItem);
@@ -153,20 +153,20 @@ public class ItemRegistry {
 				ShapedRecipes recipes = (ShapedRecipes)o;
 				if (recipes.getRecipeOutput().getItem() == vanillaItem) {
 					log.debug (" 4 - Block found in ShapedRecipes out");
-					recipes.getRecipeOutput().func_150996_a(item);
+					recipes.getRecipeOutput().setItem(item);
 				}
 				for (int i = 0; i < recipes.recipeItems.length; i++) {
 					ItemStack is = recipes.recipeItems[i];
 					if (is != null && is.getItem() == vanillaItem) {
 						log.debug (" 4 - Block found in ShapedRecipes");
-						is.func_150996_a(item);
+						is.setItem(item);
 					}
 				}
 			} else
 			if (o instanceof ShapelessRecipes) {
 				ShapelessRecipes recipes = (ShapelessRecipes)o;
 				if (recipes.getRecipeOutput().getItem() == vanillaItem) {
-					recipes.getRecipeOutput().func_150996_a(item);
+					recipes.getRecipeOutput().setItem(item);
 					log.debug (" 4 - Block found in ShapelessRecipes out");
 				}
 				Iterator subIt = recipes.recipeItems.iterator();
@@ -176,14 +176,14 @@ public class ItemRegistry {
 						ItemStack is = (ItemStack)subO;
 						if (is != null && is.getItem() == vanillaItem) {
 							log.debug (" 4 - Block found in ShapelessRecipes");
-							is.func_150996_a(item);
+							is.setItem(item);
 						}
 					}
 				}
 			} else if (o instanceof ShapedOreRecipe) {
 				ShapedOreRecipe recipes = (ShapedOreRecipe)o;
 				if (recipes.getRecipeOutput().getItem() == vanillaItem) {
-					recipes.getRecipeOutput().func_150996_a(item);
+					recipes.getRecipeOutput().setItem(item);
 					log.debug (" 4 - Block found in ShapedOreRecipe out");
 				}
 				 Object[] subList = recipes.getInput();
@@ -192,14 +192,14 @@ public class ItemRegistry {
 						ItemStack is = (ItemStack) subList[i];
 						if (is != null && is.getItem() == vanillaItem) {
 							log.debug (" 4 - Block found in ShapedOreRecipe");
-							is.func_150996_a(item);
+							is.setItem(item);
 						}
 					}
 				}
 			} else if (o instanceof ShapelessOreRecipe) {
 				ShapelessOreRecipe recipes = (ShapelessOreRecipe)o;
 				if (recipes.getRecipeOutput().getItem() == vanillaItem) {
-					recipes.getRecipeOutput().func_150996_a(item);
+					recipes.getRecipeOutput().setItem(item);
 					log.debug (" 4 - Block found in ShapelessOreRecipe out");
 				}
 				Iterator subIt = recipes.getInput().iterator();
@@ -209,7 +209,7 @@ public class ItemRegistry {
 						ItemStack is = (ItemStack)subO;
 						if (is != null && is.getItem() == vanillaItem) {
 							log.debug (" 4 - Block found in ShapelessOreRecipe");
-							is.func_150996_a(item);
+							is.setItem(item);
 						}
 					}
 				}

@@ -8,6 +8,7 @@ import com.gollum.core.common.building.BuildingParser;
 import com.gollum.core.inits.ModItems;
 
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.util.ChatComponentText;
@@ -32,7 +33,7 @@ public class CommandBuilding extends CommandBase {
 	}
 	
 	@Override
-	public void processCommand(ICommandSender sender, String[] arguments) {
+	public void processCommand(ICommandSender sender, String[] arguments) throws CommandException {
 		
 		if(arguments.length <= 0) {
 			throw new WrongUsageException(this.getCommandUsage(sender));
