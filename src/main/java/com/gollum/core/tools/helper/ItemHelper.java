@@ -7,7 +7,6 @@ import com.gollum.core.tools.helper.items.HItem;
 import com.gollum.core.tools.registry.ItemRegistry;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -50,8 +49,8 @@ public class ItemHelper implements IItemHelper {
 	 * Enregistrement du rendu de l'item. Appelé a la fin de l'Init
 	 */
 	public void registerRender () {
-		RenderItem registerMesher = Minecraft.getMinecraft().getRenderItem();
-		registerMesher.getItemModelMesher().register(this.parent, 0, new ModelResourceLocation(this.getRegisterName(), "inventory"));
+		ModGollumCoreLib.log.message("Auto register render: "+this.getRegisterName());
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(this.parent, -1, new ModelResourceLocation(this.getRegisterName(), "inventory"));
 	}
 	
 	/**
