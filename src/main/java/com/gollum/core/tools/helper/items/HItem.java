@@ -5,6 +5,8 @@ import com.gollum.core.tools.helper.IItemHelper;
 import com.gollum.core.tools.helper.ItemHelper;
 
 import net.minecraft.item.Item;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class HItem extends Item implements IItemHelper {
 
@@ -24,6 +26,15 @@ public class HItem extends Item implements IItemHelper {
 	 */
 	public void register () {
 		helper.register();
+	}
+
+	/**
+	 * Enregistrement du rendu de l'item. Appelé a la fin de l'Init
+	 */
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void registerRender () {
+		helper.registerRender();
 	}
 	
 	/**

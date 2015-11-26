@@ -5,14 +5,21 @@ import static com.gollum.core.ModGollumCoreLib.log;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.gollum.core.common.context.ModContext;
+import com.gollum.core.common.mod.GollumMod;
+import com.gollum.core.inits.ModItems;
 import com.gollum.core.tools.helper.IItemHelper;
 import com.gollum.core.tools.registered.RegisteredObjects;
 import com.gollum.core.utils.reflection.Reflection;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -27,6 +34,8 @@ import net.minecraft.util.RegistryNamespaced;
 import net.minecraft.util.RegistrySimple;
 import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
 import net.minecraftforge.fml.common.registry.GameData;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
@@ -34,26 +43,44 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 public class ItemRegistry {
 
 	private static ItemRegistry instance = new ItemRegistry();
-	
-	private ArrayList<IItemHelper> items = new ArrayList<IItemHelper>();
+
+	private HashMap<GollumMod, ArrayList<IItemHelper>> items = new HashMap<GollumMod, ArrayList<IItemHelper>>();
 	
 	public static ItemRegistry instance () {
 		return instance;
 	}
 	
 	public void add (IItemHelper item) {
-		if (!this.items.contains(item)) {
-			this.items.add(item);
+		GollumMod mod = ModContext.instance().getCurrent();
+		if (!this.items.containsKey(mod)) {
+			this.items.put(mod, new ArrayList<IItemHelper>());
+		}
+		ArrayList<IItemHelper> items = this.items.get(mod);
+		if (!items.contains(item)) {
+			items.add(item);
 		}
 	}
 	
 	public void registerAll () {
-		for (IItemHelper item : this.items) {
-			item.register();
+		GollumMod mod = ModContext.instance().getCurrent();
+		if (this.items.containsKey(mod)) {
+			ArrayList<IItemHelper> items = this.items.get(mod);
+			for (IItemHelper item : items) {
+				item.register();
+			}
 		}
-		this.items.clear();
 	}
 	
+	@SideOnly(Side.CLIENT)
+	public void registerRenders() {
+		GollumMod mod = ModContext.instance().getCurrent();
+		if (this.items.containsKey(mod)) {
+			ArrayList<IItemHelper> items = this.items.get(mod);
+			for (IItemHelper item : items) {
+				item.registerRender();
+			}
+		}
+	}
 	
 	public void overrideItemsClassField (Item vanillaItem, Item item) {
 		
