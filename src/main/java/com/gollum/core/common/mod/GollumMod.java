@@ -232,7 +232,6 @@ public abstract class GollumMod {
 		
 		this.init(event);
 		
-		
 		// Enregistre les rendus
 		ModGollumCoreLib.proxy.registerObjectRenders();
 		

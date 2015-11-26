@@ -18,6 +18,10 @@ import com.gollum.core.inits.ModTileEntities;
 import com.gollum.core.tools.registry.BlockRegistry;
 import com.gollum.core.tools.registry.ItemRegistry;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemModelMesher;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -65,6 +69,8 @@ public class ModGollumCoreLib extends GollumMod {
 	@EventHandler public void handler(FMLInitializationEvent event)     { super.handler (event); }
 	@EventHandler public void handler(FMLPostInitializationEvent event) { super.handler (event); }
 	
+	public static Item itemTutoriel;
+	
 	@EventHandler
 	@Override
 	public void preInit(FMLPreInitializationEvent event) {
@@ -77,13 +83,13 @@ public class ModGollumCoreLib extends GollumMod {
 		// Tandis que le loader de config est indépendant
 		
 		// Charge la configuration
-		this.config = (ConfigGollumCoreLib) new ConfigGollumCoreLib().loadConfig();
+		config = (ConfigGollumCoreLib) new ConfigGollumCoreLib().loadConfig();
 		
 		// Creation du logger
-		this.log = new Logger();
+		log = new Logger();
 		
 		// Creation du logger
-		this.i18n = new I18n();
+		i18n = new I18n();
 
 		// Create tab creative
 		ModCreativeTab.create();
@@ -92,10 +98,10 @@ public class ModGollumCoreLib extends GollumMod {
 		initGuiConfig();
 		
 		// Affecte la config
-		VersionChecker.setDisplay(this.config.versionChecker);
+		VersionChecker.setDisplay(config.versionChecker);
 		
 		// Gestion de la nivaeu de log
-		Logger.setLevelDisplay(this.config.level);
+		Logger.setLevelDisplay(config.level);
 		
 		// Creation du checker de version
 		new VersionChecker();
@@ -109,6 +115,9 @@ public class ModGollumCoreLib extends GollumMod {
 		BlockRegistry.instance().registerAll();
 		ItemRegistry.instance().registerAll();
 		
+		itemTutoriel = new ItemTutoriel();
+		GameRegistry.registerItem(itemTutoriel, "itemTutoriel");
+		
 	}
 	
 	/** 2 **/
@@ -121,7 +130,12 @@ public class ModGollumCoreLib extends GollumMod {
 		ModCreativeTab.init();
 		
 		// Enregistre les events
-		this.proxy.registerEvents();
+		proxy.registerEvents();
+		
+		if (proxy.isRemote()) {
+			ItemModelMesher mesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
+			mesher.register(itemTutoriel, 0, new ModelResourceLocation(this.getModId() + ":itemTutoriel", "inventory"));
+		}
 	}
 
 	/** 3 **/
