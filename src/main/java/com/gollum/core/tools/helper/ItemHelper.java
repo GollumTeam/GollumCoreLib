@@ -49,8 +49,8 @@ public class ItemHelper implements IItemHelper {
 	 * Enregistrement du rendu de l'item. Appelé a la fin de l'Init
 	 */
 	public void registerRender () {
-		ModGollumCoreLib.log.message("Auto register render: "+this.getRegisterName());
-		//Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(this.parent, -1, new ModelResourceLocation(this.getRegisterName(), "inventory"));
+		ModGollumCoreLib.log.message("Auto register render: "+this.mod.getModId()+":"+this.getRegisterName());
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(this.parent, 0, new ModelResourceLocation(this.mod.getModId()+":"+this.getRegisterName(), "inventory"));
 	}
 	
 	/**

@@ -69,8 +69,6 @@ public class ModGollumCoreLib extends GollumMod {
 	@EventHandler public void handler(FMLInitializationEvent event)     { super.handler (event); }
 	@EventHandler public void handler(FMLPostInitializationEvent event) { super.handler (event); }
 	
-	public static Item itemTutoriel;
-	
 	@EventHandler
 	@Override
 	public void preInit(FMLPreInitializationEvent event) {
@@ -115,9 +113,6 @@ public class ModGollumCoreLib extends GollumMod {
 		BlockRegistry.instance().registerAll();
 		ItemRegistry.instance().registerAll();
 		
-		itemTutoriel = new ItemTutoriel();
-		GameRegistry.registerItem(itemTutoriel, "itemTutoriel");
-		
 	}
 	
 	/** 2 **/
@@ -131,11 +126,6 @@ public class ModGollumCoreLib extends GollumMod {
 		
 		// Enregistre les events
 		proxy.registerEvents();
-		
-		if (proxy.isRemote()) {
-			ItemModelMesher mesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
-			mesher.register(itemTutoriel, 0, new ModelResourceLocation(this.getModId() + ":itemTutoriel", "inventory"));
-		}
 	}
 
 	/** 3 **/
