@@ -27,7 +27,7 @@ public class HItem extends Item implements IItemHelper {
 	public void register () {
 		helper.register();
 	}
-
+	
 	/**
 	 * Enregistrement du rendu de l'item. Appelé a la fin de l'Init
 	 */

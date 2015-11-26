@@ -123,29 +123,4 @@ public class BlockMetadataHelper extends BlockHelper implements IBlockMetadataHe
 		return (lastSubblock == -1) ? dammage : lastSubblock;
 	}
 	
-	/**
-	 * Enregistre les textures
-	 * Depuis la 1.5 on est obligé de charger les texture fichier par fichier
-	 */
-	/* TODO
-	@Override
-	public void registerBlockIcons(IIconRegister iconRegister) {
-		for (int metadata : this.listSubEnabled) {
-			this.blockIcons.put(metadata, this.loadTexture(iconRegister, "_"+metadata));
-		}
-	}
-	*/
-	
-	/* TODO
-	@Override
-	public IIcon getIcon(int side, int metadata) {
-		
-		int subBlock = this.getEnabledMetadata(metadata);
-		if (this.blockIcons.containsKey(subBlock)) {
-			return this.blockIcons.get(subBlock);
-		}
-		return null;
-	}
-	*/
-	
 }

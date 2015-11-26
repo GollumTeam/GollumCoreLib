@@ -87,22 +87,5 @@ public abstract class HBlockContainerMetadata extends HBlockContainer implements
 	public int getEnabledMetadata (int dammage) {
 		return this.helperMetadata.getEnabledMetadata(dammage);
 	}
-
-	//////////////////////////
-	//Gestion des textures  //
-	//////////////////////////
-
-	/* TODO
-	@Override
-	public void registerBlockIcons(IIconRegister iconRegister) {
-		if (helper.vanillaTexture) super.registerBlockIcons(iconRegister); else helperMetadata.registerBlockIcons(iconRegister);
-	}
-	*/
 	
-	/* TODO
-	@Override
-	public IIcon getIcon(int side, int metadata) {
-		return (helper.vanillaTexture) ? super.getIcon(side, metadata) : this.helperMetadata.getIcon(side, metadata);
-	}
-	*/
 }

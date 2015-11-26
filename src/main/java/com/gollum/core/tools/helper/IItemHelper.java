@@ -12,7 +12,7 @@ public interface IItemHelper {
 	 */
 	@SideOnly(Side.CLIENT)
 	public void register ();
-
+	
 	/**
 	 * Enregistrement du rendu de l'item. Appelé a la fin de l'Init
 	 */

@@ -2,7 +2,7 @@ package com.gollum.core.utils.math;
 
 
 
-public class Integer2d implements Cloneable, Comparable {
+public class Integer2d implements Cloneable, Comparable<Integer2d> {
 	
 	public int x = 0;
 	public int y = 0;
@@ -32,7 +32,7 @@ public class Integer2d implements Cloneable, Comparable {
 	}
 	
 	@Override
-	public int compareTo(Object o) {
+	public int compareTo(Integer2d o) {
 		
 		Integer2d int2d = (Integer2d)o;
 		

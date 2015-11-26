@@ -1,6 +1,6 @@
 package com.gollum.core.common.tileentities;
 
-import com.gollum.core.ModGollumCoreLib;
+import static com.gollum.core.ModGollumCoreLib.log;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -12,7 +12,7 @@ import net.minecraft.util.ITickable;
 public class TileEntityBlockProximitySpawn extends TileEntity implements ITickable {
 	
 	// Le mob
-	private String mobID;
+	private String mobID = "Pig";
 	short delay = 30;
 	
 	
@@ -40,7 +40,8 @@ public class TileEntityBlockProximitySpawn extends TileEntity implements ITickab
 			
 			// L'entity n'existe pas
 			if (entity == null) {
-				ModGollumCoreLib.log.warning("This mob "+this.mobID+" isn't  register");
+				log.warning("This mob "+this.mobID+" isn't  register");
+				this.worldObj.setBlockToAir(this.pos);
 				return;
 			}
 			

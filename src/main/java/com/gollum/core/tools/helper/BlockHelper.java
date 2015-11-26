@@ -9,6 +9,8 @@ import com.gollum.core.tools.registry.BlockRegistry;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -19,6 +21,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockHelper implements IBlockHelper {
 	
@@ -68,6 +72,16 @@ public class BlockHelper implements IBlockHelper {
 		
 		if(vanillaRegister) return;
 		GameRegistry.registerBlock (this.parent , this.itemBlockClass , this.getRegisterName ());
+	}
+	
+	/**
+	 * Enregistrement du rendu de l'item. Appelé a la fin de l'Init
+	 */
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void registerRender () {
+		ModGollumCoreLib.log.message("Auto register render: "+this.mod.getModId()+":"+this.getRegisterName());
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(this.getBlockItem(), 0, new ModelResourceLocation(this.mod.getModId()+":"+this.getRegisterName(), "inventory"));
 	}
 	
 	/**
@@ -129,88 +143,4 @@ public class BlockHelper implements IBlockHelper {
 		}
 	}
 	
-	//////////////////////////
-	//Gestion des textures  //
-	//////////////////////////
-	
-	/**
-	 * Clef qui permet de générer le nom du fichier de texture 
-	 * par rapport au register name en miniscule
-	 * @return
-	 */
-	@Override
-	public String getTextureKey () {
-		return ((IBlockHelper)this.parent).getRegisterName().toLowerCase();
-	}
-	
-	/**
-	* Charge une texture et affiche dans le log.
-	* Utilise le register name comme prefixe sauf si useTextureKey est à false
-	*
-	* @param iconRegister
-	* @param key
-	* @return
-	*/
-	/* TODO
-	public IIcon loadTexture(IIconRegister iconRegister) {
-		return this.loadTexture(iconRegister, "");
-	}
-	*/
-	
-	/**
-	* Charge une texture et affiche dans le log.
-	* Utilise le register name comme prefixe sauf si useTextureKey est à false
-	*
-	* @param iconRegister
-	* @param key
-	* @return
-	*/
-	/* TODO
-	public IIcon loadTexture(IIconRegister iconRegister, String sufixe) {
-		return this.loadTexture(iconRegister, sufixe, false);
-	}
-	*/
-	
-	/**
-	* Charge une texture et affiche dans le log.
-	* Utilise le register name comme prefixe sauf si dontUseTextureKey est à false
-	* 
-	* @param iconRegister
-	* @param key
-	* @return
-	*/
-	/* TODO
-	public IIcon loadTexture(IIconRegister iconRegister, String sufixe, boolean dontUseTextureKey) {
-		
-		String key = (dontUseTextureKey) ?  sufixe : (((IBlockHelper)this.parent).getTextureKey ()+sufixe);
-		String texture = this.mod.getModId().toLowerCase() + ":" + key;
-		
-		ModGollumCoreLib.log.debug ("Register icon " + texture + "\"");
-		return iconRegister.registerIcon(texture);
-	}
-	*/
-	
-	/**
-	 * Enregistre les textures
-	 * Depuis la 1.5 on est obligé de charger les texture fichier par fichier
-	 */
-	/* TODO
-	@Override
-	public void registerBlockIcons(IIconRegister iconRegister) {
-		((IBlockHelper)this.parent).setIcon (this.loadTexture(iconRegister));
-	}
-	*/
-	
-	/**
-	 * Setter de l'icon de l'objet
-	 * @param icon
-	 */
-	/* TODO
-	@Override
-	public IBlockHelper setIcon (IIcon icon) {
-		ModGollumCoreLib.log.warning("setIcon don't be call by helper. It's stub");
-		((IBlockHelper)this.parent).setIcon(icon);
-		return this;
-	}
-	*/
 }

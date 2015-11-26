@@ -38,7 +38,6 @@ public class ItemHelper implements IItemHelper {
 		return this;
 	}
 	
-	@SideOnly(Side.CLIENT)
 	@Override
 	public void register () {
 		this.parent.setUnlocalizedName(this.registerName);
@@ -48,6 +47,8 @@ public class ItemHelper implements IItemHelper {
 	/**
 	 * Enregistrement du rendu de l'item. Appelé a la fin de l'Init
 	 */
+	@SideOnly(Side.CLIENT)
+	@Override
 	public void registerRender () {
 		ModGollumCoreLib.log.message("Auto register render: "+this.mod.getModId()+":"+this.getRegisterName());
 		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(this.parent, 0, new ModelResourceLocation(this.mod.getModId()+":"+this.getRegisterName(), "inventory"));

@@ -21,24 +21,10 @@ public interface IBlockHelper {
 	 */
 	public String getRegisterName();
 	
-	/* TODO
-	public void registerBlockIcons(IIconRegister iconRegister);
-	*/
-	
 	/**
-	 * Setter de l'icon de l'objet
-	 * @param icon
+	 * Enregistrement du rendu du bloc. Appelé a la fin de l'Init
 	 */
-	/* TODO
-	public IBlockHelper setIcon (IIcon icon);
-	*/
-	
-	/**
-	 * Clef qui permet de générer le nom du fichier de texture 
-	 * par rapport au register name en miniscule
-	 * @return
-	 */
-	public String getTextureKey ();
+	public void registerRender();
 	
 	/**
 	 * Affect la class de l'objet qui servira item pour le block

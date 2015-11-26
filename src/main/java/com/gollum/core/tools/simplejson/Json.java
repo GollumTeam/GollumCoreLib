@@ -289,7 +289,7 @@ public class Json implements Cloneable {
 		return create();
 	}
 	
-	public JsonNodeBuilder argoJson() {
+	public JsonNodeBuilder<?> argoJson() {
 		return JsonNodeBuilders.aNullBuilder();
 	}
 	

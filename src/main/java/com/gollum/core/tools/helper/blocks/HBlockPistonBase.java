@@ -6,9 +6,12 @@ import com.gollum.core.tools.helper.IBlockHelper;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPistonBase;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class HBlockPistonBase extends BlockPistonBase implements IBlockHelper {
@@ -48,6 +51,15 @@ public class HBlockPistonBase extends BlockPistonBase implements IBlockHelper {
 		helper.register();
 	}
 	
+	/**
+	 * Enregistrement du rendu du bloc. Appelé a la fin de l'Init
+	 */
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void registerRender () {
+		helper.registerRender();
+	}
+	
 	@Override
 	public String getRegisterName() {
 		return helper.getRegisterName();
@@ -74,11 +86,12 @@ public class HBlockPistonBase extends BlockPistonBase implements IBlockHelper {
 	/**
 	 * Libère les items de l'inventory
 	 */
-	/* TODO
-	public void breakBlockInventory(World world, int x, int y, int z, Block oldBlock) {
-		helper.breakBlockInventory(world, x, y, z, oldBlock);
+	@Override
+	public void breakBlock(World world, BlockPos pos, IBlockState state) {
+		helper.breakBlock(world, pos, state);
+		super.breakBlock(world, pos, state);
 	}
-	*/
+	
 	
 	//////////////////////////
 	//Gestion des textures  //
@@ -128,38 +141,7 @@ public class HBlockPistonBase extends BlockPistonBase implements IBlockHelper {
 		return this;
 	}
 	*/
-
-	/* TODO
-	@Override
-	public IIcon getIcon(int side, int metadata) {
-		
-		if (helper.vanillaTexture) return super.getIcon(side, metadata);
-		
-		int orientation = getPistonOrientation(metadata);
-		if (orientation > 5) {
-			return this.iconTop;
-		}
-		if (side == orientation) {
-			if (
-				(isExtended(metadata)) ||
-				(this.minX > 0.0D) || (this.minY > 0.0D) || (this.minZ > 0.0D) ||
-				(this.maxX < 1.0D) || (this.maxY < 1.0D) || (this.maxZ < 1.0D)
-			) {
-				return this.iconOpen;
-			}
-			
-			return this.iconTop;
-		}
-		
-		return side != Facing.oppositeSide[orientation] ? this.blockIcon : this.iconBottom;
-	}
-	*/
 	
-	@Override
-	public String getTextureKey() {
-		return helper.getTextureKey();
-	}
-
 	/* TODO
 	@Override
 	@SideOnly(Side.CLIENT)

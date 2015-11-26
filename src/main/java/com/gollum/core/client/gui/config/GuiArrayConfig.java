@@ -118,7 +118,7 @@ public class GuiArrayConfig extends GuiConfig {
 		
 		ArrayList<Object> values = this.entryList.getValuesByIndex();
 		
-		Class type = this.parentEntry.getValue().getClass().getComponentType();
+		Class<?> type = this.parentEntry.getValue().getClass().getComponentType();
 		Object rtn = Array.newInstance(type,values.size());
 		
 		int i = 0;

@@ -13,10 +13,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockProximitySpawn extends HBlockContainer {
 
@@ -29,17 +26,6 @@ public class BlockProximitySpawn extends HBlockContainer {
 	@Override
 	public TileEntity createNewTileEntity(World world, int i) {
 		return new TileEntityBlockProximitySpawn();
-	}
-
-	/* TODO
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister iconRegister) {
-	}
-	*/
-	
-	@Override
-	public boolean isAir(IBlockAccess world, BlockPos pos) {
-		return true;
 	}
 	
 	/**
@@ -62,6 +48,14 @@ public class BlockProximitySpawn extends HBlockContainer {
 	@Override
 	public AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos, IBlockState state) {
 		return null;
+	}
+	
+	/**
+	 * Returns if this block is collidable (only used by Fire). Args: x, y, z
+	 */
+	@Override
+	public boolean isCollidable() {
+		return false;
 	}
 	
 	/**

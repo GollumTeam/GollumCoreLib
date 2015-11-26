@@ -95,10 +95,4 @@ public class HBlockMetadata extends HBlock implements IBlockMetadataHelper {
 		return ((IBlockMetadataHelper) this.helper).getEnabledMetadata(dammage);
 	}
 	
-	/* TODO
-	@Override
-	public IIcon getIcon(int side, int metadata) {
-		return  (helper.vanillaTexture) ? super.getIcon(side, metadata) : ((IBlockMetadataHelper) this.helper).getIcon(side, metadata);
-	}
-	*/
 }

@@ -2,7 +2,7 @@ package com.gollum.core.utils.math;
 
 
 
-public class Float3d implements Cloneable, Comparable {
+public class Float3d implements Cloneable, Comparable<Float3d> {
 	
 	public float x = 0;
 	public float y = 0;
@@ -35,7 +35,7 @@ public class Float3d implements Cloneable, Comparable {
 	}
 	
 	@Override
-	public int compareTo(Object o) {
+	public int compareTo(Float3d o) {
 		
 		Float3d int3d = (Float3d)o;
 		

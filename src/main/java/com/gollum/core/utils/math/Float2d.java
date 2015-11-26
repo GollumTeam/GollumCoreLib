@@ -2,7 +2,7 @@ package com.gollum.core.utils.math;
 
 
 
-public class Float2d implements Cloneable, Comparable {
+public class Float2d implements Cloneable, Comparable<Float2d> {
 	
 	public float x = 0.0F;
 	public float y = 0.0F;
@@ -32,9 +32,9 @@ public class Float2d implements Cloneable, Comparable {
 	}
 	
 	@Override
-	public int compareTo(Object o) {
+	public int compareTo(Float2d o) {
 		
-		Float2d int2d = (Float2d)o;
+		Float2d int2d = o;
 		
 		if (this.x < int2d.x) { return -1; }
 		if (this.x > int2d.x) { return  1; }

@@ -5,9 +5,13 @@ import static com.gollum.core.ModGollumCoreLib.log;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
+import com.gollum.core.common.context.ModContext;
+import com.gollum.core.common.mod.GollumMod;
 import com.gollum.core.tools.helper.IBlockHelper;
+import com.gollum.core.tools.helper.IItemHelper;
 import com.gollum.core.tools.registered.RegisteredObjects;
 import com.gollum.core.utils.reflection.Reflection;
 
@@ -18,31 +22,51 @@ import net.minecraft.util.RegistryNamespaced;
 import net.minecraft.util.RegistrySimple;
 import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
 import net.minecraftforge.fml.common.registry.GameData;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 
 public class BlockRegistry {
 
 	private static BlockRegistry instance = new BlockRegistry();
 	
-	private ArrayList<IBlockHelper> blocks = new ArrayList<IBlockHelper>();
+	private HashMap<GollumMod, ArrayList<IBlockHelper>> blocks = new HashMap<GollumMod, ArrayList<IBlockHelper>>();
 	
 	public static BlockRegistry instance () {
 		return instance;
 	}
 	
 	public void add (IBlockHelper block) {
-		if (!this.blocks.contains(block)) {
-			this.blocks.add(block);
+		GollumMod mod = ModContext.instance().getCurrent();
+		if (!this.blocks.containsKey(mod)) {
+			this.blocks.put(mod, new ArrayList<IBlockHelper>());
+		}
+		ArrayList<IBlockHelper> blocks = this.blocks.get(mod);
+		if (!blocks.contains(block)) {
+			blocks.add(block);
 		}
 	}
 	
 	public void registerAll () {
-		for (IBlockHelper block : this.blocks) {
-			block.register();
+		GollumMod mod = ModContext.instance().getCurrent();
+		if (this.blocks.containsKey(mod)) {
+			ArrayList<IBlockHelper> blocks = this.blocks.get(mod);
+			for (IBlockHelper block : blocks) {
+				block.register();
+			}
 		}
-		this.blocks.clear();
 	}
 	
+	@SideOnly(Side.CLIENT)
+	public void registerRenders() {
+		GollumMod mod = ModContext.instance().getCurrent();
+		if (this.blocks.containsKey(mod)) {
+			ArrayList<IBlockHelper> blocks = this.blocks.get(mod);
+			for (IBlockHelper block : blocks) {
+				block.registerRender();
+			}
+		}
+	}
 	
 	public void overrideBlocksClassField (Block vanillaBlock, Block block) {
 		
