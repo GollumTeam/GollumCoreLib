@@ -4,10 +4,17 @@ import java.util.Map.Entry;
 import java.util.TreeSet;
 
 import com.gollum.core.client.gui.config.element.ListElement;
+import com.gollum.core.client.gui.config.entry.ConfigEntry;
 import com.gollum.core.client.gui.config.entry.ListEntry;
+import com.gollum.core.client.gui.config.entry.ListSlotEntry;
 import com.gollum.core.tools.registered.RegisteredObjects;
 
+import cpw.mods.fml.client.config.GuiButtonExt;
+import net.minecraft.block.Block;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.audio.SoundCategory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 public class GuiSoundConfig extends GuiListConfig {
 
@@ -31,4 +38,26 @@ public class GuiSoundConfig extends GuiListConfig {
 		}
 		this.filter();
  	}
+	
+	/**
+	 * Draws the screen and all the components in it.
+	 */
+	@Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+		for (int i = 0; i < this.entryList.getSize(); i++) {
+			ConfigEntry entry = this.entryList.getEntry(i);
+			if (entry instanceof ListSlotEntry) {
+				((ListSlotEntry) entry).action = this.parentEntry.tradIfExist("sound_play");
+			}
+		}
+		
+		super.drawScreen(mouseX, mouseY, partialTicks);
+	}
+	
+	@Override
+	public void runSlotAction(int slotIndex, GuiButtonExt btAction, boolean doubleClick, int mouseX, int mouseY) {
+		String sound = (String) this.entryList.getEntry(slotIndex).getValue();
+		this.mc.getSoundHandler().stopSounds();
+		this.mc.getSoundHandler().playSound(PositionedSoundRecord.func_147674_a(new ResourceLocation(sound), 1.2F));;
+	}
 }

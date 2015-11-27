@@ -137,7 +137,7 @@ public class RegisteredObjects {
 		TreeMap<SoundCategory, TreeSet<String>> sounds = new TreeMap<SoundCategory, TreeSet<String>>();
 		
 		try {
-			SoundHandler soundHandler = (SoundHandler) Reflection.getFirstValueByFieldType(Minecraft.getMinecraft(), SoundHandler.class);
+			SoundHandler soundHandler = Minecraft.getMinecraft().getSoundHandler();
 			SoundRegistry soundRegistry = (SoundRegistry) Reflection.getFirstValueByFieldType(soundHandler, SoundRegistry.class);
 			
 			for (Object key: soundRegistry.getKeys()) {

@@ -5,8 +5,10 @@ import com.gollum.core.client.gui.config.GuiSoundConfig;
 import com.gollum.core.client.gui.config.element.ConfigElement;
 import com.gollum.core.tools.registered.RegisteredObjects;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundCategory;
+import net.minecraft.item.ItemStack;
 
 public class SoundEntry extends ListEntry {
 

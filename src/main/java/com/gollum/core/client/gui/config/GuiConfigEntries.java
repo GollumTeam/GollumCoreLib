@@ -18,6 +18,8 @@ import com.gollum.core.client.gui.config.entry.ConfigEntry;
 import com.gollum.core.common.config.ConfigProp;
 import com.gollum.core.utils.reflection.Reflection;
 
+import cpw.mods.fml.client.config.GuiButtonExt;
+
 public class GuiConfigEntries extends GuiListExtended {
 
 	protected Minecraft mc;

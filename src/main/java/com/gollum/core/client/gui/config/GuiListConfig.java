@@ -25,7 +25,7 @@ public class GuiListConfig extends GuiConfig {
 		private int isCliqued = 0;
 
 		public GuiButtonSlot(GuiListConfig parent, ArrayList<String> values) {
-			super(parent.mc, parent.entryList.controlX + 40, parent.height, parent.getTopEntryList(), parent.height - 30, 20);
+			super(parent.mc, parent.entryList.controlX + 40, parent.height, parent.getTopEntryList(), parent.height - 32, 20);
 			this.parent = parent;
 			this.values = values;
 			
@@ -57,12 +57,14 @@ public class GuiListConfig extends GuiConfig {
 		@Override
 		protected void elementClicked(int slotIndex, boolean doubleClick, int mouseX, int mouseY) {
 			if (this.buttons.get(slotIndex).mousePressed(this.parent.mc, mouseX, mouseY)) {
+				this.buttons.get(slotIndex).func_146113_a(this.parent.mc.getSoundHandler());
 				this.isCliqued = slotIndex;
 				if (slotIndex == 0) {
 					this.parent.currentGroup = this.parent.parentEntry.tradIfExist("all");
 				} else {
 					this.parent.currentGroup = this.values.get(slotIndex-1);
 				}
+				this.parent.resetEntries();
 			}
 		}
 
@@ -99,6 +101,7 @@ public class GuiListConfig extends GuiConfig {
 	public String currentGroup;
 	
 	GuiButtonSlot groupList = null;
+	private ArrayList<String> groups = null;
 	
 	public GuiListConfig(ListEntry listEntry) {
 		super(listEntry.parent.parent);
@@ -125,6 +128,9 @@ public class GuiListConfig extends GuiConfig {
 		this.filter();
  	}
 	
+	public void runSlotAction(int slotIndex, GuiButtonExt btAction, boolean doubleClick, int mouseX, int mouseY) {
+	}
+	
 	protected void filter() {
 		for (ConfigElement complement : new ArrayList<ConfigElement>(this.configElements)) {
 			if (
@@ -134,22 +140,27 @@ public class GuiListConfig extends GuiConfig {
 			) {
 				this.configElements.remove(complement);
 			}
-		}
-		if (this.currentGroup != this.parentEntry.tradIfExist("all")) {
-			
-		}
-	}
-
-	public ArrayList<String> getAllGroup () {
-		ArrayList<String> groups = new ArrayList<String>();
-		
-		for (ConfigElement complement : new ArrayList<ConfigElement>(this.configElements)) {
-			String group = ((ListElement)complement).group;
-			if (!groups.contains(group)) {
-				groups.add(group);
+			if (!this.currentGroup.equals(this.parentEntry.tradIfExist("all"))) {
+				if (!this.currentGroup.equals(((ListElement)complement).group)) {
+					this.configElements.remove(complement);
+				}
 			}
 		}
-		return groups;
+	}
+	
+	public ArrayList<String> getAllGroup () {
+		
+		if (this.groups == null) {
+			this.groups = new ArrayList<String>();
+			
+			for (ConfigElement complement : new ArrayList<ConfigElement>(this.configElements)) {
+				String group = ((ListElement)complement).group;
+				if (!this.groups.contains(group)) {
+					this.groups.add(group);
+				}
+			}
+		}
+		return this.groups;
 	}
 
 	public boolean showGroupList () {
@@ -198,14 +209,18 @@ public class GuiListConfig extends GuiConfig {
 			
 			if (!this.searchValue.equals(this.search.getText().trim())) {
 				this.searchValue = this.search.getText().trim();
-				this.configElements = new ArrayList<ConfigElement>();
-				this.entryList = null;
-				this.needsRefresh = true;
-				super.initGui();
+				this.resetEntries();
 			}
 			
 		}
 		
+	}
+	
+	public void resetEntries() {
+		this.configElements = new ArrayList<ConfigElement>();
+		this.entryList = null;
+		this.needsRefresh = true;
+		super.initGui();
 	}
 	
 	@Override
@@ -266,5 +281,4 @@ public class GuiListConfig extends GuiConfig {
 		super.mouseClicked(x, y, mouseEvent);
 		this.search.mouseClicked(x, y, mouseEvent);
 	}
-	
 }

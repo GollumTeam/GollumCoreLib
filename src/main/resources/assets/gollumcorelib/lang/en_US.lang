@@ -16,6 +16,10 @@ gollumcorelib.config.BuildingsList=Buildings list
 gollumcorelib.config.General=General
 
 gollumcorelib.config.search=Search
+gollumcorelib.config.all=All
+gollumcorelib.config.sound=Sounds
+gollumcorelib.config.sound_play=Play
+gollumcorelib.config.sound_stop=Stop
 
 gollumcorelib.config.group=group
 gollumcorelib.config.globalSpawnRate=spawn rate of group
