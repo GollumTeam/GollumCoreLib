@@ -22,7 +22,7 @@ import com.gollum.core.client.gui.config.entry.LongEntry;
 import com.gollum.core.client.gui.config.entry.ModIdEntry;
 import com.gollum.core.client.gui.config.entry.ShortEntry;
 import com.gollum.core.client.gui.config.entry.SliderEntry;
-import com.gollum.core.client.gui.config.entry.SoundCategoryEntry;
+import com.gollum.core.client.gui.config.entry.SoundEntry;
 import com.gollum.core.client.gui.config.entry.StringEntry;
 import com.gollum.core.common.config.ConfigProp;
 import com.gollum.core.common.config.JsonConfigProp;
@@ -84,7 +84,7 @@ public abstract class ConfigElement {
 			if (prop.type() == ConfigProp.Type.ITEM)  { return ItemEntry .class; }
 			if (prop.type() == ConfigProp.Type.BLOCK) { return BlockEntry.class; }
 			if (prop.type() == ConfigProp.Type.BIOME) { return BiomeEntry.class; }
-			if (prop.type() == ConfigProp.Type.SOUND) { return SoundCategoryEntry.class; }
+			if (prop.type() == ConfigProp.Type.SOUND) { return SoundEntry.class; }
 			
 			return StringEntry.class;
 		}

@@ -1,15 +1,14 @@
 package com.gollum.core.client.gui.config.entry;
 
+import com.gollum.core.client.gui.config.GuiConfigEntries;
+import com.gollum.core.client.gui.config.GuiSoundConfig;
+import com.gollum.core.client.gui.config.element.ConfigElement;
+import com.gollum.core.tools.registered.RegisteredObjects;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundCategory;
 
-import com.gollum.core.client.gui.config.GuiConfigEntries;
-import com.gollum.core.client.gui.config.GuiModIdConfig;
-import com.gollum.core.client.gui.config.GuiSoundCategoryConfig;
-import com.gollum.core.client.gui.config.GuiSoundConfig;
-import com.gollum.core.client.gui.config.element.ConfigElement;
-
-public class SoundEntry extends ListButtonSlotEntry {
+public class SoundEntry extends ListEntry {
 
 	public SoundEntry(int index, Minecraft mc, GuiConfigEntries parent, ConfigElement configElement) {
 		super(index, mc, parent, configElement);
@@ -22,7 +21,17 @@ public class SoundEntry extends ListButtonSlotEntry {
 	
 	@Override
 	public void updateValueButtonText(String text) {
-		text = this.buttonValue != null ? ((SoundCategory)this.buttonValue).getCategoryName() : ((SoundCategory)this.value).getCategoryName();
-		this.updateValueButtonText(text, this.COLOR_NONE);
+		SoundCategory category = RegisteredObjects.instance().getSoundCategoryBySound(this.value.toString());
+		if (category == null) {
+			text = "[not found] " + this.value;
+		} else {
+			text = "["+category.getCategoryName()+"] " + this.value;
+		}
+		super.updateValueButtonText(text);
+	}
+	
+	@Override
+	public boolean hasSearch () {
+		return true;
 	}
 }

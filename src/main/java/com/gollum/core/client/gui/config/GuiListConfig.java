@@ -52,6 +52,18 @@ public class GuiListConfig extends GuiConfig {
 		}
 	}
 
+	public ArrayList<String> getAllGroup () {
+		ArrayList<String> groups = new ArrayList<String>();
+		
+		for (ConfigElement complement : new ArrayList<ConfigElement>(this.configElements)) {
+			String group = ((ListElement)complement).group;
+			if (!groups.contains(group)) {
+				groups.add(group);
+			}
+		}
+		return groups;
+	}
+
 	@Override
 	public void initGui() {
 		
@@ -62,7 +74,7 @@ public class GuiListConfig extends GuiConfig {
 	}
 	
 	public int getTopEntryList() {
-		return super.getTopEntryList() + 20;
+		return super.getTopEntryList() + (this.parentEntry.hasSearch() ? 20 : 0);
 	}
 	
 	@Override
