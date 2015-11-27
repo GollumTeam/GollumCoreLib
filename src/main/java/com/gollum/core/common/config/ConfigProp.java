@@ -13,6 +13,7 @@ public @interface ConfigProp {
 		ITEM,
 		BLOCK,
 		BIOME,
+		SOUND,
 		MOD,
 		SLIDER,
 		LIST_INLINE,
