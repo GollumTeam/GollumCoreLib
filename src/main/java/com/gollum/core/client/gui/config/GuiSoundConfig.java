@@ -58,6 +58,6 @@ public class GuiSoundConfig extends GuiListConfig {
 	public void runSlotAction(int slotIndex, GuiButtonExt btAction, boolean doubleClick, int mouseX, int mouseY) {
 		String sound = (String) this.entryList.getEntry(slotIndex).getValue();
 		this.mc.getSoundHandler().stopSounds();
-		this.mc.getSoundHandler().playSound(PositionedSoundRecord.func_147674_a(new ResourceLocation(sound), 1.2F));;
+		this.mc.getSoundHandler().playSound(PositionedSoundRecord.func_147674_a(new ResourceLocation(sound), 1.0F));;
 	}
 }
