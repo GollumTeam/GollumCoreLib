@@ -1,12 +1,11 @@
 package com.gollum.core.common.building.handler;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockTrapDoor;
-import net.minecraft.block.BlockTripWireHook;
-import net.minecraft.world.World;
-
 import com.gollum.core.ModGollumCoreLib;
 import com.gollum.core.common.building.Building.Unity;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockTripWireHook;
+import net.minecraft.world.World;
 
 public class BlockTripWireHookBuildingHandler extends BuildingBlockHandler {
 

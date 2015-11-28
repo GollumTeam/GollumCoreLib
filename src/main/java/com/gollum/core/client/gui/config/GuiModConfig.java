@@ -2,12 +2,12 @@ package com.gollum.core.client.gui.config;
 
 import java.util.ArrayList;
 
-import net.minecraft.client.gui.GuiScreen;
-
 import com.gollum.core.client.gui.config.element.SubConfigElement;
 import com.gollum.core.client.gui.config.element.SubGuiElement;
 import com.gollum.core.common.config.ConfigLoader;
 import com.gollum.core.common.config.ConfigLoader.ConfigLoad;
+
+import net.minecraft.client.gui.GuiScreen;
 
 public class GuiModConfig extends GuiConfig {
 	

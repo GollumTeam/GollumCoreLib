@@ -1,7 +1,5 @@
 package com.gollum.core.client.gui.config.entry;
 
-import java.util.ArrayList;
-
 import com.gollum.core.client.gui.config.GuiConfigEntries;
 import com.gollum.core.client.gui.config.GuiListConfig;
 import com.gollum.core.client.gui.config.element.ConfigElement;

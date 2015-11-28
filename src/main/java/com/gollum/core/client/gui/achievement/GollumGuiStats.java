@@ -1,12 +1,8 @@
 package com.gollum.core.client.gui.achievement;
 
-import static com.gollum.core.ModGollumCoreLib.i18n;
-import static com.gollum.core.ModGollumCoreLib.log;
-
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import com.gollum.core.common.stats.StatsPage;
@@ -18,9 +14,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiSlot;
 import net.minecraft.client.gui.achievement.GuiStats;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.stats.StatBase;
-import net.minecraft.stats.StatBasic;
 import net.minecraft.stats.StatFileWriter;
 import net.minecraft.stats.StatList;
 

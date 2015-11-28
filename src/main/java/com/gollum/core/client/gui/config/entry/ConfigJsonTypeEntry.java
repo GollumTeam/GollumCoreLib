@@ -1,12 +1,12 @@
 package com.gollum.core.client.gui.config.entry;
 
-import net.minecraft.client.Minecraft;
-
 import com.gollum.core.client.gui.config.GuiConfigEntries;
 import com.gollum.core.client.gui.config.element.ConfigElement;
 import com.gollum.core.common.config.ConfigProp;
 import com.gollum.core.common.config.type.ConfigJsonType;
 import com.gollum.core.tools.simplejson.Json;
+
+import net.minecraft.client.Minecraft;
 
 public class ConfigJsonTypeEntry extends JsonEntry {
 

@@ -1,6 +1,5 @@
 package com.gollum.core.tools.registered;
 
-import java.util.ArrayList;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -155,7 +154,8 @@ public class RegisteredObjects {
 		}
 		return sounds;
 	}
-
+	
+	@SideOnly(Side.CLIENT)
 	public SoundCategory getSoundCategoryBySound(String sound) {
 		for (Entry<SoundCategory, TreeSet<String>> entry: this.getAllSound().entrySet()) {
 			if (((TreeSet<String>)entry.getValue()).contains(sound)) {

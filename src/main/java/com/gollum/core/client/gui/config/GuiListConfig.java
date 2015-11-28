@@ -11,8 +11,6 @@ import cpw.mods.fml.client.config.GuiButtonExt;
 import net.minecraft.client.gui.GuiSlot;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.Tessellator;
-import scala.annotation.varargs;
-import sun.awt.SunHints.Value;
 
 public class GuiListConfig extends GuiConfig {
 

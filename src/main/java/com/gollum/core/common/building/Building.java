@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeSet;
 
+import com.gollum.core.utils.math.Integer3d;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.world.biome.BiomeGenBase;
-
-import com.gollum.core.utils.math.Integer3d;
 
 public class Building {
 	

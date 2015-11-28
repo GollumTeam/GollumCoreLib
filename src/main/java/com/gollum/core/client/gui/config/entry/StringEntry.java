@@ -1,15 +1,16 @@
 package com.gollum.core.client.gui.config.entry;
 
 import static com.gollum.core.ModGollumCoreLib.log;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.client.renderer.Tessellator;
 
 import org.lwjgl.input.Keyboard;
 
 import com.gollum.core.client.gui.config.GuiConfigEntries;
 import com.gollum.core.client.gui.config.element.ConfigElement;
 import com.gollum.core.common.config.ConfigProp;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.renderer.Tessellator;
 
 public class StringEntry extends ConfigEntry {
 

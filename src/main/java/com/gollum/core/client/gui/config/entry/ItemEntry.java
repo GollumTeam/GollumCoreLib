@@ -1,10 +1,10 @@
 package com.gollum.core.client.gui.config.entry;
 
-import net.minecraft.client.Minecraft;
-
 import com.gollum.core.client.gui.config.GuiConfigEntries;
 import com.gollum.core.client.gui.config.GuiItemConfig;
 import com.gollum.core.client.gui.config.element.ConfigElement;
+
+import net.minecraft.client.Minecraft;
 
 public class ItemEntry extends ListEntry {
 

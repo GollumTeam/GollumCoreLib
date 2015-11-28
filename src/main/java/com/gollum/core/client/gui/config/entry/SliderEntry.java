@@ -1,12 +1,11 @@
 package com.gollum.core.client.gui.config.entry;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.Tessellator;
-
 import com.gollum.core.client.gui.config.GuiConfigEntries;
 import com.gollum.core.client.gui.config.element.ConfigElement;
 
 import cpw.mods.fml.client.config.GuiSlider;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.Tessellator;
 
 public class SliderEntry extends ConfigEntry {
 	

@@ -11,6 +11,7 @@
 package argo.jdom;
 
 import static argo.jdom.JsonNodeDoesNotMatchChainedJsonNodeSelectorException.getShortFormFailPath;
+
 import argo.format.CompactJsonFormatter;
 import argo.format.JsonFormatter;
 

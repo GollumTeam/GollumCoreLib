@@ -13,13 +13,6 @@ import java.util.TreeMap;
 
 import javax.imageio.ImageIO;
 
-import net.minecraft.item.Item;
-import argo.jdom.JdomParser;
-import argo.jdom.JsonNode;
-import argo.jdom.JsonRootNode;
-import argo.jdom.JsonStringNode;
-import argo.saj.InvalidSyntaxException;
-
 import com.gollum.core.ModGollumCoreLib;
 import com.gollum.core.common.building.Building.GroupSubBuildings;
 import com.gollum.core.common.building.Building.ListSubBuildings;
@@ -28,6 +21,13 @@ import com.gollum.core.common.building.Building.Unity;
 import com.gollum.core.common.building.Building.Unity.Content;
 import com.gollum.core.common.resources.ResourceLoader;
 import com.gollum.core.tools.registered.RegisteredObjects;
+
+import argo.jdom.JdomParser;
+import argo.jdom.JsonNode;
+import argo.jdom.JsonRootNode;
+import argo.jdom.JsonStringNode;
+import argo.saj.InvalidSyntaxException;
+import net.minecraft.item.Item;
 
 public class BuildingParser {
 	

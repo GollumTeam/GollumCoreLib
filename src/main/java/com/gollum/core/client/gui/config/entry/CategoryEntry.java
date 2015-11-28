@@ -3,11 +3,11 @@ package com.gollum.core.client.gui.config.entry;
 import java.lang.reflect.Array;
 import java.util.LinkedHashMap;
 
-import net.minecraft.client.Minecraft;
-
 import com.gollum.core.client.gui.config.GuiConfigEntries;
 import com.gollum.core.client.gui.config.GuiValueConfig;
 import com.gollum.core.client.gui.config.element.ConfigElement;
+
+import net.minecraft.client.Minecraft;
 
 public class CategoryEntry extends ButtonEntry {
 	

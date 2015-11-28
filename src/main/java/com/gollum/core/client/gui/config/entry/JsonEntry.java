@@ -2,9 +2,6 @@ package com.gollum.core.client.gui.config.entry;
 
 import java.lang.reflect.Array;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.Tessellator;
-
 import com.gollum.core.client.gui.config.GuiConfigEntries;
 import com.gollum.core.client.gui.config.element.ConfigElement;
 import com.gollum.core.client.gui.config.element.TypedValueElement;
@@ -22,6 +19,9 @@ import com.gollum.core.tools.simplejson.JsonLong;
 import com.gollum.core.tools.simplejson.JsonShort;
 import com.gollum.core.tools.simplejson.JsonString;
 import com.google.gson.JsonObject;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.Tessellator;
 
 public class JsonEntry extends ConfigEntry implements IProxyEntry {
 	

@@ -8,12 +8,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 
-import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.init.Blocks;
-import net.minecraft.world.biome.BiomeGenBase;
-
 import com.gollum.core.client.gui.config.GuiConfigEntries;
 import com.gollum.core.client.gui.config.element.ConfigElement;
 import com.gollum.core.client.gui.config.entry.ConfigEntry.Event.Type;
@@ -24,6 +18,12 @@ import com.gollum.core.common.config.type.BuildingConfigType.Group;
 import com.gollum.core.common.config.type.BuildingConfigType.Group.Building;
 import com.gollum.core.common.config.type.BuildingConfigType.Group.Building.Dimention;
 import com.gollum.core.tools.registered.RegisteredObjects;
+
+import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.init.Blocks;
+import net.minecraft.world.biome.BiomeGenBase;
 
 public class BuildingEntry extends ConfigEntry {
 	

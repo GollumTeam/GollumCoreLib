@@ -9,6 +9,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.gollum.core.tools.helper.IItemHelper;
+import com.gollum.core.tools.registered.RegisteredObjects;
+import com.gollum.core.utils.reflection.Reflection;
+
+import cpw.mods.fml.common.registry.FMLControlledNamespacedRegistry;
+import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -23,13 +29,6 @@ import net.minecraft.util.RegistryNamespaced;
 import net.minecraft.util.RegistrySimple;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
-
-import com.gollum.core.tools.helper.IItemHelper;
-import com.gollum.core.tools.registered.RegisteredObjects;
-import com.gollum.core.utils.reflection.Reflection;
-
-import cpw.mods.fml.common.registry.FMLControlledNamespacedRegistry;
-import cpw.mods.fml.common.registry.GameData;
 
 
 public class ItemRegistry {
