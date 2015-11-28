@@ -3,6 +3,7 @@ package com.gollum.core.client.gui.config;
 import java.util.Map.Entry;
 import java.util.TreeSet;
 
+import com.gollum.core.ModGollumCoreLib;
 import com.gollum.core.client.gui.config.element.ListElement;
 import com.gollum.core.client.gui.config.entry.ConfigEntry;
 import com.gollum.core.client.gui.config.entry.ListEntry;
@@ -47,7 +48,7 @@ public class GuiSoundConfig extends GuiListConfig {
 		for (int i = 0; i < this.entryList.getSize(); i++) {
 			ConfigEntry entry = this.entryList.getEntry(i);
 			if (entry instanceof ListSlotEntry) {
-				((ListSlotEntry) entry).action = this.parentEntry.tradIfExist("sound_play");
+				((ListSlotEntry) entry).action = ModGollumCoreLib.i18n.trans("config.sound_play");
 			}
 		}
 		
