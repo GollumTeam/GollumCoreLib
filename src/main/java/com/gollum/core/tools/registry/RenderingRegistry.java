@@ -1,8 +1,8 @@
 package com.gollum.core.tools.registry;
 
+import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 
 public class RenderingRegistry {
 	

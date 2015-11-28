@@ -1,10 +1,9 @@
 package com.gollum.core.client.gui;
 
-import net.minecraft.client.Minecraft;
-
 import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.client.config.GuiButtonExt;
+import net.minecraft.client.Minecraft;
 
 /**
  * This class is blatantly stolen from iChunUtils with permission.

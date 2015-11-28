@@ -2,14 +2,14 @@ package com.gollum.core.client.gui.config;
 
 import java.util.Map.Entry;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-
 import com.gollum.core.client.gui.config.element.ListElement;
 import com.gollum.core.client.gui.config.entry.ConfigEntry;
 import com.gollum.core.client.gui.config.entry.ListEntry;
 import com.gollum.core.client.gui.config.entry.ListSlotEntry;
 import com.gollum.core.tools.registered.RegisteredObjects;
+
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 
 public class GuiBlockConfig extends GuiListConfig {
 

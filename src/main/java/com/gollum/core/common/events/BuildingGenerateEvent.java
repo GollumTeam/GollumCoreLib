@@ -1,11 +1,10 @@
 package com.gollum.core.common.events;
 
-import net.minecraft.world.World;
-
 import com.gollum.core.common.building.Building;
 import com.gollum.core.utils.math.Integer3d;
 
 import cpw.mods.fml.common.eventhandler.Event;
+import net.minecraft.world.World;
 
 public class BuildingGenerateEvent extends Event {
 	

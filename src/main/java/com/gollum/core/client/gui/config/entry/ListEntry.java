@@ -1,10 +1,10 @@
 package com.gollum.core.client.gui.config.entry;
 
-import net.minecraft.client.Minecraft;
-
 import com.gollum.core.client.gui.config.GuiConfigEntries;
 import com.gollum.core.client.gui.config.GuiListConfig;
 import com.gollum.core.client.gui.config.element.ConfigElement;
+
+import net.minecraft.client.Minecraft;
 
 
 public class ListEntry extends ButtonEntry {
@@ -38,5 +38,5 @@ public class ListEntry extends ButtonEntry {
 		this.updateValueButtonText(this.value.toString());
 		return super.setValue(value);
 	}
-
+	
 }

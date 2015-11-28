@@ -2,11 +2,11 @@ package com.gollum.core.client.gui.config.entry;
 
 import java.lang.reflect.Array;
 
-import net.minecraft.client.Minecraft;
-
 import com.gollum.core.client.gui.config.GuiArrayConfig;
 import com.gollum.core.client.gui.config.GuiConfigEntries;
 import com.gollum.core.client.gui.config.element.ConfigElement;
+
+import net.minecraft.client.Minecraft;
 
 public class ArrayEntry extends ButtonEntry {
 	

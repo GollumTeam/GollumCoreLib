@@ -1,17 +1,12 @@
 package com.gollum.core.common.handlers;
 
-import static com.gollum.core.ModGollumCoreLib.log;
-
 import com.gollum.core.ModGollumCoreLib;
 import com.gollum.core.client.gui.achievement.GollumGuiStats;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngameMenu;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.achievement.GuiStats;
 import net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent;
-import net.minecraftforge.client.event.GuiScreenEvent.InitGuiEvent;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 
 public class GuiScreenHandler {

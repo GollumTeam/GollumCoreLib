@@ -1,10 +1,20 @@
 package com.gollum.core.tools.registered;
 
+import java.util.Map.Entry;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import com.gollum.core.ModGollumCoreLib;
+import com.gollum.core.utils.reflection.Reflection;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.SoundCategory;
+import net.minecraft.client.audio.SoundEventAccessorComposite;
+import net.minecraft.client.audio.SoundHandler;
+import net.minecraft.client.audio.SoundRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.world.biome.BiomeGenBase;
 
@@ -115,6 +125,41 @@ public class RegisteredObjects {
 		for (BiomeGenBase biome: this.getAllBiomes()) {
 			if (biome != null && biome.biomeName.equals(name)) {
 				return biome;
+			}
+		}
+		return null;
+	}
+
+	
+	@SideOnly(Side.CLIENT)
+	public TreeMap<SoundCategory, TreeSet<String>> getAllSound() {
+		TreeMap<SoundCategory, TreeSet<String>> sounds = new TreeMap<SoundCategory, TreeSet<String>>();
+		
+		try {
+			SoundHandler soundHandler = Minecraft.getMinecraft().getSoundHandler();
+			SoundRegistry soundRegistry = (SoundRegistry) Reflection.getFirstValueByFieldType(soundHandler, SoundRegistry.class);
+			
+			for (Object key: soundRegistry.getKeys()) {
+				SoundEventAccessorComposite accessor = (SoundEventAccessorComposite) soundRegistry.getObject(key);
+				SoundCategory category = accessor.getSoundCategory();
+				if (!sounds.containsKey(category)) {
+					sounds.put(category, new TreeSet<String>());
+				}
+				String domain = accessor.getSoundEventLocation().getResourceDomain();
+				String path = accessor.getSoundEventLocation().getResourcePath();
+				sounds.get(category).add((domain.equals("minecraft") ? "" : domain+":")+path);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return sounds;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public SoundCategory getSoundCategoryBySound(String sound) {
+		for (Entry<SoundCategory, TreeSet<String>> entry: this.getAllSound().entrySet()) {
+			if (((TreeSet<String>)entry.getValue()).contains(sound)) {
+				return entry.getKey();
 			}
 		}
 		return null;

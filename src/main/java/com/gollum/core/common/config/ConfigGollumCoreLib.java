@@ -96,6 +96,12 @@ public class ConfigGollumCoreLib extends Config {
 	@ConfigProp(group="Test", dev=true, type=Type.SLIDER)
 	public double slider2 = 20.5;
 
+	@ConfigProp(group="Test", dev=true, type=Type.SOUND)
+	public String sound = "mob.wolf.whine";
+
+	@ConfigProp(group="Test", dev=true, type=Type.SOUND, newValue="mob.wolf.whine")
+	public String arSound[] = new String[] {"mob.wolf.whine", "mob.wolf.whine"};
+	
 	@ConfigProp(group="Test", dev=true, type=Type.ITEM)
 	public String item = "minecraft:iron_axe";
 	

@@ -9,8 +9,6 @@ import java.io.InputStreamReader;
 
 import javax.imageio.ImageIO;
 
-import net.minecraft.util.ResourceLocation;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,8 +20,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.util.ResourceLocation;
 
 public abstract class AbstractResourcePack implements IResourcePack {
 	private static final Logger resourceLog = LogManager.getLogger();

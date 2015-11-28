@@ -8,11 +8,17 @@ import com.gollum.core.common.config.JsonConfigProp;
 public class ListElement extends ConfigElement {
 	
 	public String label;
+	public String group;
 	
 	public ListElement(Object value, String label) {
+		this(value, label, "General");
+	}
+	
+	public ListElement(Object value, String label, String group) {
 		super(value.toString());
 		this.value = value;
 		this.label = label;
+		this.group = group;
 	}
 	
 	public Class< ? extends ConfigEntry> getEntryClass() {

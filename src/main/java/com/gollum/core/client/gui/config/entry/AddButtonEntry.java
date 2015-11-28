@@ -1,12 +1,12 @@
 package com.gollum.core.client.gui.config.entry;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.client.renderer.Tessellator;
-
 import com.gollum.core.client.gui.config.GuiConfigEntries;
 import com.gollum.core.client.gui.config.element.TypedValueElement;
 import com.gollum.core.common.config.JsonConfigProp;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.renderer.Tessellator;
 
 public class AddButtonEntry extends ConfigEntry {
 

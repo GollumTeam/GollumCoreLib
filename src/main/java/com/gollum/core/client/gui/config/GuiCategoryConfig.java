@@ -7,10 +7,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.ChatComponentText;
-
 import com.gollum.core.client.gui.config.element.CategoryElement;
 import com.gollum.core.client.gui.config.entry.CategoryEntry;
 import com.gollum.core.common.config.ConfigLoader;
@@ -22,6 +18,9 @@ import cpw.mods.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
 import cpw.mods.fml.client.event.ConfigChangedEvent.PostConfigChangedEvent;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.Event.Result;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.util.ChatComponentText;
 
 public class GuiCategoryConfig extends GuiConfig {
 	

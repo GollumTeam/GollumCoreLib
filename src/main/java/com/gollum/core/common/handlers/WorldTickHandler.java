@@ -4,15 +4,13 @@ import static com.gollum.core.ModGollumCoreLib.log;
 
 import java.util.Iterator;
 
-import net.minecraftforge.common.MinecraftForge;
-
 import com.gollum.core.common.building.Builder;
 import com.gollum.core.common.building.Builder.BuilderRunnable;
 import com.gollum.core.common.events.BuildingGenerateEvent;
-import com.gollum.core.utils.math.Integer3d;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.WorldTickEvent;
+import net.minecraftforge.common.MinecraftForge;
 
 
 public class WorldTickHandler {

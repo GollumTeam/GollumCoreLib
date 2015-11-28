@@ -5,7 +5,6 @@ import com.gollum.core.common.CommonProxyGolumCoreLib;
 import com.gollum.core.common.command.CommandBuilding;
 import com.gollum.core.common.config.ConfigGollumCoreLib;
 import com.gollum.core.common.context.ModContext;
-import com.gollum.core.common.handlers.WorldHandler;
 import com.gollum.core.common.i18n.I18n;
 import com.gollum.core.common.log.Logger;
 import com.gollum.core.common.mod.GollumMod;
@@ -18,7 +17,6 @@ import com.gollum.core.inits.ModItems;
 import com.gollum.core.inits.ModTileEntities;
 import com.gollum.core.tools.registry.BlockRegistry;
 import com.gollum.core.tools.registry.ItemRegistry;
-import com.gollum.core.utils.reflection.Reflection;
 
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -40,7 +38,7 @@ public class ModGollumCoreLib extends GollumMod {
 
 	public final static String MODID = "GollumCoreLib";
 	public final static String MODNAME = "Gollum Core Lib";
-	public final static String VERSION = "2.0.1DEV";
+	public final static String VERSION = "2.1.0DEV";
 	public final static String MINECRAFT_VERSION = "1.7.2";
 
 	@Instance(ModGollumCoreLib.MODID)

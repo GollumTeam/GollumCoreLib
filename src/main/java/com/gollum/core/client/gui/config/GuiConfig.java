@@ -7,10 +7,6 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.resources.I18n;
-
 import org.lwjgl.input.Keyboard;
 
 import com.gollum.core.client.gui.config.element.ConfigElement;
@@ -23,6 +19,9 @@ import cpw.mods.fml.client.config.GuiButtonExt;
 import cpw.mods.fml.client.config.GuiUnicodeGlyphButton;
 import cpw.mods.fml.client.config.HoverChecker;
 import cpw.mods.fml.common.ModContainer;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.resources.I18n;
 
 public abstract class GuiConfig extends GuiScreen {
 	
