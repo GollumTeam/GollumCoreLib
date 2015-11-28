@@ -1,7 +1,5 @@
 package com.gollum.core.common.resources;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.io.File;
 import java.io.FileNotFoundException;
 

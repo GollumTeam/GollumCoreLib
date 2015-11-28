@@ -3,12 +3,12 @@ package com.gollum.core.common.building.handler;
 import java.util.HashMap;
 import java.util.Random;
 
+import com.gollum.core.common.blocks.BlockProximitySpawn;
+import com.gollum.core.common.tileentities.TileEntityBlockProximitySpawn;
+
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-
-import com.gollum.core.common.blocks.BlockProximitySpawn;
-import com.gollum.core.common.tileentities.TileEntityBlockProximitySpawn;
 
 public class BlockProximitySpawnBuildingHandler extends BuildingBlockHandler {
 	

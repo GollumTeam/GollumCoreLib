@@ -3,17 +3,16 @@ package com.gollum.core.tools.helper.items;
 import java.util.List;
 import java.util.TreeSet;
 
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
-
 import com.gollum.core.tools.helper.IItemMetadataHelper;
 import com.gollum.core.tools.helper.ItemHelper;
 import com.gollum.core.tools.helper.ItemMetadataHelper;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Icon;
 
 public class HItemMetadata extends HItem implements IItemMetadataHelper  {
 

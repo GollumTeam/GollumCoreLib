@@ -6,21 +6,20 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.EnumSet;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumChatFormatting;
-import argo.jdom.JdomParser;
-import argo.jdom.JsonRootNode;
-
 import com.gollum.core.ModGollumCoreLib;
 import com.gollum.core.common.context.ModContext;
 import com.gollum.core.common.log.Logger;
 import com.gollum.core.common.mod.GollumMod;
 
+import argo.jdom.JdomParser;
+import argo.jdom.JsonRootNode;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumChatFormatting;
 
 public class VersionChecker extends Thread {
 	

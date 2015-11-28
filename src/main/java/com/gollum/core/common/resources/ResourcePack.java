@@ -1,8 +1,5 @@
 package com.gollum.core.common.resources;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;

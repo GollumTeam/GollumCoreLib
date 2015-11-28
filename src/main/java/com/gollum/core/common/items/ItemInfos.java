@@ -1,15 +1,15 @@
 package com.gollum.core.common.items;
 
+import com.gollum.core.common.blocks.IBlockDisplayInfos;
+import com.gollum.core.tools.helper.items.HItem;
+import com.gollum.core.tools.registered.RegisteredObjects;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatMessageComponent;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
-
-import com.gollum.core.common.blocks.IBlockDisplayInfos;
-import com.gollum.core.tools.helper.items.HItem;
-import com.gollum.core.tools.registered.RegisteredObjects;
 
 public class ItemInfos extends HItem {
 	

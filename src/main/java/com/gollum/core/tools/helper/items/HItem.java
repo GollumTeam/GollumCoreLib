@@ -1,12 +1,12 @@
 package com.gollum.core.tools.helper.items;
 
-import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.item.Item;
-import net.minecraft.util.Icon;
-
 import com.gollum.core.ModGollumCoreLib;
 import com.gollum.core.tools.helper.IItemHelper;
 import com.gollum.core.tools.helper.ItemHelper;
+
+import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.item.Item;
+import net.minecraft.util.Icon;
 
 public class HItem extends Item implements IItemHelper {
 

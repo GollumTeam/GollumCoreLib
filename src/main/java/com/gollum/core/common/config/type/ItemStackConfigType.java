@@ -1,13 +1,13 @@
 package com.gollum.core.common.config.type;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
 import com.gollum.core.common.config.ConfigProp.Type;
 import com.gollum.core.common.config.JsonConfigProp;
 import com.gollum.core.tools.registered.RegisteredObjects;
 import com.gollum.core.tools.simplejson.Json;
 import com.gollum.core.tools.simplejson.Json.EntryObject;
+
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 public class ItemStackConfigType extends ConfigJsonType {
 	

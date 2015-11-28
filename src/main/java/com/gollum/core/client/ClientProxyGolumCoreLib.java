@@ -1,9 +1,9 @@
 package com.gollum.core.client;
 
-import net.minecraftforge.common.MinecraftForge;
-
 import com.gollum.core.common.CommonProxyGolumCoreLib;
 import com.gollum.core.tools.registry.SoundRegistry;
+
+import net.minecraftforge.common.MinecraftForge;
 
 public class ClientProxyGolumCoreLib extends CommonProxyGolumCoreLib {
 

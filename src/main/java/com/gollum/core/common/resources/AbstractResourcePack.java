@@ -2,14 +2,6 @@ package com.gollum.core.common.resources;
 
 import static com.gollum.core.ModGollumCoreLib.log;
 
-import com.gollum.core.common.resources.data.MetadataSection;
-import com.gollum.core.common.resources.data.MetadataSerializer;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -19,10 +11,14 @@ import java.io.InputStreamReader;
 
 import javax.imageio.ImageIO;
 
-import net.minecraft.logging.ILogAgent;
-import net.minecraft.util.ResourceLocation;
-
 import org.apache.commons.io.IOUtils;
+
+import com.gollum.core.common.resources.data.MetadataSection;
+import com.gollum.core.common.resources.data.MetadataSerializer;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import net.minecraft.util.ResourceLocation;
 
 public abstract class AbstractResourcePack implements ResourcePack {
 	protected final File resourcePackFile;

@@ -6,10 +6,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 
-import net.minecraft.item.Item;
-
 import com.gollum.core.tools.helper.IItemHelper;
 import com.gollum.core.utils.reflection.Reflection;
+
+import net.minecraft.item.Item;
 
 
 public class ItemRegistry {

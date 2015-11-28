@@ -1,12 +1,5 @@
 package com.gollum.core.common.resources;
 
-import com.google.common.base.Splitter;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
@@ -19,8 +12,9 @@ import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import net.minecraft.client.resources.data.MetadataSection;
-import net.minecraft.client.resources.data.MetadataSerializer;
+import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 public class FileResourcePack extends AbstractResourcePack implements Closeable {
 	public static final Splitter entryNameSplitter = Splitter.on('/').omitEmptyStrings().limit(3);

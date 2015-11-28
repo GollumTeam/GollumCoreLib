@@ -6,12 +6,12 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 
+import com.gollum.core.tools.helper.IBlockHelper;
+import com.gollum.core.utils.reflection.Reflection;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-
-import com.gollum.core.tools.helper.IBlockHelper;
-import com.gollum.core.utils.reflection.Reflection;
 
 
 public class BlockRegistry {

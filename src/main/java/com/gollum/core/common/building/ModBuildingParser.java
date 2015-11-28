@@ -4,8 +4,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Map.Entry;
 
-import argo.jdom.JdomParser;
-
 import com.gollum.core.ModGollumCoreLib;
 import com.gollum.core.common.config.ConfigBuildings;
 import com.gollum.core.common.config.ConfigLoader;
@@ -13,6 +11,8 @@ import com.gollum.core.common.config.type.BuildingConfigType;
 import com.gollum.core.common.config.type.BuildingConfigType.Group;
 import com.gollum.core.common.resources.ResourceLoader;
 import com.gollum.core.tools.simplejson.Json;
+
+import argo.jdom.JdomParser;
 
 public class ModBuildingParser {
 

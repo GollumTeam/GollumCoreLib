@@ -5,18 +5,15 @@ import static com.gollum.core.ModGollumCoreLib.log;
 import java.util.EnumSet;
 import java.util.Iterator;
 
-import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.ForgeSubscribe;
-
 import com.gollum.core.ModGollumCoreLib;
 import com.gollum.core.common.building.Builder;
 import com.gollum.core.common.building.Builder.BuilderRunnable;
 import com.gollum.core.common.events.BuildingGenerateEvent;
-import com.gollum.core.utils.math.Integer3d;
 
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 
 
 public class WorldTickHandler implements ITickHandler {

@@ -3,14 +3,14 @@ package com.gollum.core.common.building.handler;
 import java.util.HashMap;
 import java.util.Random;
 
+import com.gollum.core.ModGollumCoreLib;
+import com.gollum.core.common.building.Builder;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCommandBlock;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityCommandBlock;
 import net.minecraft.world.World;
-
-import com.gollum.core.ModGollumCoreLib;
-import com.gollum.core.common.building.Builder;
 
 public class BlockCommandBlockBuildingHandler extends BuildingBlockHandler {
 

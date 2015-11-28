@@ -2,11 +2,11 @@ package com.gollum.core.tools.registry;
 
 import java.util.ArrayList;
 
-import net.minecraftforge.client.event.sound.SoundLoadEvent;
-import net.minecraftforge.event.ForgeSubscribe;
-
 import com.gollum.core.ModGollumCoreLib;
 import com.gollum.core.common.context.ModContext;
+
+import net.minecraftforge.client.event.sound.SoundLoadEvent;
+import net.minecraftforge.event.ForgeSubscribe;
 
 public class SoundRegistry {
 	

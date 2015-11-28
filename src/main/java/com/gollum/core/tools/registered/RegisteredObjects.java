@@ -1,13 +1,24 @@
 package com.gollum.core.tools.registered;
 
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import com.gollum.core.ModGollumCoreLib;
+import com.gollum.core.tools.registry.SoundRegistry;
+import com.gollum.core.utils.reflection.Reflection;
+import com.google.common.collect.Maps;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.GameRegistry.UniqueIdentifier;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.SoundManager;
+import net.minecraft.client.audio.SoundPool;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -593,6 +604,24 @@ public class RegisteredObjects {
 			}
 		}
 		return null;
+	}
+
+	
+	@SideOnly(Side.CLIENT)
+	public TreeSet<String> getAllSound() {
+		TreeSet<String> sounds = new TreeSet<String>();
+		
+		try {
+			SoundPool soundPool = Minecraft.getMinecraft().sndManager.soundPoolSounds;
+			Map       map       = (Map) Reflection.getFirstValueByFieldType(soundPool, Maps.newHashMap().getClass());
+			
+			for (Object key: map.keySet()) {
+				sounds.add(key.toString());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return sounds;
 	}
 	
 }
