@@ -1,23 +1,21 @@
 package com.gollum.core.tools.helper;
 
+import static com.gollum.core.tools.helper.blocks.HBlockMetadata.METADATA;
+
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.List;
-import java.util.TreeMap;
 import java.util.TreeSet;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.world.World;
 
 public class BlockMetadataHelper extends BlockHelper implements IBlockMetadataHelper {
 	
-	protected TreeSet<Integer>        listSubEnabled = new TreeSet<Integer>();
-	
-	/* TODO
-	 * public    TreeMap<Integer, IIcon> blockIcons     = new TreeMap<Integer, IIcon>();
-	 */
+	protected TreeSet<Integer> listSubEnabled = new TreeSet<Integer>();
 	
 	public BlockMetadataHelper(Block parent, String registerName) {
 		super(parent, registerName);
@@ -26,6 +24,7 @@ public class BlockMetadataHelper extends BlockHelper implements IBlockMetadataHe
 		for (int metadata = 0; metadata < 16; metadata++) {
 			this.listSubEnabled.add (metadata);
 		}
+		this.setDefaultState(this.parent.getBlockState().getBaseState().withProperty(METADATA, 0));
 	}
 	
 	public BlockMetadataHelper(Block parent, String registerName, int listSubBlock[]) {
@@ -45,7 +44,30 @@ public class BlockMetadataHelper extends BlockHelper implements IBlockMetadataHe
 			this.listSubEnabled.add (metadata);
 		}
 	}
-
+	
+	protected void setDefaultState (IBlockState state) {
+		
+		try {
+			Method method = null;
+			for (Method m: Block.class.getDeclaredMethods()) {
+				m.setAccessible(true);
+				if (
+					m.getReturnType() == void.class &&
+					m.getGenericParameterTypes().length == 1 &&
+					m.getGenericParameterTypes()[0].equals(IBlockState.class) &&
+					(m.getModifiers() & Modifier.FINAL) == Modifier.FINAL
+				) {
+					method = m;
+					break;
+				}
+			}
+			method.invoke(this.parent, this.parent.getDefaultState().withProperty(METADATA, 0));
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	@Override
 	public BlockMetadataHelper getGollumHelperMetadata () {
 		return this;

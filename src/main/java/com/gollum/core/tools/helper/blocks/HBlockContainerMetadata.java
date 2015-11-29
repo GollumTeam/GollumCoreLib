@@ -1,5 +1,8 @@
 package com.gollum.core.tools.helper.blocks;
 
+import static com.gollum.core.tools.helper.blocks.HBlockMetadata.METADATA;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
 
@@ -8,14 +11,20 @@ import com.gollum.core.tools.helper.IBlockMetadataHelper;
 import com.gollum.core.tools.helper.items.HItemBlockMetadata;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 public abstract class HBlockContainerMetadata extends HBlockContainer implements IBlockMetadataHelper {
-
+	
 	private BlockMetadataHelper helperMetadata;
 
 	public HBlockContainerMetadata(String registerName, Material material) {
@@ -34,6 +43,23 @@ public abstract class HBlockContainerMetadata extends HBlockContainer implements
 		super(registerName, material);
 		this.helperMetadata = new BlockMetadataHelper(this, registerName, numberSubBlock);
 		this.setItemBlockClass(HItemBlockMetadata.class);
+	}
+	
+	// TODO factorisé
+	protected List<IProperty> getStateProperties() {
+		ArrayList<IProperty> prop= new ArrayList<IProperty>();
+		prop.add(METADATA);
+		return prop;
+	}
+	
+	@Override // TODO factorisé
+	protected BlockState createBlockState() {
+		List<IProperty> list = this.getStateProperties();
+		IProperty table[] = new IProperty[list.size()];
+		for (int i = 0; i < list.size(); i++) {
+			table[i] = list.get(i);
+		}
+		return new BlockState(this, table);
 	}
 	
 	@Override
@@ -76,16 +102,27 @@ public abstract class HBlockContainerMetadata extends HBlockContainer implements
 		return (helper.vanillaPicked) ? super.getPickBlock(target, world, x, y, z) : helperMetadata.getPickBlock(super.getPickBlock(null, world, x, y, z), world, x, y, z);
 	}
 	*/
-
+	
 	/**
 	 * Liste des metadata enabled pour le subtype
 	 */
+	@Override
 	public TreeSet<Integer> listSubEnabled () {
-		return this.helperMetadata.listSubEnabled();
+		return ((IBlockMetadataHelper) this.helper).listSubEnabled();
 	}
 	
 	public int getEnabledMetadata (int dammage) {
 		return this.helperMetadata.getEnabledMetadata(dammage);
+	}
+	
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return this.getDefaultState().withProperty(METADATA, Integer.valueOf(this.getEnabledMetadata(meta)));
+	}
+	
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return ((Integer)state.getValue(METADATA)).intValue();
 	}
 	
 }
