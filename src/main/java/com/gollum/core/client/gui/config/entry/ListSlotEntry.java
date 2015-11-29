@@ -10,10 +10,13 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.client.config.GuiButtonExt;
 
 public class ListSlotEntry extends ConfigEntry {
 
+	protected GuiButtonExt btAction = new GuiButtonExt(0, 0, 0, "");
 	public ItemStack itemStackIcon = null;
+	public String action = null;
 	
 	public ListSlotEntry(int index, Minecraft mc, GuiConfigEntries parent, ConfigElement configElement) {
 		super(index, mc, parent, configElement);
@@ -50,6 +53,15 @@ public class ListSlotEntry extends ConfigEntry {
 		}
 		
 		this.mc.fontRendererObj.drawString(label, this.parent.controlX + 7, y+6, this.isSelected() ? 0xFFFFFF : 0x888888, true);
+		
+		if (this.action != null) {
+			this.btAction.displayString = this.action;
+			this.btAction.width = 55;
+			this.btAction.height = 13;
+			this.btAction.xPosition = x2-60;
+			this.btAction.yPosition = y+3;
+			this.btAction.drawButton(this.mc, mouseX, mouseY);
+		}
 	}
 	
 	public boolean isSelected() {
@@ -64,6 +76,17 @@ public class ListSlotEntry extends ConfigEntry {
 	@Override
 	public ConfigEntry setValue(Object value) {
 		return this;
+	}
+
+	@Override
+	public void elementClicked(int slotIndex, boolean doubleClick, int mouseX, int mouseY) {
+		if (this.action != null && this.btAction.mousePressed(this.mc, mouseX, mouseY)) {
+			if (this.parent.parent instanceof GuiListConfig) {
+				((GuiListConfig)this.parent.parent).runSlotAction(slotIndex, this.btAction, doubleClick, mouseX, mouseY);
+			}
+		} else {
+			super.elementClicked(slotIndex, doubleClick, mouseX, mouseY);
+		}
 	}
 	
 	@Override

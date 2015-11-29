@@ -66,7 +66,6 @@ public class GollumGuiStats extends GuiStats {
 		
 	}
 	
-	
 	protected void init() {
 		for (StatsPage p : StatsPage.getStatsPages()) {
 			GuiSlot slot = new StatsCustom(p.getName());

@@ -92,4 +92,5 @@ public class CategoryEntry extends ButtonEntry {
 		
 		return super.equals(values);
 	}
+	
 }

@@ -38,5 +38,5 @@ public class ListEntry extends ButtonEntry {
 		this.updateValueButtonText(this.value.toString());
 		return super.setValue(value);
 	}
-
+	
 }

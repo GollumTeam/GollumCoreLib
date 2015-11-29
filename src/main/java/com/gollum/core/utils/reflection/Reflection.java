@@ -42,6 +42,22 @@ public class Reflection {
 	// Obfuscate method manage //
 	/////////////////////////////
 	
+	public static Object getFirstValueByFieldType (Object object, Class<?> type) throws Exception {
+		Field f = getFirstFieldByType (object.getClass(), type);
+		f.setAccessible(true);
+		return f.get(object);
+	}
+	
+	public static Field getFirstFieldByType(Class<?> clazz, Class<?> type) throws Exception {
+		
+		for (Field f: clazz.getDeclaredFields()) {
+			if (f.getType() == type) {
+				return f;
+			}
+		}
+		throw new Exception(type.getName()+" not found in "+clazz.getName());
+	}
+
 	public static Method getMethodByDesobfuscate (Class clazz, String name) {
 		
 		for (Method m : clazz.getDeclaredMethods()) {
