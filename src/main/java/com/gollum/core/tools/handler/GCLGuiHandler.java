@@ -41,16 +41,22 @@ public class GCLGuiHandler implements IGuiHandler {
 
 						try {
 							switch (i) {
-								case 0: container = (Container) constructor.newInstance(player, world, x, y, z, guiContainerInventoryClass.parameter);              break;
-								case 1: container = (Container) constructor.newInstance(player, world, x, y, z);                                                    break;
-								case 2: container = (Container) constructor.newInstance(player.inventory, world, x, y, z, guiContainerInventoryClass.parameter);    break;
-								case 3: container = (Container) constructor.newInstance(player.inventory, player, world, x, y, z);                                          break;
-								case 4: container = (Container) constructor.newInstance(player.inventory, player, world, x, y, z, guiContainerInventoryClass.parameter);    break;
-								case 5: container = (Container) constructor.newInstance(player.inventory, world, x, y, z);                                          break;
-								case 6: if (tENN) container = (Container) constructor.newInstance(player.inventory, te, guiContainerInventoryClass.parameter);break;
-								case 7: if (tENN) container = (Container) constructor.newInstance(player.inventory, te);                                      break;
-								case 8: if (tENN) container = (Container) constructor.newInstance(player.inventory, te, player, guiContainerInventoryClass.parameter);break;
-								case 9: if (tENN) container = (Container) constructor.newInstance(player.inventory, te, player);                                      break;
+								case 0 : container = (Container) constructor.newInstance(player, world, new BlockPos(x, y, z), guiContainerInventoryClass.parameter);              break;
+								case 1 : container = (Container) constructor.newInstance(player, world, new BlockPos(x, y, z));                                                    break;
+								case 2 : container = (Container) constructor.newInstance(player.inventory, world, new BlockPos(x, y, z), guiContainerInventoryClass.parameter);    break;
+								case 3 : container = (Container) constructor.newInstance(player.inventory, player, world, new BlockPos(x, y, z));                                          break;
+								case 4 : container = (Container) constructor.newInstance(player.inventory, player, world, new BlockPos(x, y, z), guiContainerInventoryClass.parameter);    break;
+								case 5 : container = (Container) constructor.newInstance(player.inventory, world, new BlockPos(x, y, z));                                          break;
+								case 6 : container = (Container) constructor.newInstance(player, world, x, y, z, guiContainerInventoryClass.parameter);              break;
+								case 7 : container = (Container) constructor.newInstance(player, world, x, y, z);                                                    break;
+								case 8 : container = (Container) constructor.newInstance(player.inventory, world, x, y, z, guiContainerInventoryClass.parameter);    break;
+								case 9 : container = (Container) constructor.newInstance(player.inventory, player, world, x, y, z);                                          break;
+								case 10: container = (Container) constructor.newInstance(player.inventory, player, world, x, y, z, guiContainerInventoryClass.parameter);    break;
+								case 11: container = (Container) constructor.newInstance(player.inventory, world, x, y, z);                                          break;
+								case 12: if (tENN) container = (Container) constructor.newInstance(player.inventory, te, guiContainerInventoryClass.parameter);break;
+								case 13: if (tENN) container = (Container) constructor.newInstance(player.inventory, te);                                      break;
+								case 14: if (tENN) container = (Container) constructor.newInstance(player.inventory, te, player, guiContainerInventoryClass.parameter);break;
+								case 15: if (tENN) container = (Container) constructor.newInstance(player.inventory, te, player);                                      break;
 								default: break;
 							}
 						} catch (Exception e) {
@@ -96,16 +102,22 @@ public class GCLGuiHandler implements IGuiHandler {
 
 						try {
 							switch (i) {
-								case 0: gui = (GuiContainer) constructor.newInstance(player, world, x, y, z, guiContainerInventoryClass.parameter);              break;
-								case 1: gui = (GuiContainer) constructor.newInstance(player, world, x, y, z);                                                    break;
-								case 2: gui = (GuiContainer) constructor.newInstance(player.inventory, world, x, y, z, guiContainerInventoryClass.parameter);    break;
-								case 3: gui = (GuiContainer) constructor.newInstance(player.inventory, world, x, y, z);                                          break;
-								case 4: gui = (GuiContainer) constructor.newInstance(player.inventory, player, world, x, y, z, guiContainerInventoryClass.parameter);    break;
-								case 5: gui = (GuiContainer) constructor.newInstance(player.inventory, player, world, x, y, z);                                          break;
-								case 6: if (tENN) gui = (GuiContainer) constructor.newInstance(player.inventory, te, guiContainerInventoryClass.parameter);break;
-								case 7: if (tENN) gui = (GuiContainer) constructor.newInstance(player.inventory, te);                                      break;
-								case 8: if (tENN) gui = (GuiContainer) constructor.newInstance(player.inventory, player, te, guiContainerInventoryClass.parameter);break;
-								case 9: if (tENN) gui = (GuiContainer) constructor.newInstance(player.inventory, player, te);                                      break;
+								case 0: gui = (GuiContainer) constructor.newInstance(player, world, new BlockPos(x, y, z), guiContainerInventoryClass.parameter);              break;
+								case 1 : gui = (GuiContainer) constructor.newInstance(player, world, new BlockPos(x, y, z));                                                    break;
+								case 2 : gui = (GuiContainer) constructor.newInstance(player.inventory, world, new BlockPos(x, y, z), guiContainerInventoryClass.parameter);    break;
+								case 3 : gui = (GuiContainer) constructor.newInstance(player.inventory, world, new BlockPos(x, y, z));                                          break;
+								case 4 : gui = (GuiContainer) constructor.newInstance(player.inventory, player, world, new BlockPos(x, y, z), guiContainerInventoryClass.parameter);    break;
+								case 5 : gui = (GuiContainer) constructor.newInstance(player.inventory, player, world, new BlockPos(x, y, z));                                          break;
+								case 6 : gui = (GuiContainer) constructor.newInstance(player, world, x, y, z, guiContainerInventoryClass.parameter);              break;
+								case 7 : gui = (GuiContainer) constructor.newInstance(player, world, x, y, z);                                                    break;
+								case 8 : gui = (GuiContainer) constructor.newInstance(player.inventory, world, x, y, z, guiContainerInventoryClass.parameter);    break;
+								case 9 : gui = (GuiContainer) constructor.newInstance(player.inventory, world, x, y, z);                                          break;
+								case 10: gui = (GuiContainer) constructor.newInstance(player.inventory, player, world, x, y, z, guiContainerInventoryClass.parameter);    break;
+								case 11: gui = (GuiContainer) constructor.newInstance(player.inventory, player, world, x, y, z);                                          break;
+								case 12: if (tENN) gui = (GuiContainer) constructor.newInstance(player.inventory, te, guiContainerInventoryClass.parameter);break;
+								case 13: if (tENN) gui = (GuiContainer) constructor.newInstance(player.inventory, te);                                      break;
+								case 14: if (tENN) gui = (GuiContainer) constructor.newInstance(player.inventory, player, te, guiContainerInventoryClass.parameter);break;
+								case 15: if (tENN) gui = (GuiContainer) constructor.newInstance(player.inventory, player, te);                                      break;
 								default: break;
 							}
 						} catch (Exception e) {
