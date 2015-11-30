@@ -39,7 +39,7 @@ minecraft {
 }
 
 version = "2.1.0-"+minecraft.version
-group= "com.gollum.core" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group= "com.gollum" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "GollumCoreLib"
 
 task unmappedjar (type: Copy, dependsOn: ':jar') {
@@ -51,6 +51,13 @@ task unmappedjar (type: Copy, dependsOn: ':jar') {
 }
 build.dependsOn unmappedjar
 genSrgs.shouldRunAfter unmappedjar
+
+jar {
+    manifest {
+        attributes 'FMLCorePlugin': 'com.gollum.fmlcore.FMLGollumCoreLib',
+            'FMLCorePluginContainsFMLMod': 'true'
+    }
+}
 
 dependencies {
     // you may put jars on which you depend on in ./libs

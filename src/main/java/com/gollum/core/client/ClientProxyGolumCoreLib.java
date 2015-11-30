@@ -12,6 +12,7 @@ import com.gollum.core.common.mod.GollumMod;
 import com.gollum.core.inits.ModItems;
 import com.gollum.core.tools.registry.BlockRegistry;
 import com.gollum.core.tools.registry.ItemRegistry;
+import com.sun.jna.Memory;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderItem;
@@ -41,6 +42,16 @@ public class ClientProxyGolumCoreLib extends CommonProxyGolumCoreLib {
 	
 	public void overrideRenderItem() {
 		try {
+			
+			RenderItem ir = Minecraft.getMinecraft().getRenderItem();
+			int id = System.identityHashCode(ir); 
+			Runtime runtime = Runtime.getRuntime();
+			
+//			Memory m = new Memory(10);
+//			m.setMemory(œ, length, value);
+//			m.get
+////			Heap
+			
 			log.message("Override RenderItem...");
 			GCLRenderItem renderItem = new GCLRenderItem(Minecraft.getMinecraft().getRenderItem());
 			for (Field f: Minecraft.class.getFields()) {
