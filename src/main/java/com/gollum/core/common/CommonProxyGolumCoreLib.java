@@ -22,5 +22,9 @@ public class CommonProxyGolumCoreLib {
 
 	public void registerObjectRenders() {
 	}
+
+	
+	public void overrideRenderItem() {
+	}
 	
 }

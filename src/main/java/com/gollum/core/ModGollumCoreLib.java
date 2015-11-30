@@ -86,6 +86,9 @@ public class ModGollumCoreLib extends GollumMod {
 		// Creation du logger
 		log = new Logger();
 		
+		// Gestion de la nivaeu de log
+		Logger.setLevelDisplay(config.level);
+		
 		// Creation du logger
 		i18n = new I18n();
 
@@ -97,9 +100,6 @@ public class ModGollumCoreLib extends GollumMod {
 		
 		// Affecte la config
 		VersionChecker.setDisplay(config.versionChecker);
-		
-		// Gestion de la nivaeu de log
-		Logger.setLevelDisplay(config.level);
 		
 		// Creation du checker de version
 		new VersionChecker();
@@ -117,6 +117,9 @@ public class ModGollumCoreLib extends GollumMod {
 	
 	/** 2 **/
 	public void init(FMLInitializationEvent event) {
+		
+		// Override ItemRender
+		proxy.overrideRenderItem();
 		
 		// Initialisation les TileEntities
 		ModTileEntities.init();
