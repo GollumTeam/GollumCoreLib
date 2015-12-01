@@ -98,19 +98,6 @@ public class GollumCoreLibTransformer implements IClassTransformer {
 		classNode.accept(writer);
 		
 		Logger.log(ModGollumCoreLib.MODID, Logger.LEVEL_MESSAGE, "Applying ASM to Minecraft methods to net.minecraft.client.Minecaft OK");
-
-		File outDir=new File(".");
-		outDir.mkdirs();
-		DataOutputStream dout;
-		try {
-			dout = new DataOutputStream(new FileOutputStream(new File(outDir,"LoggingTest.class")));
-		dout.write(writer.toByteArray());
-			dout.flush();
-			dout.close();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		return writer.toByteArray();
 	}
