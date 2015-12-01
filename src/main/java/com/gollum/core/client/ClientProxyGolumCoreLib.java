@@ -41,7 +41,7 @@ public class ClientProxyGolumCoreLib extends CommonProxyGolumCoreLib {
 	}
 	
 	public void overrideRenderItem() {
-		try {
+		/*try {
 			
 			RenderItem ir = Minecraft.getMinecraft().getRenderItem();
 			int id = System.identityHashCode(ir); 
@@ -67,5 +67,6 @@ public class ClientProxyGolumCoreLib extends CommonProxyGolumCoreLib {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		*/
 	}
 }
