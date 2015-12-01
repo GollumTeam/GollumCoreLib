@@ -87,4 +87,9 @@ public class GCLRenderItem extends RenderItem {
 		}
 	}
 	
+	@Override
+	public void renderItemIntoGUI(ItemStack stack, int x, int y) {
+		super.renderItemIntoGUI(stack, x, y);
+	}
+	
 }

@@ -7,7 +7,7 @@ import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
 
 // Go see https://github.com/Guichaguri/TickrateChanger
-
+@IFMLLoadingPlugin.MCVersion("1.8.8")
 @TransformerExclusions({"com.gollum.core.asm"})
 public class GollumCoreLibPlugin implements IFMLLoadingPlugin /*, IFMLCallHook */ {
 	
