@@ -10,6 +10,11 @@ import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions
 
 @TransformerExclusions({"com.gollum.fmlcore"})
 public class FMLGollumCoreLib implements IFMLLoadingPlugin, IFMLCallHook {
+
+	public final static String MODID = "FMLGollumCoreLib";
+	public final static String MODNAME = "Gollum Core Lib CoreMod";
+	public final static String VERSION = "1.0.0";
+	public final static String MINECRAFT_VERSION = "1.8.8";
 	
 	private FMLGollumCoreLib instance;
 	
@@ -19,23 +24,23 @@ public class FMLGollumCoreLib implements IFMLLoadingPlugin, IFMLCallHook {
 	
 	@Override
 	public String[] getASMTransformerClass() {
-		return new String[]{"me.guichaguri.tickratechanger.TickrateTransformer"};
+		return new String[]{FMLGollumCoreLibTransformer.class.getCanonicalName()};
 	}
 	
 	@Override
 	public String getModContainerClass() {
-		return "me.guichaguri.tickratechanger.TickrateContainer";
+		return FMLGollumCoreLibContainer.class.getCanonicalName();
 	}
 
 	@Override
 	public String getSetupClass() {
-		return "me.guichaguri.tickratechanger.TickrateChanger";
+		return FMLGollumCoreLib.class.getCanonicalName();
 	}
 	
 	@Override
 	public void injectData(Map<String, Object> data) {
-		
 	}
+	
 	@Override
 	public String getAccessTransformerClass() {
 		return null;

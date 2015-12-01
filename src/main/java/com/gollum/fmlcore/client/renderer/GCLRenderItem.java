@@ -1,4 +1,4 @@
-package com.gollum.core.client.renderer;
+package com.gollum.fmlcore.client.renderer;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -15,6 +15,11 @@ import net.minecraft.item.ItemStack;
 
 public class GCLRenderItem extends RenderItem {
 
+	public GCLRenderItem(TextureManager textureManager, ModelManager modelManager) {
+		super(textureManager, modelManager);
+	}
+	
+	/*
 	private RenderItem proxy;
 	int syncProp = 0;
 	boolean isInit = false;
@@ -57,10 +62,12 @@ public class GCLRenderItem extends RenderItem {
 			this.registerItem(itm, subType, identifier);
 		}
 	}
+	*/
 	
 	@Override
 	public void renderItemIntoGUI(ItemStack stack, int x, int y) {
 		log.debug("renderItemIntoGUI", stack, x, y);
 		super.renderItemIntoGUI(stack, x, y);
 	}
+	
 }

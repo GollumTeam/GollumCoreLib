@@ -23,3 +23,5 @@ For Install :
 ./gradlew build
 ./gradlew eclipse
 </pre>
+
+In your eclipse launch preference add in VM Option -Dfml.coreMods.load=com.gollum.fmlcore.FMLGollumCoreLib 

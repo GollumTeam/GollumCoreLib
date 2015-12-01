@@ -39,7 +39,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 	acceptedMinecraftVersions = ModGollumCoreLib.MINECRAFT_VERSION
 )
 public class ModGollumCoreLib extends GollumMod {
-
+	
 	public final static String MODID = "GollumCoreLib";
 	public final static String MODNAME = "Gollum Core Lib";
 	public final static String VERSION = "2.1.0DEV";
@@ -118,8 +118,8 @@ public class ModGollumCoreLib extends GollumMod {
 	/** 2 **/
 	public void init(FMLInitializationEvent event) {
 		
-		// Override ItemRender
-		proxy.overrideRenderItem();
+		// Override ItemRender TODO
+		//proxy.overrideRenderItem();
 		
 		// Initialisation les TileEntities
 		ModTileEntities.init();
