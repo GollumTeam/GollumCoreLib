@@ -1,32 +1,30 @@
 package com.gollum.core.asm;
 
-import java.lang.reflect.Field;
-import java.security.acl.Owner;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.Iterator;
-import java.util.List;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.InsnList;
-import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.LabelNode;
-import org.objectweb.asm.tree.LineNumberNode;
-import org.objectweb.asm.tree.LocalVariableNode;
+import org.objectweb.asm.tree.LdcInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
-import org.objectweb.asm.tree.TypeInsnNode;
-import org.objectweb.asm.tree.VarInsnNode;
 
 import com.gollum.core.ModGollumCoreLib;
+import com.gollum.core.client.renderer.GCLRenderItem;
 import com.gollum.core.common.log.Logger;
 
-import net.minecraft.client.renderer.ItemRenderer;
-import net.minecraft.client.renderer.entity.RenderEndermite;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.launchwrapper.IClassTransformer;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 /**
  * @author Guilherme Chaguri
@@ -44,6 +42,8 @@ public class GollumCoreLibTransformer implements IClassTransformer {
 			
 		} catch(Exception ex) {
 			ex.printStackTrace();
+			Logger.log(ModGollumCoreLib.MODID, Logger.LEVEL_MESSAGE, "Error on override vanilla class.");
+			 FMLCommonHandler.instance().exitJava(1, false);
 		}
 		
 		return bytes;
@@ -67,7 +67,6 @@ public class GollumCoreLibTransformer implements IClassTransformer {
 			
 			// TODO Find Refelection Class name
 			if((method.name.equals("startGame")) && (method.desc.equals("()V"))) {
-				InsnList list = new InsnList();
 				for(AbstractInsnNode node : method.instructions.toArray()) {
 					
 					// Detect le "new RenderItem(this.renderEngine, this.modelManager)"
@@ -77,14 +76,17 @@ public class GollumCoreLibTransformer implements IClassTransformer {
 						((MethodInsnNode)node).name.equals("<init>") &&
 						((MethodInsnNode)node).owner.equals(RenderItem.class.getCanonicalName().replace('.', '/'))
 					) { 
-						do {
-							list.add(node);
-							node  = node.getNext();
-						} while (!(node instanceof LabelNode) || node.getOpcode() != Opcodes.F_NEW); // rechere du futur retour à la ligne
+//						do {
+//							node  = node.getNext();
+//						} while (!(node instanceof LabelNode) || node.getOpcode() != Opcodes.F_NEW); // rechere du futur retour à la ligne
 						
 						///////////////////////
 						// Start inject code //
 						///////////////////////
+//						method.instructions.insertBefore(node, new MethodInsnNode(Opcodes.INVOKESPECIAL, "com/gollum/core/client/renderer/GCLRenderItem", "<init>", "()V", false));
+//						method.instructions.remove(node);
+//						((MethodInsnNode)node).owner = ;
+//						method.instructions.insertBefore(node, new MethodInsnNode(Opcodes.INVOKESTATIC, GollumCoreLibTransformer.class.getCanonicalName().replace('.', '/'), "test", "()V", false));
 						
 						///////////////////////
 						// End inject code //
@@ -93,47 +95,20 @@ public class GollumCoreLibTransformer implements IClassTransformer {
 							
 						
 					}
-					// Ajout du retour à la ligne
-					list.add(node);
-
 				}
 				
-				method.instructions.clear();
-				method.instructions.add(list);
 			}
 			
 		}
 		
 		ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
 		classNode.accept(writer);
+		
 		return writer.toByteArray();
 	}
 	
-	private LocalVariableNode getLocalVariableNode(VarInsnNode varInsnNode, MethodNode methodNode) {
-		int varIdx = varInsnNode.var;
-		int instrIdx = getInstrIndex(varInsnNode);
-		List<?> localVariables = methodNode.localVariables;
-		for (int idx = 0; idx < localVariables.size(); idx++) {
-			LocalVariableNode localVariableNode = (LocalVariableNode) localVariables.get(idx);
-			if (localVariableNode.index == varIdx) {
-				int scopeEndInstrIndex = getInstrIndex(localVariableNode.end);
-				if (scopeEndInstrIndex >= instrIdx) {
-					// still valid for current line
-					return localVariableNode;
-				}
-			}
-		}
-		throw new RuntimeException("Variable with index " + varIdx + " and scope end >= " + instrIdx + " not found for method " + methodNode.name + "!");
+	public static void test() {
+		Logger.log(ModGollumCoreLib.MODID, Logger.LEVEL_MESSAGE, "Cool.");
 	}
 	
-	private int getInstrIndex(AbstractInsnNode insnNode) {
-		try {
-			Field indexField = AbstractInsnNode.class.getDeclaredField("index");
-			indexField.setAccessible(true);
-			Object indexValue = indexField.get(insnNode);
-			return ((Integer) indexValue).intValue();
-		} catch (Exception exc) {
-			throw new RuntimeException(exc);
-		}
-	}
 }
