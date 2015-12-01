@@ -6,6 +6,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public interface IBlockHelper {
 	
@@ -24,6 +26,7 @@ public interface IBlockHelper {
 	/**
 	 * Enregistrement du rendu du bloc. Appelé a la fin de l'Init
 	 */
+	@SideOnly(Side.CLIENT)
 	public void registerRender();
 	
 	/**

@@ -1,4 +1,4 @@
-package com.gollum.fmlcore.client.renderer;
+package com.gollum.core.client.renderer;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;

@@ -10,12 +10,12 @@ public interface IItemHelper {
 	/**
 	 * Enregistrement du item. Appelé a la fin du postInit
 	 */
-	@SideOnly(Side.CLIENT)
 	public void register ();
 	
 	/**
 	 * Enregistrement du rendu de l'item. Appelé a la fin de l'Init
 	 */
+	@SideOnly(Side.CLIENT)
 	public void registerRender ();
 	
 	/**
