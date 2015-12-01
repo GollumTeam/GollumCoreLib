@@ -24,4 +24,4 @@ For Install :
 ./gradlew eclipse
 </pre>
 
-In your eclipse launch preference add in VM Option -Dfml.coreMods.load=com.gollum.fmlcore.FMLGollumCoreLib 
+In your eclipse launch preference add in VM Option -Dfml.coreMods.load=com.gollum.core.asm.GollumCoreLibPlugin

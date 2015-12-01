@@ -39,7 +39,7 @@ minecraft {
 }
 
 version = "2.1.0-"+minecraft.version
-group= "com.gollum" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group= "com.gollum.core" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "GollumCoreLib"
 
 task unmappedjar (type: Copy, dependsOn: ':jar') {
@@ -54,7 +54,7 @@ genSrgs.shouldRunAfter unmappedjar
 
 jar {
     manifest {
-        attributes 'FMLCorePlugin': 'com.gollum.fmlcore.FMLGollumCoreLib',
+        attributes 'FMLCorePlugin': 'com.gollum.core.asm.GollumCoreLibPlugin',
             'FMLCorePluginContainsFMLMod': 'true'
     }
 }
