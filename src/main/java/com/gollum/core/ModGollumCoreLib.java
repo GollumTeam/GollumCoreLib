@@ -118,9 +118,6 @@ public class ModGollumCoreLib extends GollumMod {
 	/** 2 **/
 	public void init(FMLInitializationEvent event) {
 		
-		// Override ItemRender TODO
-		//proxy.overrideRenderItem();
-		
 		// Initialisation les TileEntities
 		ModTileEntities.init();
 		

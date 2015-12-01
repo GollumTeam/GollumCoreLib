@@ -41,32 +41,7 @@ public class ClientProxyGolumCoreLib extends CommonProxyGolumCoreLib {
 	}
 	
 	public void overrideRenderItem() {
-		/*try {
-			
-			RenderItem ir = Minecraft.getMinecraft().getRenderItem();
-			int id = System.identityHashCode(ir); 
-			Runtime runtime = Runtime.getRuntime();
-			
-//			Memory m = new Memory(10);
-//			m.setMemory(œ, length, value);
-//			m.get
-////			Heap
-			
-			log.message("Override RenderItem...");
-			GCLRenderItem renderItem = new GCLRenderItem(Minecraft.getMinecraft().getRenderItem());
-			for (Field f: Minecraft.class.getFields()) {
-				f.setAccessible(true);
-				if (f.getType() == RenderItem.class) {
-					f.set(Minecraft.getMinecraft(), renderItem);
-					log.message("Override RenderItem OK");
-					break;
-				}
-			}
-			
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		/*
 		*/
 	}
 }

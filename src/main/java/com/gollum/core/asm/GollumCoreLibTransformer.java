@@ -19,7 +19,6 @@ import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
 import com.gollum.core.ModGollumCoreLib;
-import com.gollum.core.client.renderer.GCLRenderItem;
 import com.gollum.core.common.log.Logger;
 
 import net.minecraft.client.renderer.entity.RenderItem;
@@ -76,39 +75,43 @@ public class GollumCoreLibTransformer implements IClassTransformer {
 						((MethodInsnNode)node).name.equals("<init>") &&
 						((MethodInsnNode)node).owner.equals(RenderItem.class.getCanonicalName().replace('.', '/'))
 					) { 
-//						do {
-//							node  = node.getNext();
-//						} while (!(node instanceof LabelNode) || node.getOpcode() != Opcodes.F_NEW); // rechere du futur retour à la ligne
+						do {
+							node  = node.getNext();
+						} while (!(node instanceof LabelNode) || node.getOpcode() != Opcodes.F_NEW); // rechere du futur retour à la ligne
 						
 						///////////////////////
 						// Start inject code //
 						///////////////////////
-//						method.instructions.insertBefore(node, new MethodInsnNode(Opcodes.INVOKESPECIAL, "com/gollum/core/client/renderer/GCLRenderItem", "<init>", "()V", false));
-//						method.instructions.remove(node);
-//						((MethodInsnNode)node).owner = ;
-//						method.instructions.insertBefore(node, new MethodInsnNode(Opcodes.INVOKESTATIC, GollumCoreLibTransformer.class.getCanonicalName().replace('.', '/'), "test", "()V", false));
+						
+						method.instructions.insertBefore(node, new MethodInsnNode(Opcodes.INVOKESTATIC, GollumCoreLibOverrider.class.getCanonicalName().replace('.', '/'), "overrideRenderItem", "()V", false));
 						
 						///////////////////////
 						// End inject code //
 						///////////////////////
 							
-							
-						
 					}
 				}
-				
 			}
-			
 		}
 		
 		ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
 		classNode.accept(writer);
 		
+		Logger.log(ModGollumCoreLib.MODID, Logger.LEVEL_MESSAGE, "Applying ASM to Minecraft methods to net.minecraft.client.Minecaft OK");
+
+		File outDir=new File(".");
+		outDir.mkdirs();
+		DataOutputStream dout;
+		try {
+			dout = new DataOutputStream(new FileOutputStream(new File(outDir,"LoggingTest.class")));
+		dout.write(writer.toByteArray());
+			dout.flush();
+			dout.close();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		return writer.toByteArray();
 	}
-	
-	public static void test() {
-		Logger.log(ModGollumCoreLib.MODID, Logger.LEVEL_MESSAGE, "Cool.");
-	}
-	
 }
