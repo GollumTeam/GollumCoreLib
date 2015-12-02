@@ -5,6 +5,8 @@ import static com.gollum.core.ModGollumCoreLib.log;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
+import org.lwjgl.opengl.GL11;
+
 import com.gollum.core.client.event.RenderItemEvent;
 import com.gollum.core.client.handlers.ISimpleBlockRenderingHandler;
 import com.gollum.core.common.blocks.ISimpleBlockRendered;
@@ -14,6 +16,7 @@ import com.gollum.core.utils.reflection.Reflection;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.resources.model.ModelManager;
@@ -111,7 +114,48 @@ public class GCLRenderItem extends RenderItem {
 			ISimpleBlockRenderingHandler renderHandler = RenderingRegistry.getBlockHandler(id);
 			if (renderHandler != null) {
 				// TODO metadata
+				
+				GL11.glEnable(GL11.GL_ALPHA_TEST);
+
+//				if (block.getRenderBlockPass() != 0) {
+//					GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
+//					GL11.glEnable(GL11.GL_BLEND);
+//					OpenGlHelper.glBlendFunc(770, 771, 1, 0);
+//				} else {
+					GL11.glAlphaFunc(GL11.GL_GREATER, 0.5F);
+					GL11.glDisable(GL11.GL_BLEND);
+//				}
+				
+				GL11.glPushMatrix();
+				GL11.glTranslatef((float)(x - 2), (float)(y + 3), -3.0F + this.zLevel);
+				GL11.glScalef(10.0F, 10.0F, 10.0F);
+				GL11.glTranslatef(1.0F, 0.5F, 1.0F);
+				GL11.glScalef(1.0F, 1.0F, -1.0F);
+				GL11.glRotatef(210.0F, 1.0F, 0.0F, 0.0F);
+				GL11.glRotatef(45.0F, 0.0F, 1.0F, 0.0F);
+				int l = stack.getItem().getColorFromItemStack(stack, 0);
+				float f3 = (float)(l >> 16 & 255) / 255.0F;
+				float f4 = (float)(l >> 8 & 255) / 255.0F;
+				float f = (float)(l & 255) / 255.0F;
+
+//				if (this.renderWithColor)
+//				{
+//					GL11.glColor4f(f3, f4, f, 1.0F);
+//				}
+
+				GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
+//				this.renderBlocksRi.useInventoryTint = this.renderWithColor;
+//				this.renderBlocksRi.renderBlockAsItem(block, k, 1.0F);
+//				this.renderBlocksRi.useInventoryTint = true;
 				renderHandler.renderInventoryBlock(block, 0, id, new GLCRenderBlocks());
+
+//				if (block.getRenderBlockPass() == 0)
+//				{
+					GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
+//				}
+				
+				GL11.glPopMatrix();
+				
 			} else {
 				log.severe("ISimpleBlockRenderingHandler with id "+id+" not found");
 			}
