@@ -147,7 +147,7 @@ public class GCLRenderItem extends RenderItem {
 //				this.renderBlocksRi.useInventoryTint = this.renderWithColor;
 //				this.renderBlocksRi.renderBlockAsItem(block, k, 1.0F);
 //				this.renderBlocksRi.useInventoryTint = true;
-				renderHandler.renderInventoryBlock(block, 0, id, new GLCRenderBlocks());
+				renderHandler.renderInventoryBlock(block, stack.getItemDamage(), id, new GLCRenderBlocks());
 
 //				if (block.getRenderBlockPass() == 0)
 //				{
