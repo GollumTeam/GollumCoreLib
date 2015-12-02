@@ -1,23 +1,9 @@
 package com.gollum.core.client;
 
-import static com.gollum.core.ModGollumCoreLib.log;
-
-import java.lang.reflect.Field;
-
-import com.gollum.core.client.renderer.GCLRenderItem;
 import com.gollum.core.common.CommonProxyGolumCoreLib;
-import com.gollum.core.common.context.ModContext;
 import com.gollum.core.common.handlers.GuiScreenHandler;
-import com.gollum.core.common.mod.GollumMod;
-import com.gollum.core.inits.ModItems;
-import com.gollum.core.tools.registry.BlockRegistry;
 import com.gollum.core.tools.registry.ItemRegistry;
-import com.sun.jna.Memory;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
 
 public class ClientProxyGolumCoreLib extends CommonProxyGolumCoreLib {
