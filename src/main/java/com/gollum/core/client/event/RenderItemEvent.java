@@ -1,5 +1,7 @@
 package com.gollum.core.client.event;
 
+import com.gollum.core.utils.math.Integer2d;
+
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -21,16 +23,14 @@ public class RenderItemEvent extends Event {
 			super(renderItem, itemStack);
 		}
 		
-		public int x = 0;
-		public int y = 0;
+		public Integer2d pos;
 		
 		public static class Pre extends RenderItemIntoGUI {
 			
 			
-			public Pre(RenderItem renderItem, ItemStack itemStack, int x, int y) {
+			public Pre(RenderItem renderItem, ItemStack itemStack, Integer2d pos) {
 				super(renderItem, itemStack);
-				this.x = x;
-				this.y = y;
+				this.pos = pos;
 			}
 			public boolean isCancelable() {
 				return true;
@@ -42,10 +42,9 @@ public class RenderItemEvent extends Event {
 			public int x = 0;
 			public int y = 0;
 			
-			public Post(RenderItem renderItem, ItemStack itemStack, int x, int y) {
+			public Post(RenderItem renderItem, ItemStack itemStack, Integer2d pos) {
 				super(renderItem, itemStack);
-				this.x = x;
-				this.y = y;
+				this.pos = pos;
 			}
 		}
 	}

@@ -12,6 +12,7 @@ import com.gollum.core.client.handlers.ISimpleBlockRenderingHandler;
 import com.gollum.core.common.blocks.ISimpleBlockRendered;
 import com.gollum.core.common.events.BuildingGenerateEvent;
 import com.gollum.core.tools.registry.RenderingRegistry;
+import com.gollum.core.utils.math.Integer2d;
 import com.gollum.core.utils.reflection.Reflection;
 
 import net.minecraft.block.Block;
@@ -27,6 +28,9 @@ import net.minecraftforge.common.MinecraftForge;
 public class GCLRenderItem extends RenderItem {
 	
 	private static GCLRenderItem instance = null;
+	
+	public boolean renderWithColor = true;
+	public GLCRenderBlocks renderBlocksRi = new GLCRenderBlocks();
 	
 	protected GCLRenderItem(TextureManager textureManager, ModelManager modelManager) {
 		super(textureManager, modelManager);
@@ -99,72 +103,70 @@ public class GCLRenderItem extends RenderItem {
 	@Override
 	public void renderItemIntoGUI(ItemStack stack, int x, int y) {
 		
-		RenderItemEvent.RenderItemIntoGUI event = new RenderItemEvent.RenderItemIntoGUI.Pre(this, stack, x, y);
+		RenderItemEvent.RenderItemIntoGUI event = new RenderItemEvent.RenderItemIntoGUI.Pre(this, stack, new Integer2d(x, y));
 		MinecraftForge.EVENT_BUS.post(event);
 		if (event.isCanceled()) {
 			return;
 		}
-		x = event.x;
-		y = event.y;
+		x = event.pos.x;
+		y = event.pos.y;
 		stack = event.itemStack;
 		
-		Block block = Block.getBlockFromItem(event.itemStack.getItem());
-		if (block instanceof ISimpleBlockRendered) {
-			int id = ((ISimpleBlockRendered) block).getGCLRenderType();
-			ISimpleBlockRenderingHandler renderHandler = RenderingRegistry.getBlockHandler(id);
-			if (renderHandler != null) {
-				// TODO metadata
-				
-				GL11.glEnable(GL11.GL_ALPHA_TEST);
-
-//				if (block.getRenderBlockPass() != 0) {
-//					GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
-//					GL11.glEnable(GL11.GL_BLEND);
-//					OpenGlHelper.glBlendFunc(770, 771, 1, 0);
-//				} else {
-					GL11.glAlphaFunc(GL11.GL_GREATER, 0.5F);
-					GL11.glDisable(GL11.GL_BLEND);
-//				}
-				
-				GL11.glPushMatrix();
-				GL11.glTranslatef((float)(x - 2), (float)(y + 3), -3.0F + this.zLevel);
-				GL11.glScalef(10.0F, 10.0F, 10.0F);
-				GL11.glTranslatef(1.0F, 0.5F, 1.0F);
-				GL11.glScalef(1.0F, 1.0F, -1.0F);
-				GL11.glRotatef(210.0F, 1.0F, 0.0F, 0.0F);
-				GL11.glRotatef(45.0F, 0.0F, 1.0F, 0.0F);
-				int l = stack.getItem().getColorFromItemStack(stack, 0);
-				float f3 = (float)(l >> 16 & 255) / 255.0F;
-				float f4 = (float)(l >> 8 & 255) / 255.0F;
-				float f = (float)(l & 255) / 255.0F;
-
-//				if (this.renderWithColor)
-//				{
-					GL11.glColor4f(f3, f4, f, 1.0F);
-//				}
-
-				GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
-//				this.renderBlocksRi.useInventoryTint = this.renderWithColor;
-//				this.renderBlocksRi.renderBlockAsItem(block, k, 1.0F);
-//				this.renderBlocksRi.useInventoryTint = true;
-				renderHandler.renderInventoryBlock(block, stack.getItemDamage(), id, new GLCRenderBlocks());
-
-//				if (block.getRenderBlockPass() == 0)
-//				{
-					GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
-//				}
-				
-				GL11.glPopMatrix();
-				
-			} else {
-				log.severe("ISimpleBlockRenderingHandler with id "+id+" not found");
-			}
-		} else {
+		if (!this.renderBlockHandlerIntoGUI(stack, x, y, Block.getBlockFromItem(event.itemStack.getItem())) ) {
 			super.renderItemIntoGUI(stack, x, y);
 		}
 		
-		event = new RenderItemEvent.RenderItemIntoGUI.Post(this, stack, x, y);
+		event = new RenderItemEvent.RenderItemIntoGUI.Post(this, stack, new Integer2d(x, y));
 		MinecraftForge.EVENT_BUS.post(event);
+	}
+
+	protected boolean renderBlockHandlerIntoGUI(ItemStack stack, int x, int y, Block block) {
+		
+		if (!(block instanceof ISimpleBlockRendered)) {
+			return false;
+		}
+		
+		int modelId = ((ISimpleBlockRendered) block).getGCLRenderType();
+		ISimpleBlockRenderingHandler renderHandler = RenderingRegistry.getBlockHandler(modelId);
+		if (renderHandler != null) {
+			
+			renderHandler.renderInventoryBlock(block, stack.getItemDamage(), modelId, new GLCRenderBlocks());
+			
+			GL11.glEnable(GL11.GL_ALPHA_TEST);
+
+			GL11.glAlphaFunc(GL11.GL_GREATER, 0.5F);
+			GL11.glDisable(GL11.GL_BLEND);
+
+			GL11.glPushMatrix();
+			GL11.glTranslatef((float)(x - 2), (float)(y + 3), -3.0F + this.zLevel);
+			GL11.glScalef(10.0F, 10.0F, 10.0F);
+			GL11.glTranslatef(1.0F, 0.5F, 1.0F);
+			GL11.glScalef(1.0F, 1.0F, -1.0F);
+			GL11.glRotatef(210.0F, 1.0F, 0.0F, 0.0F);
+			GL11.glRotatef(45.0F, 0.0F, 1.0F, 0.0F);
+			int color = stack.getItem().getColorFromItemStack(stack, 0);
+			float r = (float)(color  >> 16 & 255) / 255.0F;
+			float g = (float)(color  >> 8 & 255) / 255.0F;
+			float b = (float)(color & 255) / 255.0F;
+
+			if (this.renderWithColor) {
+				GL11.glColor4f(r, g, b, 1.0F);
+			}
+
+			GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
+			this.renderBlocksRi.useInventoryTint = this.renderWithColor;
+			this.renderBlocksRi.renderBlockAsItem(block, stack.getItemDamage(), 1.0F);
+			this.renderBlocksRi.useInventoryTint = true;
+			
+			GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
+			
+			GL11.glPopMatrix();
+			
+		} else {
+			log.severe("ISimpleBlockRenderingHandler with id "+modelId+" not found");
+		}
+		
+		return true;
 	}
 	
 }
