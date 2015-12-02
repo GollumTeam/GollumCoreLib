@@ -140,7 +140,7 @@ public class GCLRenderItem extends RenderItem {
 
 //				if (this.renderWithColor)
 //				{
-//					GL11.glColor4f(f3, f4, f, 1.0F);
+					GL11.glColor4f(f3, f4, f, 1.0F);
 //				}
 
 				GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
