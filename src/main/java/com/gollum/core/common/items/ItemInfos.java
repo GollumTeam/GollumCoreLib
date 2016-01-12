@@ -1,10 +1,13 @@
 package com.gollum.core.common.items;
 
+import java.util.Map.Entry;
+
 import com.gollum.core.common.blocks.IBlockDisplayInfos;
 import com.gollum.core.tools.helper.items.HItem;
 import com.gollum.core.tools.registered.RegisteredObjects;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -41,19 +44,21 @@ public class ItemInfos extends HItem {
 			
 			if (state != null) {
 				Block block = state.getBlock();
-				/* FIXME TODO review displaying infos
-				int metadata = world.getBlockMetadata (x, y, z);
+				String stateString = "";
+				for (Entry<IProperty, Comparable> entry : state.getProperties().entrySet()) {
+					IProperty prop = entry.getKey();
+					stateString += ", "+prop.getName() + "="+EnumChatFormatting.RED+state.getValue(prop)+EnumChatFormatting.WHITE;
+				}
 				
-				player.addChatMessage(new ChatComponentText("Block : pos="+x+"x"+y+"x"+z+", id="+Block.getIdFromBlock(block)+", metadata="+EnumChatFormatting.RED+metadata+EnumChatFormatting.WHITE+", rname="+RegisteredObjects.instance().getRegisterName(block)+", name="+block.getUnlocalizedName()));
+				player.addChatMessage(new ChatComponentText("Block : "+pos+stateString+", id="+Block.getIdFromBlock(block)+", rname="+RegisteredObjects.instance().getRegisterName(block)+", name="+block.getUnlocalizedName()));
 				if (block instanceof IBlockDisplayInfos) {
 					String info;
-					if ((info = ((IBlockDisplayInfos)block).displayDebugInfos(world, x, y, z)) != null) {
+					if ((info = ((IBlockDisplayInfos)block).displayDebugInfos(world, pos)) != null) {
 						player.addChatMessage(new ChatComponentText(info));
 					}
 				}
-				*/
 			} else {
-				player.addChatMessage(new ChatComponentText("Block : pos="+pos.toString()+", id=0, rname=minecraft:air"));
+				player.addChatMessage(new ChatComponentText("Block : "+pos+", id=0, rname=minecraft:air"));
 			}
 		}
 		
