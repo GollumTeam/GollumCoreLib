@@ -105,11 +105,12 @@ public class GCLRenderItem extends RenderItem {
 		
 		boolean rendered = false;
 		
-		RenderItemEvent event = new RenderItemEvent.Pre(this, stack);
+		RenderItemEvent event = new RenderItemEvent.Pre(this, stack, model);
 		if (event.isCanceled()) {
 			return;
 		}
 		stack = event.itemStack;
+		model = event.model;
 		
 		Block block = Block.getBlockFromItem(stack.getItem());
 		if (block instanceof ISimpleBlockRendered) {
@@ -127,7 +128,7 @@ public class GCLRenderItem extends RenderItem {
 			super.renderItem(stack, model);
 		}
 		
-		event = new RenderItemEvent.Post(this, stack);
+		event = new RenderItemEvent.Post(this, stack, model);
 		MinecraftForge.EVENT_BUS.post(event);
 	}
 	
@@ -143,60 +144,9 @@ public class GCLRenderItem extends RenderItem {
 		y = event.pos.y;
 		stack = event.itemStack;
 		
-		if (!this.renderBlockHandlerIntoGUI(stack, x, y, Block.getBlockFromItem(stack.getItem())) ) {
-			super.renderItemIntoGUI(stack, x, y);
-		}
+		super.renderItemIntoGUI(stack, x, y);
 		
 		event = new RenderItemIntoGuiEvent.Post(this, stack, new Integer2d(x, y));
 		MinecraftForge.EVENT_BUS.post(event);
 	}
-
-	
-	protected boolean renderBlockHandlerIntoGUI(ItemStack stack, int x, int y, Block block) {
-		
-		if (true || !(block instanceof ISimpleBlockRendered)) {
-			return false;
-		}
-		
-		int modelId = ((ISimpleBlockRendered) block).getGCLRenderType();
-		ISimpleBlockRenderingHandler renderHandler = RenderingRegistry.getBlockHandler(modelId);
-		if (renderHandler != null) {
-			
-			GL11.glEnable(GL11.GL_ALPHA_TEST);
-			
-			GL11.glAlphaFunc(GL11.GL_GREATER, 0.5F);
-			GL11.glDisable(GL11.GL_BLEND);
-			
-			GL11.glPushMatrix();
-			GL11.glTranslatef((float)(x - 2), (float)(y + 3), -3.0F + this.zLevel);
-			GL11.glScalef(10.0F, 10.0F, 10.0F);
-			GL11.glTranslatef(1.0F, 0.5F, 1.0F);
-			GL11.glScalef(1.0F, 1.0F, -1.0F);
-			GL11.glRotatef(210.0F, 1.0F, 0.0F, 0.0F);
-			GL11.glRotatef(45.0F, 0.0F, 1.0F, 0.0F);
-			int color = stack.getItem().getColorFromItemStack(stack, 0);
-			float r = (float)(color  >> 16 & 255) / 255.0F;
-			float g = (float)(color  >> 8 & 255) / 255.0F;
-			float b = (float)(color & 255) / 255.0F;
-			
-			if (this.renderWithColor) {
-				GL11.glColor4f(r, g, b, 1.0F);
-			}
-			
-			GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
-			this.renderBlocksRi.useInventoryTint = this.renderWithColor;
-			this.renderBlocksRi.renderBlockAsItem(block, stack.getItemDamage(), 1.0F);
-			this.renderBlocksRi.useInventoryTint = true;
-			
-			GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
-			
-			GL11.glPopMatrix();
-			
-		} else {
-			log.severe("ISimpleBlockRenderingHandler with id "+modelId+" not found");
-		}
-		
-		return true;
-	}
-	
 }

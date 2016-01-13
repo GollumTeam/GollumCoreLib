@@ -34,7 +34,12 @@ public class GLCRenderBlocks {
 			int modelId = ((ISimpleBlockRendered) block).getGCLRenderType();
 			ISimpleBlockRenderingHandler renderHandler = RenderingRegistry.getBlockHandler(modelId);
 			if (renderHandler != null) {
+				
+				GL11.glPushMatrix();
+				GL11.glScaled(0.7, 0.7, 0.7);
+				GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
 				renderHandler.renderInventoryBlock(block, metadata, modelId, this);
+				GL11.glPopMatrix();
 			}
 		}
 		
