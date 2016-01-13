@@ -2,6 +2,7 @@ package com.gollum.core.client;
 
 import com.gollum.core.common.CommonProxyGolumCoreLib;
 import com.gollum.core.common.handlers.GuiScreenHandler;
+import com.gollum.core.inits.ModItems;
 import com.gollum.core.tools.registry.BlockRegistry;
 import com.gollum.core.tools.registry.ItemRegistry;
 

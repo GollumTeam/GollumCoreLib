@@ -45,7 +45,17 @@ public class ItemBuilding extends HItem {
 		
 	}
 	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void registerRender () {
+		helper.registerRender(0);
+		for (int metadata = 1; metadata < 255; metadata++) {
+			helper.registerRender(metadata, this.getRegisterName(), false);
+		}
+	}
+	
 	private void initBuildingList () {
+		boolean first = this.nameIndex == null;
 		this.nameIndex     = new ArrayList<String>();
 		this.buildingIndex = new ArrayList<Building>();
 		for (Entry<String, Building> entry : BuildingParser.getBuildingsList().entrySet()) {

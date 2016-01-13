@@ -51,7 +51,7 @@ public class HBlockPistonExtension extends BlockPistonExtension implements IBloc
 	public void registerRender () {
 		helper.registerRender();
 	}
-	
+
 	/**
 	 * Affect la class de l'objet qui servira item pour le block
 	 * par default ItemBlock

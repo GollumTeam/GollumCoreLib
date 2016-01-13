@@ -11,12 +11,14 @@ import com.gollum.core.client.event.RenderItemEvent;
 import com.gollum.core.client.event.RenderItemIntoGuiEvent;
 import com.gollum.core.client.handlers.ISimpleBlockRenderingHandler;
 import com.gollum.core.common.blocks.ISimpleBlockRendered;
+import com.gollum.core.common.blocks.ISimpleBlockRenderedColored;
 import com.gollum.core.tools.registry.RenderingRegistry;
 import com.gollum.core.utils.math.Integer2d;
 import com.gollum.core.utils.reflection.Reflection;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.resources.model.IBakedModel;
@@ -28,13 +30,6 @@ import net.minecraftforge.common.MinecraftForge;
 public class GCLRenderItem extends RenderItem {
 	
 	private static GCLRenderItem instance = null;
-	
-	public boolean renderWithColor = true;
-	public GLCRenderBlocks renderBlocksRi = new GLCRenderBlocks();
-	
-	protected GCLRenderItem(TextureManager textureManager, ModelManager modelManager) {
-		super(textureManager, modelManager);
-	}
 	
 	public static void override () {
 		if (instance == null) {
@@ -60,6 +55,7 @@ public class GCLRenderItem extends RenderItem {
 	
 	private RenderItem proxy;
 	private boolean isInit = false;
+	public boolean renderWithColor = true;
 	
 	public GCLRenderItem(RenderItem proxy) {
 		super(getResourceManager(), getTextureMapBlocks());
@@ -96,7 +92,7 @@ public class GCLRenderItem extends RenderItem {
 	@Override
 	protected void registerItem(Item itm, int subType, String identifier) {
 		if (this.isInit) {
-			this.registerItem(itm, subType, identifier);
+			super.registerItem(itm, subType, identifier);
 		}
 	}
 	
@@ -117,9 +113,7 @@ public class GCLRenderItem extends RenderItem {
 			int modelId = ((ISimpleBlockRendered) block).getGCLRenderType();
 			ISimpleBlockRenderingHandler renderHandler = RenderingRegistry.getBlockHandler(modelId);
 			if (renderHandler != null) {
-				this.renderBlocksRi.useInventoryTint = this.renderWithColor;
-				this.renderBlocksRi.renderBlockAsItem(block, stack.getItemDamage(), 1.0F);
-				this.renderBlocksRi.useInventoryTint = true;
+				this.renderBlockAsItem(block, stack.getItemDamage(), 1.0F);
 				rendered = true;
 			}
 		}
@@ -130,6 +124,38 @@ public class GCLRenderItem extends RenderItem {
 		
 		event = new RenderItemEvent.Post(this, stack, model);
 		MinecraftForge.EVENT_BUS.post(event);
+	}
+	
+	protected void renderBlockAsItem(Block block, int metadata, float light) {
+		
+		Tessellator tessellator = Tessellator.getInstance();
+		
+		if (this.renderWithColor) {
+			int color = 0xFFFFFF;
+			if (block instanceof ISimpleBlockRenderedColored) {
+				color = ((ISimpleBlockRenderedColored)block).getRenderColor(metadata);
+			}
+			
+			float r = (float)(color >> 16 & 255) / 255.0F;
+			float g = (float)(color >> 8 & 255) / 255.0F;
+			float b = (float)(color & 255) / 255.0F;
+			GL11.glColor4f(r * light, g * light, b * light, 1.0F);
+		}
+		
+		if (block instanceof ISimpleBlockRendered) {
+			int modelId = ((ISimpleBlockRendered) block).getGCLRenderType();
+			ISimpleBlockRenderingHandler renderHandler = RenderingRegistry.getBlockHandler(modelId);
+			if (renderHandler != null) {
+				
+				GL11.glPushMatrix();
+				GL11.glScaled(0.7, 0.7, 0.7);
+				GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
+				renderHandler.renderInventoryBlock(block, metadata, modelId, this);
+				GL11.glPopMatrix();
+			}
+		}
+		
+		
 	}
 	
 	@Override

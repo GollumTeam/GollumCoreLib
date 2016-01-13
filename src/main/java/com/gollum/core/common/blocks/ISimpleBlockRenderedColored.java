@@ -1,7 +1,5 @@
 package com.gollum.core.common.blocks;
 
-import com.gollum.core.client.renderer.GLCRenderBlocks;
-
 public interface ISimpleBlockRenderedColored extends ISimpleBlockRendered {
 	
 	/**

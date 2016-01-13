@@ -59,7 +59,7 @@ public class HBlockPistonBase extends BlockPistonBase implements IBlockHelper {
 	public void registerRender () {
 		helper.registerRender();
 	}
-	
+
 	@Override
 	public String getRegisterName() {
 		return helper.getRegisterName();

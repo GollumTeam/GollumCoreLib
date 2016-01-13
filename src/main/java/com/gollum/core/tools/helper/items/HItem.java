@@ -36,7 +36,7 @@ public class HItem extends Item implements IItemHelper {
 	public void registerRender () {
 		helper.registerRender();
 	}
-	
+
 	/**
 	 * Nom d'enregistrement du mod
 	 */
@@ -45,35 +45,4 @@ public class HItem extends Item implements IItemHelper {
 		return helper.getRegisterName();
 	}
 	
-	/**
-	 * Setter de l'icon de l'objet
-	 * @param icon
-	 */
-	/* TODO
-	@Override
-	public void setIcon (IIcon icon) {
-		this.itemIcon = icon;
-	}
-	*/
-	
-	//////////////////////////
-	//Gestion des textures  //
-	//////////////////////////
-	
-	/* TODO
-	@Override
-	public void registerIcons(IIconRegister iconRegister) {
-		if (helper.vanillaTexture) super.registerIcons(iconRegister); else helper.registerIcons(iconRegister);
-	}
-	*/
-	
-	/**
-	 * Clef qui permet de générer le nom du fichier de texture 
-	 * par rapport au register name en miniscule
-	 * @return
-	 */
-	@Override
-	public String getTextureKey() {
-		return helper.getTextureKey();
-	}
 }

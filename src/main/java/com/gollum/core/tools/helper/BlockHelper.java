@@ -1,6 +1,8 @@
 package com.gollum.core.tools.helper;
 
+import java.util.ArrayList;
 import java.util.Random;
+import java.util.TreeSet;
 
 import com.gollum.core.ModGollumCoreLib;
 import com.gollum.core.common.context.ModContext;
@@ -11,6 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -80,8 +83,31 @@ public class BlockHelper implements IBlockHelper {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerRender () {
-		ModGollumCoreLib.log.message("Auto register render: "+this.mod.getModId()+":"+this.getRegisterName());
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(this.getBlockItem(), 0, new ModelResourceLocation(this.mod.getModId()+":"+this.getRegisterName(), "inventory"));
+		ArrayList<ItemStack> list = new ArrayList<ItemStack>();
+		this.parent.getSubBlocks(this.getBlockItem(), (CreativeTabs)null, list);
+		TreeSet<Integer> registered  = new TreeSet<Integer>();
+		
+		registered.add(0);
+		this.registerRender(0);
+		for (ItemStack is :list) {
+			if (!registered.contains(is.getItemDamage())) {
+				registered.add(is.getItemDamage());
+				this.registerRender(is.getItemDamage());
+			}
+		}
+	}
+	
+	public void registerRender (int metadata) {
+		this.registerRender(metadata, this.getRegisterName());
+	}
+
+	public void registerRender (int metadata, String renderKey) {
+		this.registerRender(metadata, this.getRegisterName(), true);
+	}
+	
+	public void registerRender (int metadata, String renderKey, boolean trace) {
+		if (trace) ModGollumCoreLib.log.message("Auto register render: "+this.mod.getModId()+":"+renderKey+':'+metadata);
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(this.getBlockItem(), metadata, new ModelResourceLocation(this.mod.getModId()+":"+renderKey, "inventory"));
 	}
 	
 	/**

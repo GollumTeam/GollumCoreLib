@@ -1,5 +1,8 @@
 package com.gollum.core.tools.helper;
 
+import java.util.ArrayList;
+import java.util.TreeSet;
+
 import com.gollum.core.ModGollumCoreLib;
 import com.gollum.core.common.context.ModContext;
 import com.gollum.core.common.mod.GollumMod;
@@ -8,7 +11,9 @@ import com.gollum.core.tools.registry.ItemRegistry;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -39,6 +44,11 @@ public class ItemHelper implements IItemHelper {
 	}
 	
 	@Override
+	public String getRegisterName() {
+		return this.registerName;
+	}
+	
+	@Override
 	public void register () {
 		this.parent.setUnlocalizedName(this.registerName);
 		GameRegistry.registerItem (this.parent, this.getRegisterName (), this.mod.getModId());
@@ -50,97 +60,30 @@ public class ItemHelper implements IItemHelper {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerRender () {
-		ModGollumCoreLib.log.message("Auto register render: "+this.mod.getModId()+":"+this.getRegisterName());
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(this.parent, 0, new ModelResourceLocation(this.mod.getModId()+":"+this.getRegisterName(), "inventory"));
+		ArrayList<ItemStack> list = new ArrayList<ItemStack>();
+		this.parent.getSubItems(this.parent, (CreativeTabs)null, list);
+		TreeSet<Integer> registered  = new TreeSet<Integer>();
+
+		registered.add(0);
+		this.registerRender(0);
+		for (ItemStack is :list) {
+			if (!registered.contains(is.getItemDamage())) {
+				registered.add(is.getItemDamage());
+				this.registerRender(is.getItemDamage());
+			}
+		}
 	}
 	
-	/**
-	 * Nom d'enregistrement du mod
-	 */
-	public String getRegisterName() {
-		return registerName;
+	public void registerRender (int metadata) {
+		this.registerRender(metadata, this.getRegisterName());
+	}
+
+	public void registerRender (int metadata, String renderKey) {
+		this.registerRender(metadata, this.getRegisterName(), true);
 	}
 	
-	//////////////////////////
-	//Gestion des textures  //
-	//////////////////////////
-	
-	/**
-	 * Clef qui permet de générer le nom du fichier de texture 
-	 * par rapport au register name en miniscule
-	 * @return
-	 */
-	@Override
-	public String getTextureKey () {
-		return ((IItemHelper)this.parent).getRegisterName().toLowerCase();
+	public void registerRender (int metadata, String renderKey, boolean trace) {
+		if (trace) ModGollumCoreLib.log.message("Auto register render: "+this.mod.getModId()+":"+renderKey+':'+metadata);
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(this.parent, metadata, new ModelResourceLocation(this.mod.getModId()+":"+renderKey, "inventory"));
 	}
-	
-	/**
-	* Charge une texture et affiche dans le log.
-	* Utilise le register name comme prefixe sauf si useTextureKey est à false
-	*
-	* @param iconRegister
-	* @param key
-	* @return
-	*/
-	/* TODO
-	public IIcon loadTexture(IIconRegister iconRegister) {
-		return this.loadTexture(iconRegister, "");
-	}
-	*/
-	
-	/**
-	* Charge une texture et affiche dans le log.
-	* Utilise le register name comme prefixe sauf si useTextureKey est à false
-	*
-	* @param iconRegister
-	* @param key
-	* @return
-	*/
-	/* TODO
-	public IIcon loadTexture(IIconRegister iconRegister, String sufixe) {
-		return this.loadTexture(iconRegister, sufixe, false);
-	}
-	*/
-	
-	/**
-	* Charge une texture et affiche dans le log.
-	* Utilise le register name comme prefixe sauf si dontUseTextureKey est à false
-	* 
-	* @param iconRegister
-	* @param key
-	* @return
-	*/
-	/* TODO
-	public IIcon loadTexture(IIconRegister iconRegister, String sufixe, boolean dontUseTextureKey) {
-		
-		String key = (dontUseTextureKey ?  "" : ((IItemHelper)this.parent).getTextureKey ())+sufixe;
-		String texture = this.mod.getModId().toLowerCase() + ":" + key;
-		
-		ModGollumCoreLib.log.debug ("Register icon " + texture + "\"");
-		return iconRegister.registerIcon(texture);
-	}
-	*/
-	
-	/**
-	 * Enregistre les textures
-	 * Depuis la 1.5 on est obligé de charger les texture fichier par fichier
-	 */
-	/* TODO
-	@Override
-	public void registerIcons(IIconRegister iconRegister) {
-		((IItemHelper)this.parent).setIcon (this.loadTexture(iconRegister));
-	}
-	*/
-	
-	/**
-	 * Setter de l'icon de l'objet
-	 * @param icon
-	 */
-	/* TODO
-	@Override
-	public void setIcon (IIcon icon) {
-		ModGollumCoreLib.log.warning("setIcon don't be call by helper. It's stub");
-	}
-	*/
 }
