@@ -18,6 +18,7 @@ import com.gollum.core.utils.reflection.Reflection;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.texture.TextureManager;
@@ -99,7 +100,6 @@ public class GCLRenderItem extends RenderItem {
 
 	public void renderItem(ItemStack stack, IBakedModel model) {
 		
-		boolean rendered = false;
 		
 		RenderItemEvent event = new RenderItemEvent.Pre(this, stack, model);
 		if (event.isCanceled()) {
@@ -108,17 +108,7 @@ public class GCLRenderItem extends RenderItem {
 		stack = event.itemStack;
 		model = event.model;
 		
-		Block block = Block.getBlockFromItem(stack.getItem());
-		if (block instanceof ISimpleBlockRendered) {
-			int modelId = ((ISimpleBlockRendered) block).getGCLRenderType();
-			ISimpleBlockRenderingHandler renderHandler = RenderingRegistry.getBlockHandler(modelId);
-			if (renderHandler != null) {
-				this.renderBlockAsItem(block, stack.getItemDamage(), 1.0F);
-				rendered = true;
-			}
-		}
-		
-		if (!rendered) {
+		if (!this.renderBlockAsItem(stack)) {
 			super.renderItem(stack, model);
 		}
 		
@@ -126,35 +116,40 @@ public class GCLRenderItem extends RenderItem {
 		MinecraftForge.EVENT_BUS.post(event);
 	}
 	
-	protected void renderBlockAsItem(Block block, int metadata, float light) {
+	protected boolean renderBlockAsItem(ItemStack stack) {
 		
-		Tessellator tessellator = Tessellator.getInstance();
-		
-		if (this.renderWithColor) {
-			int color = 0xFFFFFF;
-			if (block instanceof ISimpleBlockRenderedColored) {
-				color = ((ISimpleBlockRenderedColored)block).getRenderColor(metadata);
-			}
-			
-			float r = (float)(color >> 16 & 255) / 255.0F;
-			float g = (float)(color >> 8 & 255) / 255.0F;
-			float b = (float)(color & 255) / 255.0F;
-			GL11.glColor4f(r * light, g * light, b * light, 1.0F);
-		}
+		Block block = Block.getBlockFromItem(stack.getItem());
+		int metadata = stack.getItemDamage();
 		
 		if (block instanceof ISimpleBlockRendered) {
 			int modelId = ((ISimpleBlockRendered) block).getGCLRenderType();
 			ISimpleBlockRenderingHandler renderHandler = RenderingRegistry.getBlockHandler(modelId);
 			if (renderHandler != null) {
+		
+				Tessellator tessellator = Tessellator.getInstance();
+		
+				if (this.renderWithColor) {
+					int color = 0xFFFFFF;
+					if (block instanceof ISimpleBlockRenderedColored) {
+						color = ((ISimpleBlockRenderedColored)block).getRenderColor(metadata);
+					}
+					
+					float r = (float)(color >> 16 & 255) / 255.0F;
+					float g = (float)(color >> 8 & 255) / 255.0F;
+					float b = (float)(color & 255) / 255.0F;
+					GL11.glColor4f(r, g, b, 1.0F);
+				}
 				
 				GL11.glPushMatrix();
-				GL11.glScaled(0.7, 0.7, 0.7);
+				GL11.glScaled(0.5, 0.5, 0.5);
 				GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
 				renderHandler.renderInventoryBlock(block, metadata, modelId, this);
 				GL11.glPopMatrix();
+				
+				return true;
 			}
 		}
-		
+		return false;
 		
 	}
 	
