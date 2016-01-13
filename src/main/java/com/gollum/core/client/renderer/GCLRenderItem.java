@@ -8,18 +8,18 @@ import java.lang.reflect.Modifier;
 import org.lwjgl.opengl.GL11;
 
 import com.gollum.core.client.event.RenderItemEvent;
+import com.gollum.core.client.event.RenderItemIntoGuiEvent;
 import com.gollum.core.client.handlers.ISimpleBlockRenderingHandler;
 import com.gollum.core.common.blocks.ISimpleBlockRendered;
-import com.gollum.core.common.events.BuildingGenerateEvent;
 import com.gollum.core.tools.registry.RenderingRegistry;
 import com.gollum.core.utils.math.Integer2d;
 import com.gollum.core.utils.reflection.Reflection;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.client.resources.model.ModelManager;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -100,11 +100,42 @@ public class GCLRenderItem extends RenderItem {
 		}
 	}
 	
+
+	public void renderItem(ItemStack stack, IBakedModel model) {
+		
+		boolean rendered = false;
+		
+		RenderItemEvent event = new RenderItemEvent.Pre(this, stack);
+		if (event.isCanceled()) {
+			return;
+		}
+		stack = event.itemStack;
+		
+		Block block = Block.getBlockFromItem(stack.getItem());
+		if (block instanceof ISimpleBlockRendered) {
+			int modelId = ((ISimpleBlockRendered) block).getGCLRenderType();
+			ISimpleBlockRenderingHandler renderHandler = RenderingRegistry.getBlockHandler(modelId);
+			if (renderHandler != null) {
+				this.renderBlocksRi.useInventoryTint = this.renderWithColor;
+				this.renderBlocksRi.renderBlockAsItem(block, stack.getItemDamage(), 1.0F);
+				this.renderBlocksRi.useInventoryTint = true;
+				rendered = true;
+			}
+		}
+		
+		if (!rendered) {
+			super.renderItem(stack, model);
+		}
+		
+		event = new RenderItemEvent.Post(this, stack);
+		MinecraftForge.EVENT_BUS.post(event);
+	}
+	
 	@Override
 	public void renderItemIntoGUI(ItemStack stack, int x, int y) {
 		
-		RenderItemEvent.RenderItemIntoGUI event = new RenderItemEvent.RenderItemIntoGUI.Pre(this, stack, new Integer2d(x, y));
-		MinecraftForge.EVENT_BUS.post(event);
+		RenderItemIntoGuiEvent event = new RenderItemIntoGuiEvent.Pre(this, stack, new Integer2d(x, y));
+		MinecraftForge.EVENT_BUS.post(event);  
 		if (event.isCanceled()) {
 			return;
 		}
@@ -112,17 +143,18 @@ public class GCLRenderItem extends RenderItem {
 		y = event.pos.y;
 		stack = event.itemStack;
 		
-		if (!this.renderBlockHandlerIntoGUI(stack, x, y, Block.getBlockFromItem(event.itemStack.getItem())) ) {
+		if (!this.renderBlockHandlerIntoGUI(stack, x, y, Block.getBlockFromItem(stack.getItem())) ) {
 			super.renderItemIntoGUI(stack, x, y);
 		}
 		
-		event = new RenderItemEvent.RenderItemIntoGUI.Post(this, stack, new Integer2d(x, y));
+		event = new RenderItemIntoGuiEvent.Post(this, stack, new Integer2d(x, y));
 		MinecraftForge.EVENT_BUS.post(event);
 	}
 
+	
 	protected boolean renderBlockHandlerIntoGUI(ItemStack stack, int x, int y, Block block) {
 		
-		if (!(block instanceof ISimpleBlockRendered)) {
+		if (true || !(block instanceof ISimpleBlockRendered)) {
 			return false;
 		}
 		
@@ -130,13 +162,11 @@ public class GCLRenderItem extends RenderItem {
 		ISimpleBlockRenderingHandler renderHandler = RenderingRegistry.getBlockHandler(modelId);
 		if (renderHandler != null) {
 			
-			renderHandler.renderInventoryBlock(block, stack.getItemDamage(), modelId, new GLCRenderBlocks());
-			
 			GL11.glEnable(GL11.GL_ALPHA_TEST);
-
+			
 			GL11.glAlphaFunc(GL11.GL_GREATER, 0.5F);
 			GL11.glDisable(GL11.GL_BLEND);
-
+			
 			GL11.glPushMatrix();
 			GL11.glTranslatef((float)(x - 2), (float)(y + 3), -3.0F + this.zLevel);
 			GL11.glScalef(10.0F, 10.0F, 10.0F);
@@ -148,11 +178,11 @@ public class GCLRenderItem extends RenderItem {
 			float r = (float)(color  >> 16 & 255) / 255.0F;
 			float g = (float)(color  >> 8 & 255) / 255.0F;
 			float b = (float)(color & 255) / 255.0F;
-
+			
 			if (this.renderWithColor) {
 				GL11.glColor4f(r, g, b, 1.0F);
 			}
-
+			
 			GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
 			this.renderBlocksRi.useInventoryTint = this.renderWithColor;
 			this.renderBlocksRi.renderBlockAsItem(block, stack.getItemDamage(), 1.0F);

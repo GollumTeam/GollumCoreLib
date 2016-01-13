@@ -1,11 +1,10 @@
 package com.gollum.core.tools.helper.items;
 
-import com.gollum.core.tools.helper.BlockHelper;
-import com.gollum.core.tools.helper.BlockMetadataHelper;
-import com.gollum.core.tools.helper.IBlockHelper;
-import com.gollum.core.tools.helper.IBlockMetadataHelper;
+import java.util.ArrayList;
+import java.util.TreeSet;
 
 import net.minecraft.block.Block;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
@@ -16,23 +15,31 @@ public class HItemBlockMetadata extends ItemBlock {
 		this.setHasSubtypes(true);
 	}
 	
-	/**
-	 * Returns the unlocalized name of this item. This version accepts an
-	 * ItemStack so different stacks can have different names based on their
-	 * damage or NBT.
-	 */
-	/* TODO
 	public String getUnlocalizedName(ItemStack itemStack) {
-		
 		int dammage = itemStack.getItemDamage();
-		
-		// Castage du helper
-		BlockHelper         blockHelper         = ((IBlockHelper)         this.field_150939_a).getGollumHelper ();
-		BlockMetadataHelper blockMetadataHelper = ((IBlockMetadataHelper) this.field_150939_a).getGollumHelperMetadata ();
-		
-		return this.getUnlocalizedName() + "." + blockMetadataHelper.getEnabledMetadata (dammage);
+		return this.getUnlocalizedName() + "." + this.getEnabledMetadata (dammage);
 	}
-	*/
+	
+	public int getEnabledMetadata (int dammage) {
+		ArrayList<ItemStack> list = new ArrayList<ItemStack>();
+		this.getSubItems(this, (CreativeTabs)null, list);
+		TreeSet<Integer> listSubEnabled  = new TreeSet<Integer>();
+		for (ItemStack is :list) {
+			if (!listSubEnabled.contains(is.getItemDamage())) {
+				listSubEnabled.add(is.getItemDamage());
+			}
+		}
+		
+		int lastSubblock = -1;
+		for (Integer metadata : listSubEnabled) {
+			if (metadata  > dammage) {
+				break;
+			}
+			lastSubblock = metadata;			
+		}
+		
+		return (lastSubblock == -1) ? dammage : lastSubblock;
+	}
 	
 	/**
 	 * Returns the metadata of the block which this Item (ItemBlock) can place
