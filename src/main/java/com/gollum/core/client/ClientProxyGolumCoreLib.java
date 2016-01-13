@@ -2,6 +2,7 @@ package com.gollum.core.client;
 
 import com.gollum.core.common.CommonProxyGolumCoreLib;
 import com.gollum.core.common.handlers.GuiScreenHandler;
+import com.gollum.core.tools.registry.BlockRegistry;
 import com.gollum.core.tools.registry.ItemRegistry;
 
 import net.minecraftforge.common.MinecraftForge;
@@ -10,8 +11,7 @@ public class ClientProxyGolumCoreLib extends CommonProxyGolumCoreLib {
 	
 	@Override
 	public void registerObjectRenders() {
-		
-//		BlockRegistry.instance().registerAll();
+		BlockRegistry.instance().registerRenders();
 		ItemRegistry .instance().registerRenders();
 	}
 	
@@ -26,8 +26,4 @@ public class ClientProxyGolumCoreLib extends CommonProxyGolumCoreLib {
 		return true;
 	}
 	
-	public void overrideRenderItem() {
-		/*
-		*/
-	}
 }
