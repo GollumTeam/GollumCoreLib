@@ -142,6 +142,7 @@ public class GCLRenderItem extends RenderItem {
 				
 				GL11.glPushMatrix();
 				GL11.glScaled(0.5, 0.5, 0.5);
+				GL11.glRotated(90, 0, 1, 0);
 				GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
 				renderHandler.renderInventoryBlock(block, metadata, modelId, this);
 				GL11.glPopMatrix();

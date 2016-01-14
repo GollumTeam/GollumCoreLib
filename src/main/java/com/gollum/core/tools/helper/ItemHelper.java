@@ -8,7 +8,6 @@ import java.util.TreeSet;
 import com.gollum.core.ModGollumCoreLib;
 import com.gollum.core.common.context.ModContext;
 import com.gollum.core.common.mod.GollumMod;
-import com.gollum.core.tools.helper.items.HItem;
 import com.gollum.core.tools.registry.ItemRegistry;
 
 import net.minecraft.client.Minecraft;
@@ -127,6 +126,12 @@ public class ItemHelper implements IItemHelper {
 	public void getSubItems(Item item, CreativeTabs ctabs, List list) {
 		HashMap<Integer, String> map = new HashMap<Integer, String>();
 		((IItemHelper)this.parent).getSubNames(map);
+		
+		if (map.isEmpty()) {
+			list.add(new ItemStack(item, 1, 0));
+			return;
+		}
+		
 		for (Entry<Integer, String> entry: map.entrySet()) {
 			list.add(new ItemStack(item, 1, entry.getKey()));
 		}

@@ -2,6 +2,8 @@ package com.gollum.core.common.tileentities;
 
 import net.minecraft.block.BlockChest;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -146,11 +148,11 @@ public abstract class GCLInventoryTileEntity extends TileEntityLockable implemen
 	@Override
 	public void closeInventory (EntityPlayer player) {
 		if (!player.isSpectator() &&  this.getBlockType() == this.worldObj.getBlockState(pos).getBlock()) {
-            --this.numUsingPlayers;
-            this.worldObj.addBlockEvent(this.pos, this.getBlockType(), 1, this.numUsingPlayers);
-            this.worldObj.notifyNeighborsOfStateChange(this.pos, this.getBlockType());
-            this.worldObj.notifyNeighborsOfStateChange(this.pos.down(), this.getBlockType());
-        }
+			--this.numUsingPlayers;
+			this.worldObj.addBlockEvent(this.pos, this.getBlockType(), 1, this.numUsingPlayers);
+			this.worldObj.notifyNeighborsOfStateChange(this.pos, this.getBlockType());
+			this.worldObj.notifyNeighborsOfStateChange(this.pos.down(), this.getBlockType());
+		}
 	}
 	
 	/**
@@ -220,6 +222,33 @@ public abstract class GCLInventoryTileEntity extends TileEntityLockable implemen
 		double y = (double) this.pos.getY() + 0.5D;
 		double z = (double) this.pos.getZ() + 0.5D;
 		this.worldObj.playSoundEffect(x, y, z, this.soundOpenInventory, this.volumeSoundOpenClosedInventory, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+	}
+	
+	@Override
+	public int getField(int id) {
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value) {
+	}
+
+	@Override
+	public int getFieldCount() {
+		return 0;
+	}
+
+	@Override
+	public void clear() {
+		for (int i = 0; i < inventory.length; ++i) {
+			inventory[i] = null;
+		}
+	}
+
+	@Override
+	public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	////////////

@@ -37,7 +37,7 @@ public class GCLGuiHandler implements IGuiHandler {
 				//InventoryPlayer
 				
 				for (Constructor constructor : guiContainerInventoryClass.classContainer.getConstructors()) {
-					for (int i = 0 ; i < 10; i++) {
+					for (int i = 0 ; i < 15; i++) {
 
 						try {
 							switch (i) {
@@ -59,7 +59,7 @@ public class GCLGuiHandler implements IGuiHandler {
 								case 15: if (tENN) container = (Container) constructor.newInstance(player.inventory, te, player);                                      break;
 								default: break;
 							}
-						} catch (Exception e) {
+						} catch (IllegalArgumentException e) {
 						}
 						
 						if (container != null) {
@@ -98,7 +98,7 @@ public class GCLGuiHandler implements IGuiHandler {
 				//InventoryPlayer
 				
 				for (Constructor constructor : guiContainerInventoryClass.classGuiContainer.getConstructors()) {
-					for (int i = 0 ; i < 10; i++) {
+					for (int i = 0 ; i < 15; i++) {
 
 						try {
 							switch (i) {
@@ -116,11 +116,11 @@ public class GCLGuiHandler implements IGuiHandler {
 								case 11: gui = (GuiContainer) constructor.newInstance(player.inventory, player, world, x, y, z);                                          break;
 								case 12: if (tENN) gui = (GuiContainer) constructor.newInstance(player.inventory, te, guiContainerInventoryClass.parameter);break;
 								case 13: if (tENN) gui = (GuiContainer) constructor.newInstance(player.inventory, te);                                      break;
-								case 14: if (tENN) gui = (GuiContainer) constructor.newInstance(player.inventory, player, te, guiContainerInventoryClass.parameter);break;
-								case 15: if (tENN) gui = (GuiContainer) constructor.newInstance(player.inventory, player, te);                                      break;
+								case 14: if (tENN) gui = (GuiContainer) constructor.newInstance(player.inventory, te, player, guiContainerInventoryClass.parameter);break;
+								case 15: if (tENN) gui = (GuiContainer) constructor.newInstance(player.inventory, te, player);                                      break;
 								default: break;
 							}
-						} catch (Exception e) {
+						} catch (IllegalArgumentException e) {
 						}
 						
 						if (gui != null) {
