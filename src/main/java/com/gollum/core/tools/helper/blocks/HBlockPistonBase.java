@@ -12,10 +12,12 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockPistonBase;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -111,63 +113,9 @@ public class HBlockPistonBase extends BlockPistonBase implements IBlockHelper {
 		super.breakBlock(world, pos, state);
 	}
 	
-	
-	//////////////////////////
-	//Gestion des textures  //
-	//////////////////////////
-	
-	/**
-	 * Enregistre les textures
-	 * Depuis la 1.5 on est obligé de charger les texture fichier par fichier
-	 */
-	/* TODO
 	@Override
-	public void registerBlockIcons(IIconRegister iconRegister) {
-		
-		if (helper.vanillaTexture) {
-			super.registerBlockIcons(iconRegister);
-			return;
-		};
-		
-		this.registerBlockIconsTop   (iconRegister);
-		this.registerBlockIconsOpen  (iconRegister);
-		this.registerBlockIconsBottom(iconRegister);
-		this.registerBlockIconsSide  (iconRegister);
-		
+	public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player) {
+		return helper.getPickBlock(target, world, pos, player);
 	}
-	protected void registerBlockIconsTop(IIconRegister iconRegister) {
-		this.iconTop = helper.loadTexture(iconRegister, suffixTop + (this.isStickyPiston ? suffixSticky : ""));
-	}
-	protected void registerBlockIconsOpen(IIconRegister iconRegister) {
-		this.iconOpen = helper.loadTexture(iconRegister, suffixOpen);
-	}
-	protected void registerBlockIconsBottom(IIconRegister iconRegister) {
-		this.iconBottom = helper.loadTexture(iconRegister, suffixBottom);
-	}
-	protected void registerBlockIconsSide(IIconRegister iconRegister) {
-		this.blockIcon = helper.loadTexture(iconRegister, suffixSide);
-	}
-	*/
-	
-	/**
-	 * Setter de l'icon de l'objet
-	 * @param icon
-	 */
-	/* TODO
-	@Override
-	public IBlockHelper setIcon (IIcon icon) {
-		this.blockIcon = icon;
-		return this;
-	}
-	*/
-	
-	/* TODO
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getPistonExtensionTexture() {
-		if (helper.vanillaTexture) return super.getPistonExtensionTexture();
-		return this.iconTop;
-	}
-	*/
 	
 }

@@ -38,7 +38,7 @@ public class ItemHelper implements IItemHelper {
 		this.registerName = registerName;
 		this.mod          = ModContext.instance().getCurrent();
 		
-		if (!vanillaRegister) ItemRegistry.instance().add((HItem) this.parent);
+		if (!vanillaRegister) ItemRegistry.instance().add((IItemHelper) this.parent);
 	}
 
 	@Override
