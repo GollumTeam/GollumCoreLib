@@ -46,10 +46,8 @@ public interface IBlockHelper {
 	 */
 	public Item getBlockItem ();
 	
-	@SideOnly(Side.CLIENT)
 	public void getSubNames(HashMap<Integer, String> list);
 	
-	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(Item item, CreativeTabs ctabs, List list);
 	
 	/**

@@ -1,6 +1,8 @@
 package com.gollum.core.tools.helper;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map.Entry;
 import java.util.TreeSet;
 
 import com.gollum.core.ModGollumCoreLib;
@@ -10,6 +12,7 @@ import com.gollum.core.tools.helper.items.HItem;
 import com.gollum.core.tools.registry.ItemRegistry;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -60,16 +63,22 @@ public class ItemHelper implements IItemHelper {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerRender () {
-		ArrayList<ItemStack> list = new ArrayList<ItemStack>();
-		this.parent.getSubItems(this.parent, (CreativeTabs)null, list);
+		HashMap<Integer, String> map = new HashMap<Integer, String>();
+		((IItemHelper)this.parent).getSubNames(map);
 		TreeSet<Integer> registered  = new TreeSet<Integer>();
-
-		registered.add(0);
-		this.registerRender(0);
-		for (ItemStack is :list) {
-			if (!registered.contains(is.getItemDamage())) {
-				registered.add(is.getItemDamage());
-				this.registerRender(is.getItemDamage());
+		
+		if (map.isEmpty()) {
+			this.registerRender(0);
+		} else {
+			for (Entry<Integer, String> entry :map.entrySet()) {
+				if (!registered.contains(entry.getKey())) {
+					ModelBakery.addVariantName(this.parent, this.mod.getModId()+":"+entry.getValue());
+				}
+			}
+			for (Entry<Integer, String> entry :map.entrySet()) {
+				if (!registered.contains(entry.getKey())) {
+					this.registerRender(entry.getKey(), entry.getValue());
+				}
 			}
 		}
 	}
@@ -85,5 +94,41 @@ public class ItemHelper implements IItemHelper {
 	public void registerRender (int metadata, String renderKey, boolean trace) {
 		if (trace) ModGollumCoreLib.log.message("Auto register render: "+this.mod.getModId()+":"+renderKey+':'+metadata);
 		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(this.parent, metadata, new ModelResourceLocation(this.mod.getModId()+":"+renderKey, "inventory"));
+	}
+
+	@Override
+	public String getUnlocalizedName(ItemStack stack) {
+		int metadata = ((IItemHelper)this.parent).getEnabledMetadata(stack.getItemDamage());
+		return this.parent.getUnlocalizedName() + "." + metadata;
+	}
+	
+
+	@Override
+	public int getEnabledMetadata (int dammage) {
+		int lastSubblock = -1;
+		HashMap<Integer, String> map = new HashMap<Integer, String>();
+		this.getSubNames(map);
+		
+		for (Entry<Integer, String> entry: map.entrySet()) {
+			if (entry.getKey()  > dammage) {
+				break;
+			}
+			lastSubblock = entry.getKey();			
+		}
+		return (lastSubblock == -1) ? dammage : lastSubblock;
+	}
+
+	@Override
+	public void getSubNames(HashMap<Integer, String> list) {
+		((IItemHelper)this.parent).getSubNames(list);
+	}
+
+	@Override
+	public void getSubItems(Item item, CreativeTabs ctabs, List list) {
+		HashMap<Integer, String> map = new HashMap<Integer, String>();
+		((IItemHelper)this.parent).getSubNames(map);
+		for (Entry<Integer, String> entry: map.entrySet()) {
+			list.add(new ItemStack(item, 1, entry.getKey()));
+		}
 	}
 }

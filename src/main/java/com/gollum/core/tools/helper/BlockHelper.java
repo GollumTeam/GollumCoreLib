@@ -9,6 +9,7 @@ import java.util.TreeSet;
 import com.gollum.core.ModGollumCoreLib;
 import com.gollum.core.common.context.ModContext;
 import com.gollum.core.common.mod.GollumMod;
+import com.gollum.core.tools.helper.items.HItemBlock;
 import com.gollum.core.tools.registry.BlockRegistry;
 
 import net.minecraft.block.Block;
@@ -42,7 +43,7 @@ public class BlockHelper implements IBlockHelper {
 	protected GollumMod mod;
 	protected Block parent;
 	protected String registerName;
-	protected Class<? extends ItemBlock> itemBlockClass = ItemBlock.class;
+	protected Class<? extends ItemBlock> itemBlockClass = HItemBlock.class;
 	
 	public BlockHelper (Block parent, String registerName) {
 		this.parent       = parent;
@@ -134,15 +135,14 @@ public class BlockHelper implements IBlockHelper {
 		return Item.getItemFromBlock(this.parent);
 	}
 	
-	@SideOnly(Side.CLIENT)
 	public void getSubNames(HashMap<Integer, String> list) {
+		((IItemHelper)this.parent).getSubNames(list);
 	}
 	
 	@Override
-	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(Item item, CreativeTabs ctabs, List list) {
 		HashMap<Integer, String> map = new HashMap<Integer, String>();
-		this.getSubNames(map);
+		((IItemHelper)this.parent).getSubNames(map);
 		for (Entry<Integer, String> entry: map.entrySet()) {
 			list.add(new ItemStack(item, 1, entry.getKey()));
 		}

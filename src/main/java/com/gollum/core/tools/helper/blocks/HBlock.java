@@ -50,12 +50,10 @@ public class HBlock extends Block implements IBlockHelper {
 		helper.registerRender();
 	}
 	
-	@SideOnly(Side.CLIENT)
 	@Override
 	public void getSubNames(HashMap<Integer, String> list) {
 	}
 	
-	@SideOnly(Side.CLIENT)
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs ctabs, List list) {
 		helper.getSubBlocks(item, ctabs, list);

@@ -1,5 +1,11 @@
 package com.gollum.core.tools.helper;
 
+import java.util.HashMap;
+import java.util.List;
+
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -23,4 +29,11 @@ public interface IItemHelper {
 	 */
 	public String getRegisterName();
 	
+	public void getSubNames(HashMap<Integer, String> list);
+	
+	public void getSubItems(Item item, CreativeTabs ctabs, List list);
+
+	int getEnabledMetadata(int dammage);
+	
+	public String getUnlocalizedName(ItemStack stack);
 }

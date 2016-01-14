@@ -62,13 +62,11 @@ public abstract class HBlockContainer extends BlockContainer implements IBlockHe
 		helper.registerRender();
 	}
 	
-	@SideOnly(Side.CLIENT)
 	@Override
 	public void getSubNames(HashMap<Integer, String> list) {
 	}
 	
 	@Override
-	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(Item item, CreativeTabs ctabs, List list) {
 		HashMap<Integer, String> map = new HashMap<Integer, String>();
 		this.getSubNames(map);
