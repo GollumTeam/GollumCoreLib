@@ -244,6 +244,11 @@ public abstract class GCLInventoryTileEntity extends TileEntityLockable implemen
 			inventory[i] = null;
 		}
 	}
+	
+	@Override
+	public String getGuiID() {
+		return null;
+	}
 
 	@Override
 	public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn) {
