@@ -1,5 +1,8 @@
 package com.gollum.core.tools.helper.blocks;
 
+import java.util.HashMap;
+import java.util.List;
+
 import com.gollum.core.ModGollumCoreLib;
 import com.gollum.core.tools.helper.BlockHelper;
 import com.gollum.core.tools.helper.IBlockHelper;
@@ -7,6 +10,7 @@ import com.gollum.core.tools.helper.IBlockHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.BlockPos;
@@ -44,6 +48,17 @@ public class HBlock extends Block implements IBlockHelper {
 	@Override
 	public void registerRender () {
 		helper.registerRender();
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void getSubNames(HashMap<Integer, String> list) {
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void getSubBlocks(Item item, CreativeTabs ctabs, List list) {
+		helper.getSubBlocks(item, ctabs, list);
 	}
 	
 	/**

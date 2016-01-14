@@ -1,6 +1,8 @@
 package com.gollum.core.tools.helper;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map.Entry;
 import java.util.Random;
 import java.util.TreeSet;
 
@@ -12,6 +14,7 @@ import com.gollum.core.tools.registry.BlockRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
@@ -33,7 +36,6 @@ public class BlockHelper implements IBlockHelper {
 	// Une sorte de config
 	// Par defaut le helper vas enregistrer le block, charger des texture perso ...
 	public boolean vanillaRegister      = false;
-	public boolean vanillaTexture       = false;
 	public boolean vanillaPicked        = false;
 	public boolean vanillaDamageDropped = false;
 	
@@ -83,16 +85,22 @@ public class BlockHelper implements IBlockHelper {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerRender () {
-		ArrayList<ItemStack> list = new ArrayList<ItemStack>();
-		this.parent.getSubBlocks(this.getBlockItem(), (CreativeTabs)null, list);
+		HashMap<Integer, String> map = new HashMap<Integer, String>();
+		((IBlockHelper)this.parent).getSubNames(map);
 		TreeSet<Integer> registered  = new TreeSet<Integer>();
 		
-		registered.add(0);
-		this.registerRender(0);
-		for (ItemStack is :list) {
-			if (!registered.contains(is.getItemDamage())) {
-				registered.add(is.getItemDamage());
-				this.registerRender(is.getItemDamage());
+		if (map.isEmpty()) {
+			this.registerRender(0);
+		} else {
+			for (Entry<Integer, String> entry :map.entrySet()) {
+				if (!registered.contains(entry.getKey())) {
+					ModelBakery.addVariantName(this.getBlockItem(), this.mod.getModId()+":"+entry.getValue());
+				}
+			}
+			for (Entry<Integer, String> entry :map.entrySet()) {
+				if (!registered.contains(entry.getKey())) {
+					this.registerRender(entry.getKey(), entry.getValue());
+				}
 			}
 		}
 	}
@@ -100,13 +108,13 @@ public class BlockHelper implements IBlockHelper {
 	public void registerRender (int metadata) {
 		this.registerRender(metadata, this.getRegisterName());
 	}
-
+	
 	public void registerRender (int metadata, String renderKey) {
-		this.registerRender(metadata, this.getRegisterName(), true);
+		this.registerRender(metadata, renderKey, true);
 	}
 	
 	public void registerRender (int metadata, String renderKey, boolean trace) {
-		if (trace) ModGollumCoreLib.log.message("Auto register render: "+this.mod.getModId()+":"+renderKey+':'+metadata);
+		if (trace) ModGollumCoreLib.log.message("Auto register render: "+metadata+":"+this.mod.getModId()+":"+renderKey);
 		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(this.getBlockItem(), metadata, new ModelResourceLocation(this.mod.getModId()+":"+renderKey, "inventory"));
 	}
 	
@@ -125,6 +133,21 @@ public class BlockHelper implements IBlockHelper {
 	public Item getBlockItem () {
 		return Item.getItemFromBlock(this.parent);
 	}
+	
+	@SideOnly(Side.CLIENT)
+	public void getSubNames(HashMap<Integer, String> list) {
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void getSubBlocks(Item item, CreativeTabs ctabs, List list) {
+		HashMap<Integer, String> map = new HashMap<Integer, String>();
+		this.getSubNames(map);
+		for (Entry<Integer, String> entry: map.entrySet()) {
+			list.add(new ItemStack(item, 1, entry.getKey()));
+		}
+	}
+
 	
 	/**
 	 * Libère les items de l'inventory

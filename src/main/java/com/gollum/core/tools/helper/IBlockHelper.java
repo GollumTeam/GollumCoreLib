@@ -1,7 +1,11 @@
 package com.gollum.core.tools.helper;
 
+import java.util.HashMap;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.BlockPos;
@@ -41,6 +45,12 @@ public interface IBlockHelper {
 	 * Renvoie l'item en relation avec le block
 	 */
 	public Item getBlockItem ();
+	
+	@SideOnly(Side.CLIENT)
+	public void getSubNames(HashMap<Integer, String> list);
+	
+	@SideOnly(Side.CLIENT)
+	public void getSubBlocks(Item item, CreativeTabs ctabs, List list);
 	
 	/**
 	 * Libère les items de l'inventory

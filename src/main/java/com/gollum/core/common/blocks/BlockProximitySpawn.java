@@ -19,8 +19,6 @@ public class BlockProximitySpawn extends HBlockContainer {
 
 	public BlockProximitySpawn(String registerName) {
 		super(registerName, Material.air);
-		
-		this.helper.vanillaTexture = true;
 	}
 
 	@Override

@@ -1,5 +1,9 @@
 package com.gollum.core.tools.helper.blocks;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map.Entry;
+
 import com.gollum.core.ModGollumCoreLib;
 import com.gollum.core.tools.helper.BlockHelper;
 import com.gollum.core.tools.helper.IBlockHelper;
@@ -7,8 +11,10 @@ import com.gollum.core.tools.helper.IBlockHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPistonBase;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -58,6 +64,21 @@ public class HBlockPistonBase extends BlockPistonBase implements IBlockHelper {
 	@Override
 	public void registerRender () {
 		helper.registerRender();
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void getSubNames(HashMap<Integer, String> list) {
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void getSubBlocks(Item item, CreativeTabs ctabs, List list) {
+		HashMap<Integer, String> map = new HashMap<Integer, String>();
+		this.getSubNames(map);
+		for (Entry<Integer, String> entry: map.entrySet()) {
+			list.add(new ItemStack(item, 1, entry.getKey()));
+		}
 	}
 
 	@Override
