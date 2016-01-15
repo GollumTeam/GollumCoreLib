@@ -51,7 +51,7 @@ public class ItemWrench extends HItem {
 		
 		if (block.rotateBlock(world, pos, side)) {
 			player.swingItem();
-			return true;
+			return !world.isRemote;
 		}
 		return false;
 	}
