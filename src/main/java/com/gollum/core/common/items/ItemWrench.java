@@ -16,8 +16,6 @@ import net.minecraftforge.common.ForgeDirection;
 
 public class ItemWrench extends HItem {
 	
-	public Set<Class<? extends Block>> shiftRotations = new HashSet<Class<? extends Block>>();
-	
 	public ItemWrench(int id, String registerName) {
 		super(id, registerName);
 
@@ -27,26 +25,13 @@ public class ItemWrench extends HItem {
 		this.shiftRotations.add(BlockButton.class);
 		this.shiftRotations.add(BlockChest.class);
 	}
-
-	private boolean isShiftRotation(Class<? extends Block> cls) {
-		for (Class<? extends Block> shift : shiftRotations) {
-			if (shift.isAssignableFrom(cls)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
+	
 	@Override
 	public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
 		int id = world.getBlockId(x, y, z);
 		Block block = Block.blocksList[id];
 		
 		if (block == null) {
-			return false;
-		}
-
-		if (player.isSneaking() != isShiftRotation(block.getClass())) {
 			return false;
 		}
 		
