@@ -8,6 +8,7 @@ import java.util.TreeSet;
 import com.gollum.core.ModGollumCoreLib;
 import com.gollum.core.common.context.ModContext;
 import com.gollum.core.common.mod.GollumMod;
+import com.gollum.core.tools.registered.RegisteredObjects;
 import com.gollum.core.tools.registry.ItemRegistry;
 
 import net.minecraft.client.Minecraft;
@@ -91,7 +92,7 @@ public class ItemHelper implements IItemHelper {
 	}
 	
 	public void registerRender (int metadata, String renderKey, boolean trace) {
-		if (trace) ModGollumCoreLib.log.message("Auto register render: "+this.mod.getModId()+":"+renderKey+':'+metadata);
+		if (trace) ModGollumCoreLib.log.message("Auto register render: "+RegisteredObjects.instance().getRegisterName(this.parent)+":"+metadata+":"+renderKey);
 		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(this.parent, metadata, new ModelResourceLocation(this.mod.getModId()+":"+renderKey, "inventory"));
 	}
 

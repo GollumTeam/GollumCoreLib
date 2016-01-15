@@ -117,7 +117,7 @@ public class BlockHelper implements IBlockHelper {
 	}
 	
 	public void registerRender (int metadata, String renderKey, boolean trace) {
-		if (trace) ModGollumCoreLib.log.message("Auto register render: "+metadata+":"+this.mod.getModId()+":"+renderKey);
+		if (trace) ModGollumCoreLib.log.message("Auto register render: "+this.getRegisterName()+":"+metadata+":"+":"+renderKey);
 		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(this.getBlockItem(), metadata, new ModelResourceLocation(this.mod.getModId()+":"+renderKey, "inventory"));
 	}
 	
