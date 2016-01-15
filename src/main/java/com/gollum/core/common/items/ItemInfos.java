@@ -44,19 +44,24 @@ public class ItemInfos extends HItem {
 			
 			if (state != null) {
 				Block block = state.getBlock();
-				String stateString = "";
+				player.addChatMessage(new ChatComponentText("=========="));
+				player.addChatMessage(new ChatComponentText(pos.toString()));
+				player.addChatMessage(new ChatComponentText("  rname: "+EnumChatFormatting.RED+RegisteredObjects.instance().getRegisterName(block)+EnumChatFormatting.WHITE));
+				player.addChatMessage(new ChatComponentText("  id: "+EnumChatFormatting.RED+Block.getIdFromBlock(block)+EnumChatFormatting.WHITE));
+				player.addChatMessage(new ChatComponentText("  metadata: "+EnumChatFormatting.BLUE+block.getMetaFromState(state)+EnumChatFormatting.WHITE));
+				player.addChatMessage(new ChatComponentText("  name: "+EnumChatFormatting.BLUE+block.getUnlocalizedName()+EnumChatFormatting.WHITE));
+				player.addChatMessage(new ChatComponentText("  state: "));
 				for (Entry<IProperty, Comparable> entry : state.getProperties().entrySet()) {
 					IProperty prop = entry.getKey();
-					stateString += ", "+prop.getName() + "="+EnumChatFormatting.RED+state.getValue(prop)+EnumChatFormatting.WHITE;
+					player.addChatMessage(new ChatComponentText("     "+prop.getName()+": "+EnumChatFormatting.GREEN+state.getValue(prop)+EnumChatFormatting.WHITE));
 				}
-				
-				player.addChatMessage(new ChatComponentText("Block : "+pos+stateString+", id="+Block.getIdFromBlock(block)+", rname="+RegisteredObjects.instance().getRegisterName(block)+", name="+block.getUnlocalizedName()));
 				if (block instanceof IBlockDisplayInfos) {
 					String info;
 					if ((info = ((IBlockDisplayInfos)block).displayDebugInfos(world, pos)) != null) {
 						player.addChatMessage(new ChatComponentText(info));
 					}
 				}
+				player.addChatMessage(new ChatComponentText("=========="));
 			} else {
 				player.addChatMessage(new ChatComponentText("Block : "+pos+", id=0, rname=minecraft:air"));
 			}
