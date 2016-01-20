@@ -37,7 +37,7 @@ public class GCLGuiHandler implements IGuiHandler {
 				//InventoryPlayer
 				
 				for (Constructor constructor : guiContainerInventoryClass.classContainer.getConstructors()) {
-					for (int i = 0 ; i < 15; i++) {
+					for (int i = 0 ; i <= 15; i++) {
 
 						try {
 							switch (i) {
@@ -98,7 +98,7 @@ public class GCLGuiHandler implements IGuiHandler {
 				//InventoryPlayer
 				
 				for (Constructor constructor : guiContainerInventoryClass.classGuiContainer.getConstructors()) {
-					for (int i = 0 ; i < 15; i++) {
+					for (int i = 0 ; i <= 15; i++) {
 
 						try {
 							switch (i) {
