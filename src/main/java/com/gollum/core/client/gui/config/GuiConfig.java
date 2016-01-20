@@ -1,5 +1,7 @@
 package com.gollum.core.client.gui.config;
 
+import static net.minecraftforge.fml.client.config.GuiUtils.RESET_CHAR;
+import static net.minecraftforge.fml.client.config.GuiUtils.UNDO_CHAR;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -90,8 +92,8 @@ public abstract class GuiConfig extends GuiScreen {
 		
 		// Init Button action
 		
-		int undoGlyphWidth  = this.mc.fontRendererObj.getStringWidth("UNDO_CHAR")  * 2; // TODO
-		int resetGlyphWidth = this.mc.fontRendererObj.getStringWidth("RESET_CHAR") * 2; // TODO
+		int undoGlyphWidth  = this.mc.fontRendererObj.getStringWidth(UNDO_CHAR)  * 2;
+		int resetGlyphWidth = this.mc.fontRendererObj.getStringWidth(RESET_CHAR) * 2;
 		
 		// Calculate size
 		int doneWidth       = Math.max(this.mc.fontRendererObj.getStringWidth(I18n.format("gui.done")) + 20, 100);
@@ -116,7 +118,7 @@ public abstract class GuiConfig extends GuiScreen {
 			this.height - 29, 
 			undoWidth,
 			20,
-			" " + I18n.format("fml.configgui.tooltip.undoChanges"), "UNDO_CHAR", // TODO
+			" " + I18n.format("fml.configgui.tooltip.undoChanges"), UNDO_CHAR,
 			2.0F
 		));
 			
@@ -126,7 +128,7 @@ public abstract class GuiConfig extends GuiScreen {
 			this.height - 29,
 			resetWidth,
 			20,
-			" " + I18n.format("fml.configgui.tooltip.resetToDefault"), "RESET_CHAR", // TODO
+			" " + I18n.format("fml.configgui.tooltip.resetToDefault"), RESET_CHAR,
 			2.0F
 		));
 		
