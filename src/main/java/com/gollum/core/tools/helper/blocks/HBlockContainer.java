@@ -70,11 +70,7 @@ public abstract class HBlockContainer extends BlockContainer implements IBlockHe
 	
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs ctabs, List list) {
-		HashMap<Integer, String> map = new HashMap<Integer, String>();
-		this.getSubNames(map);
-		for (Entry<Integer, String> entry: map.entrySet()) {
-			list.add(new ItemStack(item, 1, entry.getKey()));
-		}
+		helper.getSubBlocks(item, ctabs, list);
 	}
 	
 	/**

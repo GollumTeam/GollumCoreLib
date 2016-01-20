@@ -144,7 +144,13 @@ public class BlockHelper implements IBlockHelper {
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs ctabs, List list) {
 		HashMap<Integer, String> map = new HashMap<Integer, String>();
-		((IItemHelper)this.parent).getSubNames(map);
+		((IBlockHelper)this.parent).getSubNames(map);
+		
+		if (map.isEmpty()) {
+			list.add(new ItemStack(item, 1, 0));
+			return;
+		}
+		
 		for (Entry<Integer, String> entry: map.entrySet()) {
 			list.add(new ItemStack(item, 1, entry.getKey()));
 		}
