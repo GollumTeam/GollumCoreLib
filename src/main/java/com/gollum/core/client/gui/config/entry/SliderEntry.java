@@ -4,7 +4,6 @@ import com.gollum.core.client.gui.config.GuiConfigEntries;
 import com.gollum.core.client.gui.config.element.ConfigElement;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraftforge.fml.client.config.GuiSlider;
 
 public class SliderEntry extends ConfigEntry {

@@ -3,7 +3,6 @@ package com.gollum.core.client.event;
 import com.gollum.core.utils.math.Integer2d;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
 public class RenderItem extends Event {

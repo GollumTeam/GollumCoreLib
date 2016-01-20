@@ -1,14 +1,8 @@
 package com.gollum.core.common.items;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.gollum.core.tools.helper.items.HItem;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockButton;
-import net.minecraft.block.BlockChest;
-import net.minecraft.block.BlockLever;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;

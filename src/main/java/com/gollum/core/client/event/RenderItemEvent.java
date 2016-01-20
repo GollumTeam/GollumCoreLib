@@ -1,12 +1,8 @@
 package com.gollum.core.client.event;
 
-import com.gollum.core.utils.math.Integer2d;
-
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
 public class RenderItemEvent extends Event {

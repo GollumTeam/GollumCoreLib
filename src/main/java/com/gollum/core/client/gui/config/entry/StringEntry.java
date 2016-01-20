@@ -10,7 +10,6 @@ import com.gollum.core.common.config.ConfigProp;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.client.renderer.Tessellator;
 
 public class StringEntry extends ConfigEntry {
 

@@ -12,14 +12,10 @@ import java.util.Map;
 
 import com.gollum.core.common.context.ModContext;
 import com.gollum.core.common.mod.GollumMod;
-import com.gollum.core.inits.ModItems;
 import com.gollum.core.tools.helper.IItemHelper;
 import com.gollum.core.tools.registered.RegisteredObjects;
 import com.gollum.core.utils.reflection.Reflection;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

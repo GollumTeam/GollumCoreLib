@@ -1,9 +1,7 @@
 package com.gollum.core.tools.helper.items;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.TreeSet;
 
 import com.gollum.core.tools.helper.IBlockHelper;
 import com.gollum.core.tools.helper.IItemHelper;

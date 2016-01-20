@@ -21,7 +21,6 @@ import com.gollum.core.tools.simplejson.JsonString;
 import com.google.gson.JsonObject;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.Tessellator;
 
 public class JsonEntry extends ConfigEntry implements IProxyEntry {
 	

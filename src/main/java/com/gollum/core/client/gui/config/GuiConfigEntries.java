@@ -16,7 +16,6 @@ import com.gollum.core.utils.reflection.Reflection;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiListExtended;
 import net.minecraft.client.gui.GuiSlot;
-import net.minecraft.client.renderer.Tessellator;
 
 public class GuiConfigEntries extends GuiListExtended {
 

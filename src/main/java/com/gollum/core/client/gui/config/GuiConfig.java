@@ -2,6 +2,7 @@ package com.gollum.core.client.gui.config;
 
 import static net.minecraftforge.fml.client.config.GuiUtils.RESET_CHAR;
 import static net.minecraftforge.fml.client.config.GuiUtils.UNDO_CHAR;
+
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;

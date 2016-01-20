@@ -3,7 +3,6 @@ package com.gollum.core.tools.registry;
 import java.util.HashMap;
 
 import com.gollum.core.client.handlers.ISimpleBlockRenderingHandler;
-import com.gollum.jammyfurniture.client.render.JFInventoryRenderer;
 
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
