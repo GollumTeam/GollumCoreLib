@@ -11,7 +11,6 @@ import java.util.Map;
 import com.gollum.core.common.context.ModContext;
 import com.gollum.core.common.mod.GollumMod;
 import com.gollum.core.tools.helper.IBlockHelper;
-import com.gollum.core.tools.helper.IItemHelper;
 import com.gollum.core.tools.registered.RegisteredObjects;
 import com.gollum.core.utils.reflection.Reflection;
 

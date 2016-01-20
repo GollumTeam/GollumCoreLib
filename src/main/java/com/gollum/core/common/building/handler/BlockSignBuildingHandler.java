@@ -1,16 +1,10 @@
 package com.gollum.core.common.building.handler;
 
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Random;
 
-import com.gollum.core.ModGollumCoreLib;
-import com.gollum.core.common.building.Building.Unity;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSign;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.world.World;
 
 public class BlockSignBuildingHandler extends BuildingBlockHandler {

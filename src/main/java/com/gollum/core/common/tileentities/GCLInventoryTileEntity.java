@@ -1,6 +1,5 @@
 package com.gollum.core.common.tileentities;
 
-import net.minecraft.block.BlockChest;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;

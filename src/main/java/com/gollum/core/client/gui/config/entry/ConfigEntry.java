@@ -12,7 +12,6 @@ import com.gollum.core.common.config.JsonConfigProp;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiListExtended.IGuiListEntry;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fml.client.config.GuiButtonExt;

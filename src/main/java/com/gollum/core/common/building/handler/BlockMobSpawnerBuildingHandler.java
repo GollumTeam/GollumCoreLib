@@ -5,8 +5,6 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockMobSpawner;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.world.World;
 
 public class BlockMobSpawnerBuildingHandler extends BuildingBlockHandler {

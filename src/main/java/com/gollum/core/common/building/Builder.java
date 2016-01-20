@@ -4,7 +4,6 @@ import static com.gollum.core.ModGollumCoreLib.log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.concurrent.locks.ReentrantLock;
 
 import com.gollum.core.common.building.Building.GroupSubBuildings;
@@ -13,17 +12,10 @@ import com.gollum.core.common.building.Building.SubBuilding;
 import com.gollum.core.common.building.Building.Unity;
 import com.gollum.core.common.building.Building.Unity.Content;
 import com.gollum.core.common.building.Building.Unity3D;
-import com.gollum.core.common.building.handler.BuildingBlockHandler;
-import com.gollum.core.tools.registry.BuildingBlockRegistry;
 import com.gollum.core.utils.math.Integer3d;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.init.Blocks;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 

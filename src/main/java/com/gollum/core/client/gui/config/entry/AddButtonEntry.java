@@ -6,7 +6,6 @@ import com.gollum.core.common.config.JsonConfigProp;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.client.renderer.Tessellator;
 
 public class AddButtonEntry extends ConfigEntry {
 
