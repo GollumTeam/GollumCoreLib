@@ -1,5 +1,6 @@
 package com.gollum.core.tools.helper;
 
+import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -14,18 +15,23 @@ import com.gollum.core.ModGollumCoreLib;
 import com.gollum.core.common.context.ModContext;
 import com.gollum.core.common.mod.GollumMod;
 import com.gollum.core.tools.helper.items.HItemBlock;
+import com.gollum.core.tools.helper.states.IEnumIndexed;
+import com.gollum.core.tools.helper.states.IEnumSubBlock;
 import com.gollum.core.tools.registry.BlockRegistry;
-import com.gollum.jammyfurniture.common.block.IEnumSubBlock;
 import com.google.common.collect.Lists;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockTorch;
 import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -36,6 +42,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -44,26 +51,22 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockHelper implements IBlockHelper {
 	
-	public static abstract class PropertySubBlock<T extends Enum<T> & IEnumSubBlock> extends PropertyEnum<T> {
-		
-		protected PropertySubBlock(String name, Class<T> valueClass, Collection<T> allowedValues) {
+	public static abstract class PropertyIndex<T extends Enum<T> & IEnumIndexed> extends PropertyEnum<T> {
+
+		protected PropertyIndex(String name, Class<T> valueClass, Collection<T> allowedValues) {
 			super(name, valueClass, allowedValues);
 		}
 		
-		public PropertySubBlock(String name, Class<T> valueClass, T[] values) {
+		public PropertyIndex(String name, Class<T> valueClass, T[] values) {
 			this(name, valueClass, Lists.newArrayList(values));
 		}
 		
-		public PropertySubBlock(String name, Class<T> valueClass) {
+		public PropertyIndex(String name, Class<T> valueClass) {
 			this(name, valueClass, valueClass.getEnumConstants());
 		}
 		
-		public boolean isFacingPlane (T value) {
-			return ((IEnumSubBlock)value).isFacingPlane();
-		}
-		
 		public int getIndex (T value) {
-			return ((IEnumSubBlock)value).getIndex();
+			return ((IEnumIndexed)value).getIndex();
 		}
 
 		public T getEnumFromMeta(int meta) {
@@ -83,14 +86,38 @@ public class BlockHelper implements IBlockHelper {
 			
 			return lastMatch;
 		}
+		
+	}
+	
+	public static abstract class PropertySubBlock<T extends Enum<T> & IEnumIndexed> extends PropertyIndex<T> {
+		
+		protected PropertySubBlock(String name, Class<T> valueClass, Collection<T> allowedValues) {
+			super(name, valueClass, allowedValues);
+		}
+		
+		public PropertySubBlock(String name, Class<T> valueClass, T[] values) {
+			this(name, valueClass, Lists.newArrayList(values));
+		}
+		
+		public PropertySubBlock(String name, Class<T> valueClass) {
+			this(name, valueClass, valueClass.getEnumConstants());
+		}
+		
+		public boolean isFacingPlane (T value) {
+			return ((IEnumSubBlock)value).isFacingPlane();
+		}
+		
+		public T[] getSubBlocksList () {
+			T[] ts = (T[])Array.newInstance(this.getValueClass(), 0);
+			return this.getAllowedValues().toArray(ts);
+		}
 	}
 	
 	// Pour chaque element natural. Utilise le fonctionnement naturel mais pas des helpers
 	// Une sorte de config
 	// Par defaut le helper vas enregistrer le block, charger des texture perso ...
-	public boolean vanillaRegister      = false;
-	public boolean vanillaPicked        = false;
-	public boolean vanillaDamageDropped = false;
+	public boolean vanillaRegister = false;
+	public boolean vanillaRegisterRender = false;
 	
 	protected GollumMod mod;
 	protected Block parent;
@@ -118,40 +145,32 @@ public class BlockHelper implements IBlockHelper {
 	
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		IBlockState state = this.parent.getDefaultState();
-		boolean found = false;
 		
-		// Le type puis si besoin l'orientation
-		for (IProperty prop : (Set<IProperty>)state.getProperties().keySet()) {
-			if (prop instanceof PropertySubBlock) {
+		IBlockState state = this.parent.getDefaultState();
+		PropertySubBlock propSubBlock = ((IBlockHelper)this.parent).getPropSubBlock(state);
+		PropertyDirection propFacing = ((IBlockHelper)this.parent).getPropFacing(state);
+		Enum valueFacing = null;
+		
+		for (IProperty prop: (Set<IProperty>)state.getProperties().keySet()) {
+			if (prop instanceof PropertyIndex) {
+				PropertyIndex propIndex = (PropertyIndex)prop;
+				Enum value = propIndex.getEnumFromMeta(meta);
 				
-				// le type
-				PropertySubBlock propSubBlock = (PropertySubBlock)prop;
-				found = true;
-				Enum enumValue = propSubBlock.getEnumFromMeta(meta);
-				IEnumSubBlock enumSubBlock = (IEnumSubBlock)enumValue;
-				
-				state = state.withProperty(propSubBlock, enumValue);
-				
-				// Le facing
-				if (enumSubBlock.isFacingPlane()) {
-					
-					for (IProperty propFacing : (Set<IProperty>)state.getProperties().keySet()) {
-						if (propFacing.getName() == "facing") {
-							state = state.withProperty(propFacing, EnumFacing.HORIZONTALS[(meta - enumSubBlock.getIndex()) % 4]);
-							break;
-						}
-					}
+				if (propIndex instanceof PropertySubBlock) {
+					valueFacing = value;
 				}
+				
+				state = state.withProperty(propIndex, value);
+				meta -= propIndex.getIndex(value);
 			}
 		}
 		
-		if (!found) {
-			for (IProperty propFacing : (Set<IProperty>)state.getProperties().keySet()) {
-				if (propFacing.getName() == "facing") {
-					state = state.withProperty(propFacing, EnumFacing.HORIZONTALS[meta % 4]);
-					break;
-				}
+		if(propFacing != null && (propSubBlock == null || valueFacing == null || propSubBlock.isFacingPlane(valueFacing))) {
+			int size = propFacing.getAllowedValues().size();
+			if (size == 4) {
+				state = state.withProperty(propFacing, EnumFacing.HORIZONTALS[meta % 4]);
+			} else {
+				state = state.withProperty(propFacing, EnumFacing.VALUES[meta % 6]);
 			}
 		}
 		
@@ -160,39 +179,31 @@ public class BlockHelper implements IBlockHelper {
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		int metadata = 0;
-		boolean found = false;
 		
-		// Le type puis si besoin l'orientation
-		for (IProperty prop : (Set<IProperty>)state.getProperties().keySet()) {
-			if (prop instanceof PropertySubBlock) {
-				PropertySubBlock propSubBlock = (PropertySubBlock)prop;
-				found = true;
+		int metadata = 0;
+		PropertySubBlock propSubBlock = ((IBlockHelper)this.parent).getPropSubBlock(state);
+		PropertyDirection propFacing = ((IBlockHelper)this.parent).getPropFacing(state);
+		Enum valueFacing = null;
+		
+		for (IProperty prop: (Set<IProperty>)state.getProperties().keySet()) {
+			if (prop instanceof PropertyIndex) {
+				PropertyIndex propIndex = (PropertyIndex)prop;
+				Enum value = state.getValue(propIndex);
 				
-				// Le type
-				Enum value = (Enum)state.getValue(prop);
-				metadata += propSubBlock.getIndex ( value );
-				
-				// Le facing
-				if (propSubBlock.isFacingPlane(value)) {
-					
-					for (IProperty propFacing : (Set<IProperty>)state.getProperties().keySet()) {
-						if (propFacing.getName() == "facing") {
-							metadata += ((EnumFacing)state.getValue(propFacing)).getHorizontalIndex();
-							break;
-						}
-					}
+				if (propIndex instanceof PropertySubBlock) {
+					valueFacing = value;
 				}
-				break;
+				
+				metadata += propIndex.getIndex(value);
 			}
 		}
-		
-		if (!found) {
-			for (IProperty propFacing : (Set<IProperty>)state.getProperties().keySet()) {
-				if (propFacing.getName() == "facing") {
-					metadata += ((EnumFacing)state.getValue(propFacing)).getHorizontalIndex();
-					break;
-				}
+
+		if(propFacing != null && (propSubBlock == null || valueFacing == null || propSubBlock.isFacingPlane(valueFacing))) {
+			int size = propFacing.getAllowedValues().size();
+			if (size == 4) {
+				metadata += ((EnumFacing)state.getValue(propFacing)).getHorizontalIndex();
+			} else {
+				metadata += ((EnumFacing)state.getValue(propFacing)).getIndex();
 			}
 		}
 		
@@ -203,17 +214,33 @@ public class BlockHelper implements IBlockHelper {
 	public void getSubNames(Map<Integer, String> list) {
 		
 		IBlockState state = this.parent.getDefaultState();
-		for (IProperty prop : (Set<IProperty>)state.getProperties().keySet()) {
-			if (prop instanceof PropertySubBlock) {
-				PropertySubBlock type = (PropertySubBlock)prop;
-				for (Object object : type.getAllowedValues()) {
-					if (object instanceof Enum) {
-						Enum value = (Enum)object;
-						list.put(type.getIndex(value), type.getName(value));
-					}
-				}
+		PropertySubBlock propSubBlock = ((IBlockHelper)this.parent).getPropSubBlock(state);
+		
+		if (propSubBlock != null) {
+			for (Enum value : propSubBlock.getSubBlocksList()) {
+				list.put(propSubBlock.getIndex(value), propSubBlock.getName(value));
 			}
 		}
+	}
+	
+	@Override
+	public PropertySubBlock getPropSubBlock(IBlockState state) {
+		for (IProperty prop: (Set<IProperty>)state.getProperties().keySet()) {
+			if (prop instanceof PropertySubBlock) {
+				return (PropertySubBlock)prop;
+			}
+		}
+		return null;
+	}
+	
+	@Override
+	public PropertyDirection getPropFacing(IBlockState state) {
+		for (IProperty prop: (Set<IProperty>)state.getProperties().keySet()) {
+			if (prop.getName() == "facing" && prop instanceof PropertyDirection) {
+				return (PropertyDirection)prop;
+			}
+		}
+		return null;
 	}
 	
 	//////////////
@@ -224,7 +251,6 @@ public class BlockHelper implements IBlockHelper {
 	 * Enregistrement du block. Appelé a la fin du postInit
 	 */
 	public void register () {
-		
 		if(vanillaRegister) return;
 		GameRegistry.registerBlock (this.parent , this.itemBlockClass , this.getRegisterName ());
 	}
@@ -235,6 +261,8 @@ public class BlockHelper implements IBlockHelper {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerRender () {
+		if(vanillaRegisterRender) return;
+		
 		HashMap<Integer, String> map = new HashMap<Integer, String>();
 		((IBlockHelper)this.parent).getSubNames(map);
 		TreeSet<Integer> registered  = new TreeSet<Integer>();
@@ -288,29 +316,17 @@ public class BlockHelper implements IBlockHelper {
 	}
 	
 	////////////
-	// Others //
+	// Events //
 	////////////
 	
-	/**
-	 * Renvoie l'item en relation avec le block
-	 */
 	@Override
-	public Item getBlockItem () {
-		return Item.getItemFromBlock(this.parent);
-	}
-	
-	@Override
-	public void getSubBlocks(Item item, CreativeTabs ctabs, List list) {
-		HashMap<Integer, String> map = new HashMap<Integer, String>();
-		((IBlockHelper)this.parent).getSubNames(map);
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase player, ItemStack stack) {
 		
-		if (map.isEmpty()) {
-			list.add(new ItemStack(item, 1, 0));
-			return;
-		}
+		state = ((IBlockHelper)this.parent).getStateFromMeta(stack.getItemDamage());
+		PropertyDirection propFacing = ((IBlockHelper)this.parent).getPropFacing(state);
 		
-		for (Entry<Integer, String> entry: map.entrySet()) {
-			list.add(new ItemStack(item, 1, entry.getKey()));
+		if (propFacing != null) {
+			world.setBlockState(pos, state.withProperty(propFacing, ((IBlockHelper)this.parent).getOrientationForPlayer(pos, player)), 2);
 		}
 	}
 
@@ -363,6 +379,64 @@ public class BlockHelper implements IBlockHelper {
 		IItemHelper item = (IItemHelper)((IBlockHelper)this.parent).getBlockItem();
 		int matadata = item.getEnabledMetadata(this.parent.getMetaFromState(world.getBlockState(pos)));
 		return new ItemStack(this.parent, 1, matadata);
+	}
+	
+	////////////
+	// Others //
+	////////////
+	
+	/**
+	 * Renvoie l'item en relation avec le block
+	 */
+	@Override
+	public Item getBlockItem () {
+		return Item.getItemFromBlock(this.parent);
+	}
+	
+	@Override
+	public void getSubBlocks(Item item, CreativeTabs ctabs, List list) {
+		HashMap<Integer, String> map = new HashMap<Integer, String>();
+		((IBlockHelper)this.parent).getSubNames(map);
+		
+		if (map.isEmpty()) {
+			list.add(new ItemStack(item, 1, 0));
+			return;
+		}
+		
+		for (Entry<Integer, String> entry: map.entrySet()) {
+			list.add(new ItemStack(item, 1, entry.getKey()));
+		}
+	}
+	
+	@Override
+	public EnumFacing getOrientationForPlayer(BlockPos clickedBlock, Entity player) {
+		
+		IBlockState state = this.parent.getDefaultState();
+		PropertyDirection propFacing = ((IBlockHelper)this.parent).getPropFacing(state);
+		
+		if (propFacing != null) {
+			
+			Collection<EnumFacing> values = propFacing.getAllowedValues();
+			
+			if (MathHelper.abs((float)player.posX - (float)clickedBlock.getX()) < 2.0F && MathHelper.abs((float)player.posZ - (float)clickedBlock.getZ()) < 2.0F)
+			{
+				double orientation = player.posY + (double)player.getEyeHeight();
+				
+				if (values.contains(EnumFacing.UP) && orientation - (double)clickedBlock.getY() > 2.0D) {
+					return EnumFacing.UP;
+				}
+				
+				if (values.contains(EnumFacing.UP) && (double)clickedBlock.getY() - orientation > 0.0D) {
+					return EnumFacing.DOWN;
+				}
+			}
+			EnumFacing result = player.getHorizontalFacing().getOpposite();
+			if (values.contains(result)) {
+				return result;
+			}
+		}
+		
+		return EnumFacing.NORTH;
 	}
 	
 }

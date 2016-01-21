@@ -5,17 +5,22 @@ import java.util.Map;
 
 import com.gollum.core.ModGollumCoreLib;
 import com.gollum.core.tools.helper.BlockHelper;
+import com.gollum.core.tools.helper.BlockHelper.PropertySubBlock;
 import com.gollum.core.tools.helper.IBlockHelper;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -53,6 +58,16 @@ public class HBlock extends Block implements IBlockHelper {
 	@Override
 	public void getSubNames(Map<Integer, String> list) {
 		helper.getSubNames(list);
+	}
+
+	@Override
+	public PropertySubBlock getPropSubBlock(IBlockState state) {
+		return this.helper.getPropSubBlock(state);
+	}
+
+	@Override
+	public PropertyDirection getPropFacing(IBlockState state) {
+		return this.helper.getPropFacing(state);
 	}
 	
 	//////////////
@@ -95,6 +110,28 @@ public class HBlock extends Block implements IBlockHelper {
 	}
 	
 	////////////
+	// Events //
+	////////////
+	
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase player, ItemStack stack) {
+		helper.onBlockPlacedBy(world, pos, state, player, stack);
+	}
+	
+	/**
+	 * Libère les items de l'inventory
+	 */
+	@Override
+	public void breakBlock(World world, BlockPos pos, IBlockState state) {
+		helper.breakBlock(world, pos, state);
+		super.breakBlock(world, pos, state);
+	}
+	
+	@Override
+	public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player) {
+		return helper.getPickBlock(target, world, pos, player);
+	}
+	
+	////////////
 	// Others //
 	////////////
 	
@@ -110,19 +147,10 @@ public class HBlock extends Block implements IBlockHelper {
 	public void getSubBlocks(Item item, CreativeTabs ctabs, List list) {
 		helper.getSubBlocks(item, ctabs, list);
 	}
-	
-	/**
-	 * Libère les items de l'inventory
-	 */
+
 	@Override
-	public void breakBlock(World world, BlockPos pos, IBlockState state) {
-		helper.breakBlock(world, pos, state);
-		super.breakBlock(world, pos, state);
-	}
-	
-	@Override
-	public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player) {
-		return helper.getPickBlock(target, world, pos, player);
+	public EnumFacing getOrientationForPlayer(BlockPos clickedBlock, Entity player) {
+		return helper.getOrientationForPlayer(null, player);
 	}
 	
 }
