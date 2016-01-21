@@ -1,7 +1,7 @@
 package com.gollum.core.tools.helper.items;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.gollum.core.tools.helper.IBlockHelper;
 import com.gollum.core.tools.helper.IItemHelper;
@@ -54,7 +54,7 @@ public class HItemBlock extends ItemBlock implements IItemHelper {
 	}
 
 	@Override
-	public void getSubNames(HashMap<Integer, String> list) {
+	public void getSubNames(Map<Integer, String> list) {
 		((IBlockHelper)block).getSubNames(list);
 	}
 

@@ -1,7 +1,7 @@
 package com.gollum.core.tools.helper;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -19,6 +19,20 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public interface IBlockHelper {
 	
 	public BlockHelper getGollumHelper ();
+	
+	////////////
+	// States //
+	////////////
+	
+	public IBlockState getStateFromMeta(int meta);
+	
+	public int getMetaFromState(IBlockState state);
+	
+	public void getSubNames(Map<Integer, String> list);
+	
+	//////////////
+	// Register //
+	//////////////
 	
 	/**
 	 * Enregistrement du block. Appelé a la fin du postInit
@@ -44,12 +58,14 @@ public interface IBlockHelper {
 	 */
 	public Block setItemBlockClass (Class<? extends ItemBlock> itemClass);
 	
+	////////////
+	// Others //
+	////////////
+	
 	/**
 	 * Renvoie l'item en relation avec le block
 	 */
 	public Item getBlockItem ();
-	
-	public void getSubNames(HashMap<Integer, String> list);
 	
 	public void getSubBlocks(Item item, CreativeTabs ctabs, List list);
 	
@@ -59,5 +75,5 @@ public interface IBlockHelper {
 	public void breakBlock(World world, BlockPos pos, IBlockState state);
 
 	public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player);
-
+	
 }

@@ -2,6 +2,7 @@ package com.gollum.core.tools.helper.blocks;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import com.gollum.core.ModGollumCoreLib;
@@ -52,9 +53,43 @@ public class HBlockPistonBase extends BlockPistonBase implements IBlockHelper {
 		return helper;
 	}
 	
+	////////////
+	// States //
+	////////////
+	
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return helper.getStateFromMeta(meta);
+	}
+	
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return helper.getMetaFromState(state);
+	}
+	
+	@Override
+	public void getSubNames(Map<Integer, String> list) {
+		helper.getSubNames(list);
+	}
+	
+	/**
+	 * Affect la class de l'objet qui servira item pour le block
+	 * par default ItemBlock
+	 * @param itemClass
+	 */
+	@Override
+	public Block setItemBlockClass (Class<? extends ItemBlock> itemClass) {
+		return helper.setItemBlockClass(itemClass);
+	}
+	
+	//////////////
+	// Register //
+	//////////////
+	
 	/**
 	 * Enregistrement du block. Appelé a la fin du postInit
 	 */
+	@Override
 	public void register () {
 		helper.register();
 	}
@@ -68,33 +103,19 @@ public class HBlockPistonBase extends BlockPistonBase implements IBlockHelper {
 		helper.registerRender();
 	}
 	
-	@Override
-	public void getSubNames(HashMap<Integer, String> list) {
-	}
 	
-	@Override
-	public void getSubBlocks(Item item, CreativeTabs ctabs, List list) {
-		HashMap<Integer, String> map = new HashMap<Integer, String>();
-		this.getSubNames(map);
-		for (Entry<Integer, String> entry: map.entrySet()) {
-			list.add(new ItemStack(item, 1, entry.getKey()));
-		}
-	}
-
+	/**
+	 * Nom d'enregistrement du mod
+	 */
 	@Override
 	public String getRegisterName() {
 		return helper.getRegisterName();
 	}
 	
-	/**
-	 * Affect la class de l'objet qui servira item pour le block
-	 * par default ItemBlock
-	 * @param itemClass
-	 */
-	@Override
-	public Block setItemBlockClass (Class<? extends ItemBlock> itemClass) {
-		return helper.setItemBlockClass(itemClass);
-	}
+
+	////////////
+	// Others //
+	////////////
 	
 	/**
 	 * Renvoie l'item en relation avec le block
@@ -102,6 +123,11 @@ public class HBlockPistonBase extends BlockPistonBase implements IBlockHelper {
 	@Override
 	public Item getBlockItem () {
 		return helper.getBlockItem();
+	}
+	
+	@Override
+	public void getSubBlocks(Item item, CreativeTabs ctabs, List list) {
+		helper.getSubBlocks(item, ctabs, list);
 	}
 	
 	/**
@@ -117,5 +143,4 @@ public class HBlockPistonBase extends BlockPistonBase implements IBlockHelper {
 	public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player) {
 		return helper.getPickBlock(target, world, pos, player);
 	}
-	
 }

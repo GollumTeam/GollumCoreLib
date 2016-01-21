@@ -1,7 +1,7 @@
 package com.gollum.core.tools.helper.items;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.gollum.core.ModGollumCoreLib;
 import com.gollum.core.tools.helper.IItemHelper;
@@ -56,7 +56,7 @@ public class HItem extends Item implements IItemHelper {
 	}
 	
 	@Override
-	public void getSubNames(HashMap<Integer, String> list) {
+	public void getSubNames(Map<Integer, String> list) {
 	}
 	
 	@Override

@@ -1,7 +1,7 @@
 package com.gollum.core.tools.helper.blocks;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.gollum.core.ModGollumCoreLib;
 import com.gollum.core.tools.helper.BlockHelper;
@@ -36,6 +36,29 @@ public class HBlock extends Block implements IBlockHelper {
 		return helper;
 	}
 	
+	////////////
+	// States //
+	////////////
+	
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return helper.getStateFromMeta(meta);
+	}
+	
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return helper.getMetaFromState(state);
+	}
+	
+	@Override
+	public void getSubNames(Map<Integer, String> list) {
+		helper.getSubNames(list);
+	}
+	
+	//////////////
+	// Register //
+	//////////////
+	
 	/**
 	 * Enregistrement du block. Appelé a la fin du postInit
 	 */
@@ -51,15 +74,6 @@ public class HBlock extends Block implements IBlockHelper {
 	@Override
 	public void registerRender () {
 		helper.registerRender();
-	}
-	
-	@Override
-	public void getSubNames(HashMap<Integer, String> list) {
-	}
-	
-	@Override
-	public void getSubBlocks(Item item, CreativeTabs ctabs, List list) {
-		helper.getSubBlocks(item, ctabs, list);
 	}
 	
 	/**
@@ -80,12 +94,21 @@ public class HBlock extends Block implements IBlockHelper {
 		return helper.setItemBlockClass(itemClass);
 	}
 	
+	////////////
+	// Others //
+	////////////
+	
 	/**
 	 * Renvoie l'item en relation avec le block
 	 */
 	@Override
 	public Item getBlockItem () {
 		return helper.getBlockItem();
+	}
+
+	@Override
+	public void getSubBlocks(Item item, CreativeTabs ctabs, List list) {
+		helper.getSubBlocks(item, ctabs, list);
 	}
 	
 	/**

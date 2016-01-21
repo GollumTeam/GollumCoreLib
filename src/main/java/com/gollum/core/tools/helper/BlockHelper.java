@@ -1,9 +1,13 @@
 package com.gollum.core.tools.helper;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
+import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import com.gollum.core.ModGollumCoreLib;
@@ -11,8 +15,12 @@ import com.gollum.core.common.context.ModContext;
 import com.gollum.core.common.mod.GollumMod;
 import com.gollum.core.tools.helper.items.HItemBlock;
 import com.gollum.core.tools.registry.BlockRegistry;
+import com.gollum.jammyfurniture.common.block.IEnumSubBlock;
+import com.google.common.collect.Lists;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.ModelBakery;
@@ -27,6 +35,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -34,6 +43,47 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockHelper implements IBlockHelper {
+	
+	public static abstract class PropertySubBlock<T extends Enum<T> & IEnumSubBlock> extends PropertyEnum<T> {
+		
+		protected PropertySubBlock(String name, Class<T> valueClass, Collection<T> allowedValues) {
+			super(name, valueClass, allowedValues);
+		}
+		
+		public PropertySubBlock(String name, Class<T> valueClass, T[] values) {
+			this(name, valueClass, Lists.newArrayList(values));
+		}
+		
+		public PropertySubBlock(String name, Class<T> valueClass) {
+			this(name, valueClass, valueClass.getEnumConstants());
+		}
+		
+		public boolean isFacingPlane (T value) {
+			return ((IEnumSubBlock)value).isFacingPlane();
+		}
+		
+		public int getIndex (T value) {
+			return ((IEnumSubBlock)value).getIndex();
+		}
+
+		public T getEnumFromMeta(int meta) {
+			TreeMap<Integer, T> sortedValue = new TreeMap<Integer, T>();
+			for (T value : this.getAllowedValues()) {
+				sortedValue.put(this.getIndex(value), value);
+			}
+			
+			T lastMatch = sortedValue.get(0);
+			for(Entry<Integer, T> entry : sortedValue.entrySet()) {
+				if (entry.getKey()  <= meta) {
+					lastMatch = entry.getValue();	
+				} else {
+					break;
+				}
+			}
+			
+			return lastMatch;
+		}
+	}
 	
 	// Pour chaque element natural. Utilise le fonctionnement naturel mais pas des helpers
 	// Une sorte de config
@@ -62,16 +112,113 @@ public class BlockHelper implements IBlockHelper {
 		return this;
 	}
 	
-	/**
-	 * Affect la class de l'objet qui servira item pour le block
-	 * par default ItemBlock
-	 * @param itemClass
-	 */
+	////////////
+	// States //
+	////////////
+	
 	@Override
-	public Block setItemBlockClass (Class<? extends ItemBlock> itemClass) {
-		this.itemBlockClass = itemClass;
-		return this.parent;
+	public IBlockState getStateFromMeta(int meta) {
+		IBlockState state = this.parent.getDefaultState();
+		boolean found = false;
+		
+		// Le type puis si besoin l'orientation
+		for (IProperty prop : (Set<IProperty>)state.getProperties().keySet()) {
+			if (prop instanceof PropertySubBlock) {
+				
+				// le type
+				PropertySubBlock propSubBlock = (PropertySubBlock)prop;
+				found = true;
+				Enum enumValue = propSubBlock.getEnumFromMeta(meta);
+				IEnumSubBlock enumSubBlock = (IEnumSubBlock)enumValue;
+				
+				state = state.withProperty(propSubBlock, enumValue);
+				
+				// Le facing
+				if (enumSubBlock.isFacingPlane()) {
+					
+					for (IProperty propFacing : (Set<IProperty>)state.getProperties().keySet()) {
+						if (propFacing.getName() == "facing") {
+							state = state.withProperty(propFacing, EnumFacing.HORIZONTALS[(meta - enumSubBlock.getIndex()) % 4]);
+							break;
+						}
+					}
+				}
+			}
+		}
+		
+		if (!found) {
+			for (IProperty propFacing : (Set<IProperty>)state.getProperties().keySet()) {
+				if (propFacing.getName() == "facing") {
+					state = state.withProperty(propFacing, EnumFacing.HORIZONTALS[meta % 4]);
+					break;
+				}
+			}
+		}
+		
+		return state;
 	}
+
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		int metadata = 0;
+		boolean found = false;
+		
+		// Le type puis si besoin l'orientation
+		for (IProperty prop : (Set<IProperty>)state.getProperties().keySet()) {
+			if (prop instanceof PropertySubBlock) {
+				PropertySubBlock propSubBlock = (PropertySubBlock)prop;
+				found = true;
+				
+				// Le type
+				Enum value = (Enum)state.getValue(prop);
+				metadata += propSubBlock.getIndex ( value );
+				
+				// Le facing
+				if (propSubBlock.isFacingPlane(value)) {
+					
+					for (IProperty propFacing : (Set<IProperty>)state.getProperties().keySet()) {
+						if (propFacing.getName() == "facing") {
+							metadata += ((EnumFacing)state.getValue(propFacing)).getHorizontalIndex();
+							break;
+						}
+					}
+				}
+				break;
+			}
+		}
+		
+		if (!found) {
+			for (IProperty propFacing : (Set<IProperty>)state.getProperties().keySet()) {
+				if (propFacing.getName() == "facing") {
+					metadata += ((EnumFacing)state.getValue(propFacing)).getHorizontalIndex();
+					break;
+				}
+			}
+		}
+		
+		return metadata;
+	}
+	
+	@Override
+	public void getSubNames(Map<Integer, String> list) {
+		
+		IBlockState state = this.parent.getDefaultState();
+		for (IProperty prop : (Set<IProperty>)state.getProperties().keySet()) {
+			if (prop instanceof PropertySubBlock) {
+				PropertySubBlock type = (PropertySubBlock)prop;
+				for (Object object : type.getAllowedValues()) {
+					if (object instanceof Enum) {
+						Enum value = (Enum)object;
+						list.put(type.getIndex(value), type.getName(value));
+					}
+				}
+			}
+		}
+	}
+	
+	//////////////
+	// Register //
+	//////////////
 	
 	/**
 	 * Enregistrement du block. Appelé a la fin du postInit
@@ -130,15 +277,26 @@ public class BlockHelper implements IBlockHelper {
 	}
 	
 	/**
+	 * Affect la class de l'objet qui servira item pour le block
+	 * par default ItemBlock
+	 * @param itemClass
+	 */
+	@Override
+	public Block setItemBlockClass (Class<? extends ItemBlock> itemClass) {
+		this.itemBlockClass = itemClass;
+		return this.parent;
+	}
+	
+	////////////
+	// Others //
+	////////////
+	
+	/**
 	 * Renvoie l'item en relation avec le block
 	 */
 	@Override
 	public Item getBlockItem () {
 		return Item.getItemFromBlock(this.parent);
-	}
-	
-	public void getSubNames(HashMap<Integer, String> list) {
-		((IItemHelper)this.parent).getSubNames(list);
 	}
 	
 	@Override

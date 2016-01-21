@@ -1,7 +1,7 @@
 package com.gollum.core.tools.helper;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -29,7 +29,7 @@ public interface IItemHelper {
 	 */
 	public String getRegisterName();
 	
-	public void getSubNames(HashMap<Integer, String> list);
+	public void getSubNames(Map<Integer, String> list);
 	
 	public void getSubItems(Item item, CreativeTabs ctabs, List list);
 

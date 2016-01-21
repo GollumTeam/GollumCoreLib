@@ -2,7 +2,9 @@ package com.gollum.core.tools.helper;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import com.gollum.core.ModGollumCoreLib;
@@ -106,7 +108,7 @@ public class ItemHelper implements IItemHelper {
 	@Override
 	public int getEnabledMetadata (int dammage) {
 		int lastSubblock = -1;
-		HashMap<Integer, String> map = new HashMap<Integer, String>();
+		TreeMap<Integer, String> map = new TreeMap<Integer, String>();
 		this.getSubNames(map);
 		
 		for (Entry<Integer, String> entry: map.entrySet()) {
@@ -119,7 +121,7 @@ public class ItemHelper implements IItemHelper {
 	}
 
 	@Override
-	public void getSubNames(HashMap<Integer, String> list) {
+	public void getSubNames(Map<Integer, String> list) {
 		((IItemHelper)this.parent).getSubNames(list);
 	}
 
