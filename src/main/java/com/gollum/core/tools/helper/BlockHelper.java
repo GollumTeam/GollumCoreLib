@@ -188,7 +188,7 @@ public class BlockHelper implements IBlockHelper {
 		for (IProperty prop: (Set<IProperty>)state.getProperties().keySet()) {
 			if (prop instanceof PropertyIndex) {
 				PropertyIndex propIndex = (PropertyIndex)prop;
-				Enum value = state.getValue(propIndex);
+				Enum value = (Enum)state.getValue(propIndex);
 				
 				if (propIndex instanceof PropertySubBlock) {
 					valueFacing = value;
