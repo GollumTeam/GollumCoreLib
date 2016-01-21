@@ -68,7 +68,7 @@ public class BlockHelper implements IBlockHelper {
 		public int getIndex (T value) {
 			return ((IEnumIndexed)value).getIndex();
 		}
-
+		
 		public T getEnumFromMeta(int meta) {
 			TreeMap<Integer, T> sortedValue = new TreeMap<Integer, T>();
 			for (T value : this.getAllowedValues()) {
@@ -86,7 +86,6 @@ public class BlockHelper implements IBlockHelper {
 			
 			return lastMatch;
 		}
-		
 	}
 	
 	public static abstract class PropertySubBlock<T extends Enum<T> & IEnumIndexed> extends PropertyIndex<T> {
@@ -146,10 +145,11 @@ public class BlockHelper implements IBlockHelper {
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		
+		int metaFacing = meta;
 		IBlockState state = this.parent.getDefaultState();
 		PropertySubBlock propSubBlock = ((IBlockHelper)this.parent).getPropSubBlock(state);
 		PropertyDirection propFacing = ((IBlockHelper)this.parent).getPropFacing(state);
-		Enum valueFacing = null;
+		Enum valueSubBlock = null;
 		
 		for (IProperty prop: (Set<IProperty>)state.getProperties().keySet()) {
 			if (prop instanceof PropertyIndex) {
@@ -157,33 +157,33 @@ public class BlockHelper implements IBlockHelper {
 				Enum value = propIndex.getEnumFromMeta(meta);
 				
 				if (propIndex instanceof PropertySubBlock) {
-					valueFacing = value;
+					valueSubBlock = value;
 				}
 				
 				state = state.withProperty(propIndex, value);
-				meta -= propIndex.getIndex(value);
+				metaFacing -= propIndex.getIndex(value);
 			}
 		}
 		
-		if(propFacing != null && (propSubBlock == null || valueFacing == null || propSubBlock.isFacingPlane(valueFacing))) {
+		if(propFacing != null && (propSubBlock == null || valueSubBlock == null || propSubBlock.isFacingPlane(valueSubBlock))) {
 			int size = propFacing.getAllowedValues().size();
 			if (size == 4) {
-				state = state.withProperty(propFacing, EnumFacing.HORIZONTALS[meta % 4]);
+				state = state.withProperty(propFacing, EnumFacing.HORIZONTALS[metaFacing % 4]);
 			} else {
-				state = state.withProperty(propFacing, EnumFacing.VALUES[meta % 6]);
+				state = state.withProperty(propFacing, EnumFacing.VALUES[metaFacing % 6]);
 			}
 		}
 		
 		return state;
 	}
-
+	
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		
 		int metadata = 0;
 		PropertySubBlock propSubBlock = ((IBlockHelper)this.parent).getPropSubBlock(state);
 		PropertyDirection propFacing = ((IBlockHelper)this.parent).getPropFacing(state);
-		Enum valueFacing = null;
+		Enum valueSubBlock = null;
 		
 		for (IProperty prop: (Set<IProperty>)state.getProperties().keySet()) {
 			if (prop instanceof PropertyIndex) {
@@ -191,14 +191,14 @@ public class BlockHelper implements IBlockHelper {
 				Enum value = (Enum)state.getValue(propIndex);
 				
 				if (propIndex instanceof PropertySubBlock) {
-					valueFacing = value;
+					valueSubBlock = value;
 				}
 				
 				metadata += propIndex.getIndex(value);
 			}
 		}
 
-		if(propFacing != null && (propSubBlock == null || valueFacing == null || propSubBlock.isFacingPlane(valueFacing))) {
+		if(propFacing != null && (propSubBlock == null || valueSubBlock == null || propSubBlock.isFacingPlane(valueSubBlock))) {
 			int size = propFacing.getAllowedValues().size();
 			if (size == 4) {
 				metadata += ((EnumFacing)state.getValue(propFacing)).getHorizontalIndex();

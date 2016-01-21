@@ -167,7 +167,7 @@ public class HBlockPistonBase extends BlockPistonBase implements IBlockHelper {
 
 	@Override
 	public EnumFacing getOrientationForPlayer(BlockPos clickedBlock, Entity player) {
-		return helper.getOrientationForPlayer(null, player);
+		return helper.getOrientationForPlayer(clickedBlock, player);
 	}
 	
 }

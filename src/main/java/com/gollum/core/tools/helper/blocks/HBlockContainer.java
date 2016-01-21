@@ -150,6 +150,6 @@ public abstract class HBlockContainer extends BlockContainer implements IBlockHe
 
 	@Override
 	public EnumFacing getOrientationForPlayer(BlockPos clickedBlock, Entity player) {
-		return helper.getOrientationForPlayer(null, player);
+		return helper.getOrientationForPlayer(clickedBlock, player);
 	}
 }
