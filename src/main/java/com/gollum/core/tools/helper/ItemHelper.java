@@ -19,6 +19,7 @@ import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -74,7 +75,8 @@ public class ItemHelper implements IItemHelper {
 		} else {
 			for (Entry<Integer, String> entry :map.entrySet()) {
 				if (!registered.contains(entry.getKey())) {
-					ModelBakery.addVariantName(this.parent, this.mod.getModId()+":"+entry.getValue());
+					ModelResourceLocation model = this.getModelResourceLocation(entry.getValue());
+					ModelBakery.registerItemVariants(this.parent, model);
 				}
 			}
 			for (Entry<Integer, String> entry :map.entrySet()) {
@@ -95,7 +97,11 @@ public class ItemHelper implements IItemHelper {
 	
 	public void registerRender (int metadata, String renderKey, boolean trace) {
 		if (trace) ModGollumCoreLib.log.message("Auto register render: "+RegisteredObjects.instance().getRegisterName(this.parent)+":"+metadata+":"+renderKey);
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(this.parent, metadata, new ModelResourceLocation(this.mod.getModId()+":"+renderKey, "inventory"));
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(this.parent, metadata, this.getModelResourceLocation(renderKey));
+	}
+	
+	protected ModelResourceLocation getModelResourceLocation (String renderKey) {
+		return new ModelResourceLocation(this.mod.getModId()+":"+renderKey, "inventory");
 	}
 
 	@Override

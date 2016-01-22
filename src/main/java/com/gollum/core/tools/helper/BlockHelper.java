@@ -44,6 +44,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -165,6 +166,10 @@ public class BlockHelper implements IBlockHelper {
 			}
 		}
 		
+		if (metaFacing < 0) {
+			System.out.println("error");
+		}
+		
 		if(propFacing != null && (propSubBlock == null || valueSubBlock == null || propSubBlock.isFacingPlane(valueSubBlock))) {
 			int size = propFacing.getAllowedValues().size();
 			if (size == 4) {
@@ -272,7 +277,8 @@ public class BlockHelper implements IBlockHelper {
 		} else {
 			for (Entry<Integer, String> entry :map.entrySet()) {
 				if (!registered.contains(entry.getKey())) {
-					ModelBakery.addVariantName(this.getBlockItem(), this.mod.getModId()+":"+entry.getValue());
+					ModelResourceLocation model = this.getModelResourceLocation(entry.getValue());
+					ModelBakery.registerItemVariants(this.getBlockItem(), model);
 				}
 			}
 			for (Entry<Integer, String> entry :map.entrySet()) {
@@ -293,7 +299,11 @@ public class BlockHelper implements IBlockHelper {
 	
 	public void registerRender (int metadata, String renderKey, boolean trace) {
 		if (trace) ModGollumCoreLib.log.message("Auto register render: "+this.getRegisterName()+":"+metadata+":"+":"+renderKey);
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(this.getBlockItem(), metadata, new ModelResourceLocation(this.mod.getModId()+":"+renderKey, "inventory"));
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(this.getBlockItem(), metadata, this.getModelResourceLocation(renderKey));
+	}
+	
+	protected ModelResourceLocation getModelResourceLocation (String renderKey) {
+		return new ModelResourceLocation(this.mod.getModId()+":"+renderKey, "inventory");
 	}
 	
 	/**
