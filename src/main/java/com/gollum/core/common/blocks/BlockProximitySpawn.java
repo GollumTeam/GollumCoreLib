@@ -73,16 +73,5 @@ public class BlockProximitySpawn extends HBlockContainer {
 	public boolean isOpaqueCube() {
 		return false;
 	}
-
-	/**
-	 * If this block doesn't render as an ordinary block it will return False
-	 * (examples: signs, buttons, stairs, etc)
-	 */
-	/* TODO
-	@Override
-	public boolean renderAsNormalBlock() {
-		return false;
-	}
-	*/
 	
 }

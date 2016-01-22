@@ -1,17 +1,17 @@
 package com.gollum.core.common.tileentities;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntityLockable;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.common.util.Constants;
 
-public abstract class GCLInventoryTileEntity extends TileEntityLockable implements ITickable, IInventory {
+public abstract class GCLInventoryTileEntity extends TileEntity implements ITickable, IInventory {
 
 	protected ItemStack[] inventory;
 	protected int maxSize;
@@ -245,14 +245,8 @@ public abstract class GCLInventoryTileEntity extends TileEntityLockable implemen
 	}
 	
 	@Override
-	public String getGuiID() {
-		return null;
-	}
-
-	@Override
-	public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn) {
-		// TODO Auto-generated method stub
-		return null;
+	public IChatComponent getDisplayName() {
+		return new ChatComponentText(this.getCommandSenderName());
 	}
 	
 	////////////
