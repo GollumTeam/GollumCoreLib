@@ -29,3 +29,6 @@ gollumcorelib.config.dimention=dimention
 gollumcorelib.config.spawnRate=spawn rate in group
 gollumcorelib.config.spawnHeight=height detection of spawn
 gollumcorelib.config.blocksSpawn=blocks spawn detection
+
+gollumcorelib.config.worldRestartRequired=One or more changed settings requires that World be restarted before taking effect.
+gollumcorelib.config.worldRestartTitle=World Restart Required

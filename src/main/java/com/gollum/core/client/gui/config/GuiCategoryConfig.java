@@ -60,22 +60,9 @@ public class GuiCategoryConfig extends GuiConfig {
 	
 	@Override
 	public void displayParent() {
-		
-		boolean mcRestart = this.entryList.requiresMcRestart();
-		boolean wRestart  = this.entryList.requiresWorldRestart();
-		
-		ConfigChangedEvent event = new OnConfigChangedEvent(this.getMod().getModId(), "", wRestart, mcRestart);
-		FMLCommonHandler.instance().bus().post(event);
-		if (!event.getResult().equals(Result.DENY)) {
-			this.saveValue ();
-			FMLCommonHandler.instance().bus().post(new PostConfigChangedEvent(this.getMod().getModId(), "", wRestart, mcRestart));
-			
-			if (mcRestart) {
-				this.mc.displayGuiScreen(new GuiMessageDialog(this.getParent(), "fml.configgui.gameRestartTitle", new ChatComponentText(I18n.format("fml.configgui.gameRestartRequired")), "fml.configgui.confirmRestartMessage"));
-				return;
-			}
+		if (!this.displayRestart()) {
+			super.displayParent();
 		}
-		super.displayParent();
 	}
 	
 	@Override

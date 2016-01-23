@@ -12,13 +12,15 @@ import net.minecraft.client.Minecraft;
 public class CategoryEntry extends ButtonEntry {
 	
 	private Object value;
-	public boolean mustBeRestart = false;
+	public boolean mustBeMcRestart = false;
+	public boolean mustBeWorldRestart = false;
 	
 	public CategoryEntry(int index, Minecraft mc, GuiConfigEntries parent, ConfigElement configElement) {
 		super(index, mc, parent, configElement);
 		
 		this.labelDisplay = false;
-		this.mustBeRestart = false;
+		this.mustBeMcRestart = false;
+		this.mustBeWorldRestart = false;
 		this.updateValueButtonText(this.getLabel());
 		this.value = this.configElement.getValue();
 	}
@@ -39,10 +41,15 @@ public class CategoryEntry extends ButtonEntry {
 		this.value = value;
 		return super.setValue(value);
 	}
-	
+
 	@Override
 	public boolean requiresMcRestart() {
-		return this.mustBeRestart ;
+		return this.mustBeMcRestart ;
+	}
+	
+	@Override
+	public boolean requiresWorldRestart() {
+		return this.mustBeWorldRestart ;
 	}
 	
 	@Override

@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.lwjgl.input.Keyboard;
 
+import com.gollum.core.ModGollumCoreLib;
 import com.gollum.core.client.gui.config.element.ConfigElement;
 import com.gollum.core.common.config.ConfigProp;
 import com.gollum.core.common.config.JsonConfigProp;
@@ -17,12 +18,19 @@ import com.gollum.core.common.mod.GollumMod;
 
 import net.minecraftforge.fml.client.GuiModList;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
+import net.minecraftforge.fml.client.config.GuiMessageDialog;
 import net.minecraftforge.fml.client.config.GuiUnicodeGlyphButton;
 import net.minecraftforge.fml.client.config.HoverChecker;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent.PostConfigChangedEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.ModContainer;
+import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.util.ChatComponentText;
 
 public abstract class GuiConfig extends GuiScreen {
 	
@@ -157,6 +165,28 @@ public abstract class GuiConfig extends GuiScreen {
 			}
 		}
 		return this.parent;
+	}
+	
+	protected boolean displayRestart() {
+		boolean mcRestart = this.entryList.requiresMcRestart();
+		boolean wRestart  = this.entryList.requiresWorldRestart();
+		
+		ConfigChangedEvent event = new OnConfigChangedEvent(this.getMod().getModId(), "", wRestart, mcRestart);
+		FMLCommonHandler.instance().bus().post(event);
+		if (!event.getResult().equals(Result.DENY)) {
+			this.saveValue ();
+			FMLCommonHandler.instance().bus().post(new PostConfigChangedEvent(this.getMod().getModId(), "", wRestart, mcRestart));
+
+			if (mcRestart) {
+				this.mc.displayGuiScreen(new GuiMessageDialog(this.getParent(), "fml.configgui.gameRestartTitle", new ChatComponentText(I18n.format("fml.configgui.gameRestartRequired")), "fml.configgui.confirmRestartMessage"));
+				return true;
+			} else
+			if (wRestart && this.mc.theWorld != null) {
+				this.mc.displayGuiScreen(new GuiMessageDialog(this.getParent(), ModGollumCoreLib.i18n.trans("config.worldRestartTitle"), new ChatComponentText(ModGollumCoreLib.i18n.trans("config.worldRestartRequired")), "fml.configgui.confirmRestartMessage"));
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public void displayParent() {

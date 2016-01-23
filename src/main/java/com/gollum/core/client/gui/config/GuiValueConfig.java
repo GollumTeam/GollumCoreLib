@@ -81,7 +81,10 @@ public class GuiValueConfig extends GuiConfig {
 	@Override
 	public void displayParent() {
 		if (this.entryList.requiresMcRestart()) {
-			this.parentEntry.mustBeRestart = true;
+			this.parentEntry.mustBeMcRestart = true;
+		}
+		if (this.entryList.requiresWorldRestart()) {
+			this.parentEntry.mustBeWorldRestart = true;
 		}
 		super.displayParent();
 	}

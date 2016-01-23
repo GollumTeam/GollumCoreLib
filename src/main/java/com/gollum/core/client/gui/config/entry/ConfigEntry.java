@@ -7,6 +7,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.gollum.core.ModGollumCoreLib;
 import com.gollum.core.client.gui.config.GuiConfigEntries;
 import com.gollum.core.client.gui.config.element.ConfigElement;
 import com.gollum.core.client.gui.config.element.TypedValueElement;
@@ -116,8 +117,12 @@ public abstract class ConfigEntry implements IGuiListEntry {
 		} else {
 			this.toolTip.add (EnumChatFormatting.AQUA + I18n.format("fml.configgui.tooltip.default", defaultValueStr));
 		}
+		
 		if (prop.mcRestart()) {
 			toolTip.add(EnumChatFormatting.RED + "[" + I18n.format("fml.configgui.gameRestartTitle") + "]");
+		} else
+		if (prop.worldRestart()) {
+			toolTip.add(EnumChatFormatting.RED + "[" + ModGollumCoreLib.i18n.trans("config.worldRestartTitle") + "]");
 		}
 		
 		this.undoHoverChecker = new HoverChecker(this.btUndo, 800);
@@ -268,7 +273,7 @@ public abstract class ConfigEntry implements IGuiListEntry {
 	}
 	
 	public boolean enabled() {
-		return this.mc.theWorld != null ? !this.configElement.getConfigProp().worldRestart() : true;
+		return true;
 	}
 	
 	public boolean isChanged () {
