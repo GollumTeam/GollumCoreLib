@@ -265,8 +265,11 @@ public class Json implements Cloneable {
 	/////////////////////
 	// Convert to json //
 	/////////////////////
-	
 	public static Json create (JsonNode json) {
+		return create(json, null);
+	}
+	
+	public static Json create (JsonNode json, Class<? extends Json> type) {
 		
 		if (json.isObjectNode()) {
 			JsonObject o = createObject();
@@ -282,11 +285,23 @@ public class Json implements Cloneable {
 			}
 			return ar;
 		}
-		if (json.isStringValue())  { return create (json.getStringValue());  }
-		if (json.isNumberValue())  { return create (json.getNumberValue());  }
-		if (json.isBooleanValue()) { return create (json.getBooleanValue()); }
 		
-		return create();
+		Json value = create();
+		if (json.isStringValue())  { value = create (json.getStringValue());  }
+		if (json.isNumberValue())  { value = create (json.getNumberValue());  }
+		if (json.isBooleanValue()) { value = create (json.getBooleanValue()); }
+		
+		if (type == JsonString.class) { value = create (value.strValue());    }
+		if (type == JsonLong.class  ) { value = create (value.longValue());   }
+		if (type == JsonInt.class   ) { value = create (value.intValue());    }
+		if (type == JsonShort.class ) { value = create (value.shortValue());  }
+		if (type == JsonByte.class  ) { value = create (value.byteValue());   }
+		if (type == JsonChar.class  ) { value = create (value.charValue());   }
+		if (type == JsonDouble.class) { value = create (value.doubleValue()); }
+		if (type == JsonFloat.class ) { value = create (value.floatValue());  }
+		if (type == JsonBool.class  ) { value = create (value.boolValue());   }
+		
+		return value;
 	}
 	
 	public JsonNodeBuilder argoJson() {

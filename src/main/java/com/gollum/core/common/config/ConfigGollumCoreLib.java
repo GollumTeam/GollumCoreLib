@@ -5,6 +5,14 @@ import com.gollum.core.common.config.ConfigProp.Type;
 import com.gollum.core.common.config.type.ItemStackConfigType;
 import com.gollum.core.tools.simplejson.IJsonObjectDisplay;
 import com.gollum.core.tools.simplejson.Json;
+import com.gollum.core.tools.simplejson.JsonBool;
+import com.gollum.core.tools.simplejson.JsonByte;
+import com.gollum.core.tools.simplejson.JsonDouble;
+import com.gollum.core.tools.simplejson.JsonFloat;
+import com.gollum.core.tools.simplejson.JsonInt;
+import com.gollum.core.tools.simplejson.JsonLong;
+import com.gollum.core.tools.simplejson.JsonShort;
+import com.gollum.core.tools.simplejson.JsonString;
 
 import net.minecraft.world.biome.BiomeGenBase;
 
@@ -79,13 +87,14 @@ public class ConfigGollumCoreLib extends Config {
 	
 	
 	// Json
-	@ConfigProp(group="Test", dev=true) public Json jsonStr    = Json.create("Test");
-	@ConfigProp(group="Test", dev=true) public Json jsonLong   = Json.create(10L);
-	@ConfigProp(group="Test", dev=true) public Json jsonInt    = Json.create((int)10);
-	@ConfigProp(group="Test", dev=true) public Json jsonShort  = Json.create((short)10);
-	@ConfigProp(group="Test", dev=true) public Json jsonByte   = Json.create((byte)10);
-	@ConfigProp(group="Test", dev=true) public Json jsonDouble = Json.create(10.5D);
-	@ConfigProp(group="Test", dev=true) public Json jsonFloat  = Json.create(10.5F);
+	@ConfigProp(group="Test", dev=true) public JsonString jsonStr    = Json.create("Test");
+	@ConfigProp(group="Test", dev=true) public JsonLong   jsonLong   = Json.create(10L);
+	@ConfigProp(group="Test", dev=true) public JsonInt    jsonInt    = Json.create((int)10);
+	@ConfigProp(group="Test", dev=true) public JsonShort  jsonShort  = Json.create((short)10);
+	@ConfigProp(group="Test", dev=true) public JsonByte   jsonByte   = Json.create((byte)10);
+	@ConfigProp(group="Test", dev=true) public JsonDouble jsonDouble = Json.create(10.5D);
+	@ConfigProp(group="Test", dev=true) public JsonFloat  jsonFloat  = Json.create(10.5F);
+	@ConfigProp(group="Test", dev=true) public JsonBool   jsonBool   = Json.create(true);
 	
 	@ConfigProp(group="Test", dev=true, type=Type.SLIDER)
 	public byte slider = 20;
