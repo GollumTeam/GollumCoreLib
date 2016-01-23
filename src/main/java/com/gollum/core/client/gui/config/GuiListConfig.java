@@ -8,12 +8,12 @@ import com.gollum.core.client.gui.config.element.ConfigElement;
 import com.gollum.core.client.gui.config.element.ListElement;
 import com.gollum.core.client.gui.config.entry.ListEntry;
 
+import net.minecraftforge.fml.client.config.GuiButtonExt;
 import net.minecraft.client.gui.GuiSlot;
 import net.minecraft.client.gui.GuiTextField;
-import net.minecraftforge.fml.client.config.GuiButtonExt;
+import net.minecraft.client.renderer.Tessellator;
 
 public class GuiListConfig extends GuiConfig {
-
 	
 	public static class GuiButtonSlot extends GuiSlot {
 
@@ -80,7 +80,7 @@ public class GuiListConfig extends GuiConfig {
 		}
 
 		@Override
-		protected void drawSlot(int slotIndex, int x, int y, int slotHeight, int mouseX, int mouseY) {
+		protected void drawSlot(int slotIndex, int x, int y, int slotHeight , int mouseX, int mouseY) {
 			GuiButtonExt button = this.buttons.get(slotIndex);
 			button.xPosition = this.left + 5;
 			button.yPosition = y;
@@ -170,7 +170,7 @@ public class GuiListConfig extends GuiConfig {
 		
 		super.initGui();
 		
-		this.search = new GuiTextField(1, this.mc.fontRendererObj, 0, 0, 0, 16);
+		this.search = new GuiTextField(100, this.mc.fontRendererObj, 0, 0, 0, 16);
 		this.groupList = new GuiButtonSlot(this, this.getAllGroup());
 	}
 	
@@ -279,5 +279,4 @@ public class GuiListConfig extends GuiConfig {
 		super.mouseClicked(x, y, mouseEvent);
 		this.search.mouseClicked(x, y, mouseEvent);
 	}
-	
 }

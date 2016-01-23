@@ -5,10 +5,12 @@ import com.gollum.core.client.gui.config.GuiListConfig;
 import com.gollum.core.client.gui.config.element.ConfigElement;
 import com.gollum.core.client.gui.config.element.ListElement;
 
+import net.minecraftforge.fml.client.config.GuiButtonExt;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.client.config.GuiButtonExt;
 
 public class ListSlotEntry extends ConfigEntry {
 
@@ -21,7 +23,7 @@ public class ListSlotEntry extends ConfigEntry {
 	}
 	
 	@Override
-	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight , int mouseX, int mouseY, boolean isSelected, boolean resetControlWidth) {
+	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected, boolean resetControlWidth) {
 		
 		int x1 = this.parent.controlX;
 		int y1 = y + this.parent.getSlotHeight ();

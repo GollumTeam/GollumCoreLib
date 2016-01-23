@@ -3,9 +3,9 @@ package com.gollum.core.client.gui.config.entry;
 import com.gollum.core.client.gui.config.GuiConfigEntries;
 import com.gollum.core.client.gui.config.element.ConfigElement;
 
-import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 import net.minecraftforge.fml.client.config.GuiUtils;
+import net.minecraft.client.Minecraft;
 
 public abstract class ButtonEntry extends ConfigEntry {
 

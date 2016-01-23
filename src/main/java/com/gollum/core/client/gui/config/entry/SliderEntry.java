@@ -3,8 +3,9 @@ package com.gollum.core.client.gui.config.entry;
 import com.gollum.core.client.gui.config.GuiConfigEntries;
 import com.gollum.core.client.gui.config.element.ConfigElement;
 
-import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.client.config.GuiSlider;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.Tessellator;
 
 public class SliderEntry extends ConfigEntry {
 	
@@ -45,7 +46,7 @@ public class SliderEntry extends ConfigEntry {
 		this.setValue(this.configElement.getValue());
 	}
 	@Override
-	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight , int mouseX, int mouseY, boolean isSelected, boolean resetControlWidth) {
+	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected, boolean resetControlWidth) {
 		
 		super.drawEntry(slotIndex, x, y, listWidth, slotHeight, mouseX, mouseY, isSelected, resetControlWidth);
 		

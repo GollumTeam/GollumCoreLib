@@ -2,9 +2,9 @@ package com.gollum.core.client.gui.config;
 
 import java.util.Set;
 
+import net.minecraftforge.fml.client.IModGuiFactory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraftforge.fml.client.IModGuiFactory;
 
 public class ConfigModGuiFactory implements IModGuiFactory {
 	

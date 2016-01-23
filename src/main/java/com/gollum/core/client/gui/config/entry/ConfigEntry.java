@@ -1,5 +1,8 @@
 package com.gollum.core.client.gui.config.entry;
 
+import static net.minecraftforge.fml.client.config.GuiUtils.RESET_CHAR;
+import static net.minecraftforge.fml.client.config.GuiUtils.UNDO_CHAR;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,13 +13,14 @@ import com.gollum.core.client.gui.config.element.TypedValueElement;
 import com.gollum.core.common.config.ConfigProp;
 import com.gollum.core.common.config.JsonConfigProp;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiListExtended.IGuiListEntry;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 import net.minecraftforge.fml.client.config.GuiUtils;
 import net.minecraftforge.fml.client.config.HoverChecker;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiListExtended.IGuiListEntry;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.util.EnumChatFormatting;
 
 public abstract class ConfigEntry implements IGuiListEntry {
 	
@@ -76,8 +80,8 @@ public abstract class ConfigEntry implements IGuiListEntry {
 		
 		this.btnAdd     = new GuiButtonExt(0, 0, 0, 18, 18, "+");
 		this.btnRemove  = new GuiButtonExt(0, 0, 0, 18, 18, "x");
-		this.btUndo  = new GuiButtonExt(0, 0, 0, 18, 18, "UNDO_CHAR"); // TODO
-		this.btReset = new GuiButtonExt(0, 0, 0, 18, 18, "RESET_CHAR"); // TODO
+		this.btUndo  = new GuiButtonExt(0, 0, 0, 18, 18, UNDO_CHAR);
+		this.btReset = new GuiButtonExt(0, 0, 0, 18, 18, RESET_CHAR);
 		
 		this.btnAdd    .packedFGColour = GuiUtils.getColorCode('2', true);
 		this.btnRemove .packedFGColour = GuiUtils.getColorCode('c', true);
@@ -151,6 +155,11 @@ public abstract class ConfigEntry implements IGuiListEntry {
 	}
 	
 	@Override
+	public void setSelected(int p_178011_1_, int p_178011_2_, int p_178011_3_) {
+		
+	}
+	
+	@Override
 	public final void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected) {
 		this.drawEntry(slotIndex, x, y, listWidth, slotHeight, mouseX, mouseY, isSelected, true);
 	}
@@ -213,7 +222,6 @@ public abstract class ConfigEntry implements IGuiListEntry {
 			this.parent.initGui();
 		}
 	}
-	
 	
 	protected void drawRec(int x, int y, int width, int height, int color1) {
 		this.drawRec(x, y, width, height, color1, color1);
@@ -390,11 +398,6 @@ public abstract class ConfigEntry implements IGuiListEntry {
 	}
 
 	public void setSlot(int slotIndex) {
-	}
-	
-	@Override
-	public void setSelected(int p_178011_1_, int p_178011_2_, int p_178011_3_) {
-		// TODO Auto-generated method stub
 	}
 	
 	public void drawToolTip(int mouseX, int mouseY) {

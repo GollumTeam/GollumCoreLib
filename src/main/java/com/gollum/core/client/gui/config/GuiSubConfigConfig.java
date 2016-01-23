@@ -11,14 +11,14 @@ import com.gollum.core.client.gui.config.entry.SubConfigEntry;
 import com.gollum.core.common.config.ConfigLoader;
 import com.gollum.core.common.config.ConfigLoader.ConfigLoad;
 
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.ChatComponentText;
 import net.minecraftforge.fml.client.config.GuiMessageDialog;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent.PostConfigChangedEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.util.ChatComponentText;
 
 public class GuiSubConfigConfig extends GuiConfig {
 	

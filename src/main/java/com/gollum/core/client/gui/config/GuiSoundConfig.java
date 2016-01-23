@@ -10,10 +10,10 @@ import com.gollum.core.client.gui.config.entry.ListEntry;
 import com.gollum.core.client.gui.config.entry.ListSlotEntry;
 import com.gollum.core.tools.registered.RegisteredObjects;
 
+import net.minecraftforge.fml.client.config.GuiButtonExt;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.audio.SoundCategory;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.client.config.GuiButtonExt;
 
 public class GuiSoundConfig extends GuiListConfig {
 

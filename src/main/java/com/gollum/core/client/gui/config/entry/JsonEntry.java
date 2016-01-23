@@ -21,6 +21,7 @@ import com.gollum.core.tools.simplejson.JsonString;
 import com.google.gson.JsonObject;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.Tessellator;
 
 public class JsonEntry extends ConfigEntry implements IProxyEntry {
 	
@@ -249,7 +250,7 @@ public class JsonEntry extends ConfigEntry implements IProxyEntry {
 	}
 	
 	@Override
-	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight , int mouseX, int mouseY, boolean isSelected, boolean resetControlWidth) {
+	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected, boolean resetControlWidth) {
 		if (this.proxy == null) return;
 		this.proxy.drawEntry (slotIndex, x, y, listWidth, slotHeight, mouseX, mouseY, isSelected, resetControlWidth);
 	}

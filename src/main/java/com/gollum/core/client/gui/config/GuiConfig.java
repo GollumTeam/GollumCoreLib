@@ -15,14 +15,14 @@ import com.gollum.core.common.config.ConfigProp;
 import com.gollum.core.common.config.JsonConfigProp;
 import com.gollum.core.common.mod.GollumMod;
 
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fml.client.GuiModList;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 import net.minecraftforge.fml.client.config.GuiUnicodeGlyphButton;
 import net.minecraftforge.fml.client.config.HoverChecker;
 import net.minecraftforge.fml.common.ModContainer;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.resources.I18n;
 
 public abstract class GuiConfig extends GuiScreen {
 	
@@ -119,7 +119,7 @@ public abstract class GuiConfig extends GuiScreen {
 			this.height - 29, 
 			undoWidth,
 			20,
-			" " + I18n.format("fml.configgui.tooltip.undoChanges"), UNDO_CHAR,
+			" " + I18n.format("fml.configgui.tooltip.undoChanges"), UNDO_CHAR, 
 			2.0F
 		));
 			
@@ -129,7 +129,7 @@ public abstract class GuiConfig extends GuiScreen {
 			this.height - 29,
 			resetWidth,
 			20,
-			" " + I18n.format("fml.configgui.tooltip.resetToDefault"), RESET_CHAR,
+			" " + I18n.format("fml.configgui.tooltip.resetToDefault"), RESET_CHAR, 
 			2.0F
 		));
 		
@@ -256,17 +256,21 @@ public abstract class GuiConfig extends GuiScreen {
 	}
 	
 	public void drawToolTip(List stringList, int x, int y) {
-		this.drawHoveringText(stringList, x, y);// TODO tester
+		this.drawHoveringText(stringList, x, y);
+	}
+
+	public void handleMouseInput() throws IOException {
+		super.handleMouseInput();
+		this.entryList.handleMouseInput();
 	}
 	
 	/**
 	 * Called when the mouse is clicked.
-	 * @throws IOException 
 	 */
 	@Override
 	protected void mouseClicked(int x, int y, int mouseEvent) throws IOException {
-		if (mouseEvent != 0 || !this.entryList.mouseReleased(x, y, mouseEvent)) {
-			this.entryList.mouseClicked(x, y, mouseEvent);
+		if (mouseEvent != 0 || !this.entryList.mouseClicked(x, y, mouseEvent)) {
+			this.entryList.mouseScreenClicked(x, y, mouseEvent);
 			super.mouseClicked(x, y, mouseEvent);
 		}
 	}

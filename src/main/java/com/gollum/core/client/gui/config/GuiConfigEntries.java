@@ -16,6 +16,7 @@ import com.gollum.core.utils.reflection.Reflection;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiListExtended;
 import net.minecraft.client.gui.GuiSlot;
+import net.minecraft.client.renderer.Tessellator;
 
 public class GuiConfigEntries extends GuiListExtended {
 
@@ -82,8 +83,7 @@ public class GuiConfigEntries extends GuiListExtended {
 
 	@Override
 	protected void drawSlot(int p_148126_1_, int p_148126_2_, int p_148126_3_, int p_148126_4_, int p_148126_6_, int p_148126_7_) {
-		// TODO this.getListEntry(p_148126_1_).drawEntry(p_148126_1_, p_148126_2_, p_148126_3_, this.getListWidth(), p_148126_4_, p_148126_6_, p_148126_7_, this.func_148124_c(p_148126_6_, p_148126_7_) == p_148126_1_);
-		this.getListEntry(p_148126_1_).drawEntry(p_148126_1_, p_148126_2_, p_148126_3_, this.getListWidth(), p_148126_4_, p_148126_6_, p_148126_7_, this.isSelected(p_148126_1_));
+		this.getListEntry(p_148126_1_).drawEntry(p_148126_1_, p_148126_2_, p_148126_3_, this.getListWidth(), p_148126_4_, p_148126_6_, p_148126_7_, this.getSlotIndexFromScreenCoords(p_148126_6_, p_148126_7_) == p_148126_1_);
 	}
 	
 	@Override
@@ -346,11 +346,10 @@ public class GuiConfigEntries extends GuiListExtended {
 	 * This method is a pass-through for IConfigEntry objects that contain GuiTextField elements. Called from the parent GuiConfig
 	 * screen.
 	 */
-	public boolean mouseClicked(int mouseX, int mouseY, int mouseEvent) {
+	public void mouseScreenClicked(int mouseX, int mouseY, int mouseEvent) {
 		for (ConfigEntry entry : this.listEntries){
 			entry.mouseClicked(mouseX, mouseY, mouseEvent);
 		}
-		return super.mouseClicked(mouseX, mouseY, mouseEvent);
 	}
 	
 	@Override
