@@ -30,7 +30,7 @@ import argo.jdom.JdomParser;
 import argo.jdom.JsonNode;
 import argo.jdom.JsonNodeFactories;
 import argo.jdom.JsonRootNode;
-import cpw.mods.fml.relauncher.FMLInjectionData;
+import net.minecraftforge.fml.relauncher.FMLInjectionData;
 
 public class ConfigLoader {
 	
