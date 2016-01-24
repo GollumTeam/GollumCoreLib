@@ -1,20 +1,24 @@
 package com.gollum.core.common.building.handler;
 
-import net.minecraft.block.Block;
+import com.gollum.core.common.building.Building.EnumRotate;
+
 import net.minecraft.block.BlockTripWireHook;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 public class BlockTripWireHookBuildingHandler extends BuildingBlockHandler {
 
 	@Override
-	protected boolean mustApply (World world, int x, int y, int z, Block block) {
+	protected boolean mustApply (World world, BlockPos pos, IBlockState state) {
 		return 
-			block instanceof BlockTripWireHook
+			state != null && state.getBlock() instanceof BlockTripWireHook
 		;
 	}
 	
 	@Override
-	public void applyOrientation(World world, int x, int y, int z, Block block, int metadata, int orientation, int rotate) {
+	public void applyOrientation(World world, BlockPos pos, IBlockState state, EnumFacing facing, EnumRotate rotate) {
 		/* FIXME
 		if (orientation == Unity.ORIENTATION_UP)    { metadata = (metadata & 0xC) + 2; } else 
 		if (orientation == Unity.ORIENTATION_DOWN)  { metadata = (metadata & 0xC) + 0; } else 

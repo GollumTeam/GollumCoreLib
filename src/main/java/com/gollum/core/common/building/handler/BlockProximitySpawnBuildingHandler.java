@@ -1,18 +1,20 @@
 package com.gollum.core.common.building.handler;
 
 import java.util.HashMap;
-import java.util.Random;
 
 import com.gollum.core.common.blocks.BlockProximitySpawn;
+import com.gollum.core.common.building.Building.EnumRotate;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 public class BlockProximitySpawnBuildingHandler extends BuildingBlockHandler {
 	
 	@Override
-	protected boolean mustApply (World world, int x, int y, int z, Block block) {
-		return block instanceof BlockProximitySpawn;
+	protected boolean mustApply (World world, BlockPos pos, IBlockState state) {
+		return 
+			state != null && state.getBlock() instanceof BlockProximitySpawn;
 	}
 	
 	/**
@@ -20,15 +22,13 @@ public class BlockProximitySpawnBuildingHandler extends BuildingBlockHandler {
 	 * @param rotate	
 	 */
 	@Override
-	public void applyExtra(
-		Block block,
+	protected void applyExtra(
 		World world,
-		Random random, 
-		int x, int y, int z, 
+		BlockPos pos,
+		IBlockState state,
 		HashMap<String, String> extra,
-		int initX, int initY, int initZ, 
-		int rotate,
-		int dx, int dz,
+		BlockPos initPos,
+		EnumRotate rotate,
 		int maxX, int maxZ
 	) {
 		/* FIXME

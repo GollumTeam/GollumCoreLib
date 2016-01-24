@@ -1,20 +1,23 @@
 package com.gollum.core.common.building.handler;
 
 import java.util.HashMap;
-import java.util.Random;
 
-import net.minecraft.block.Block;
+import com.gollum.core.common.building.Building.EnumRotate;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 
 public abstract class BuildingBlockHandler {
 	
 	/**
 	 * Affecte l'orientation
 	 */
-	
-	public final void setOrientation(World world, int x, int y, int z, Block block, int metadata, int orientation, int rotate) {
-		if (this.mustApply(world, x, y, z, block)) {
-			this.applyOrientation(world, x, y, z, block, metadata, orientation, rotate);
+	public void setOrientation(WorldServer world, BlockPos pos, IBlockState state, EnumFacing facing, EnumRotate rotate) {
+		if (this.mustApply(world, pos, state)) {
+			this.applyOrientation(world, pos, state, facing, rotate);
 		}
 	}
 
@@ -23,39 +26,36 @@ public abstract class BuildingBlockHandler {
 	 * @param rotate	
 	 */
 	public final void setExtra(
-		Block block,
 		World world,
-		Random random, 
-		int x, int y, int z, 
+		BlockPos pos,
+		IBlockState state,
 		HashMap<String, String> extra,
-		int initX, int initY, int initZ, 
-		int rotate,
-		int dx, int dz,
+		BlockPos initPos,
+		EnumRotate rotate,
 		int maxX, int maxZ
 	) {
-		if (this.mustApply(world, x, y, z, block)) {
-			this.applyExtra(block, world, random, x, y, z, extra, initX, initY, initZ, rotate, dx, dz, maxX, maxZ);
+		if (this.mustApply(world, pos, state)) {
+			this.applyExtra(world, pos, state, extra, initPos, rotate, maxX, maxZ);
 		}
 	}
 	
-	protected boolean mustApply (World world, int x, int y, int z, Block block) {
+	protected boolean mustApply (World world, BlockPos pos, IBlockState state) {
 		return false;
 	}
 
-	protected void applyOrientation(World world, int x, int y, int z, Block block, int metadata, int orientation, int rotate) {
+	protected void applyOrientation(World world, BlockPos pos, IBlockState state, EnumFacing facing, EnumRotate rotate) {
 	}
 	
 	protected void applyExtra(
-		Block block,
 		World world,
-		Random random, 
-		int x, int y, int z, 
+		BlockPos pos,
+		IBlockState state,
 		HashMap<String, String> extra,
-		int initX, int initY, int initZ, 
-		int rotate,
-		int dx, int dz,
+		BlockPos initPos,
+		EnumRotate rotate,
 		int maxX, int maxZ
 	) {
 	}
+
 	
 }

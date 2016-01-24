@@ -4,18 +4,28 @@ import static com.gollum.core.ModGollumCoreLib.log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.concurrent.locks.ReentrantLock;
 
+import com.gollum.core.common.building.Building.EnumRotate;
 import com.gollum.core.common.building.Building.GroupSubBuildings;
 import com.gollum.core.common.building.Building.ListSubBuildings;
 import com.gollum.core.common.building.Building.SubBuilding;
 import com.gollum.core.common.building.Building.Unity;
 import com.gollum.core.common.building.Building.Unity.Content;
 import com.gollum.core.common.building.Building.Unity3D;
+import com.gollum.core.common.building.handler.BuildingBlockHandler;
+import com.gollum.core.tools.registry.BuildingBlockRegistry;
 import com.gollum.core.utils.math.Integer3d;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.BlockContainer;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
@@ -24,16 +34,16 @@ public class Builder {
 	public static ArrayList<BuilderRunnable> currentBuilds = new ArrayList<BuilderRunnable>();
 	
 	public void build(World world, SubBuilding subBuilding, boolean isStaff) {
-		this.build(world, subBuilding.building, subBuilding.orientation, subBuilding.x, subBuilding.y, subBuilding.z, isStaff);
+		this.build(world, subBuilding.building, EnumRotate.getByIndex((subBuilding.facing.getHorizontalIndex()+2) % 4), new BlockPos (subBuilding.x, subBuilding.y, subBuilding.z), isStaff);
 	}
 	
-	public void build(World world, Building building, int rotate, int initX, int initY, int initZ) {
-		this.build(world, building, rotate, initX, initY, initZ, false);
+	public void build(World world, Building building, EnumRotate rotate, BlockPos initPos) {
+		this.build(world, building, rotate, initPos, false);
 	}
 	
-	public void build(World world, Building building, int rotate, int initX, int initY, int initZ, boolean isStaff) {
+	public void build(World world, Building building, EnumRotate rotate, BlockPos initPos, boolean isStaff) {
 		
-		BuilderRunnable thread = new BuilderRunnable(world, building, rotate, initX, initY, initZ, isStaff);
+		BuilderRunnable thread = new BuilderRunnable(world, building, rotate, initPos, isStaff);
 		thread.start();
 		this.currentBuilds.add(thread);
 	}
@@ -46,23 +56,23 @@ public class Builder {
 	 * @param maxZ
 	 * @return
 	 */
-	public static int getRotatedX(int x, int z, int rotate, int maxX, int maxZ) {
-		if (rotate == Building.ROTATED_90) {
+	public static int getRotatedX(int x, int z, EnumRotate rotate, int maxX, int maxZ) {
+		if (rotate == EnumRotate.ROTATED_90) {
 			return z;
 		}
-		if (rotate == Building.ROTATED_180) {
+		if (rotate == EnumRotate.ROTATED_180) {
 
-			int newX = getRotatedX (x, z, Building.ROTATED_90, maxX, maxZ);
-			int newZ = getRotatedZ (x, z, Building.ROTATED_90, maxX, maxZ);
+			int newX = getRotatedX (x, z, EnumRotate.ROTATED_90, maxX, maxZ);
+			int newZ = getRotatedZ (x, z, EnumRotate.ROTATED_90, maxX, maxZ);
 			
-			return getRotatedX (newX, newZ, Building.ROTATED_90, maxX, maxZ);
+			return getRotatedX (newX, newZ, EnumRotate.ROTATED_90, maxX, maxZ);
 		}
-		if (rotate == Building.ROTATED_270) {
+		if (rotate == EnumRotate.ROTATED_270) {
 
-			int newX = getRotatedX (x, z, Building.ROTATED_180, maxX, maxZ);
-			int newZ = getRotatedZ (x, z, Building.ROTATED_180, maxX, maxZ);
+			int newX = getRotatedX (x, z, EnumRotate.ROTATED_180, maxX, maxZ);
+			int newZ = getRotatedZ (x, z, EnumRotate.ROTATED_180, maxX, maxZ);
 			
-			return getRotatedX (newX, newZ, Building.ROTATED_90, maxX, maxZ);
+			return getRotatedX (newX, newZ, EnumRotate.ROTATED_90, maxX, maxZ);
 		}
 		return x;
 	}
@@ -75,23 +85,23 @@ public class Builder {
 	 * @param maxX
 	 * @return
 	 */
-	public static int getRotatedZ(int x, int z, int rotate, int maxX, int maxZ) {
-		if (rotate == Building.ROTATED_90) {
+	public static int getRotatedZ(int x, int z, EnumRotate rotate, int maxX, int maxZ) {
+		if (rotate == EnumRotate.ROTATED_90) {
 			return maxX - x -1;
 		}
-		if (rotate == Building.ROTATED_180) {
+		if (rotate == EnumRotate.ROTATED_180) {
 
-			int newX = getRotatedX (x, z, Building.ROTATED_90, maxX, maxZ);
-			int newZ = getRotatedZ (x, z, Building.ROTATED_90, maxX, maxZ);
+			int newX = getRotatedX (x, z, EnumRotate.ROTATED_90, maxX, maxZ);
+			int newZ = getRotatedZ (x, z, EnumRotate.ROTATED_90, maxX, maxZ);
 			
-			return getRotatedZ (newX, newZ, Building.ROTATED_90, maxX, maxZ);
+			return getRotatedZ (newX, newZ, EnumRotate.ROTATED_90, maxX, maxZ);
 		}
-		if (rotate == Building.ROTATED_270) {
+		if (rotate == EnumRotate.ROTATED_270) {
 
-			int newX = getRotatedX (x, z, Building.ROTATED_180, maxX, maxZ);
-			int newZ = getRotatedZ (x, z, Building.ROTATED_180, maxX, maxZ);
+			int newX = getRotatedX (x, z, EnumRotate.ROTATED_180, maxX, maxZ);
+			int newZ = getRotatedZ (x, z, EnumRotate.ROTATED_180, maxX, maxZ);
 			
-			return getRotatedZ (newX, newZ, Building.ROTATED_90, maxX, maxZ);
+			return getRotatedZ (newX, newZ, EnumRotate.ROTATED_90, maxX, maxZ);
 		}
 		return z;
 	}
@@ -100,10 +110,8 @@ public class Builder {
 		
 		WorldServer world;
 		Building building;
-		int rotate;
-		int initX;
-		int initY;
-		int initZ;
+		EnumRotate rotate;
+		BlockPos initPos;
 		
 		public ReentrantLock lockWorld = new ReentrantLock();
 		public Object        waiter    = new Object();
@@ -120,7 +128,7 @@ public class Builder {
 			return this.world;
 		}
 		
-		public int getRotate() {
+		public EnumRotate getRotate() {
 			return this.rotate;
 		}
 		
@@ -128,17 +136,15 @@ public class Builder {
 			return this.building;
 		}
 
-		public Integer3d getPosition() {
-			return new Integer3d(this.initX, this.initY, this.initZ);
+		public BlockPos getInitPos() {
+			return this.initPos;
 		}
 		
-		public BuilderRunnable(World world, Building building, int rotate, int initX, int initY, int initZ, boolean isStaff) {
+		public BuilderRunnable(World world, Building building, EnumRotate rotate, BlockPos initPos, boolean isStaff) {
 			this.world    = (WorldServer) world;
 			this.building = building;
 			this.rotate   = rotate;
-			this.initX    = initX;
-			this.initY    = initY;
-			this.initZ    = initZ;
+			this.initPos    = initPos;
 			this.isStaff  = isStaff;
 		}
 		
@@ -149,44 +155,26 @@ public class Builder {
 			
 			try {
 				
-				log.info("Create building width matrix : "+building.name+" "+initX+" "+initY+" "+initZ);
+				log.info("Create building width matrix : "+building.name+" "+initPos);
 				
-				initY = initY + building.height;
+				initPos= initPos.add(0, building.height, 0);
 				if (reTop) {
-					initY = (initY < 3) ? 3 : initY;
-				}
-				int dx = -1; 
-				int dz = 1;
-				switch (rotate) {
-					case Building.ROTATED_90:
-						dx = -1; 
-						dz = -1;
-						break;
-					case Building.ROTATED_180:
-						dx = 1; 
-						dz = -1;
-						break;
-					case Building.ROTATED_270:
-						dx = 1; 
-						dz = 1;
-						break;
-					default: 
-						break;
+					initPos = (initPos.getY() < 3) ? new BlockPos(initPos.getX(), 3, initPos.getZ()) : initPos;
 				}
 				
-//				this.placeBlockStone(dx, dz);
-				log.debug ("Building placeBlocks : "+building.name+" "+initX+" "+initY+" "+initZ);
-				this.placeBlocks(dx, dz);
-				log.debug ("Building placeAfterBlocks : "+building.name+" "+initX+" "+initY+" "+initZ);
-				placeAfterBlock(dx, dz);
-				log.debug ("Building placeBlockRandom : "+building.name+" "+initX+" "+initY+" "+initZ);
-				this.placeBlockRandom(dx, dz);
+				this.placeBlockStone();
+				log.debug ("Building placeBlocks : "+building.name+" "+initPos);
+				this.placeBlocks();
+				log.debug ("Building placeAfterBlocks : "+building.name+initPos);
+				placeAfterBlock();
+				log.debug ("Building placeBlockRandom : "+building.name+initPos);
+				this.placeBlockRandom();
 				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			
-			log.info("End create building width matrix : "+building.name+" "+initX+" "+initY+" "+initZ);
+			log.info("End create building width matrix : "+building.name+initPos);
 			
 			this.unlockWorld();
 		}
@@ -237,38 +225,32 @@ public class Builder {
 			}
 		}
 		
-		private boolean setBlock (int x,int y, int z, Block block, int metadata) {
-			return false;/* FIXME
-			if (y < 3) {
+		private boolean setBlock (BlockPos pos, IBlockState state) {
+			if (pos.getY() < 3) {
 				return false;
 			}
 			try {
-				return world.setBlock(x, y, z, block, metadata, 0);
+				return world.setBlockState(pos, state, 0);
 			} catch (Exception e) {
 				e.printStackTrace();
 				return false;
 			}
-			*/
 		}
 		
-		private void placeBlockStone(int dx, int dz) {
+		private void placeBlockStone() {
 			// Peut etre inutile
 			for (Unity3D unity3D : building.unities) {
 				
 				// Position réél dans le monde du block
-				int finalX = initX + unity3D.x(rotate)*dx;
-				int finalY = initY + unity3D.y(rotate);
-				int finalZ = initZ + unity3D.z(rotate)*dz;
+				BlockPos finalPos = initPos.add(unity3D.x(rotate)*rotate.dx, unity3D.y(rotate), unity3D.z(rotate)*rotate.dz);
 				
 				this.lock();
-				this.setBlock (finalX, finalY, finalZ, Blocks.stone, 0);
+				this.setBlock (finalPos, Blocks.stone.getDefaultState());
 				
 			}
 		}
 		
-		private void placeBlocks(int dx, int dz) {
-			
-			/* FIXME
+		private void placeBlocks() {
 			
 			ArrayList<Unity3D> placed = new ArrayList<Unity3D>();
 			
@@ -283,27 +265,25 @@ public class Builder {
 				Unity unity = unity3D.unity;
 				
 				// Position réél dans le monde du block
-				int finalX = initX + unity3D.x(rotate)*dx;
-				int finalY = initY + unity3D.y(rotate);
-				int finalZ = initZ + unity3D.z(rotate)*dz;
+				BlockPos finalPos = initPos.add(unity3D.x(rotate)*rotate.dx, unity3D.y(rotate), unity3D.z(rotate)*rotate.dz);
 				
 				boolean isPlaced = false;
 				
-				world.removeTileEntity(new BlockPos(finalX, finalY, finalZ));
+				world.removeTileEntity(finalPos);
 				
-				if (unity.after || BuildingBlockRegistry.instance().isAfterBlock(unity.block)) {
-					this.setBlock (finalX, finalY, finalZ, Blocks.air, 0);
+				if (unity.after || (unity.state != null && BuildingBlockRegistry.instance().isAfterBlock(unity.state.getBlock()))) {
+					this.setBlock (finalPos, Blocks.air.getDefaultState());
 				} else 
-				if (unity.block != null) {
-					isPlaced = this.setBlock (finalX, finalY, finalZ, unity.block, unity.metadata);
+				if (unity.state != null) {
+					isPlaced = this.setBlock (finalPos, unity.state);
 				} else {
-					this.setBlock (finalX, finalY, finalZ, Blocks.air, 0);
+					this.setBlock (finalPos, Blocks.air.getDefaultState());
 				}
 				
 				if (isPlaced) {
-					this.setOrientation (finalX, finalY, finalZ, this.rotateOrientation(rotate, unity.orientation));
-					this.setContents    (finalX, finalY, finalZ, unity.contents);
-					this.setExtra       (finalX, finalY, finalZ, unity.extra, building.maxX(rotate), building.maxZ(rotate));
+					this.setOrientation (finalPos, this.rotateOrientation(rotate, unity.facing));
+					this.setContents    (finalPos, unity.contents);
+					this.setExtra       (finalPos, unity.extra, building.maxX(rotate), building.maxZ(rotate));
 					
 					placed.add(unity3D);
 				}
@@ -323,50 +303,45 @@ public class Builder {
 				Unity unity = unity3D.unity;
 				
 				// Position réél dans le monde du block
-				int finalX = initX + unity3D.x(rotate)*dx;
-				int finalY = initY + unity3D.y(rotate);
-				int finalZ = initZ + unity3D.z(rotate)*dz;
+				BlockPos finalPos = initPos.add(unity3D.x(rotate)*rotate.dx, unity3D.y(rotate), unity3D.z(rotate)*rotate.dz);
 				
 				this.lock();
-				world.notifyBlocksOfNeighborChange(finalX, finalY, finalZ, unity.block != null ? unity.block : Blocks.air);
+				world.notifyBlockOfStateChange(finalPos, unity.state != null ? unity.state.getBlock() : Blocks.air);
 //				if (this.isStaff ) {
-					world.markBlockForUpdate(new BlockPos(finalX, finalY, finalZ));
+					world.markBlockForUpdate(finalPos);
 //				}
 			}
-			*/
 		}
 		
 
-		private void placeAfterBlock(int dx, int dz) {
-			/* FIXME
+		private void placeAfterBlock() {
+			
 			ArrayList<Unity3D> placed = new ArrayList<Unity3D>();
 			
 			for (Unity3D unity3D : building.unities) {
 				
 				Unity unity = unity3D.unity;
 				
-				if (!unity.after && !BuildingBlockRegistry.instance().isAfterBlock(unity.block)) {
+				if (!unity.after && unity.state != null && !BuildingBlockRegistry.instance().isAfterBlock(unity.state.getBlock())) {
 					continue;
 				}
 				
 				boolean isPlaced = false;
 				
 				// Position réél dans le monde du block
-				int finalX = initX + unity3D.x(rotate)*dx;
-				int finalY = initY + unity3D.y(rotate);
-				int finalZ = initZ + unity3D.z(rotate)*dz;
+				BlockPos finalPos = initPos.add(unity3D.x(rotate)*rotate.dx, unity3D.y(rotate), unity3D.z(rotate)*rotate.dz);
 				
-				if (unity.block != null) {
+				if (unity.state != null) {
 //					log.debug("Place after block : "+RegisteredObjects.instance().getRegisterName(unity.block));
-					isPlaced = this.setBlock (finalX, finalY, finalZ, unity.block, unity.metadata);
+					isPlaced = this.setBlock (finalPos, unity.state);
 				} else {
-					this.setBlock (finalX, finalY, finalZ, Blocks.air, 0);
+					this.setBlock (finalPos, Blocks.air.getDefaultState());
 				}
 				
 				if (isPlaced) {
-					this.setOrientation (finalX, finalY, finalZ, this.rotateOrientation(rotate, unity.orientation));
-					this.setContents    (finalX, finalY, finalZ, unity.contents);
-					this.setExtra       (finalX, finalY, finalZ, unity.extra, building.maxX(rotate), building.maxZ(rotate));
+					this.setOrientation (finalPos, this.rotateOrientation(rotate, unity.facing));
+					this.setContents    (finalPos, unity.contents);
+					this.setExtra       (finalPos, unity.extra, building.maxX(rotate), building.maxZ(rotate));
 					
 					placed.add(unity3D);
 				}
@@ -386,20 +361,17 @@ public class Builder {
 				Unity unity = unity3D.unity;
 				
 				// Position réél dans le monde du block
-				int finalX = initX + unity3D.x(rotate)*dx;
-				int finalY = initY + unity3D.y(rotate);
-				int finalZ = initZ + unity3D.z(rotate)*dz;
+				BlockPos finalPos = initPos.add(unity3D.x(rotate)*rotate.dx, unity3D.y(rotate), unity3D.z(rotate)*rotate.dz);
 				
 				this.lock();
-				world.notifyBlocksOfNeighborChange(finalX, finalY, finalZ, unity.block != null ? unity.block : Blocks.air);
+				world.notifyNeighborsOfStateChange(finalPos, unity.state != null ? unity.state.getBlock() : Blocks.air);
 //				if (this.isStaff ) {
-					world.markBlockForUpdate(finalX, finalY, finalZ);
+					world.markBlockForUpdate(finalPos);
 //				}
 			}
-			*/
 		}
 		
-		private void placeBlockRandom(int dx, int dz) {
+		private void placeBlockRandom() {
 			
 			for(GroupSubBuildings group: building.getRandomGroupSubBuildings()) {
 				
@@ -407,7 +379,17 @@ public class Builder {
 				
 				for (SubBuilding subBuilding : randomBuilding) {
 					
-					BuilderRunnable thread = new BuilderRunnable(world, subBuilding.building, rotate, initX+subBuilding.x*dx, initY+subBuilding.y, initZ+subBuilding.z*dz, isStaff);
+					BuilderRunnable thread = new BuilderRunnable(
+						this.world,
+						subBuilding.building, 
+						this.rotate,
+						new BlockPos(
+							this.initPos.getX()+subBuilding.x*this.rotate.dx,
+							this.initPos.getY()+subBuilding.y,
+							this.initPos.getZ()+subBuilding.z*this.rotate.dz
+						),
+						this.isStaff
+					);
 					thread.waiter    = this.waiter;
 					thread.lockWorld = this.lockWorld;
 					thread.run(false);
@@ -417,44 +399,15 @@ public class Builder {
 		
 		/**
 		 * Retourne l'orientation retourner en fonction de la rotation
-		 * @param rotate
+		 * @param rotate2
 		 * @param orientation
 		 * @return
 		 */
-		private int rotateOrientation(int rotate, int orientation) {
-			if (rotate == Building.ROTATED_90) {
-				
-				switch (orientation) { 
-					case Unity.ORIENTATION_UP:
-						return Unity.ORIENTATION_RIGTH;
-					case Unity.ORIENTATION_RIGTH:
-						return Unity.ORIENTATION_DOWN;
-					case Unity.ORIENTATION_DOWN:
-						return Unity.ORIENTATION_LEFT;
-					case Unity.ORIENTATION_LEFT:
-						return Unity.ORIENTATION_UP;
-						
-					case Unity.ORIENTATION_TOP_HORIZONTAL:
-						return Unity.ORIENTATION_TOP_VERTICAL;
-					case Unity.ORIENTATION_TOP_VERTICAL:
-						return Unity.ORIENTATION_TOP_HORIZONTAL;
-						
-					case Unity.ORIENTATION_BOTTOM_HORIZONTAL:
-						return Unity.ORIENTATION_BOTTOM_VERTICAL;
-					case Unity.ORIENTATION_BOTTOM_VERTICAL:
-						return Unity.ORIENTATION_BOTTOM_HORIZONTAL;
-						
-					default:
-						return Unity.ORIENTATION_NONE;
-				}
+		private EnumFacing rotateOrientation(EnumRotate rotate, EnumFacing facing) {
+			for (int i = 0; i < rotate.rotate; i++) {
+				facing = facing.rotateY();
 			}
-			if (rotate == Building.ROTATED_180) {
-				return this.rotateOrientation(Building.ROTATED_90, this.rotateOrientation(Building.ROTATED_90, orientation));
-			}
-			if (rotate == Building.ROTATED_270) {
-				return this.rotateOrientation(Building.ROTATED_180, this.rotateOrientation(Building.ROTATED_90, orientation));
-			}
-			return orientation;
+			return facing;
 		}
 		
 		/**
@@ -466,13 +419,12 @@ public class Builder {
 		 * @param z
 		 * @param contents
 		 */
-		private void setContents(int x, int y, int z, ArrayList<ArrayList<Content>> contents) {
-			/* FIXME
-			Block block  = world.getBlock (x, y, z);
+		private void setContents(BlockPos pos, ArrayList<ArrayList<Content>> contents) {
+			IBlockState state  = world.getBlockState(pos);
 			
-			if (block instanceof BlockContainer) {
+			if (state != null && state.getBlock() instanceof BlockContainer) {
 				
-				TileEntity te  = world.getTileEntity (x, y, z);
+				TileEntity te  = world.getTileEntity (pos);
 				if (te instanceof IInventory) {
 					
 					for (int i = 0; i < contents.size(); i++) {
@@ -498,53 +450,28 @@ public class Builder {
 					}
 				}
 			}
-			*/
 		}
 		
 		/**
 		 * Insert les extras informations du block
 		 */
-		private void setExtra(int x, int y, int z, HashMap<String, String> extra, int maxX, int maxZ) {
-			/* FIXME
-			Block block  = world.getBlock (x, y, z);
-	
-			int dx = -1; 
-			int dz = 1;
-			switch (rotate) {
-				case Building.ROTATED_90:
-					dx = -1; 
-					dz = -1;
-					break;
-				case Building.ROTATED_180:
-					dx = 1; 
-					dz = -1;
-					break;
-				case Building.ROTATED_270:
-					dx = 1; 
-					dz = 1;
-					break;
-				default: 
-					break;
-			}
+		private void setExtra(BlockPos pos, HashMap<String, String> extra, int maxX, int maxZ) {
+			IBlockState state  = this.world.getBlockState(pos);
 			
 			for (BuildingBlockHandler handler : BuildingBlockRegistry.instance().getHandlers()) {
-				handler.setExtra(block, world, world.rand, x, y, z, extra, initX, initY, initZ, rotate, dx, dz, maxX, maxZ);
+				handler.setExtra(this.world, pos, state, extra, this.initPos, this.rotate, maxX, maxZ);
 			}
-			*/
 		}
 		
 		/**
 		 * Affecte l'orientation
 		 */
-		private void setOrientation(int x, int y, int z, int orientation) {
-			/* FIXME
-			Block block  = world.getBlock (x, y, z);
-			int metadata = world.getBlockMetadata (x, y, z);
+		private void setOrientation(BlockPos pos, EnumFacing facing) {
+			IBlockState state  = this.world.getBlockState(pos);
 			
 			for (BuildingBlockHandler handler : BuildingBlockRegistry.instance().getHandlers()) {
-				handler.setOrientation(world, x, y, z, block, metadata, orientation, rotate);
+				handler.setOrientation(this.world, pos, state, facing, this.rotate);
 			}
-			*/
 		}
 	}
 	

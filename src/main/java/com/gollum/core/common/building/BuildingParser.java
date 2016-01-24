@@ -27,7 +27,15 @@ import argo.jdom.JsonNode;
 import argo.jdom.JsonRootNode;
 import argo.jdom.JsonStringNode;
 import argo.saj.InvalidSyntaxException;
+import net.minecraft.block.Block;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.property.PropertyFloat;
 
 public class BuildingParser {
 	
@@ -303,25 +311,23 @@ public class BuildingParser {
 		
 		Unity unity = new Unity();
 		try {
-			String blockStr    = type.getStringValue ("block");
-			String metadata    = "0"   ; try { metadata    = type.getNumberValue ("metadata"); } catch (Exception e) { }
-			String orientation = "none"; try { orientation = type.getStringValue ("orientation"); } catch (Exception e) { }
-			boolean after      = false ; try { after       = type.getBooleanValue ("after"); } catch (Exception e) { }
-			JsonNode contents  = null  ; try { contents    = type.getNode("contents"); } catch (Exception e) { }
+			String blockStr   = type.getStringValue ("block");
+			String metadata   = "0"   ; try { metadata  = type.getNumberValue ("metadata"); } catch (Exception e) { }
+			String facing     = null  ; try { facing    = type.getStringValue ("facing");   } catch (Exception e) { }
+			boolean after     = false ; try { after     = type.getBooleanValue ("after");   } catch (Exception e) { }
+			JsonNode contents = null  ; try { contents  = type.getNode("contents");         } catch (Exception e) { }
 			
-			unity.block       = RegisteredObjects.instance().getBlock(blockStr);
-			unity.metadata    = Integer.parseInt(metadata);
-			unity.after       = after;
+			unity.state = null;
+			Block block = RegisteredObjects.instance().getBlock(blockStr);
+			if (block != null) {
+				unity.state = this.getBlockState(block.getDefaultState(), type);
+			}
 			
-			if (orientation.equals("none"))              { unity.orientation = Unity.ORIENTATION_NONE;              } else 
-			if (orientation.equals("up"))                { unity.orientation = Unity.ORIENTATION_UP;                } else 
-			if (orientation.equals("down"))              { unity.orientation = Unity.ORIENTATION_DOWN;              } else 
-			if (orientation.equals("left"))              { unity.orientation = Unity.ORIENTATION_LEFT;              } else 
-			if (orientation.equals("right"))             { unity.orientation = Unity.ORIENTATION_RIGTH;             } else 
-			if (orientation.equals("top_vertical"))      { unity.orientation = Unity.ORIENTATION_TOP_VERTICAL;      } else 
-			if (orientation.equals("bottom_vertical"))   { unity.orientation = Unity.ORIENTATION_BOTTOM_VERTICAL;   } else 
-			if (orientation.equals("top_horizontal"))    { unity.orientation = Unity.ORIENTATION_TOP_HORIZONTAL;    } else 
-			if (orientation.equals("bottom_horizontal")) { unity.orientation = Unity.ORIENTATION_BOTTOM_HORIZONTAL; }
+			unity.after = after;
+			try {
+				unity.facing   = facing != null ? EnumFacing.byName(facing) : null; 
+			} catch (Exception e) { 
+				ModGollumCoreLib.log.warning("Facing '"+facing+"' not correct", e.getMessage()); }
 			
 			if (contents != null) {
 				unity.contents = new ArrayList();
@@ -345,6 +351,39 @@ public class BuildingParser {
 		}
 		return unity;
 	}
+	
+	private IBlockState getBlockState(IBlockState state, JsonNode json) {
+		try {
+			JsonNode stateNode = json.getNode("states");
+			for (IProperty prop: state.getProperties().keySet()) {
+				String name = prop.getName();
+				try {
+					if (prop instanceof PropertyBool) {
+						state = state.withProperty(prop, stateNode.getBooleanValue(name));
+					} else
+					if (prop instanceof PropertyInteger || prop instanceof PropertyFloat) {
+						state = state.withProperty(prop, stateNode.getNumberValue(name));
+					} else
+					if (prop instanceof PropertyEnum) {
+						PropertyEnum propEnum = (PropertyEnum)prop;
+						String value = stateNode.getStringValue(name);
+						for (Object obj: propEnum.getAllowedValues()) {
+							Enum enumValue = (Enum)obj;
+							if (enumValue.name().equals(value)) {
+								state = state.withProperty(prop, enumValue);
+								break;
+							}
+						}
+						
+					}
+				} catch (Exception e) {
+				}
+			}
+		} catch (Exception e) {
+		}
+		return state;
+	}
+
 
 	/**
 	 * Parse un contenu d'objet (Les chests par exemple)

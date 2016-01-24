@@ -7,16 +7,41 @@ import java.util.TreeSet;
 import com.gollum.core.utils.math.Integer3d;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.biome.BiomeGenBase;
 
 public class Building {
 	
-	public static final int ROTATED_0  = 0;
-	public static final int ROTATED_90 = 1;
-	public static final int ROTATED_180 = 2;
-	public static final int ROTATED_270 = 3;
-	public static final int ROTATED_360 = 4;
+	public static enum EnumRotate {
+		ROTATED_0 (0, 0, -1, 1),
+		ROTATED_90 (90, 1, -1, -1),
+		ROTATED_180 (180, 2, 1, -1),
+		ROTATED_270 (270, 3, 1, 1);
+		
+		public final int deg;
+		public final int rotate;
+		public final int dx;
+		public final int dz;
+		
+		EnumRotate (int deg, int rotate, int dx, int dz) {
+			this.deg = deg;
+			this.rotate = rotate;
+			this.dx = dx;
+			this.dz = dz;
+		}
+
+		public static EnumRotate getByIndex(int index) {
+			switch(index) {
+				case 0: return EnumRotate.ROTATED_0;
+				case 1: return EnumRotate.ROTATED_90;
+				case 2: return EnumRotate.ROTATED_180;
+				case 3: return EnumRotate.ROTATED_270;
+			}
+			return EnumRotate.ROTATED_0;
+		}
+	}
 	
 	public static class Unity3D implements Comparable {
 		
@@ -35,14 +60,14 @@ public class Building {
 			this.position3d = position3d;
 		}
 		
-		public int x(int rotate) {
-			return (rotate == ROTATED_90 || rotate == ROTATED_270) ? building.maxX(rotate) - this.position3d.z - 1 : this.position3d.x;
+		public int x(EnumRotate rotate) {
+			return (rotate == EnumRotate.ROTATED_90 || rotate == EnumRotate.ROTATED_270) ? building.maxX(rotate) - this.position3d.z - 1 : this.position3d.x;
 		}
-		public int y(int rotate) {
+		public int y(EnumRotate rotate) {
 			return this.position3d.y;
 		}
-		public int z(int rotate) {
-			return (rotate == ROTATED_90 || rotate == ROTATED_270) ? this.position3d.x : building.maxZ(rotate) - this.position3d.z - 1;
+		public int z(EnumRotate rotate) {
+			return (rotate == EnumRotate.ROTATED_90 || rotate == EnumRotate.ROTATED_270) ? this.position3d.x : building.maxZ(rotate) - this.position3d.z - 1;
 		}
 
 		@Override
@@ -64,16 +89,6 @@ public class Building {
 	 */
 	public static class Unity {
 		
-		public static final int ORIENTATION_NONE   = 0;
-		public static final int ORIENTATION_UP     = 1;
-		public static final int ORIENTATION_DOWN   = 2;
-		public static final int ORIENTATION_LEFT   = 3;
-		public static final int ORIENTATION_RIGTH  = 4;
-		public static final int ORIENTATION_TOP_HORIZONTAL    = 5;
-		public static final int ORIENTATION_BOTTOM_HORIZONTAL = 6;
-		public static final int ORIENTATION_TOP_VERTICAL      = 7;
-		public static final int ORIENTATION_BOTTOM_VERTICAL   = 8;
-		
 		/**
 		 * Contenu d'un objet (des Item uniquement pour le moment)
 		 */
@@ -90,10 +105,9 @@ public class Building {
 			
 		}
 		
-		public Block block     = null;
-		public int metadata    = 0;
-		public int orientation = Unity.ORIENTATION_NONE;
-		public boolean after   = false;
+		public IBlockState state  = null;
+		public EnumFacing facing = null;
+		public boolean after     = false;
 		public ArrayList<ArrayList<Content>> contents = new ArrayList();
 		public HashMap<String, String> extra = new HashMap<String, String>();
 		
@@ -125,7 +139,7 @@ public class Building {
 		public int x = 0;
 		public int y = 0;
 		public int z = 0;
-		public int orientation;
+		public EnumFacing facing;
 		public Building building = new Building();
 		
 		public void synMax(Building building) {
@@ -175,8 +189,8 @@ public class Building {
 	public int maxX() { return maxX; }
 	public int maxY() { return maxY; }
 	public int maxZ() { return maxZ; }
-	public int maxX(int rotate) { return (rotate == this.ROTATED_90 || rotate == this.ROTATED_270) ? maxZ : maxX; }
-	public int maxZ(int rotate) { return (rotate == this.ROTATED_90 || rotate == this.ROTATED_270) ? maxX : maxZ; }
+	public int maxX(EnumRotate rotate) { return (rotate == EnumRotate.ROTATED_90 || rotate == EnumRotate.ROTATED_270) ? maxZ : maxX; }
+	public int maxZ(EnumRotate rotate) { return (rotate == EnumRotate.ROTATED_90 || rotate == EnumRotate.ROTATED_270) ? maxX : maxZ; }
 
 	public void setNull (int x, int y, int z) {
 		

@@ -11,6 +11,7 @@ import java.util.Random;
 import com.gollum.core.common.building.Builder;
 import com.gollum.core.common.building.Building;
 import com.gollum.core.common.building.Building.DimentionSpawnInfos;
+import com.gollum.core.common.building.Building.EnumRotate;
 import com.gollum.core.common.events.BuildingGenerateEvent;
 import com.gollum.core.utils.math.Integer3d;
 
@@ -190,8 +191,8 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 			random.nextInt((int)((Math.pow (10 , multiplicateur) * ((float)this.globalSpawnRate.size())/1.5f))) < (Math.pow (Math.min (groupSpawnRate, 10) , multiplicateur))
 		) {
 			
-			int     rotate     = random.nextInt(Building.ROTATED_360);
-			Block[] blocksList = new Block[256];
+			EnumRotate rotate     = EnumRotate.getByIndex(random.nextInt(4));
+			Block[]    blocksList = new Block[256];
 			
 			Collections.shuffle(buildings);
 			
@@ -257,7 +258,7 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 									if (event.isCanceled()) {
 										return false;
 									}
-									builder.build(world, building, rotate, initX, initY, initZ);
+									builder.build(world, building, rotate, new BlockPos(initX, initY, initZ));
 									
 									return true;
 								}

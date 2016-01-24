@@ -12,8 +12,7 @@ public class CommonProxyGolumCoreLib {
 	
 	public void registerEvents () {
 		MinecraftForge.EVENT_BUS.register(new WorldHandler());
-		// TODO
-		FMLCommonHandler.instance().bus().register(new WorldTickHandler());
+		MinecraftForge.EVENT_BUS.register(new WorldTickHandler());
 	}
 
 	public boolean isRemote() {

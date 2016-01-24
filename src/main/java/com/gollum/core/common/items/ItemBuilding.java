@@ -102,7 +102,7 @@ public class ItemBuilding extends HItem {
 			subBuilding.x = pos.getX();
 			subBuilding.y = pos.getY();
 			subBuilding.z = pos.getZ();
-			subBuilding.orientation= orientation;
+			subBuilding.facing = player.getHorizontalFacing().getOpposite();
 			
 			log.debug("orientation = "+orientation);
 			this.lastBuildings.add(subBuilding);
