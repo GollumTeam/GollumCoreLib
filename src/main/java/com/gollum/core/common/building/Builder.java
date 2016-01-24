@@ -275,17 +275,22 @@ public class Builder {
 					this.setBlock (finalPos, Blocks.air.getDefaultState());
 				} else 
 				if (unity.state != null) {
+//					log.debug("Place after block : "+RegisteredObjects.instance().getRegisterName(unity.state.getBlock()));
 					isPlaced = this.setBlock (finalPos, unity.state);
 				} else {
 					this.setBlock (finalPos, Blocks.air.getDefaultState());
 				}
 				
 				if (isPlaced) {
-					this.setOrientation (finalPos, this.rotateOrientation(rotate, unity.facing));
-					this.setContents    (finalPos, unity.contents);
-					this.setExtra       (finalPos, unity.extra, building.maxX(rotate), building.maxZ(rotate));
-					
-					placed.add(unity3D);
+					try {
+						this.setOrientation (finalPos, this.rotateOrientation(rotate, unity.facing));
+						this.setContents    (finalPos, unity.contents);
+						this.setExtra       (finalPos, unity.extra, building.maxX(rotate), building.maxZ(rotate));
+						
+						placed.add(unity3D);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 				
 				if (System.currentTimeMillis() - this.timeDisplayProgress > 5000) {
@@ -332,18 +337,22 @@ public class Builder {
 				BlockPos finalPos = initPos.add(unity3D.x(rotate)*rotate.dx, unity3D.y(rotate), unity3D.z(rotate)*rotate.dz);
 				
 				if (unity.state != null) {
-//					log.debug("Place after block : "+RegisteredObjects.instance().getRegisterName(unity.block));
+//					log.debug("Place after block : "+RegisteredObjects.instance().getRegisterName(unity.state.getBlock()));
 					isPlaced = this.setBlock (finalPos, unity.state);
 				} else {
 					this.setBlock (finalPos, Blocks.air.getDefaultState());
 				}
 				
 				if (isPlaced) {
-					this.setOrientation (finalPos, this.rotateOrientation(rotate, unity.facing));
-					this.setContents    (finalPos, unity.contents);
-					this.setExtra       (finalPos, unity.extra, building.maxX(rotate), building.maxZ(rotate));
-					
-					placed.add(unity3D);
+					try {
+						this.setOrientation (finalPos, this.rotateOrientation(rotate, unity.facing));
+						this.setContents    (finalPos, unity.contents);
+						this.setExtra       (finalPos, unity.extra, building.maxX(rotate), building.maxZ(rotate));
+						
+						placed.add(unity3D);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 				
 				if (System.currentTimeMillis() - this.timeDisplayProgress > 5000) {
@@ -404,8 +413,10 @@ public class Builder {
 		 * @return
 		 */
 		private EnumFacing rotateOrientation(EnumRotate rotate, EnumFacing facing) {
-			for (int i = 0; i < rotate.rotate; i++) {
-				facing = facing.rotateY();
+			if (facing != null) {
+				for (int i = 0; i < rotate.rotate; i++) {
+					facing = facing.rotateY();
+				}	
 			}
 			return facing;
 		}
