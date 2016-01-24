@@ -256,7 +256,7 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 									if (event.isCanceled()) {
 										return false;
 									}
-									builder.build(world, building, rotate, initX, initY, initZ);
+									builder.build(event.world, event.building, event.rotate, event.position.x, event.position.y, event.position.z);
 									
 									return true;
 								}
