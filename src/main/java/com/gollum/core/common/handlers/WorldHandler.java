@@ -52,7 +52,7 @@ public class WorldHandler {
 						e.printStackTrace();
 					}
 				}
-				BuildingGenerateEvent newEvent = new BuildingGenerateEvent.Post(event.world, thread.getBuilding(), thread.getRotate(), thread.getPosition());
+				BuildingGenerateEvent newEvent = new BuildingGenerateEvent.Post(event.world, thread.getBuilding(), thread.getRotate(), thread.getInitPos());
 				MinecraftForge.EVENT_BUS.post(newEvent);
 				this.mustBeSave = true;
 			}

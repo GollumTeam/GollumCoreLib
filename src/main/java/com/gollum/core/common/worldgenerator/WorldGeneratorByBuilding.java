@@ -253,12 +253,12 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 									// N'est pas sauvegardé enc as d'arret du serveur mais ca devrais pas dérangé
 									this.chunkMarkHasBuilding (world, chunkX, chunkZ);
 									
-									BuildingGenerateEvent event = new BuildingGenerateEvent.Pre(world, building, rotate, new Integer3d(initX, initY, initZ));
+									BuildingGenerateEvent event = new BuildingGenerateEvent.Pre(world, building, rotate, new BlockPos(initX, initY, initZ));
 									MinecraftForge.EVENT_BUS.post(event);
 									if (event.isCanceled()) {
 										return false;
 									}
-									builder.build(world, building, rotate, new BlockPos(initX, initY, initZ));
+									builder.build(event.world, event.building, event.rotate, event.position);
 									
 									return true;
 								}

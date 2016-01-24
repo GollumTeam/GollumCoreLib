@@ -31,7 +31,7 @@ public class WorldTickHandler {
 					if (thread.getWorld() == event.world && !thread.isAlive()) {
 						i.remove();
 						
-						BuildingGenerateEvent newEvent = new BuildingGenerateEvent.Post(event.world, thread.getBuilding(), thread.getRotate(), thread.getPosition());
+						BuildingGenerateEvent newEvent = new BuildingGenerateEvent.Post(event.world, thread.getBuilding(), thread.getRotate(), thread.getInitPos());
 						MinecraftForge.EVENT_BUS.post(newEvent);
 						
 						log.debug ("Thread "+thread.getId()+" is finish remove of pile.");
