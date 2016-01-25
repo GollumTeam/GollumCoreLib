@@ -6,7 +6,6 @@ import com.gollum.core.common.building.Building.EnumRotate;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
@@ -15,9 +14,9 @@ public abstract class BuildingBlockHandler {
 	/**
 	 * Affecte l'orientation
 	 */
-	public void setOrientation(WorldServer world, BlockPos pos, IBlockState state, EnumFacing facing, EnumRotate rotate) {
+	public void setOrientation(WorldServer world, BlockPos pos, IBlockState state, EnumRotate rotate) {
 		if (this.mustApply(world, pos, state)) {
-			this.applyOrientation(world, pos, state, facing, rotate);
+			this.applyOrientation(world, pos, state, rotate);
 		}
 	}
 
@@ -43,7 +42,7 @@ public abstract class BuildingBlockHandler {
 		return false;
 	}
 
-	protected void applyOrientation(World world, BlockPos pos, IBlockState state, EnumFacing facing, EnumRotate rotate) {
+	protected void applyOrientation(World world, BlockPos pos, IBlockState state, EnumRotate rotate) {
 	}
 	
 	protected void applyExtra(

@@ -4,16 +4,11 @@ import java.util.ArrayList;
 
 import com.gollum.core.common.building.handler.BlockCommandBlockBuildingHandler;
 import com.gollum.core.common.building.handler.BlockDirectionalBuildingHandler;
-import com.gollum.core.common.building.handler.BlockDirectionalWithBit1BuildingHandler;
-import com.gollum.core.common.building.handler.BlockDirectionalWithNoneBuildingHandler;
-import com.gollum.core.common.building.handler.BlockDoorBuildingHandler;
 import com.gollum.core.common.building.handler.BlockLeverBuildingHandler;
 import com.gollum.core.common.building.handler.BlockMobSpawnerBuildingHandler;
 import com.gollum.core.common.building.handler.BlockProximitySpawnBuildingHandler;
-import com.gollum.core.common.building.handler.BlockSignBuildingHandler;
-import com.gollum.core.common.building.handler.BlockStairsBuildingHandler;
-import com.gollum.core.common.building.handler.BlockTrapDoorBuildingHandler;
-import com.gollum.core.common.building.handler.BlockTripWireHookBuildingHandler;
+import com.gollum.core.common.building.handler.BlockStandingSignBuildingHandler;
+import com.gollum.core.common.building.handler.BlockWallSignBuildingHandler;
 import com.gollum.core.common.building.handler.BuildingBlockHandler;
 
 import net.minecraft.block.Block;
@@ -53,15 +48,10 @@ public class BuildingBlockRegistry {
 	}
 	
 	protected BuildingBlockRegistry () {
-		this.handlers.add(new BlockSignBuildingHandler());
+		this.handlers.add(new BlockWallSignBuildingHandler());
+		this.handlers.add(new BlockStandingSignBuildingHandler());
 		this.handlers.add(new BlockDirectionalBuildingHandler());
-		this.handlers.add(new BlockDirectionalWithNoneBuildingHandler());
-		this.handlers.add(new BlockDirectionalWithBit1BuildingHandler());
-		this.handlers.add(new BlockTrapDoorBuildingHandler());
-		this.handlers.add(new BlockTripWireHookBuildingHandler());
 		this.handlers.add(new BlockLeverBuildingHandler());
-		this.handlers.add(new BlockDoorBuildingHandler());
-		this.handlers.add(new BlockStairsBuildingHandler());
 		this.handlers.add(new BlockCommandBlockBuildingHandler());
 		this.handlers.add(new BlockProximitySpawnBuildingHandler());
 		this.handlers.add(new BlockMobSpawnerBuildingHandler());

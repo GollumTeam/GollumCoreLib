@@ -106,7 +106,6 @@ public class Building {
 		}
 		
 		public IBlockState state  = null;
-		public EnumFacing facing = null;
 		public boolean after     = false;
 		public ArrayList<ArrayList<Content>> contents = new ArrayList();
 		public HashMap<String, String> extra = new HashMap<String, String>();

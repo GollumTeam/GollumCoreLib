@@ -5,7 +5,6 @@ import com.gollum.core.common.building.Building.EnumRotate;
 import net.minecraft.block.BlockLever;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 public class BlockLeverBuildingHandler extends BuildingBlockHandler {
@@ -17,7 +16,7 @@ public class BlockLeverBuildingHandler extends BuildingBlockHandler {
 	}
 	
 	@Override
-	public void applyOrientation(World world, BlockPos pos, IBlockState state, EnumFacing facing, EnumRotate rotate) {
+	public void applyOrientation(World world, BlockPos pos, IBlockState state, EnumRotate rotate) {
 		/* FIXME
 		if (orientation == Unity.ORIENTATION_UP)    { metadata = (metadata & 0x8) + 4; } else 
 		if (orientation == Unity.ORIENTATION_DOWN)  { metadata = (metadata & 0x8) + 3; } else 

@@ -166,7 +166,7 @@ public class Builder {
 				log.debug ("Building placeBlocks : "+building.name+" "+initPos);
 				this.placeBlocks();
 				log.debug ("Building placeAfterBlocks : "+building.name+initPos);
-				placeAfterBlock();
+				this.placeAfterBlock();
 				log.debug ("Building placeBlockRandom : "+building.name+initPos);
 				this.placeBlockRandom();
 				
@@ -283,7 +283,7 @@ public class Builder {
 				
 				if (isPlaced) {
 					try {
-						this.setOrientation (finalPos, this.rotateOrientation(rotate, unity.facing));
+						this.setOrientation (finalPos);
 						this.setContents    (finalPos, unity.contents);
 						this.setExtra       (finalPos, unity.extra, building.maxX(rotate), building.maxZ(rotate));
 						
@@ -345,7 +345,7 @@ public class Builder {
 				
 				if (isPlaced) {
 					try {
-						this.setOrientation (finalPos, this.rotateOrientation(rotate, unity.facing));
+						this.setOrientation (finalPos);
 						this.setContents    (finalPos, unity.contents);
 						this.setExtra       (finalPos, unity.extra, building.maxX(rotate), building.maxZ(rotate));
 						
@@ -374,9 +374,9 @@ public class Builder {
 				
 				this.lock();
 				world.notifyNeighborsOfStateChange(finalPos, unity.state != null ? unity.state.getBlock() : Blocks.air);
-//				if (this.isStaff ) {
+				if (this.isStaff ) {
 					world.markBlockForUpdate(finalPos);
-//				}
+				}
 			}
 		}
 		
@@ -404,21 +404,6 @@ public class Builder {
 					thread.run(false);
 				}
 			}
-		}
-		
-		/**
-		 * Retourne l'orientation retourner en fonction de la rotation
-		 * @param rotate2
-		 * @param orientation
-		 * @return
-		 */
-		private EnumFacing rotateOrientation(EnumRotate rotate, EnumFacing facing) {
-			if (facing != null) {
-				for (int i = 0; i < rotate.rotate; i++) {
-					facing = facing.rotateY();
-				}	
-			}
-			return facing;
 		}
 		
 		/**
@@ -477,11 +462,11 @@ public class Builder {
 		/**
 		 * Affecte l'orientation
 		 */
-		private void setOrientation(BlockPos pos, EnumFacing facing) {
+		private void setOrientation(BlockPos pos) {
 			IBlockState state  = this.world.getBlockState(pos);
 			
 			for (BuildingBlockHandler handler : BuildingBlockRegistry.instance().getHandlers()) {
-				handler.setOrientation(this.world, pos, state, facing, this.rotate);
+				handler.setOrientation(this.world, pos, state, this.rotate);
 			}
 		}
 	}

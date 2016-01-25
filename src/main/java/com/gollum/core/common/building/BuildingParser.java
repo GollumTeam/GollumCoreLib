@@ -313,7 +313,6 @@ public class BuildingParser {
 		try {
 			String blockStr   = type.getStringValue ("block");
 			String metadata   = "0"   ; try { metadata  = type.getNumberValue ("metadata"); } catch (Exception e) { }
-			String facing     = null  ; try { facing    = type.getStringValue ("facing");   } catch (Exception e) { }
 			boolean after     = false ; try { after     = type.getBooleanValue ("after");   } catch (Exception e) { }
 			JsonNode contents = null  ; try { contents  = type.getNode("contents");         } catch (Exception e) { }
 			
@@ -324,10 +323,6 @@ public class BuildingParser {
 			}
 			
 			unity.after = after;
-			try {
-				unity.facing   = facing != null ? EnumFacing.byName(facing) : null; 
-			} catch (Exception e) { 
-				ModGollumCoreLib.log.warning("Facing '"+facing+"' not correct", e.getMessage()); }
 			
 			if (contents != null) {
 				unity.contents = new ArrayList();
@@ -355,29 +350,59 @@ public class BuildingParser {
 	private IBlockState getBlockState(IBlockState state, JsonNode json) {
 		try {
 			JsonNode stateNode = json.getNode("states");
-			for (IProperty prop: state.getProperties().keySet()) {
-				String name = prop.getName();
-				try {
+			try {
+				for (IProperty prop: state.getProperties().keySet()) {
+					String name = prop.getName();
 					if (prop instanceof PropertyBool) {
-						state = state.withProperty(prop, stateNode.getBooleanValue(name));
+						Boolean value = null;
+						try {
+							value = stateNode.getBooleanValue(name);
+						} catch (Exception e) {
+						}
+						if (value != null) {
+							state = state.withProperty(prop, value);
+						}
 					} else
-					if (prop instanceof PropertyInteger || prop instanceof PropertyFloat) {
-						state = state.withProperty(prop, stateNode.getNumberValue(name));
+					if (prop instanceof PropertyInteger) {
+						Integer value = null;
+						try {
+							value = Integer.parseInt(stateNode.getNumberValue(name));
+						} catch (Exception e) {
+						}
+						if (value != null) {
+							state = state.withProperty(prop, value);
+						}
+					} else
+					if (prop instanceof PropertyFloat) {
+						Float value = null;
+						try {
+							value = Float.parseFloat(stateNode.getNumberValue(name));
+						} catch (Exception e) {
+						}
+						if (value != null) {
+							state = state.withProperty(prop, value);
+						}
 					} else
 					if (prop instanceof PropertyEnum) {
-						PropertyEnum propEnum = (PropertyEnum)prop;
-						String value = stateNode.getStringValue(name);
-						for (Object obj: propEnum.getAllowedValues()) {
-							Enum enumValue = (Enum)obj;
-							if (enumValue.name().equals(value)) {
-								state = state.withProperty(prop, enumValue);
-								break;
+						String value = null;
+						try {
+							value = stateNode.getStringValue(name);
+						} catch (Exception e) {
+						}
+						if (value != null) {
+							PropertyEnum propEnum = (PropertyEnum)prop;
+							for (Object obj: propEnum.getAllowedValues()) {
+								Enum enumValue = (Enum)obj;
+								if (enumValue.name().toLowerCase().equals(value.toLowerCase())) {
+									state = state.withProperty(prop, enumValue);
+									break;
+								}
 							}
 						}
-						
 					}
-				} catch (Exception e) {
 				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		} catch (Exception e) {
 		}
