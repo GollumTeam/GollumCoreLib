@@ -11,13 +11,11 @@ import net.minecraft.world.WorldServer;
 
 public abstract class BuildingBlockHandler {
 	
-	/**
-	 * Affecte l'orientation
-	 */
-	public void setOrientation(WorldServer world, BlockPos pos, IBlockState state, EnumRotate rotate) {
+	public IBlockState getBlockState(WorldServer world, BlockPos pos, IBlockState state, EnumRotate rotate) {
 		if (this.mustApply(world, pos, state)) {
-			this.applyOrientation(world, pos, state, rotate);
+			state = this.applyBlockState(world, pos, state, rotate);
 		}
+		return state;
 	}
 
 	/**
@@ -42,7 +40,8 @@ public abstract class BuildingBlockHandler {
 		return false;
 	}
 
-	protected void applyOrientation(World world, BlockPos pos, IBlockState state, EnumRotate rotate) {
+	protected IBlockState applyBlockState(World world, BlockPos pos, IBlockState state, EnumRotate rotate) {
+		return state;
 	}
 	
 	protected void applyExtra(

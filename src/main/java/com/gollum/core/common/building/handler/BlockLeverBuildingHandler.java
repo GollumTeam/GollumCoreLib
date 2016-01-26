@@ -16,7 +16,7 @@ public class BlockLeverBuildingHandler extends BuildingBlockHandler {
 	}
 	
 	@Override
-	public void applyOrientation(World world, BlockPos pos, IBlockState state, EnumRotate rotate) {
+	public IBlockState applyBlockState(World world, BlockPos pos, IBlockState state, EnumRotate rotate) {
 		/* FIXME
 		if (orientation == Unity.ORIENTATION_UP)    { metadata = (metadata & 0x8) + 4; } else 
 		if (orientation == Unity.ORIENTATION_DOWN)  { metadata = (metadata & 0x8) + 3; } else 
@@ -33,8 +33,8 @@ public class BlockLeverBuildingHandler extends BuildingBlockHandler {
 		}
 		
 		world.setBlockMetadataWithNotify(x, y, z, metadata, 0);
-		return;
 		*/
+		return state;
 	}
 	
 }

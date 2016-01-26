@@ -6,6 +6,8 @@ import com.gollum.core.common.building.Building.EnumRotate;
 
 import net.minecraft.block.BlockMobSpawner;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
@@ -27,13 +29,11 @@ public class BlockMobSpawnerBuildingHandler extends BuildingBlockHandler {
 		EnumRotate rotate,
 		int maxX, int maxZ
 	) {
-		/* FIXME
-		TileEntity te  = world.getTileEntity (x, y, z);
+		TileEntity te  = world.getTileEntity (pos);
 		if (te instanceof TileEntityMobSpawner) {
 			String entity = ""; try { entity = extra.get("entity"); } catch (Exception e) {} entity = (entity != null) ? entity : "Pig";
-			((TileEntityMobSpawner) te).func_145881_a().setEntityName(entity);
+			((TileEntityMobSpawner) te).getSpawnerBaseLogic().setEntityName(entity);
 		}
-		*/
 	}
 	
 }

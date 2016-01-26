@@ -2,10 +2,14 @@ package com.gollum.core.common.building.handler;
 
 import java.util.HashMap;
 
+import com.gollum.core.ModGollumCoreLib;
+import com.gollum.core.common.building.Builder;
 import com.gollum.core.common.building.Building.EnumRotate;
 
 import net.minecraft.block.BlockCommandBlock;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityCommandBlock;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
@@ -28,8 +32,7 @@ public class BlockCommandBlockBuildingHandler extends BuildingBlockHandler {
 		EnumRotate rotate,
 		int maxX, int maxZ
 	) {
-		/* FIXME
-		TileEntity te  = world.getTileEntity (x, y, z);
+		TileEntity te  = world.getTileEntity (pos);
 		if (te instanceof TileEntityCommandBlock) {
 			
 			String command = ""; try { command = extra.get("command"); } catch (Exception e) {} command = (command != null) ? command : "";
@@ -39,15 +42,14 @@ public class BlockCommandBlockBuildingHandler extends BuildingBlockHandler {
 			int varY = 0; try { varY = Integer.parseInt(extra.get("y")); } catch (Exception e) {}
 			int varZ = 0; try { varZ = Integer.parseInt(extra.get("z")); } catch (Exception e) {}
 			
-			command = command.replace("{$x}", ""+(Builder.getRotatedX(varX, varZ, rotate, maxX, maxZ)*dx + initX));
-			command = command.replace("{$y}", ""+ (varY + initY));
-			command = command.replace("{$z}", ""+(Builder.getRotatedZ(varX, varZ, rotate, maxX, maxZ)*dz + initZ));
+			command = command.replace("{$x}", ""+(Builder.getRotatedX(varX, varZ, rotate, maxX, maxZ)*rotate.dx + initPos.getX()));
+			command = command.replace("{$y}", ""+ (varY + initPos.getY()));
+			command = command.replace("{$z}", ""+(Builder.getRotatedZ(varX, varZ, rotate, maxX, maxZ)*rotate.dz + initPos.getZ()));
 			ModGollumCoreLib.log.info("command : "+command);
 			
-			((TileEntityCommandBlock) te).func_145993_a().func_145752_a(command);
+			((TileEntityCommandBlock) te).getCommandBlockLogic().setCommand(command);
 				
 		}
-		*/
 	}
 	
 }

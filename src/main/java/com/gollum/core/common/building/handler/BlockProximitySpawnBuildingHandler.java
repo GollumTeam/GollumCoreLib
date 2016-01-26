@@ -4,8 +4,10 @@ import java.util.HashMap;
 
 import com.gollum.core.common.blocks.BlockProximitySpawn;
 import com.gollum.core.common.building.Building.EnumRotate;
+import com.gollum.core.common.tileentities.TileEntityBlockProximitySpawn;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
@@ -31,13 +33,11 @@ public class BlockProximitySpawnBuildingHandler extends BuildingBlockHandler {
 		EnumRotate rotate,
 		int maxX, int maxZ
 	) {
-		/* FIXME
-		TileEntity te  = world.getTileEntity (x, y, z);
+		TileEntity te  = world.getTileEntity (pos);
 		if (te instanceof TileEntityBlockProximitySpawn) {
 			String entity = ""; try { entity = extra.get("entity"); } catch (Exception e) {} entity = (entity != null) ? entity : "Chicken";
 			((TileEntityBlockProximitySpawn) te).setModId (entity);
 		}
-		*/
 	}
 	
 }

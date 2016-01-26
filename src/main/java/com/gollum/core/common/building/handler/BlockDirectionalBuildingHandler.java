@@ -45,18 +45,18 @@ public class BlockDirectionalBuildingHandler extends BuildingBlockHandler {
 	}
 	
 	@Override
-	protected void applyOrientation(World world, BlockPos pos, IBlockState state, EnumRotate rotate) {
+	protected IBlockState applyBlockState(World world, BlockPos pos, IBlockState state, EnumRotate rotate) {
 		try {
-		for (IProperty prop : (java.util.Set<IProperty>)state.getProperties().keySet()) {
-			if (prop.getName().equals("facing")) {
-				EnumFacing facing = (EnumFacing)state.getValue(prop);
-//				world.setBlockState(pos, state.withProperty(prop, this.rotateOrientation(rotate, facing)), 0);
-				world.setBlockState(pos, state.withProperty(prop, EnumFacing.NORTH), 0);
+			for (IProperty prop : (java.util.Set<IProperty>)state.getProperties().keySet()) {
+				if (prop.getName().equals("facing")) {
+					EnumFacing facing = (EnumFacing)state.getValue(prop);
+					state = state.withProperty(prop, this.rotateFacing(rotate, facing));
+				}
 			}
-		}
 		} catch (Exception e) {
 			e.fillInStackTrace();
 		}
+		return state;
 	}
 	
 	/**
@@ -65,7 +65,7 @@ public class BlockDirectionalBuildingHandler extends BuildingBlockHandler {
 	 * @param orientation
 	 * @return
 	 */
-	protected EnumFacing rotateOrientation(EnumRotate rotate, EnumFacing facing) {
+	protected EnumFacing rotateFacing(EnumRotate rotate, EnumFacing facing) {
 		if (facing != null) {
 			for (int i = 0; i < rotate.rotate; i++) {
 				facing = facing.rotateY();

@@ -20,9 +20,9 @@ public class BlockStandingSignBuildingHandler extends BlockWallSignBuildingHandl
 	}
 	
 	@Override
-	public void applyOrientation(World world, BlockPos pos, IBlockState state, EnumRotate rotate) {
+	public IBlockState applyBlockState(World world, BlockPos pos, IBlockState state, EnumRotate rotate) {
 		Integer rotation = state.getValue(ROTATION);
-		world.setBlockState(pos, state.withProperty(ROTATION, (rotation + 4*rotate.rotate) % 0xF), 0);
+		return state.withProperty(ROTATION, (rotation + 4*rotate.rotate) % 0xF);
 	}
 	
 }

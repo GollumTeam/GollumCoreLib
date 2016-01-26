@@ -276,14 +276,13 @@ public class Builder {
 				} else 
 				if (unity.state != null) {
 //					log.debug("Place after block : "+RegisteredObjects.instance().getRegisterName(unity.state.getBlock()));
-					isPlaced = this.setBlock (finalPos, unity.state);
+					isPlaced = this.setBlock (finalPos, this.getBlockState(finalPos, unity.state));
 				} else {
 					this.setBlock (finalPos, Blocks.air.getDefaultState());
 				}
 				
 				if (isPlaced) {
 					try {
-						this.setOrientation (finalPos);
 						this.setContents    (finalPos, unity.contents);
 						this.setExtra       (finalPos, unity.extra, building.maxX(rotate), building.maxZ(rotate));
 						
@@ -338,14 +337,13 @@ public class Builder {
 				
 				if (unity.state != null) {
 //					log.debug("Place after block : "+RegisteredObjects.instance().getRegisterName(unity.state.getBlock()));
-					isPlaced = this.setBlock (finalPos, unity.state);
+					isPlaced = this.setBlock (finalPos, this.getBlockState(finalPos, unity.state));
 				} else {
 					this.setBlock (finalPos, Blocks.air.getDefaultState());
 				}
 				
 				if (isPlaced) {
 					try {
-						this.setOrientation (finalPos);
 						this.setContents    (finalPos, unity.contents);
 						this.setExtra       (finalPos, unity.extra, building.maxX(rotate), building.maxZ(rotate));
 						
@@ -459,15 +457,11 @@ public class Builder {
 			}
 		}
 		
-		/**
-		 * Affecte l'orientation
-		 */
-		private void setOrientation(BlockPos pos) {
-			IBlockState state  = this.world.getBlockState(pos);
-			
+		private IBlockState getBlockState(BlockPos pos, IBlockState state) {
 			for (BuildingBlockHandler handler : BuildingBlockRegistry.instance().getHandlers()) {
-				handler.setOrientation(this.world, pos, state, this.rotate);
+				state = handler.getBlockState(this.world, pos, state, this.rotate);
 			}
+			return state;
 		}
 	}
 	
