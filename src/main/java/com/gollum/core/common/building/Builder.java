@@ -297,15 +297,14 @@ public class Builder {
 					this.setBlock (finalX, finalY, finalZ, Blocks.air, 0);
 				} else 
 				if (unity.block != null) {
-					isPlaced = this.setBlock (finalX, finalY, finalZ, unity.block, unity.metadata);
+					isPlaced = this.setBlock (finalX, finalY, finalZ, unity.block, this.getMetadata (finalX, finalY, finalZ, unity));
 				} else {
 					this.setBlock (finalX, finalY, finalZ, Blocks.air, 0);
 				}
 				
 				if (isPlaced) {
-					this.setOrientation (finalX, finalY, finalZ, this.rotateOrientation(rotate, unity.orientation));
 					this.setContents    (finalX, finalY, finalZ, unity.contents);
-					this.setExtra       (finalX, finalY, finalZ, unity.extra, building.maxX(rotate), building.maxZ(rotate));
+					this.setExtra       (finalX, finalY, finalZ, unity, building.maxX(rotate), building.maxZ(rotate));
 					
 					placed.add(unity3D);
 				}
@@ -359,15 +358,14 @@ public class Builder {
 				
 				if (unity.block != null) {
 //					log.debug("Place after block : "+RegisteredObjects.instance().getRegisterName(unity.block));
-					isPlaced = this.setBlock (finalX, finalY, finalZ, unity.block, unity.metadata);
+					isPlaced = this.setBlock (finalX, finalY, finalZ, unity.block, this.getMetadata (finalX, finalY, finalZ, unity));
 				} else {
 					this.setBlock (finalX, finalY, finalZ, Blocks.air, 0);
 				}
 				
 				if (isPlaced) {
-					this.setOrientation (finalX, finalY, finalZ, this.rotateOrientation(rotate, unity.orientation));
 					this.setContents    (finalX, finalY, finalZ, unity.contents);
-					this.setExtra       (finalX, finalY, finalZ, unity.extra, building.maxX(rotate), building.maxZ(rotate));
+					this.setExtra       (finalX, finalY, finalZ, unity, building.maxX(rotate), building.maxZ(rotate));
 					
 					placed.add(unity3D);
 				}
@@ -415,47 +413,7 @@ public class Builder {
 			}
 		}
 		
-		/**
-		 * Retourne l'orientation retourner en fonction de la rotation
-		 * @param rotate
-		 * @param orientation
-		 * @return
-		 */
-		private int rotateOrientation(int rotate, int orientation) {
-			if (rotate == Building.ROTATED_90) {
-				
-				switch (orientation) { 
-					case Unity.ORIENTATION_UP:
-						return Unity.ORIENTATION_RIGTH;
-					case Unity.ORIENTATION_RIGTH:
-						return Unity.ORIENTATION_DOWN;
-					case Unity.ORIENTATION_DOWN:
-						return Unity.ORIENTATION_LEFT;
-					case Unity.ORIENTATION_LEFT:
-						return Unity.ORIENTATION_UP;
-						
-					case Unity.ORIENTATION_TOP_HORIZONTAL:
-						return Unity.ORIENTATION_TOP_VERTICAL;
-					case Unity.ORIENTATION_TOP_VERTICAL:
-						return Unity.ORIENTATION_TOP_HORIZONTAL;
-						
-					case Unity.ORIENTATION_BOTTOM_HORIZONTAL:
-						return Unity.ORIENTATION_BOTTOM_VERTICAL;
-					case Unity.ORIENTATION_BOTTOM_VERTICAL:
-						return Unity.ORIENTATION_BOTTOM_HORIZONTAL;
-						
-					default:
-						return Unity.ORIENTATION_NONE;
-				}
-			}
-			if (rotate == Building.ROTATED_180) {
-				return this.rotateOrientation(Building.ROTATED_90, this.rotateOrientation(Building.ROTATED_90, orientation));
-			}
-			if (rotate == Building.ROTATED_270) {
-				return this.rotateOrientation(Building.ROTATED_180, this.rotateOrientation(Building.ROTATED_90, orientation));
-			}
-			return orientation;
-		}
+		
 		
 		/**
 		 * Retourne le block
@@ -504,7 +462,7 @@ public class Builder {
 		/**
 		 * Insert les extras informations du block
 		 */
-		private void setExtra(int x, int y, int z, HashMap<String, String> extra, int maxX, int maxZ) {
+		private void setExtra(int x, int y, int z, Unity unity, int maxX, int maxZ) {
 			
 			Block block  = world.getBlock (x, y, z);
 	
@@ -528,7 +486,7 @@ public class Builder {
 			}
 			
 			for (BuildingBlockHandler handler : BuildingBlockRegistry.instance().getHandlers()) {
-				handler.setExtra(block, world, world.rand, x, y, z, extra, initX, initY, initZ, rotate, dx, dz, maxX, maxZ);
+				handler.setExtra(block, world, world.rand, x, y, z, unity, initX, initY, initZ, rotate, dx, dz, maxX, maxZ);
 			}
 			
 		}
@@ -536,14 +494,12 @@ public class Builder {
 		/**
 		 * Affecte l'orientation
 		 */
-		private void setOrientation(int x, int y, int z, int orientation) {
-			
-			Block block  = world.getBlock (x, y, z);
-			int metadata = world.getBlockMetadata (x, y, z);
-			
+		private int getMetadata(int x, int y, int z, Unity unity) {
+			int metadata = unity.metadata;
 			for (BuildingBlockHandler handler : BuildingBlockRegistry.instance().getHandlers()) {
-				handler.setOrientation(world, x, y, z, block, metadata, orientation, rotate);
+				metadata = handler.getMetadata(world, x, y, z, metadata, unity, rotate);
 			}
+			return metadata;
 			
 		}
 	}
