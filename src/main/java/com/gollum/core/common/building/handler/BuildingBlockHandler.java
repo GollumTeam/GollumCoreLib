@@ -45,10 +45,6 @@ public abstract class BuildingBlockHandler {
 		return state;
 	}
 	
-	protected boolean mustApply (World world, int x, int y, int z, Unity unity) {
-		return false;
-	}
-	
 	protected void applyExtra(
 		World world,
 		BlockPos pos,

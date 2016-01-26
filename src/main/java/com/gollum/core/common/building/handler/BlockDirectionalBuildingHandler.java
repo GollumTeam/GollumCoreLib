@@ -55,7 +55,7 @@ public class BlockDirectionalBuildingHandler extends BuildingBlockHandler {
 				}
 			}
 		} catch (Exception e) {
-			e.fillInStackTrace();
+			e.printStackTrace();
 		}
 		return state;
 	}
