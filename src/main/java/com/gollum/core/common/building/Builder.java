@@ -276,7 +276,7 @@ public class Builder {
 				} else 
 				if (unity.state != null) {
 //					log.debug("Place after block : "+RegisteredObjects.instance().getRegisterName(unity.state.getBlock()));
-					isPlaced = this.setBlock (finalPos, this.getBlockState(finalPos, unity.state));
+					isPlaced = this.setBlock (finalPos, this.getBlockState(finalPos, unity));
 				} else {
 					this.setBlock (finalPos, Blocks.air.getDefaultState());
 				}
@@ -284,7 +284,7 @@ public class Builder {
 				if (isPlaced) {
 					try {
 						this.setContents    (finalPos, unity.contents);
-						this.setExtra       (finalPos, unity.extra, building.maxX(rotate), building.maxZ(rotate));
+						this.setExtra       (finalPos, unity, building.maxX(rotate), building.maxZ(rotate));
 						
 						placed.add(unity3D);
 					} catch (Exception e) {
@@ -337,7 +337,7 @@ public class Builder {
 				
 				if (unity.state != null) {
 //					log.debug("Place after block : "+RegisteredObjects.instance().getRegisterName(unity.state.getBlock()));
-					isPlaced = this.setBlock (finalPos, this.getBlockState(finalPos, unity.state));
+					isPlaced = this.setBlock (finalPos, this.getBlockState(finalPos, unity));
 				} else {
 					this.setBlock (finalPos, Blocks.air.getDefaultState());
 				}
@@ -345,7 +345,7 @@ public class Builder {
 				if (isPlaced) {
 					try {
 						this.setContents    (finalPos, unity.contents);
-						this.setExtra       (finalPos, unity.extra, building.maxX(rotate), building.maxZ(rotate));
+						this.setExtra       (finalPos, unity, building.maxX(rotate), building.maxZ(rotate));
 						
 						placed.add(unity3D);
 					} catch (Exception e) {
@@ -449,17 +449,16 @@ public class Builder {
 		/**
 		 * Insert les extras informations du block
 		 */
-		private void setExtra(BlockPos pos, HashMap<String, String> extra, int maxX, int maxZ) {
-			IBlockState state  = this.world.getBlockState(pos);
-			
+		private void setExtra(BlockPos pos, Unity unity, int maxX, int maxZ) {
 			for (BuildingBlockHandler handler : BuildingBlockRegistry.instance().getHandlers()) {
-				handler.setExtra(this.world, pos, state, extra, this.initPos, this.rotate, maxX, maxZ);
+				handler.setExtra(this.world, pos, unity, this.initPos, this.rotate, maxX, maxZ);
 			}
 		}
 		
-		private IBlockState getBlockState(BlockPos pos, IBlockState state) {
+		private IBlockState getBlockState(BlockPos pos, Unity unity) {
+			IBlockState state = unity.state;
 			for (BuildingBlockHandler handler : BuildingBlockRegistry.instance().getHandlers()) {
-				state = handler.getBlockState(this.world, pos, state, this.rotate);
+				state = handler.getBlockState(this.world, pos, state, unity, this.rotate);
 			}
 			return state;
 		}

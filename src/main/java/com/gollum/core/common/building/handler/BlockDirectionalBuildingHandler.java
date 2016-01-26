@@ -1,6 +1,7 @@
 package com.gollum.core.common.building.handler;
 
 import com.gollum.core.common.building.Building.EnumRotate;
+import com.gollum.core.common.building.Building.Unity;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockButton;
@@ -25,8 +26,8 @@ import net.minecraft.world.World;
 public class BlockDirectionalBuildingHandler extends BuildingBlockHandler {
 	
 	@Override
-	protected boolean mustApply (World world, BlockPos pos, IBlockState state) {
-		Block block = (state != null) ? state.getBlock() : null;
+	protected boolean mustApply (World world, BlockPos pos, Unity unity) {
+		Block block = (unity.state != null) ? unity.state.getBlock() : null;
 		return
 			block instanceof BlockDirectional  || 
 			block instanceof BlockSign         ||
@@ -45,7 +46,7 @@ public class BlockDirectionalBuildingHandler extends BuildingBlockHandler {
 	}
 	
 	@Override
-	protected IBlockState applyBlockState(World world, BlockPos pos, IBlockState state, EnumRotate rotate) {
+	protected IBlockState applyBlockState(World world, BlockPos pos, IBlockState state, Unity unity, EnumRotate rotate) {
 		try {
 			for (IProperty prop : (java.util.Set<IProperty>)state.getProperties().keySet()) {
 				if (prop.getName().equals("facing")) {
