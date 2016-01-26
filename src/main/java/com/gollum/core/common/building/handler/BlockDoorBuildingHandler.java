@@ -3,19 +3,20 @@ package com.gollum.core.common.building.handler;
 import com.gollum.core.ModGollumCoreLib;
 import com.gollum.core.common.building.Building.Unity;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.world.World;
 
 public class BlockDoorBuildingHandler extends BuildingBlockHandler {
 	
 	@Override
-	protected boolean mustApply (World world, int x, int y, int z, Block block) {
-		return block instanceof BlockDoor;
+	protected boolean mustApply (World world, int x, int y, int z, Unity unity) {
+		return unity.block instanceof BlockDoor;
 	}
 	
 	@Override
-	public void applyOrientation(World world, int x, int y, int z, Block block, int metadata, int orientation, int rotate) {
+	protected int applyMetadata(World world, int x, int y, int z, int metadata, Unity unity, int rotate) {
+		
+		int orientation = this.rotateOrientation(rotate, unity.orientation);
 		
 		if ((metadata & 0x8) != 0x8) {
 			if (orientation == Unity.ORIENTATION_UP)    { metadata = (metadata & 0x3) + 3; } else 
@@ -23,14 +24,13 @@ public class BlockDoorBuildingHandler extends BuildingBlockHandler {
 			if (orientation == Unity.ORIENTATION_LEFT)  { metadata = (metadata & 0x3) + 2; } else 
 			if (orientation == Unity.ORIENTATION_RIGTH) { metadata = (metadata & 0x3) + 0; } else 
 			{
-				ModGollumCoreLib.log.severe("Bad orientation : "+orientation+" name:"+block.getUnlocalizedName()+" pos:"+x+","+y+","+z);
+				ModGollumCoreLib.log.severe("Bad orientation : "+orientation+" name:"+unity.block.getUnlocalizedName()+" pos:"+x+","+y+","+z);
 			}
 		} else {
 			metadata = metadata & 0x9;
 		}
 		
-		world.setBlockMetadataWithNotify(x, y, z, metadata, 0);
-		return;
+		return metadata;
 		
 	}
 	

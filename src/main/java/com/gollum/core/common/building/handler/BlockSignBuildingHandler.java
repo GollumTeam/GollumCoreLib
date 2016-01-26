@@ -3,7 +3,6 @@ package com.gollum.core.common.building.handler;
 import static com.gollum.core.ModGollumCoreLib.log;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
 import java.util.Random;
 
 import com.gollum.core.ModGollumCoreLib;
@@ -18,12 +17,14 @@ import net.minecraft.world.World;
 public class BlockSignBuildingHandler extends BuildingBlockHandler {
 	
 	@Override
-	protected boolean mustApply (World world, int x, int y, int z, Block block) {
-		return block instanceof BlockSign;
+	protected boolean mustApply (World world, int x, int y, int z, Unity unity) {
+		return unity.block instanceof BlockSign;
 	}
 	
 	@Override
-	public void applyOrientation(World world, int x, int y, int z, Block block, int metadata, int orientation, int rotate) {
+	protected int applyMetadata(World world, int x, int y, int z, int metadata, Unity unity, int rotate) {
+		
+		int orientation = this.rotateOrientation(rotate, unity.orientation);
 		
 		boolean standing = true;
 		try {
@@ -42,7 +43,7 @@ public class BlockSignBuildingHandler extends BuildingBlockHandler {
 				}
 			}
 			f.setAccessible(true);
-			standing = (Boolean) f.get(block);
+			standing = (Boolean) f.get(unity.block);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -56,24 +57,21 @@ public class BlockSignBuildingHandler extends BuildingBlockHandler {
 			if (orientation == Unity.ORIENTATION_LEFT)  { metadata = (metadata & 0x8) + 4; } else 
 			if (orientation == Unity.ORIENTATION_RIGTH) { metadata = (metadata & 0x8) + 5; } else 
 			{
-				ModGollumCoreLib.log.severe("Bad orientation : "+orientation+" name:"+block.getUnlocalizedName()+" pos:"+x+","+y+","+z);
+				ModGollumCoreLib.log.severe("Bad orientation : "+orientation+" name:"+unity.block.getUnlocalizedName()+" pos:"+x+","+y+","+z);
 			}
 		}
-		world.setBlockMetadataWithNotify(x, y, z, metadata, 0);
+		
+		return metadata;
 		
 	}
 	
-	/**
-	 * Insert les extras informations du block
-	 * @param rotate	
-	 */
 	@Override
 	public void applyExtra(
 		Block block,
 		World world,
 		Random random, 
 		int x, int y, int z, 
-		HashMap<String, String> extra,
+		Unity unity,
 		int initX, int initY, int initZ, 
 		int rotate,
 		int dx, int dz,
@@ -83,10 +81,10 @@ public class BlockSignBuildingHandler extends BuildingBlockHandler {
 		if (te instanceof TileEntitySign) {
 			
 			try {
-				String text1 = ""   ; try { text1 = extra.get("text1");                     } catch (Exception e) {} text1 = (text1 != null) ? text1 : "";
-				String text2 = ""   ; try { text2 = extra.get("text2");                     } catch (Exception e) {} text2 = (text2 != null) ? text2 : "";
-				String text3 = ""   ; try { text3 = extra.get("text3");                     } catch (Exception e) {} text3 = (text3 != null) ? text3 : "";
-				String text4 = ""   ; try { text4 = extra.get("text4");                     } catch (Exception e) {} text4 = (text4 != null) ? text4 : "";
+				String text1 = ""   ; try { text1 = unity.extra.get("text1");                     } catch (Exception e) {} text1 = (text1 != null) ? text1 : "";
+				String text2 = ""   ; try { text2 = unity.extra.get("text2");                     } catch (Exception e) {} text2 = (text2 != null) ? text2 : "";
+				String text3 = ""   ; try { text3 = unity.extra.get("text3");                     } catch (Exception e) {} text3 = (text3 != null) ? text3 : "";
+				String text4 = ""   ; try { text4 = unity.extra.get("text4");                     } catch (Exception e) {} text4 = (text4 != null) ? text4 : "";
 				
 				((TileEntitySign) te).signText[0] = text1;
 				((TileEntitySign) te).signText[1] = text2;

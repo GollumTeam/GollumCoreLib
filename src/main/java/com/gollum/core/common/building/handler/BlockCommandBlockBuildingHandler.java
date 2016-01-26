@@ -1,10 +1,10 @@
 package com.gollum.core.common.building.handler;
 
-import java.util.HashMap;
 import java.util.Random;
 
 import com.gollum.core.ModGollumCoreLib;
 import com.gollum.core.common.building.Builder;
+import com.gollum.core.common.building.Building.Unity;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCommandBlock;
@@ -15,8 +15,8 @@ import net.minecraft.world.World;
 public class BlockCommandBlockBuildingHandler extends BuildingBlockHandler {
 
 	@Override
-	protected boolean mustApply (World world, int x, int y, int z, Block block) {
-		return block instanceof BlockCommandBlock;
+	protected boolean mustApply (World world, int x, int y, int z, Unity unity) {
+		return unity.block instanceof BlockCommandBlock;
 	}
 	
 	@Override
@@ -25,7 +25,7 @@ public class BlockCommandBlockBuildingHandler extends BuildingBlockHandler {
 		World world,
 		Random random, 
 		int x, int y, int z, 
-		HashMap<String, String> extra,
+		Unity unity,
 		int initX, int initY, int initZ, 
 		int rotate,
 		int dx, int dz,
@@ -35,12 +35,12 @@ public class BlockCommandBlockBuildingHandler extends BuildingBlockHandler {
 		TileEntity te  = world.getBlockTileEntity (x, y, z);
 		if (te instanceof TileEntityCommandBlock) {
 			
-			String command = ""; try { command = extra.get("command"); } catch (Exception e) {} command = (command != null) ? command : "";
+			String command = ""; try { command = unity.extra.get("command"); } catch (Exception e) {} command = (command != null) ? command : "";
 			
 			
-			int varX = 0; try { varX = Integer.parseInt(extra.get("x")); } catch (Exception e) {}
-			int varY = 0; try { varY = Integer.parseInt(extra.get("y")); } catch (Exception e) {}
-			int varZ = 0; try { varZ = Integer.parseInt(extra.get("z")); } catch (Exception e) {}
+			int varX = 0; try { varX = Integer.parseInt(unity.extra.get("x")); } catch (Exception e) {}
+			int varY = 0; try { varY = Integer.parseInt(unity.extra.get("y")); } catch (Exception e) {}
+			int varZ = 0; try { varZ = Integer.parseInt(unity.extra.get("z")); } catch (Exception e) {}
 			
 			command = command.replace("{$x}", ""+(Builder.getRotatedX(varX, varZ, rotate, maxX, maxZ)*dx + initX));
 			command = command.replace("{$y}", ""+ (varY + initY));

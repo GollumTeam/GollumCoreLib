@@ -1,9 +1,9 @@
 package com.gollum.core.common.building.handler;
 
-import java.util.HashMap;
 import java.util.Random;
 
 import com.gollum.core.common.blocks.BlockProximitySpawn;
+import com.gollum.core.common.building.Building.Unity;
 import com.gollum.core.common.tileentities.TileEntityBlockProximitySpawn;
 
 import net.minecraft.block.Block;
@@ -13,21 +13,17 @@ import net.minecraft.world.World;
 public class BlockProximitySpawnBuildingHandler extends BuildingBlockHandler {
 	
 	@Override
-	protected boolean mustApply (World world, int x, int y, int z, Block block) {
-		return block instanceof BlockProximitySpawn;
+	protected boolean mustApply (World world, int x, int y, int z, Unity unity) {
+		return unity.block instanceof BlockProximitySpawn;
 	}
 	
-	/**
-	 * Insert les extras informations du block
-	 * @param rotate	
-	 */
 	@Override
 	public void applyExtra(
 		Block block,
 		World world,
 		Random random, 
 		int x, int y, int z, 
-		HashMap<String, String> extra,
+		Unity unity,
 		int initX, int initY, int initZ, 
 		int rotate,
 		int dx, int dz,
@@ -36,7 +32,7 @@ public class BlockProximitySpawnBuildingHandler extends BuildingBlockHandler {
 		
 		TileEntity te  = world.getBlockTileEntity (x, y, z);
 		if (te instanceof TileEntityBlockProximitySpawn) {
-			String entity = ""; try { entity = extra.get("entity"); } catch (Exception e) {} entity = (entity != null) ? entity : "Chicken";
+			String entity = ""; try { entity = unity.extra.get("entity"); } catch (Exception e) {} entity = (entity != null) ? entity : "Chicken";
 			((TileEntityBlockProximitySpawn) te).setModId (entity);
 		}
 	}

@@ -3,7 +3,6 @@ package com.gollum.core.common.building.handler;
 import com.gollum.core.ModGollumCoreLib;
 import com.gollum.core.common.building.Building.Unity;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.block.BlockFurnace;
@@ -14,29 +13,30 @@ import net.minecraft.world.World;
 public class BlockDirectionalWithBit1BuildingHandler extends BuildingBlockHandler {
 
 	@Override
-	protected boolean mustApply (World world, int x, int y, int z, Block block) {
+	protected boolean mustApply (World world, int x, int y, int z, Unity unity) {
 		return
-			block instanceof BlockLadder ||
-			block instanceof BlockFurnace ||
-			block instanceof BlockChest ||
-			block instanceof BlockDispenser ||
-			block instanceof BlockPistonBase
+			unity.block instanceof BlockLadder ||
+			unity.block instanceof BlockFurnace ||
+			unity.block instanceof BlockChest ||
+			unity.block instanceof BlockDispenser ||
+			unity.block instanceof BlockPistonBase
 		;
 	}
 	
 	@Override
-	public void applyOrientation(World world, int x, int y, int z, Block block, int metadata, int orientation, int rotate) {
+	protected int applyMetadata(World world, int x, int y, int z, int metadata, Unity unity, int rotate) {
+		
+		int orientation = this.rotateOrientation(rotate, unity.orientation);
 	
 		if (orientation == Unity.ORIENTATION_UP)    { metadata = (metadata & 0x8) + 2; } else 
 		if (orientation == Unity.ORIENTATION_DOWN)  { metadata = (metadata & 0x8) + 3; } else 
 		if (orientation == Unity.ORIENTATION_LEFT)  { metadata = (metadata & 0x8) + 4; } else 
 		if (orientation == Unity.ORIENTATION_RIGTH) { metadata = (metadata & 0x8) + 5; } else 
 		{
-			ModGollumCoreLib.log.severe("Bad orientation : "+orientation+" name:"+block.getUnlocalizedName()+" pos:"+x+","+y+","+z);
+			ModGollumCoreLib.log.severe("Bad orientation : "+orientation+" name:"+unity.block.getUnlocalizedName()+" pos:"+x+","+y+","+z);
 		}
 		
-		world.setBlockMetadataWithNotify(x, y, z, metadata, 0);
-		return;
+		return metadata;
 	}
 	
 }

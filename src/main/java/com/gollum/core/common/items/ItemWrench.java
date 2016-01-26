@@ -21,9 +21,6 @@ public class ItemWrench extends HItem {
 
 		this.setFull3D();
 		this.setMaxStackSize(1);
-		this.shiftRotations.add(BlockLever.class);
-		this.shiftRotations.add(BlockButton.class);
-		this.shiftRotations.add(BlockChest.class);
 	}
 	
 	@Override

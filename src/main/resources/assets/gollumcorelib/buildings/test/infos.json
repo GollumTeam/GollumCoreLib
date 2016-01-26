@@ -94,24 +94,10 @@
 			}
 		},
 		
-		
-		
-		"2x1x2": {
-			"block": "minecraft:netherrack",
-			"orientation":"down"
-		},
-		"2x2x2": {
-			"block": "minecraft:netherrack",
-			"orientation":"down"
-		},
-		"2x3x2": {
-			"block": "minecraft:netherrack",
-			"orientation":"down"
-		},
-		"2x4x2": {
-			"block": "minecraft:netherrack",
-			"orientation":"down"
-		},
+		"2x1x2": { "block": "minecraft:netherrack" },
+		"2x2x2": { "block": "minecraft:netherrack" },
+		"2x3x2": { "block": "minecraft:netherrack" },
+		"2x4x2": { "block": "minecraft:netherrack" },
 		
 		"25x1x3": { "block": "minecraft:ladder", "orientation": "down"  },
 		"26x1x2": { "block": "minecraft:ladder", "orientation": "left"  },
