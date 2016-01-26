@@ -486,7 +486,7 @@ public class Builder {
 			}
 			
 			for (BuildingBlockHandler handler : BuildingBlockRegistry.instance().getHandlers()) {
-				handler.setExtra(block, world, world.rand, x, y, z, unity, initX, initY, initZ, rotate, dx, dz, maxX, maxZ);
+				handler.setExtra(world, x, y, z, unity, initX, initY, initZ, rotate, dx, dz, maxX, maxZ);
 			}
 			
 		}
