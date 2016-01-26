@@ -1,11 +1,8 @@
 package com.gollum.core.common.building.handler;
 
-import java.util.Random;
-
 import com.gollum.core.common.building.Building;
 import com.gollum.core.common.building.Building.Unity;
 
-import net.minecraft.block.Block;
 import net.minecraft.world.World;
 
 public abstract class BuildingBlockHandler {
@@ -24,18 +21,16 @@ public abstract class BuildingBlockHandler {
 	}
 
 	public final void setExtra(
-		Block block,
 		World world,
-		Random random, 
-		int x, int y, int z, 
+		int x, int y, int z,
 		Unity unity,
-		int initX, int initY, int initZ, 
+		int initX, int initY, int initZ,
 		int rotate,
 		int dx, int dz,
 		int maxX, int maxZ
 	) {
 		if (this.mustApply(world, x, y, z, unity)) {
-			this.applyExtra(block, world, random, x, y, z, unity, initX, initY, initZ, rotate, dx, dz, maxX, maxZ);
+			this.applyExtra(world, x, y, z, unity, initX, initY, initZ, rotate, dx, dz, maxX, maxZ);
 		}
 	}
 	
@@ -48,12 +43,10 @@ public abstract class BuildingBlockHandler {
 	}
 	
 	protected void applyExtra(
-		Block block,
 		World world,
-		Random random, 
 		int x, int y, int z,
 		Unity unity,
-		int initX, int initY, int initZ, 
+		int initX, int initY, int initZ,
 		int rotate,
 		int dx, int dz,
 		int maxX, int maxZ

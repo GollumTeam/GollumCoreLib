@@ -1,12 +1,9 @@
 package com.gollum.core.common.building.handler;
 
-import java.util.Random;
-
 import com.gollum.core.common.blocks.BlockProximitySpawn;
 import com.gollum.core.common.building.Building.Unity;
 import com.gollum.core.common.tileentities.TileEntityBlockProximitySpawn;
 
-import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -19,12 +16,10 @@ public class BlockProximitySpawnBuildingHandler extends BuildingBlockHandler {
 	
 	@Override
 	public void applyExtra(
-		Block block,
 		World world,
-		Random random, 
-		int x, int y, int z, 
+		int x, int y, int z,
 		Unity unity,
-		int initX, int initY, int initZ, 
+		int initX, int initY, int initZ,
 		int rotate,
 		int dx, int dz,
 		int maxX, int maxZ
