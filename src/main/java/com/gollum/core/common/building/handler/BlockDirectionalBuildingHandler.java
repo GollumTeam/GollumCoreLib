@@ -30,7 +30,6 @@ public class BlockDirectionalBuildingHandler extends BuildingBlockHandler {
 		Block block = (unity.state != null) ? unity.state.getBlock() : null;
 		return
 			block instanceof BlockDirectional  || 
-			block instanceof BlockSign         ||
 			block instanceof BlockLadder       ||
 			block instanceof BlockFurnace      ||
 			block instanceof BlockChest        ||
@@ -69,7 +68,10 @@ public class BlockDirectionalBuildingHandler extends BuildingBlockHandler {
 	protected EnumFacing rotateFacing(EnumRotate rotate, EnumFacing facing) {
 		if (facing != null) {
 			for (int i = 0; i < rotate.rotate; i++) {
-				facing = facing.rotateY();
+				try {
+					facing = facing.rotateY();
+				} catch (IllegalStateException e) {
+				}
 			}	
 		}
 		return facing;

@@ -99,7 +99,6 @@
 		"2x3x2": { "block": "minecraft:netherrack" },
 		"2x4x2": { "block": "minecraft:netherrack" },
 		
-<<<<<<< HEAD
 		"25x1x3": { "block": "minecraft:ladder", "states": { "facing": "south" } },
 		"26x1x2": { "block": "minecraft:ladder", "states": { "facing": "west"  } },
 		"24x1x2": { "block": "minecraft:ladder", "states": { "facing": "east"  } },
@@ -203,111 +202,7 @@
 		"30x2x6": { "block": "minecraft:wooden_door", "states": { "facing": "west" , "half": "upper", "hinge": "right" } },
 		"28x2x6": { "block": "minecraft:wooden_door", "states": { "facing": "east" , "half": "upper", "hinge": "right" } },
 		"29x2x5": { "block": "minecraft:wooden_door", "states": { "facing": "north", "half": "upper", "hinge": "right" } }
-=======
-		"25x1x3": { "block": "minecraft:ladder", "orientation": "down"  },
-		"26x1x2": { "block": "minecraft:ladder", "orientation": "left"  },
-		"24x1x2": { "block": "minecraft:ladder", "orientation": "right" },
-		"25x1x1": { "block": "minecraft:ladder", "orientation": "up"    },
 		
-		"25x2x3": { "block": "minecraft:tripwire_hook", "orientation": "down"  },
-		"26x2x2": { "block": "minecraft:tripwire_hook", "orientation": "left"  },
-		"24x2x2": { "block": "minecraft:tripwire_hook", "orientation": "right" },
-		"25x2x1": { "block": "minecraft:tripwire_hook", "orientation": "up"    },
-		
-		"25x3x3": { "block": "minecraft:redstone_torch", "orientation": "down"  },
-		"26x3x2": { "block": "minecraft:redstone_torch", "orientation": "left"  },
-		"24x3x2": { "block": "minecraft:redstone_torch", "orientation": "right" },
-		"25x3x1": { "block": "minecraft:redstone_torch", "orientation": "up"    },
-		
-		"25x4x3": { "block": "minecraft:torch", "orientation": "down"  },
-		"26x4x2": { "block": "minecraft:torch", "orientation": "left"  },
-		"24x4x2": { "block": "minecraft:torch", "orientation": "right" },
-		"25x4x1": { "block": "minecraft:torch", "orientation": "up"    },
-		
-		"25x5x3": { "block": "minecraft:lever", "orientation": "down"  },
-		"26x5x2": { "block": "minecraft:lever", "orientation": "left"  },
-		"24x5x2": { "block": "minecraft:lever", "orientation": "right" },
-		"25x5x1": { "block": "minecraft:lever", "orientation": "up"    },
-		
-		
-		"25x1x7": { "block": "minecraft:trapdoor", "orientation": "down" , "metadata": 8 },
-		"26x1x6": { "block": "minecraft:trapdoor", "orientation": "left" , "metadata": 8 },
-		"24x1x6": { "block": "minecraft:trapdoor", "orientation": "right", "metadata": 8 },
-		"25x1x5": { "block": "minecraft:trapdoor", "orientation": "up"   , "metadata": 8 },
-		
-		"25x2x7": { "block": "minecraft:trapdoor", "orientation": "down" , "metadata": 12 },
-		"26x2x6": { "block": "minecraft:trapdoor", "orientation": "left" , "metadata": 12 },
-		"24x2x6": { "block": "minecraft:trapdoor", "orientation": "right", "metadata": 12 },
-		"25x2x5": { "block": "minecraft:trapdoor", "orientation": "up"   , "metadata": 12 },
-		
-		"25x3x7": { "block": "minecraft:trapdoor", "orientation": "down"  },
-		"26x3x6": { "block": "minecraft:trapdoor", "orientation": "left"  },
-		"24x3x6": { "block": "minecraft:trapdoor", "orientation": "right" },
-		"25x3x5": { "block": "minecraft:trapdoor", "orientation": "up"    },
-		
-		"25x4x7": { "block": "minecraft:trapdoor", "orientation": "down" , "metadata": 4 },
-		"26x4x6": { "block": "minecraft:trapdoor", "orientation": "left" , "metadata": 4 },
-		"24x4x6": { "block": "minecraft:trapdoor", "orientation": "right", "metadata": 4 },
-		"25x4x5": { "block": "minecraft:trapdoor", "orientation": "up"   , "metadata": 4 },
-		
-		
-		"25x1x11": { "block": "minecraft:ladder", "orientation": "down"  },
-		"26x1x10": { "block": "minecraft:ladder", "orientation": "left"  },
-		"24x1x10": { "block": "minecraft:ladder", "orientation": "right" },
-		"25x1x9" : { "block": "minecraft:ladder", "orientation": "up"    },
-		
-		"25x2x11": { "block": "minecraft:stone_button", "orientation": "down"  },
-		"26x2x10": { "block": "minecraft:stone_button", "orientation": "left"  },
-		"24x2x10": { "block": "minecraft:stone_button", "orientation": "right" },
-		"25x2x9" : { "block": "minecraft:stone_button", "orientation": "up"    },
-		
-		"25x3x11": { "block": "minecraft:wooden_button", "orientation": "down"  },
-		"26x3x10": { "block": "minecraft:wooden_button", "orientation": "left"  },
-		"24x3x10": { "block": "minecraft:wooden_button", "orientation": "right" },
-		"25x3x9" : { "block": "minecraft:wooden_button", "orientation": "up"    },
-		
-		"25x4x11": { "block": "minecraft:wall_sign", "orientation": "down"  },
-		"26x4x10": { "block": "minecraft:wall_sign", "orientation": "left"  },
-		"24x4x10": { "block": "minecraft:wall_sign", "orientation": "right" },
-		"25x4x9" : { "block": "minecraft:wall_sign", "orientation": "up"    },
-		
-		"25x5x11": { "block": "minecraft:lever", "orientation": "down" , "metadata": 8 },
-		"26x5x10": { "block": "minecraft:lever", "orientation": "left" , "metadata": 8 },
-		"24x5x10": { "block": "minecraft:lever", "orientation": "right", "metadata": 8 },
-		"25x5x9" : { "block": "minecraft:lever", "orientation": "up"   , "metadata": 8 },
-		
-		
-		"29x1x3": { "block": "minecraft:wooden_door", "orientation": "down"  },
-		"30x1x2": { "block": "minecraft:wooden_door", "orientation": "left"  },
-		"28x1x2": { "block": "minecraft:wooden_door", "orientation": "right" },
-		"29x1x1": { "block": "minecraft:wooden_door", "orientation": "up"    },
-		
-		"29x2x3": { "block": "minecraft:wooden_door", "orientation": "down" , "metadata": 8 },
-		"30x2x2": { "block": "minecraft:wooden_door", "orientation": "left" , "metadata": 8 },
-		"28x2x2": { "block": "minecraft:wooden_door", "orientation": "right", "metadata": 8 },
-		"29x2x1": { "block": "minecraft:wooden_door", "orientation": "up"   , "metadata": 8 },
-		
-		"29x3x3": { "block": "minecraft:furnace", "orientation": "down"  },
-		"30x3x2": { "block": "minecraft:furnace", "orientation": "left"  },
-		"28x3x2": { "block": "minecraft:furnace", "orientation": "right" },
-		"29x3x1": { "block": "minecraft:furnace", "orientation": "up"    },
-		
-		"29x4x3": { "block": "minecraft:chest", "orientation": "down" , "metadata": 8 },
-		"30x4x2": { "block": "minecraft:chest", "orientation": "left" , "metadata": 8 },
-		"28x4x2": { "block": "minecraft:chest", "orientation": "right", "metadata": 8 },
-		"29x4x1": { "block": "minecraft:chest", "orientation": "up"   , "metadata": 8 },
-		
-		
-		"29x1x7": { "block": "minecraft:wooden_door", "orientation": "down"  },
-		"30x1x6": { "block": "minecraft:wooden_door", "orientation": "left"  },
-		"28x1x6": { "block": "minecraft:wooden_door", "orientation": "right" },
-		"29x1x5": { "block": "minecraft:wooden_door", "orientation": "up"    },
-		
-		"29x2x7": { "block": "minecraft:wooden_door", "orientation": "down" , "metadata": 9 },
-		"30x2x6": { "block": "minecraft:wooden_door", "orientation": "left" , "metadata": 9 },
-		"28x2x6": { "block": "minecraft:wooden_door", "orientation": "right", "metadata": 9 },
-		"29x2x5": { "block": "minecraft:wooden_door", "orientation": "up"   , "metadata": 9 }
->>>>>>> origin/2.X.X-1.7.10DEV
 	},
 	
 	"buildings": {
