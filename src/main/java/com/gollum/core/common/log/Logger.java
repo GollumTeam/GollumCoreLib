@@ -118,8 +118,6 @@ public class Logger {
 		LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
 		Configuration conf = ctx.getConfiguration();
 		
-		conf.getLoggerConfig(key).setLevel(Level.DEBUG);
-		
 		if (fileAppender == null) {
 			
 			try {
