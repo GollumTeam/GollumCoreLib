@@ -35,6 +35,7 @@ import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IStringSerializable;
 import net.minecraftforge.common.property.PropertyFloat;
 
 public class BuildingParser {
@@ -393,6 +394,12 @@ public class BuildingParser {
 							PropertyEnum propEnum = (PropertyEnum)prop;
 							for (Object obj: propEnum.getAllowedValues()) {
 								Enum enumValue = (Enum)obj;
+								if (enumValue instanceof IStringSerializable) {
+									if (((IStringSerializable)enumValue).getName().toLowerCase().equals(value.toLowerCase())) {
+										state = state.withProperty(prop, enumValue);
+										break;
+									}
+								} else
 								if (enumValue.name().toLowerCase().equals(value.toLowerCase())) {
 									state = state.withProperty(prop, enumValue);
 									break;

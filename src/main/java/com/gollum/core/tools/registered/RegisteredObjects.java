@@ -59,10 +59,14 @@ public class RegisteredObjects {
 		
 		try {
 			
-			String modId = registerName.substring(0, registerName.indexOf(":"));
-			String name  = registerName.substring(registerName.indexOf(":")+1);
-			
+			String modId = "minecraft";
+			String name  = registerName;			
+			if (registerName.contains(":")) {	
+				modId = registerName.substring(0, registerName.indexOf(":"));
+				name  = registerName.substring(registerName.indexOf(":")+1);
+			}
 			return GameRegistry.findBlock(modId, name);
+			
 		} catch (Exception e) {
 		}
 		
@@ -76,9 +80,13 @@ public class RegisteredObjects {
 		try {
 			
 			String modId = "minecraft";
-			String name  = registerName;
-			
+			String name  = registerName;			
+			if (registerName.contains(":")) {	
+				modId = registerName.substring(0, registerName.indexOf(":"));
+				name  = registerName.substring(registerName.indexOf(":")+1);
+			}
 			return GameRegistry.findItem(modId, name);
+			
 		} catch (Exception e) {
 		}
 		
