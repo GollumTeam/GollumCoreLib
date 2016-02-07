@@ -86,7 +86,6 @@ public class Building {
 			public int  min = 1;
 			public int  max = 1;
 			public int  metadata = -1;
-			public int  type;
 			
 		}
 		
