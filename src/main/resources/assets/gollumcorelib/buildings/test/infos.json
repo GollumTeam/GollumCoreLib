@@ -166,11 +166,10 @@
 		"24x4x10": { "block": "minecraft:wall_sign", "states": { "facing": "east"  } },
 		"25x4x9" : { "block": "minecraft:wall_sign", "states": { "facing": "north" } },
 		
-		"25x5x11": { "block": "minecraft:lever", "states": { "facing": "south", "half": "upper" } },
-		"26x5x10": { "block": "minecraft:lever", "states": { "facing": "west" , "half": "upper" } },
-		"24x5x10": { "block": "minecraft:lever", "states": { "facing": "east" , "half": "upper" } },
-		"25x5x9" : { "block": "minecraft:lever", "states": { "facing": "north", "half": "upper" } },
-		
+		"26x5x10": { "block": "minecraft:lever", "states": { "facing": "west"  } },
+		"25x5x11": { "block": "minecraft:lever", "states": { "facing": "south" } },
+		"24x5x10": { "block": "minecraft:lever", "states": { "facing": "east"  } },
+		"25x5x9" : { "block": "minecraft:lever", "states": { "facing": "north" } },
 		
 		"29x1x3": { "block": "minecraft:wooden_door", "states": { "facing": "south" } },
 		"30x1x2": { "block": "minecraft:wooden_door", "states": { "facing": "west"  } },
@@ -201,7 +200,22 @@
 		"29x2x7": { "block": "minecraft:wooden_door", "states": { "facing": "south", "half": "upper", "hinge": "right" } },
 		"30x2x6": { "block": "minecraft:wooden_door", "states": { "facing": "west" , "half": "upper", "hinge": "right" } },
 		"28x2x6": { "block": "minecraft:wooden_door", "states": { "facing": "east" , "half": "upper", "hinge": "right" } },
-		"29x2x5": { "block": "minecraft:wooden_door", "states": { "facing": "north", "half": "upper", "hinge": "right" } }
+		"29x2x5": { "block": "minecraft:wooden_door", "states": { "facing": "north", "half": "upper", "hinge": "right" } },
+		
+		"29x1x11": { "block": "minecraft:lever", "states": { "facing": "up_z" } },
+		"30x1x10": { "block": "minecraft:lever", "states": { "facing": "up_x" } },
+		"28x1x10": { "block": "minecraft:lever", "states": { "facing": "up_x" } },
+		"29x1x9" : { "block": "minecraft:lever", "states": { "facing": "up_z" } },
+
+		"29x3x11": { "block": "minecraft:lever", "states": { "facing": "down_z" } },
+		"30x3x10": { "block": "minecraft:lever", "states": { "facing": "down_x" } },
+		"28x3x10": { "block": "minecraft:lever", "states": { "facing": "down_x" } },
+		"29x3x9" : { "block": "minecraft:lever", "states": { "facing": "down_z" } },
+
+		"29x4x11": { "block": "minecraft:cobblestone" },
+		"30x4x10": { "block": "minecraft:cobblestone" },
+		"28x4x10": { "block": "minecraft:cobblestone" },
+		"29x4x9" : { "block": "minecraft:cobblestone" }
 		
 	},
 	
