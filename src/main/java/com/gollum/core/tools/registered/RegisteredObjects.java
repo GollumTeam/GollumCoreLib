@@ -57,13 +57,15 @@ public class RegisteredObjects {
 		
 		try {
 			
-			String modId = registerName.substring(0, registerName.indexOf(":"));
-			String name  = registerName.substring(registerName.indexOf(":")+1);
+			String modId = "minecraft";
+			String name  = registerName;			
+			if (registerName.contains(":")) {	
+				modId = registerName.substring(0, registerName.indexOf(":"));
+				name  = registerName.substring(registerName.indexOf(":")+1);
+			}
 			
 			if (modId.equals("minecraft")) {
-				
 				return (Block)Block.blockRegistry.getObject(name);
-				
 			} else {
 				return (Block)Block.blockRegistry.getObject(registerName);
 			}
