@@ -94,9 +94,6 @@ public class Building {
 		 */
 		static public class Content {
 			
-			public static final int TYPE_ITEM  = 0;
-			public static final int TYPE_BLOCK = 1;
-			
 			public Item item = null;
 			public int  min = 1;
 			public int  max = 1;
