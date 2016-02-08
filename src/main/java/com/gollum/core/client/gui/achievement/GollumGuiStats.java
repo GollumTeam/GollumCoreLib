@@ -37,7 +37,6 @@ public class GollumGuiStats extends GuiStats {
 		this.statFileWriter = statFileWriter;
 	}
 	
-	// TODO a verifier
 	@Override
 	public void func_175366_f() {
 		
@@ -79,9 +78,13 @@ public class GollumGuiStats extends GuiStats {
 	
 	protected void setCurentSlot (GuiSlot slot) {
 		try {
-			Field f = GuiStats.class.getDeclaredField("field_146545_u");
-			f.setAccessible(true);
-			f.set(this, slot);
+			for (Field f: GuiStats.class.getDeclaredFields()) {
+				if (f.getType() == GuiSlot.class) {
+					f.setAccessible(true);
+					f.set(this, slot);
+					break;
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
