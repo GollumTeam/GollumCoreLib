@@ -106,6 +106,13 @@ public class ItemHelper implements IItemHelper {
 
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
+		
+		HashMap<Integer, String> map = new HashMap<Integer, String>();
+		((IItemHelper)this.parent).getSubNames(map);
+		if (map.size() <= 1) {
+			return this.parent.getUnlocalizedName();
+		}
+		
 		int metadata = ((IItemHelper)this.parent).getEnabledMetadata(stack.getItemDamage());
 		return this.parent.getUnlocalizedName() + "." + metadata;
 	}
@@ -115,7 +122,7 @@ public class ItemHelper implements IItemHelper {
 	public int getEnabledMetadata (int dammage) {
 		int lastSubblock = -1;
 		TreeMap<Integer, String> map = new TreeMap<Integer, String>();
-		this.getSubNames(map);
+		((IItemHelper)this.parent).getSubNames(map);
 		
 		for (Entry<Integer, String> entry: map.entrySet()) {
 			if (entry.getKey()  > dammage) {
