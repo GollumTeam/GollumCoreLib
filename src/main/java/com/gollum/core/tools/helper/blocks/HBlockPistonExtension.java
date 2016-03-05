@@ -1,15 +1,21 @@
 package com.gollum.core.tools.helper.blocks;
 
+import java.util.List;
+
 import com.gollum.core.ModGollumCoreLib;
 import com.gollum.core.tools.helper.BlockHelper;
+import com.gollum.core.tools.helper.BlockHelper.BoundsList;
 import com.gollum.core.tools.helper.IBlockHelper;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPistonExtension;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class HBlockPistonExtension extends BlockPistonExtension implements IBlockHelper {
@@ -64,6 +70,47 @@ public class HBlockPistonExtension extends BlockPistonExtension implements IBloc
 	 */
 	public void breakBlockInventory(World world, int x, int y, int z, Block oldBlock) {
 		helper.breakBlockInventory(world, x, y, z, oldBlock);
+	}
+	
+	///////////////
+	// Collision //
+	///////////////
+	
+	/**
+	 * Adds all intersecting collision boxes to a list. (Be sure to only add boxes to the list if they intersect the
+	 * mask.) Parameters: World, X, Y, Z, mask, list, colliding entity
+	 */
+	@Override
+	public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB axisAlignedBB, List list, Entity entity) {
+		super.addCollisionBoxesToList(world, x, y, z, axisAlignedBB, list, entity);
+	}
+	
+	/**
+	 * Original addCollisionBoxesToList method
+	 */
+	@Override
+	public void baseAddCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB axisAlignedBB, List list, Entity entity) {
+		super.addCollisionBoxesToList(world, x, y, z, axisAlignedBB, list, entity);
+	}
+	
+	/**
+	 * Updates the blocks bounds based on its current state. Args: world, x, y, z
+	 */
+	@Override
+	public void setBlockBoundsBasedOnState(IBlockAccess blockAccess, int x, int y, int z) {
+		super.setBlockBoundsBasedOnState(blockAccess, x, y, z);
+	}
+	
+	/**
+	 * Helper to define collision box
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param list
+	 */
+	@Override
+	public void defineCollisionBox(IBlockAccess world, int x, int y, int z, BoundsList list) {
 	}
 	
 	//////////////////////////

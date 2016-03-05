@@ -1,6 +1,7 @@
 package com.gollum.core.tools.helper.blocks;
 
 import java.util.List;
+import java.util.Random;
 
 import com.gollum.core.ModGollumCoreLib;
 import com.gollum.core.tools.helper.BlockHelper;
@@ -8,8 +9,7 @@ import com.gollum.core.tools.helper.BlockHelper.BoundsList;
 import com.gollum.core.tools.helper.IBlockHelper;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.BlockOre;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
@@ -19,28 +19,19 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public abstract class HBlockContainer extends BlockContainer implements IBlockHelper {
+public class HBlockOre extends BlockOre implements IBlockHelper {
 
 	protected BlockHelper helper;
 	
-	public HBlockContainer (String registerName, Material material)  {
-		super(material);
+	public HBlockOre (String registerName) {
+		super();
 		ModGollumCoreLib.log.info ("Create block registerName : " + registerName);
 		this.helper = new BlockHelper(this, registerName);
 	}
-	
+
+	@Override
 	public BlockHelper getGollumHelper () {
 		return helper;
-	}
-	
-	/**
-	 * Affect la class de l'objet qui servira item pour le block
-	 * par default ItemBlock
-	 * @param itemClass
-	 */
-	@Override
-	public Block setItemBlockClass (Class<? extends ItemBlock> itemClass) {
-		return helper.setItemBlockClass(itemClass);
 	}
 	
 	/**
@@ -60,6 +51,16 @@ public abstract class HBlockContainer extends BlockContainer implements IBlockHe
 	}
 	
 	/**
+	 * Affecte la classe de l'objet qui servira item pour le block
+	 * par default ItemBlock
+	 * @param itemClass
+	 */
+	@Override
+	public Block setItemBlockClass (Class<? extends ItemBlock> itemClass) {
+		return helper.setItemBlockClass(itemClass);
+	}
+	
+	/**
 	 * Renvoie l'item en relation avec le block
 	 */
 	@Override
@@ -70,6 +71,7 @@ public abstract class HBlockContainer extends BlockContainer implements IBlockHe
 	/**
 	 * Libère les items de l'inventory
 	 */
+	@Override
 	public void breakBlockInventory(World world, int x, int y, int z, Block oldBlock) {
 		helper.breakBlockInventory(world, x, y, z, oldBlock);
 	}
@@ -117,7 +119,7 @@ public abstract class HBlockContainer extends BlockContainer implements IBlockHe
 	}
 	
 	//////////////////////////
-	//Gestion des textures  //
+	// Gestion des textures //
 	//////////////////////////
 	
 	@Override
@@ -144,4 +146,53 @@ public abstract class HBlockContainer extends BlockContainer implements IBlockHe
 	public String getTextureKey() {
 		return helper.getTextureKey();
 	}
+
+	///////////
+	// Reset //
+	///////////
+	
+	/**
+	 * Returns the type of items to drop on block destruction.
+	 */
+	@Override
+	public Item getItemDropped(int metadata, Random random, int fortune) {
+		return Item.getItemFromBlock(this);
+	}
+	
+	/**
+	 * Returns the quantity of items to drop on block destruction.
+	 */
+	@Override
+	public int quantityDropped(Random random) {
+		return 1;
+	}
+	
+	/**
+	 * Returns the usual quantity dropped by the block plus a bonus of 1 to 'i' (inclusive).
+	 */
+	@Override
+	public int quantityDroppedWithBonus(int fortune, Random random) {
+		return this.quantityDropped(random);
+	}
+	
+	/**
+	 * Gathers how much experience this block drops when broken.
+	 * 
+	 * @param world The world
+	 * @param metadata
+	 * @param fortune
+	 * @return Amount of XP from breaking this block.
+	 */
+	@Override
+	public int getExpDrop(IBlockAccess world, int metadata, int fortune) {
+		return 0;
+	}
+	
+	/**
+	 * Determines the damage on the item the block drops. Used in cloth and wood.
+	 */
+	public int damageDropped(int metadata) {
+		return 0;
+	}
+	
 }

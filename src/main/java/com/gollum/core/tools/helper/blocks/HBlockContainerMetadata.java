@@ -3,6 +3,7 @@ package com.gollum.core.tools.helper.blocks;
 import java.util.List;
 import java.util.TreeSet;
 
+import com.gollum.core.tools.helper.BlockHelper.BoundsList;
 import com.gollum.core.tools.helper.BlockMetadataHelper;
 import com.gollum.core.tools.helper.IBlockMetadataHelper;
 import com.gollum.core.tools.helper.items.HItemBlockMetadata;
@@ -10,10 +11,13 @@ import com.gollum.core.tools.helper.items.HItemBlockMetadata;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public abstract class HBlockContainerMetadata extends HBlockContainer implements IBlockMetadataHelper {
@@ -85,7 +89,47 @@ public abstract class HBlockContainerMetadata extends HBlockContainer implements
 	public int getEnabledMetadata (int dammage) {
 		return this.helperMetadata.getEnabledMetadata(dammage);
 	}
+	
 
+	
+	/**
+	 * Adds all intersecting collision boxes to a list. (Be sure to only add boxes to the list if they intersect the
+	 * mask.) Parameters: World, X, Y, Z, mask, list, colliding entity
+	 */
+	@Override
+	public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB axisAlignedBB, List list, Entity entity) {
+		this.helper.addCollisionBoxesToList(world, x, y, z, axisAlignedBB, list, entity);
+	}
+	
+	/**
+	 * Original addCollisionBoxesToList method
+	 */
+	@Override
+	public void baseAddCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB axisAlignedBB, List list, Entity entity) {
+		super.addCollisionBoxesToList(world, x, y, z, axisAlignedBB, list, entity);
+	}
+	
+	/**
+	 * Updates the blocks bounds based on its current state. Args: world, x, y, z
+	 */
+	@Override
+	public void setBlockBoundsBasedOnState(IBlockAccess blockAccess, int x, int y, int z) {
+		this.helper.setBlockBoundsBasedOnState(blockAccess, x, y, z);
+	}
+	
+	/**
+	 * Helper to define collision box
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param list
+	 */
+	@Override
+	public void defineCollisionBox(IBlockAccess world, int x, int y, int z, BoundsList list) {
+		this.helper.defineCollisionBox(world, x, y, z, list);;
+	}
+	
 	//////////////////////////
 	//Gestion des textures  //
 	//////////////////////////

@@ -1,5 +1,7 @@
 package com.gollum.core.tools.helper;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import com.gollum.core.ModGollumCoreLib;
@@ -10,6 +12,7 @@ import com.gollum.core.tools.registry.BlockRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -17,10 +20,70 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class BlockHelper implements IBlockHelper {
+	
+	public static class BoundsList {
+		
+		private ArrayList<AxisAlignedBB> bounds = new ArrayList<AxisAlignedBB>();
+		
+		public ArrayList<AxisAlignedBB> getBounds() {
+			return this.bounds;
+		}
+		
+		public void add(double x1, double y1, double z1, double x2, double y2, double z2) {
+			this.bounds.add(AxisAlignedBB.getBoundingBox(x1, y1, z1, x2, y2, z2));
+		}
+		
+		public void rotateClockwise() {
+			for (AxisAlignedBB boundBox: this.bounds) {
+				double minX = boundBox.minX;
+				double maxX = boundBox.maxX;
+				boundBox.minX = 1-boundBox.maxZ;
+				boundBox.maxX = 1-boundBox.minZ;
+				boundBox.minZ = minX;
+				boundBox.maxZ = maxX;
+			}
+		}
+		
+		public void rotateClockwise(int nbRotate) {
+			for (int i = 0; i <nbRotate; i++) {
+				this.rotateClockwise();
+			}
+		}
+		
+		public AxisAlignedBB getTotalBounds() {
+			
+			if (this.bounds.isEmpty()) {
+				return null;
+			}
+			
+			AxisAlignedBB firstBox = this.bounds.get(0);
+			double minX = firstBox.minX;
+			double minY = firstBox.minY;
+			double minZ = firstBox.minZ;
+			double maxX = firstBox.maxX;
+			double maxY = firstBox.maxY;
+			double maxZ = firstBox.maxZ;
+			
+			for (AxisAlignedBB boundBox: this.bounds) {
+				minX = Math.min(minX, boundBox.minX);
+				minY = Math.min(minY, boundBox.minY);
+				minZ = Math.min(minZ, boundBox.minZ);
+				maxX = Math.max(maxX, boundBox.maxX);
+				maxY = Math.max(maxY, boundBox.maxY);
+				maxZ = Math.max(maxZ, boundBox.maxZ);
+			}
+			
+			return AxisAlignedBB.getBoundingBox(minX, minY, minZ, maxX, maxY, maxZ);
+		}
+		
+	}
+	
 	
 	// Pour chaque element natural. Utilise le fonctionnement naturel mais pas des helpers
 	// Une sorte de config
@@ -129,6 +192,58 @@ public class BlockHelper implements IBlockHelper {
 			
 			world.func_147453_f(x, y, z, oldBlock);
 		}
+	}
+	
+	///////////////
+	// Collision //
+	///////////////
+	
+	/**
+	 * Adds all intersecting collision boxes to a list. (Be sure to only add boxes to the list if they intersect the
+	 * mask.) Parameters: World, X, Y, Z, mask, list, colliding entity
+	 */
+	@Override
+	public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB axisAlignedBB, List list, Entity entity) {
+		BoundsList bounds = new BoundsList();
+		this.defineCollisionBox(world, x, y, z, bounds);
+		for (AxisAlignedBB boundBox: bounds.getBounds()) {
+			this.parent.setBlockBounds((float)boundBox.minX, (float)boundBox.minY, (float)boundBox.minZ, (float)boundBox.maxX, (float)boundBox.maxY, (float)boundBox.maxZ);
+			this.baseAddCollisionBoxesToList(world, x, y, z, axisAlignedBB, list, entity);
+		}
+	}
+	
+	/**
+	 * Original addCollisionBoxesToList method
+	 */
+	@Override
+	public void baseAddCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB axisAlignedBB, List list, Entity entity) {
+		((IBlockHelper)this.parent).baseAddCollisionBoxesToList(world, x, y, z, axisAlignedBB, list, entity);
+	}
+	
+	/**
+	 * Updates the blocks bounds based on its current state. Args: world, x, y, z
+	 */
+	@Override
+	public void setBlockBoundsBasedOnState(IBlockAccess blockAccess, int x, int y, int z) {
+	
+		BoundsList list = new BoundsList();
+		this.defineCollisionBox(blockAccess, x, y, z, list);
+		AxisAlignedBB total = list.getTotalBounds();
+		this.parent.setBlockBounds((float)total.minX, (float)total.minY, (float)total.minZ, (float)total.maxX, (float)total.maxY, (float)total.maxZ);
+	
+	}
+	
+	/**
+	 * Helper to define collision box
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param list
+	 */
+	@Override
+	public void defineCollisionBox(IBlockAccess world, int x, int y, int z, BoundsList list) {
+		list.add(0, 0, 0, 1, 1, 1);
 	}
 	
 	//////////////////////////
