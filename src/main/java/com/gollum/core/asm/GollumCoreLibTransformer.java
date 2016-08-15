@@ -28,14 +28,14 @@ public class GollumCoreLibTransformer implements IClassTransformer {
 		if(bytes == null) return null;
 		
 		try {
-			if(name.equals("net.minecraft.client.Minecraft")) {
+			if(name.equals("net.minecraft.client.Minecraft") || name.equals("ave")) {
 				return patchMinecraftClass(bytes);
 			}
 			
 		} catch(Exception ex) {
 			ex.printStackTrace();
 			Logger.log(ModGollumCoreLib.MODID, Logger.LEVEL_MESSAGE, "Error on override vanilla class.");
-			 FMLCommonHandler.instance().exitJava(1, false);
+			FMLCommonHandler.instance().exitJava(1, false);
 		}
 		
 		return bytes;
@@ -57,7 +57,6 @@ public class GollumCoreLibTransformer implements IClassTransformer {
 			// Search: this.renderItem = new RenderItem(this.renderEngine, this.modelManager); in methde startGame //
 			/////////////////////////////////////////////////////////////////////////////////////////////////////////
 			
-			// TODO Find Refelection Class name
 			if((method.name.equals("startGame")) && (method.desc.equals("()V"))) {
 				for(AbstractInsnNode node : method.instructions.toArray()) {
 					
