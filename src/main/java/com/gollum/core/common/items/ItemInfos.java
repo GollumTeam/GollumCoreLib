@@ -51,7 +51,8 @@ public class ItemInfos extends HItem {
 				player.addChatMessage(new ChatComponentText("  metadata: "+EnumChatFormatting.BLUE+block.getMetaFromState(state)+EnumChatFormatting.WHITE));
 				player.addChatMessage(new ChatComponentText("  name: "+EnumChatFormatting.BLUE+block.getUnlocalizedName()+EnumChatFormatting.WHITE));
 				player.addChatMessage(new ChatComponentText("  state: "));
-				for (Entry<IProperty, Comparable> entry : state.getProperties().entrySet()) {
+				for (Object o : state.getProperties().entrySet()) {
+					Entry<IProperty, Comparable> entry = (Entry<IProperty, Comparable>) o;
 					IProperty prop = entry.getKey();
 					player.addChatMessage(new ChatComponentText("     "+prop.getName()+": "+EnumChatFormatting.GREEN+state.getValue(prop)+EnumChatFormatting.WHITE));
 				}

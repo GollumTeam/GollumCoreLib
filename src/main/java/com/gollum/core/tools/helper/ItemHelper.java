@@ -75,8 +75,7 @@ public class ItemHelper implements IItemHelper {
 		} else {
 			for (Entry<Integer, String> entry :map.entrySet()) {
 				if (!registered.contains(entry.getKey())) {
-					ModelResourceLocation model = this.getModelResourceLocation(entry.getValue());
-					ModelBakery.registerItemVariants(this.parent, model);
+					ModelBakery.addVariantName(this.parent, entry.getValue());
 				}
 			}
 			for (Entry<Integer, String> entry :map.entrySet()) {

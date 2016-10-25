@@ -16,7 +16,7 @@ import net.minecraft.util.ChatComponentText;
 public class CommandBuilding extends CommandBase {
 
 	@Override
-	public String getCommandName()
+	public String getName()
 	{
 		return "building";
 	}
@@ -33,7 +33,7 @@ public class CommandBuilding extends CommandBase {
 	}
 	
 	@Override
-	public void processCommand(ICommandSender sender, String[] arguments) throws CommandException {
+	public void execute(ICommandSender sender, String[] arguments) throws CommandException {
 		
 		if(arguments.length <= 0) {
 			throw new WrongUsageException(this.getCommandUsage(sender));

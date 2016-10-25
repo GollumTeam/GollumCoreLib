@@ -52,7 +52,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockHelper implements IBlockHelper {
 	
-	public static abstract class PropertyIndex<T extends Enum<T> & IEnumIndexed> extends PropertyEnum<T> {
+	public static abstract class PropertyIndex<T extends Enum<T> & IEnumIndexed> extends PropertyEnum {
 
 		protected PropertyIndex(String name, Class<T> valueClass, Collection<T> allowedValues) {
 			super(name, valueClass, allowedValues);
@@ -72,8 +72,8 @@ public class BlockHelper implements IBlockHelper {
 		
 		public T getEnumFromMeta(int meta) {
 			TreeMap<Integer, T> sortedValue = new TreeMap<Integer, T>();
-			for (T value : this.getAllowedValues()) {
-				sortedValue.put(this.getIndex(value), value);
+			for (Object value : this.getAllowedValues()) {
+				sortedValue.put(this.getIndex((T) value), (T) value);
 			}
 			
 			T lastMatch = sortedValue.get(0);
@@ -89,7 +89,7 @@ public class BlockHelper implements IBlockHelper {
 		}
 	}
 	
-	public static abstract class PropertySubBlock<T extends Enum<T> & IEnumIndexed> extends PropertyIndex<T> {
+	public static abstract class PropertySubBlock<T extends Enum<T> & IEnumIndexed> extends PropertyIndex {
 		
 		protected PropertySubBlock(String name, Class<T> valueClass, Collection<T> allowedValues) {
 			super(name, valueClass, allowedValues);
@@ -109,7 +109,7 @@ public class BlockHelper implements IBlockHelper {
 		
 		public T[] getSubBlocksList () {
 			T[] ts = (T[])Array.newInstance(this.getValueClass(), 0);
-			return this.getAllowedValues().toArray(ts);
+			return (T[]) this.getAllowedValues().toArray(ts);
 		}
 	}
 	
@@ -277,8 +277,7 @@ public class BlockHelper implements IBlockHelper {
 		} else {
 			for (Entry<Integer, String> entry :map.entrySet()) {
 				if (!registered.contains(entry.getKey())) {
-					ModelResourceLocation model = this.getModelResourceLocation(entry.getValue());
-					ModelBakery.registerItemVariants(this.getBlockItem(), model);
+					ModelBakery.addVariantName(this.getBlockItem(), entry.getValue());
 				}
 			}
 			for (Entry<Integer, String> entry :map.entrySet()) {

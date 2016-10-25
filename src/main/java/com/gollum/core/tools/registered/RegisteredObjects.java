@@ -97,7 +97,7 @@ public class RegisteredObjects {
 	
 	public String getRegisterName (Block block) {
 		
-		for (ResourceLocation key: Block.blockRegistry.getKeys()) {
+		for (Object key: Block.blockRegistry.getKeys()) {
 			if (block == Block.blockRegistry.getObject(key)) {
 				if (key != null) {
 					return key.toString();
@@ -109,7 +109,7 @@ public class RegisteredObjects {
 	
 	public String getRegisterName (Item item) {
 		
-		for (ResourceLocation key: Item.itemRegistry.getKeys()) {
+		for (Object key: Item.itemRegistry.getKeys()) {
 			if (item == Item.itemRegistry.getObject(key)) {
 				if (key != null) {
 					return key.toString();
@@ -141,8 +141,8 @@ public class RegisteredObjects {
 			SoundHandler soundHandler = Minecraft.getMinecraft().getSoundHandler();
 			SoundRegistry soundRegistry = (SoundRegistry) Reflection.getFirstValueByFieldType(soundHandler, SoundRegistry.class);
 			
-			for (ResourceLocation key: soundRegistry.getKeys()) {
-				SoundEventAccessorComposite accessor = soundRegistry.getObject(key);
+			for (Object key: soundRegistry.getKeys()) {
+				SoundEventAccessorComposite accessor = (SoundEventAccessorComposite) soundRegistry.getObject(key);
 				SoundCategory category = accessor.getSoundCategory();
 				if (!sounds.containsKey(category)) {
 					sounds.put(category, new TreeSet<String>());

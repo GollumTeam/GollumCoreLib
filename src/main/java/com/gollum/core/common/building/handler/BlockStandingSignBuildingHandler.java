@@ -22,7 +22,7 @@ public class BlockStandingSignBuildingHandler extends BlockWallSignBuildingHandl
 	
 	@Override
 	protected IBlockState applyBlockState(World world, BlockPos pos, IBlockState state, Unity unity, EnumRotate rotate) {
-		Integer rotation = state.getValue(ROTATION);
+		Integer rotation = (Integer) state.getValue(ROTATION);
 		return state.withProperty(ROTATION, (rotation + 4*rotate.rotate) % 0xF);
 	}
 	

@@ -4,8 +4,8 @@
 	"name": "Gollum Core Lib",
 	"description": "Framework for Minecraft development mod.",
 	"version": "2.1.0",
-	"mcversion": "1.8.8",
+	"mcversion": "1.8",
 	"url": "http://www.smeagol-mods.com",
 	"authorList": [ "SmeagolWorms4" ]
-}
+},
 ]

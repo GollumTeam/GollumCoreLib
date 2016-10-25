@@ -5,13 +5,13 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
-import net.minecraft.util.ITickable;
 import net.minecraftforge.common.util.Constants;
 
-public abstract class GCLInventoryTileEntity extends TileEntity implements ITickable, IInventory {
+public abstract class GCLInventoryTileEntity extends TileEntity implements IUpdatePlayerListBox, IInventory {
 
 	protected ItemStack[] inventory;
 	protected int maxSize;
@@ -246,7 +246,7 @@ public abstract class GCLInventoryTileEntity extends TileEntity implements ITick
 	
 	@Override
 	public IChatComponent getDisplayName() {
-		return new ChatComponentText(this.getCommandSenderName());
+		return new ChatComponentText(this.getName());
 	}
 	
 	////////////

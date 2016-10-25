@@ -22,7 +22,7 @@ public class BlockLeverBuildingHandler extends BuildingBlockHandler {
 	@Override
 	public IBlockState applyBlockState(World world, BlockPos pos, IBlockState state, Unity unity, EnumRotate rotate) {
 		
-		EnumOrientation orientation = state.getValue(FACING);
+		EnumOrientation orientation = (EnumOrientation) state.getValue(FACING);
 		return state.withProperty(FACING, this.rotateOrientation(rotate, orientation));
 	}
 	

@@ -352,7 +352,8 @@ public class BuildingParser {
 		try {
 			JsonNode stateNode = json.getNode("states");
 			try {
-				for (IProperty prop: state.getProperties().keySet()) {
+				for (Object propObject: state.getProperties().keySet()) {
+					IProperty prop = (IProperty) propObject;
 					String name = prop.getName();
 					if (prop instanceof PropertyBool) {
 						Boolean value = null;
