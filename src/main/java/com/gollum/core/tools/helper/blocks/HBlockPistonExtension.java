@@ -48,12 +48,12 @@ public class HBlockPistonExtension extends BlockPistonExtension implements IBloc
 	
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return helper.getStateFromMeta(meta);
+		return super.getStateFromMeta(meta);
 	}
 	
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return helper.getMetaFromState(state);
+		return super.getMetaFromState(state);
 	}
 	
 	@Override
@@ -113,10 +113,11 @@ public class HBlockPistonExtension extends BlockPistonExtension implements IBloc
 	////////////
 	// Events //
 	////////////
-	
-	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase player, ItemStack stack) {
-		helper.onBlockPlacedBy(world, pos, state, player, stack);
-	}
+
+	@Override
+    public IBlockState onBlockPlaced(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+    	return super.onBlockPlaced(world, pos, facing, hitX, hitY, hitZ, meta, placer);
+    }
 	
 	/**
 	 * Libère les items de l'inventory
@@ -129,7 +130,7 @@ public class HBlockPistonExtension extends BlockPistonExtension implements IBloc
 	
 	@Override
 	public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player) {
-		return helper.getPickBlock(target, world, pos, player);
+		return super.getPickBlock(target, world, pos, player);
 	}
 	
 	////////////

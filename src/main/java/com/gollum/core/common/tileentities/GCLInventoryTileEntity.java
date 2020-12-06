@@ -1,14 +1,17 @@
 package com.gollum.core.common.tileentities;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ITickable;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
 public abstract class GCLInventoryTileEntity extends TileEntity implements ITickable, IInventory {
@@ -142,6 +145,12 @@ public abstract class GCLInventoryTileEntity extends TileEntity implements ITick
 			this.worldObj.notifyNeighborsOfStateChange(this.pos, this.getBlockType());
 			this.worldObj.notifyNeighborsOfStateChange(this.pos.down(), this.getBlockType());
 		}
+	}
+	
+
+	@Override
+	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {
+		return oldState.getBlock() !=  newSate.getBlock();
 	}
 	
 	@Override

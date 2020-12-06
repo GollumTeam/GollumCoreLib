@@ -1,5 +1,8 @@
 package com.gollum.core.tools.helper;
 
+import static net.minecraft.block.BlockPistonBase.EXTENDED;
+import static net.minecraft.block.BlockPistonBase.FACING;
+
 import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.HashMap;
@@ -266,7 +269,7 @@ public class BlockHelper implements IBlockHelper {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerRender () {
-		if(vanillaRegisterRender) return;
+		if(this.vanillaRegisterRender) return;
 		
 		HashMap<Integer, String> map = new HashMap<Integer, String>();
 		((IBlockHelper)this.parent).getSubNames(map);
@@ -328,18 +331,16 @@ public class BlockHelper implements IBlockHelper {
 	////////////
 	// Events //
 	////////////
-	
-	@Override
-	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase player, ItemStack stack) {
-		
-		state = ((IBlockHelper)this.parent).getStateFromMeta(stack.getItemDamage());
-		PropertyDirection propFacing = ((IBlockHelper)this.parent).getPropFacing(state);
-		
-		if (propFacing != null) {
-			world.setBlockState(pos, state.withProperty(propFacing, ((IBlockHelper)this.parent).getOrientationForPlayer(pos, player)), 2);
-		}
-	}
 
+	@Override
+	public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase player) {
+		IBlockState state = parent.getDefaultState();
+		PropertyDirection propFacing = ((IBlockHelper)this.parent).getPropFacing(state);
+		if (propFacing != null) {
+			state = state.withProperty(propFacing, ((IBlockHelper)this.parent).getOrientationForPlayer(pos, player));
+		}
+		return state;
+	}
 	
 	/**
 	 * Libère les items de l'inventory

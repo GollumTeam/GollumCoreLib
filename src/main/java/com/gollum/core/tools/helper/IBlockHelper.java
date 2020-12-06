@@ -72,7 +72,7 @@ public interface IBlockHelper {
 	// Events //
 	////////////
 	
-	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase player, ItemStack stack);
+	public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer);
 	
 	/**
 	 * Libère les items de l'inventory

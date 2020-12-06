@@ -19,6 +19,7 @@ It's library for Minecraft Mod. Add functionalities :
 For Install :
 
 <pre>
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64
 ./gradlew setupDecompWorkspace
 ./gradlew build
 ./gradlew eclipse

@@ -1,5 +1,8 @@
 package com.gollum.core.tools.helper.blocks;
 
+import static net.minecraft.block.BlockPistonBase.EXTENDED;
+import static net.minecraft.block.BlockPistonBase.FACING;
+
 import java.util.List;
 import java.util.Map;
 
@@ -112,10 +115,11 @@ public abstract class HBlockContainer extends BlockContainer implements IBlockHe
 	////////////
 	// Events //
 	////////////
-	
-	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase player, ItemStack stack) {
-		helper.onBlockPlacedBy(world, pos, state, player, stack);
-	}
+
+	@Override
+    public IBlockState onBlockPlaced(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+    	return helper.onBlockPlaced(world, pos, facing, hitX, hitY, hitZ, meta, placer);
+    }
 	
 	/**
 	 * Libère les items de l'inventory

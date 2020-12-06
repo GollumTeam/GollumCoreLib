@@ -1,5 +1,3 @@
-
-// For those who want the bleeding edge
 buildscript {
     repositories {
         jcenter()
@@ -55,7 +53,7 @@ genSrgs.shouldRunAfter unmappedjar
 jar {
     manifest {
         attributes 'FMLCorePlugin': 'com.gollum.core.asm.GollumCoreLibPlugin',
-                       'FMLCorePluginContainsFMLMod': 'true'
+                   'FMLCorePluginContainsFMLMod': 'true'
     }
 }
 

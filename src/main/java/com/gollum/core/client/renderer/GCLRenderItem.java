@@ -37,7 +37,6 @@ public class GCLRenderItem extends RenderItem {
 			instance = new GCLRenderItem(Minecraft.getMinecraft().getRenderItem());
 			
 			try {
-				boolean found = false;
 				for (Field f: Minecraft.class.getDeclaredFields()) {
 					f.setAccessible(true);
 					if (f.getType() == RenderItem.class) {

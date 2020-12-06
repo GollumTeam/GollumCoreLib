@@ -32,7 +32,7 @@ gollumcorelib.config.blocksSpawn=blocs de detection de spawn
 
 fml.configgui.gameRestartRequired=Un ou plusieurs changements de la configuration demandent de redémarrer Minecraft pour être pris en compte.
 fml.configgui.gameRestartTitle=Minecraft doit être redémarré
-fml.configgui.confirmRestartMessage=I Understand=Je confirme
+fml.configgui.confirmRestartMessage=Je confirme
 gollumcorelib.config.worldRestartRequired=Un ou plusieurs changements de la configuration demandent de relancer votre partie pour être pris en compte..
 gollumcorelib.config.worldRestartTitle=Votre partie doit être redémarrée
 
