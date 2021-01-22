@@ -95,7 +95,7 @@ public class GCLRenderItem extends RenderItem {
 		}
 	}
 	
-
+	@Override
 	public void renderItem(ItemStack stack, IBakedModel model) {
 		
 		
@@ -113,7 +113,7 @@ public class GCLRenderItem extends RenderItem {
 		event = new RenderItemEvent.Post(this, stack, model);
 		MinecraftForge.EVENT_BUS.post(event);
 	}
-	
+
 	protected boolean renderBlockAsItem(ItemStack stack) {
 		
 		Block block = Block.getBlockFromItem(stack.getItem());
@@ -151,7 +151,7 @@ public class GCLRenderItem extends RenderItem {
 		return false;
 		
 	}
-	
+
 	@Override
 	public void renderItemIntoGUI(ItemStack stack, int x, int y) {
 		

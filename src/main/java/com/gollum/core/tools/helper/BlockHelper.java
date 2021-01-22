@@ -334,7 +334,7 @@ public class BlockHelper implements IBlockHelper {
 
 	@Override
 	public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase player) {
-		IBlockState state = parent.getDefaultState();
+		IBlockState state = parent.getStateFromMeta(meta);
 		PropertyDirection propFacing = ((IBlockHelper)this.parent).getPropFacing(state);
 		if (propFacing != null) {
 			state = state.withProperty(propFacing, ((IBlockHelper)this.parent).getOrientationForPlayer(pos, player));

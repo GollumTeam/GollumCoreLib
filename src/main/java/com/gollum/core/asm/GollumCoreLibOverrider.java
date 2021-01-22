@@ -10,5 +10,4 @@ public class GollumCoreLibOverrider {
 	public static void overrideRenderItem ( ) {
 		GCLRenderItem.override();
 	}
-	
 }

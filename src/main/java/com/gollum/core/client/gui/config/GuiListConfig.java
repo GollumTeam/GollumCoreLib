@@ -273,6 +273,12 @@ public class GuiListConfig extends GuiConfig {
 		super.updateScreen();
 		this.search.updateCursorCounter();
 	}
+
+	@Override
+	public void handleMouseInput() throws IOException {
+		super.handleMouseInput();
+		this.groupList.handleMouseInput();
+	}
 	
 	@Override
 	protected void mouseClicked(int x, int y, int mouseEvent) throws IOException {

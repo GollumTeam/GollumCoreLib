@@ -31,7 +31,6 @@ public class GollumCoreLibTransformer implements IClassTransformer {
 			if(name.equals("net.minecraft.client.Minecraft") || name.equals("ave")) {
 				return patchMinecraftClass(bytes);
 			}
-			
 		} catch(Exception ex) {
 			ex.printStackTrace();
 			Logger.log(ModGollumCoreLib.MODID, Logger.LEVEL_MESSAGE, "Error on override vanilla class.");
@@ -54,10 +53,10 @@ public class GollumCoreLibTransformer implements IClassTransformer {
 			MethodNode method = methods.next();
 			
 			/////////////////////////////////////////////////////////////////////////////////////////////////////////
-			// Search: this.renderItem = new RenderItem(this.renderEngine, this.modelManager); in methde startGame //
+			// Search: this.renderItem = new RenderItem(this.renderEngine, this.modelManager); in method startGame //
 			/////////////////////////////////////////////////////////////////////////////////////////////////////////
 			
-			if((method.name.equals("startGame")) && (method.desc.equals("()V"))) {
+			if((method.name.equals("startGame") || method.name.equals("func_71384_a")) && (method.desc.equals("()V"))) {
 				for(AbstractInsnNode node : method.instructions.toArray()) {
 					
 					// Detect le "new RenderItem(this.renderEngine, this.modelManager)"
@@ -77,9 +76,9 @@ public class GollumCoreLibTransformer implements IClassTransformer {
 						
 						method.instructions.insertBefore(node, new MethodInsnNode(Opcodes.INVOKESTATIC, GollumCoreLibOverrider.class.getCanonicalName().replace('.', '/'), "overrideRenderItem", "()V", false));
 						
-						///////////////////////
+						/////////////////////
 						// End inject code //
-						///////////////////////
+						/////////////////////
 							
 					}
 				}
