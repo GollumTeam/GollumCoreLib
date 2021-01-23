@@ -144,7 +144,7 @@ public class ConfigLoader {
 				ConfigProp prop = (ConfigProp) field.getAnnotation(ConfigProp.class);
 				this.groupList.add(prop.group());
 				
-				Logger.log(ModGollumCoreLib.MODID, Logger.LEVEL_DEBUG, "Field : "+field.getName()+" found goup="+prop.group());
+				Logger.log(ModGollumCoreLib.MODID, Logger.LEVEL_DEBUG, "Field : "+field.getName()+" found group="+prop.group());
 				
 			}
 		}
