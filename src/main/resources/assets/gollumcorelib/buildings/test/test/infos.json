@@ -1,0 +1,13 @@
+{
+	"color" : [
+		{ "block": "minecraft:wool" },
+		{ "block": "minecraft:stone" },
+		{ "block": "CastleDefenders:BlockMerc" },
+		{ "block": "minecraft:fence" },
+		{ "block": "minecraft:torch", "facing": "north"},
+		{ "block": "minecraft:fire" },
+		{ "block": "minecraft:cobblestone" },
+		{ "block": "minecraft:netherrack" }
+	]
+	
+}

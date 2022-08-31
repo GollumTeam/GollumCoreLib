@@ -1,0 +1,17 @@
+{
+	"test": {
+		"globalSpawnRate":0,
+		"buildings": {
+			"test": {
+				"enabled": false,
+				"dimentions": {
+				}
+			},
+			"test-stone": {
+				"enabled": false,
+				"dimentions": {
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,11 @@
+[
+{
+    "modid": "gollumcorelib",
+    "name": "Gollum Core Lib",
+    "description": "Framework for Minecraft development mod.",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "",
+    "authorList": [ "SmeagolWorms4" ]
+}
+]
