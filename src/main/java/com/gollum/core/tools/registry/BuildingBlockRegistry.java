@@ -22,6 +22,7 @@ import net.minecraft.block.BlockTorch;
 import net.minecraft.block.BlockTrapDoor;
 import net.minecraft.block.BlockTripWire;
 import net.minecraft.block.BlockTripWireHook;
+import net.minecraftforge.fluids.BlockFluidBase;
 
 public class BuildingBlockRegistry {
 
@@ -66,6 +67,7 @@ public class BuildingBlockRegistry {
 		this.aftersBlock.add(BlockTripWireHook.class);
 		this.aftersBlock.add(BlockTrapDoor.class);
 		this.aftersBlock.add(BlockBush.class);
+		this.aftersBlock.add(BlockFluidBase.class);
 	}
 	
 	public ArrayList<BuildingBlockHandler> getHandlers () {

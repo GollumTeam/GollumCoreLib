@@ -294,7 +294,7 @@ public class Builder {
 					this.setBlock (finalPos, Blocks.AIR.getDefaultState());
 				} else 
 				if (unity.state != null) {
-					this.setBlock (finalPos, this.getBlockState(finalPos, unity));
+					isPlaced = this.setBlock (finalPos, this.getBlockState(finalPos, unity));
 				} else {
 					this.setBlock (finalPos, Blocks.AIR.getDefaultState());
 				}

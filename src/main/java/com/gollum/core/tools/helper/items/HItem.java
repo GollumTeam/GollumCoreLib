@@ -42,12 +42,12 @@ public class HItem extends Item implements IItemHelper {
 	public void registerRender () {
 		helper.registerRender();
 	}
-//	
-//	@Override
-//	public String getUnlocalizedName(ItemStack stack) {
-//		return helper.getUnlocalizedName(stack);
-//	}
-//	
+	
+	@Override
+	public String getUnlocalizedName(ItemStack stack) {
+		return helper.getUnlocalizedName(stack);
+	}
+	
 	@Override
 	public void getSubNames(Map<Integer, String> list) {
 	}
@@ -56,10 +56,10 @@ public class HItem extends Item implements IItemHelper {
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
 		helper.getSubItems(tab, items);
 	}
-//
-//	@Override
-//	public int getEnabledMetadata(int dammage) {
-//		return helper.getEnabledMetadata(dammage);
-//	}
+
+	@Override
+	public int getEnabledMetadata(int dammage) {
+		return helper.getEnabledMetadata(dammage);
+	}
 	
 }

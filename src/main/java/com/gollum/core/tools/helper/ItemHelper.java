@@ -2,6 +2,8 @@ package com.gollum.core.tools.helper;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import com.gollum.core.ModGollumCoreLib;
@@ -61,19 +63,22 @@ public class ItemHelper implements IItemHelper {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerRender() {
+		ModGollumCoreLib.logger.message("Auto register render: "+this.parent.getRegistryName());
+		
 		HashMap<Integer, String> map = new HashMap<Integer, String>();
-//		((IItemHelper)this.parent).getSubNames(map);
+		((IItemHelper)this.parent).getSubNames(map);
 		TreeSet<Integer> registered  = new TreeSet<Integer>();
 		
 		if (map.isEmpty()) {
 			this.registerRender(0);
 		} else {
-//			for (Entry<Integer, String> entry :map.entrySet()) {
+			for (Integer metadata :map.keySet()) {
+				this.registerRender(metadata);
 //				if (!registered.contains(entry.getKey())) {
 //					ModelResourceLocation model = this.getModelResourceLocation(entry.getValue());
 //					ModelBakery.registerItemVariants(this.parent, model);
 //				}
-//			}
+			}
 //			for (Entry<Integer, String> entry :map.entrySet()) {
 //				if (!registered.contains(entry.getKey())) {
 //					this.registerRender(entry.getKey(), entry.getValue());
@@ -83,53 +88,42 @@ public class ItemHelper implements IItemHelper {
 	}
 	
 	public void registerRender (int metadata) {
-		ModGollumCoreLib.logger.message("Auto register render: "+this.parent.getRegistryName());
 		GollumMod mod = ModContext.instance().getCurrent(); 
 	    ModelLoader.setCustomModelResourceLocation(this.parent, metadata, new ModelResourceLocation(this.parent.getRegistryName(), "inventory"));
 	}
-
-//	public void registerRender (int metadata, String renderKey) {
-//		this.registerRender(metadata, renderKey, true);
-//	}
-//	
-//	public void registerRender (int metadata, String renderKey, boolean trace) {
-//		if (trace) ModGollumCoreLib.logger.message("Auto register render: "+this.parent.getRegistryName()+":"+metadata+":"+renderKey);
-//	    ModelLoader.setCustomModelResourceLocation(StartupCommon.itemSimple, metadata, itemModelResourceLocation);
-////		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(this.parent, metadata, this.getModelResourceLocation(renderKey));
-//	}
 	
-	protected ModelResourceLocation getModelResourceLocation (String renderKey) {
-		return new ModelResourceLocation(this.mod.getModId()+":"+renderKey, "inventory");
+//	protected ModelResourceLocation getModelResourceLocation (String renderKey) {
+//		return new ModelResourceLocation(this.mod.getModId()+":"+renderKey, "inventory");
+//	}
+
+	@Override
+	public String getUnlocalizedName(ItemStack stack) {
+		
+		HashMap<Integer, String> map = new HashMap<Integer, String>();
+		((IItemHelper)this.parent).getSubNames(map);
+		if (map.size() <= 1) {
+			return this.parent.getUnlocalizedName();
+		}
+		
+		int metadata = ((IItemHelper)this.parent).getEnabledMetadata(stack.getItemDamage());
+		return this.parent.getUnlocalizedName() + "." + metadata;
 	}
-//
-//	@Override
-//	public String getUnlocalizedName(ItemStack stack) {
-//		
-//		HashMap<Integer, String> map = new HashMap<Integer, String>();
-//		((IItemHelper)this.parent).getSubNames(map);
-//		if (map.size() <= 1) {
-//			return this.parent.getUnlocalizedName();
-//		}
-//		
-//		int metadata = ((IItemHelper)this.parent).getEnabledMetadata(stack.getItemDamage());
-//		return this.parent.getUnlocalizedName() + "." + metadata;
-//	}
-//	
-//
-//	@Override
-//	public int getEnabledMetadata (int dammage) {
-//		int lastSubblock = -1;
-//		TreeMap<Integer, String> map = new TreeMap<Integer, String>();
-//		((IItemHelper)this.parent).getSubNames(map);
-//		
-//		for (Entry<Integer, String> entry: map.entrySet()) {
-//			if (entry.getKey()  > dammage) {
-//				break;
-//			}
-//			lastSubblock = entry.getKey();			
-//		}
-//		return (lastSubblock == -1) ? dammage : lastSubblock;
-//	}
+	
+
+	@Override
+	public int getEnabledMetadata (int dammage) {
+		int lastSubblock = -1;
+		TreeMap<Integer, String> map = new TreeMap<Integer, String>();
+		((IItemHelper)this.parent).getSubNames(map);
+		
+		for (Entry<Integer, String> entry: map.entrySet()) {
+			if (entry.getKey()  > dammage) {
+				break;
+			}
+			lastSubblock = entry.getKey();			
+		}
+		return (lastSubblock == -1) ? dammage : lastSubblock;
+	}
 
 	@Override
 	public void getSubNames(Map<Integer, String> list) {

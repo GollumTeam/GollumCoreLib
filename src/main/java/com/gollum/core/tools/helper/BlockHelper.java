@@ -51,6 +51,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -283,32 +284,37 @@ public class BlockHelper implements IBlockHelper {
 		if (map.isEmpty()) {
 			this.registerRender(0);
 		} else {
-			for (Entry<Integer, String> entry :map.entrySet()) {
-				if (!registered.contains(entry.getKey())) {
-					ModelResourceLocation model = this.getModelResourceLocation(entry.getValue());
-					ModelBakery.registerItemVariants(this.getBlockItem(), model);
-				}
+			for (Integer metadata :map.keySet()) {
+				this.registerRender(metadata);
 			}
-			for (Entry<Integer, String> entry :map.entrySet()) {
-				if (!registered.contains(entry.getKey())) {
-					this.registerRender(entry.getKey(), entry.getValue());
-				}
-			}
+//			for (Entry<Integer, String> entry :map.entrySet()) {
+//				if (!registered.contains(entry.getKey())) {
+//					ModelResourceLocation model = this.getModelResourceLocation(entry.getValue());
+//					ModelBakery.registerItemVariants(this.getBlockItem(), model);
+//				}
+//			}
+//			for (Entry<Integer, String> entry :map.entrySet()) {
+//				if (!registered.contains(entry.getKey())) {
+//					this.registerRender(entry.getKey(), entry.getValue());
+//				}
+//			}
 		}
 	}
 	
 	public void registerRender (int metadata) {
-		this.registerRender(metadata, this.getRegisterName());
+		ModGollumCoreLib.logger.message("Auto register render: "+this.parent.getRegistryName());
+		GollumMod mod = ModContext.instance().getCurrent(); 
+	    ModelLoader.setCustomModelResourceLocation(this.getBlockItem(), metadata, new ModelResourceLocation(this.parent.getRegistryName(), "inventory"));
 	}
 	
-	public void registerRender (int metadata, String renderKey) {
-		this.registerRender(metadata, renderKey, true);
-	}
-	
-	public void registerRender (int metadata, String renderKey, boolean trace) {
-		if (trace) ModGollumCoreLib.logger.message("Auto register render: "+this.getRegisterName()+":"+metadata+":"+":"+renderKey);
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(this.getBlockItem(), metadata, this.getModelResourceLocation(renderKey));
-	}
+//	public void registerRender (int metadata, String renderKey) {
+//		this.registerRender(metadata, renderKey, true);
+//	}
+//	
+//	public void registerRender (int metadata, String renderKey, boolean trace) {
+//		if (trace) ModGollumCoreLib.logger.message("Auto register render: "+this.getRegisterName()+":"+metadata+":"+":"+renderKey);
+//		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(this.getBlockItem(), metadata, this.getModelResourceLocation(renderKey));
+//	}
 	
 	protected ModelResourceLocation getModelResourceLocation (String renderKey) {
 		return new ModelResourceLocation(this.mod.getModId()+":"+renderKey, "inventory");

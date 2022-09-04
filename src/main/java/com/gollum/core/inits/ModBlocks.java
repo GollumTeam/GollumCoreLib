@@ -7,6 +7,6 @@ public class ModBlocks {
 	public static BlockProximitySpawn blockProximitySpawn;
 	
 	public static void init() {
-		ModBlocks.blockProximitySpawn = new BlockProximitySpawn ("BlockProximitySpawn");
+		ModBlocks.blockProximitySpawn = new BlockProximitySpawn ("blockproximityspawn");
 	}
 }

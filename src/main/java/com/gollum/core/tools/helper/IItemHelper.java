@@ -30,7 +30,7 @@ public interface IItemHelper {
 	
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items);
 
-//	int getEnabledMetadata(int dammage);
-//	
-//	public String getUnlocalizedName(ItemStack stack);
+	int getEnabledMetadata(int dammage);
+	
+	public String getUnlocalizedName(ItemStack stack);
 }
