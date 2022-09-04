@@ -1,5 +1,5 @@
 {
-    "parent": "gollumcorelib:block/BlockProximitySpawn",
+    "parent": "gollumcorelib:block/blockproximityspawn",
     "display": {
         "thirdperson": {
             "rotation": [ 10, -45, 170 ],

@@ -38,7 +38,7 @@ public abstract class HBlockContainer extends BlockContainer implements IBlockHe
 	
 	public HBlockContainer (String registerName, Material material)  {
 		super(material);
-		ModGollumCoreLib.log.info ("Create block registerName : " + registerName);
+		ModGollumCoreLib.logger.info ("Create block registerName : " + registerName);
 		this.helper = new BlockHelper(this, registerName);
 	}
 	

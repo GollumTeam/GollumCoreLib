@@ -25,7 +25,7 @@ public class ModBuildingParser {
 	public BuildingConfigType parse(String modId) {
 		
 		if (!resourceLoader.assetExist(DIR_BUILDING_ASSETS+NAME_JSON, modId)) {
-			ModGollumCoreLib.log.debug("No buildings Found : "+modId);
+			ModGollumCoreLib.logger.debug("No buildings Found : "+modId);
 			return null;
 		}
 		
@@ -46,7 +46,7 @@ public class ModBuildingParser {
 					String groupName = entry.getKey();
 					Group group = entry.getValue();
 					
-					ModGollumCoreLib.log.debug("Final group building :"+groupName);
+					ModGollumCoreLib.logger.debug("Final group building :"+groupName);
 					
 				}
 				
@@ -58,7 +58,7 @@ public class ModBuildingParser {
 			
 			
 		} catch (Exception e) {
-			ModGollumCoreLib.log.severe("Erreur parsing buildings : "+modId);
+			ModGollumCoreLib.logger.severe("Erreur parsing buildings : "+modId);
 			e.printStackTrace();
 		}
 		

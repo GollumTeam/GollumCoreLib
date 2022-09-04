@@ -1,6 +1,0 @@
-{
-   "variants": {
-       "inventory": { "model": "gollumcorelib:air" },
-       "normal": { "model": "gollumcorelib:air" }
-   }
-}

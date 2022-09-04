@@ -16,8 +16,8 @@ public class ModCreativeTab {
 	}
 	public static void init() {
 		if (ModGollumCoreLib.config.devTools) {
-			ModCreativeTab.tabBuildingStaff.setIcon(ModItems.itemBuilding);
-			ModCreativeTab.tabDevTools     .setIcon(ModItems.itemWrench);
+			ModCreativeTab.tabBuildingStaff.setIcon(ModItems.BUILDING);
+			ModCreativeTab.tabDevTools     .setIcon(ModItems.WRENCH);
 		}
 	}
 }

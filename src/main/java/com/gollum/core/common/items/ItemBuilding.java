@@ -1,16 +1,18 @@
 package com.gollum.core.common.items;
 
-import static com.gollum.core.ModGollumCoreLib.log;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import com.gollum.core.ModGollumCoreLib;
 import com.gollum.core.common.building.Builder;
 import com.gollum.core.common.building.Building;
 import com.gollum.core.common.building.Building.SubBuilding;
+import com.gollum.core.inits.ModCreativeTab;
 import com.gollum.core.common.building.BuildingParser;
+import com.gollum.core.tools.helper.IItemHelper;
 import com.gollum.core.tools.helper.items.HItem;
 
 import net.minecraft.creativetab.CreativeTabs;
@@ -36,8 +38,6 @@ public class ItemBuilding extends HItem {
 		return this.lastBuildings.get (lastBuildings.size() - i - 1);
 	}
 	
-	
-	private Builder builder = new Builder();
 	public ArrayList<String>   nameIndex     = null;
 	public ArrayList<Building> buildingIndex = null;
 	
@@ -46,6 +46,7 @@ public class ItemBuilding extends HItem {
 		
 		this.setMaxStackSize(1);
 		this.setHasSubtypes(true);
+		this.setCreativeTab(ModCreativeTab.tabBuildingStaff);
 		
 	}
 	
@@ -54,7 +55,7 @@ public class ItemBuilding extends HItem {
 	public void registerRender () {
 		helper.registerRender(0);
 		for (int metadata = 1; metadata < 255; metadata++) {
-			helper.registerRender(metadata, this.getRegisterName(), false);
+			helper.registerRender(metadata);
 		}
 	}
 	
@@ -73,31 +74,22 @@ public class ItemBuilding extends HItem {
 		return this.nameIndex;
 	}
 
-	private ArrayList<Building> getNBuildingIndex() {
+	private ArrayList<Building> getBuildingIndex() {
 		this.initBuildingList();
 		return this.buildingIndex;
 	}
 	
 
-    /**
-     * This is called when the item is used, before the block is activated.
-     * @param stack The Item Stack
-     * @param player The Player that used the item
-     * @param world The Current World
-     * @param pos Target position
-     * @param side The side of the target hit
-     * @return Return true to prevent any further processing.
-     */
 	@Override
     public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
-		
+//		
 		if (world.isRemote) {
 			return EnumActionResult.SUCCESS;
 		}
 		ItemStack itemStack = player.getItemStackFromSlot(hand == EnumHand.MAIN_HAND ? EntityEquipmentSlot.MAINHAND : EntityEquipmentSlot.OFFHAND);
 		if (itemStack != null) {
 			int metadata = itemStack.getItemDamage();
-			ArrayList<Building> buildings = this.getNBuildingIndex(); 
+			ArrayList<Building> buildings = this.getBuildingIndex(); 
 			int orientation = MathHelper.floor((double) (player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 			
 			if (metadata < buildings.size()) {
@@ -109,9 +101,9 @@ public class ItemBuilding extends HItem {
 				subBuilding.z = pos.getZ();
 				subBuilding.facing = player.getHorizontalFacing().getOpposite();
 				
-				log.debug("orientation = "+orientation);
+				ModGollumCoreLib.logger.debug("orientation = "+orientation);
 				this.lastBuildings.add(subBuilding);
-				builder.build(world, subBuilding, true);
+				Builder.instance().build(world, subBuilding, true);
 				
 			}
 		}
@@ -147,12 +139,12 @@ public class ItemBuilding extends HItem {
 	public String getItemStackDisplayName(ItemStack itemStack) {
 		return this.getUnlocalizedNameInefficiently(itemStack);
 	}
-	
-	@SideOnly(Side.CLIENT)
+
 	@Override
-	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-		for (int metadata = 0; metadata < this.getNameIndex().size(); metadata++) {
-			items.add(new ItemStack(this, 1, metadata));
+	public void getSubNames(Map<Integer, String> list) {
+		ArrayList<String> names = this.getNameIndex();
+		for (int metadata = 0; metadata < names.size(); metadata++) {
+			list.put(metadata, names.get(metadata));
 		}
 	}
 	

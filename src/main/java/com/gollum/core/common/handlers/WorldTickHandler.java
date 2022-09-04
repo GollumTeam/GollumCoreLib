@@ -1,6 +1,6 @@
 package com.gollum.core.common.handlers;
 
-import static com.gollum.core.ModGollumCoreLib.log;
+import static com.gollum.core.ModGollumCoreLib.logger;
 
 import java.util.Iterator;
 
@@ -34,7 +34,7 @@ public class WorldTickHandler {
 						BuildingGenerateEvent newEvent = new BuildingGenerateEvent.Post(event.world, thread.getBuilding(), thread.getRotate(), thread.getInitPos());
 						MinecraftForge.EVENT_BUS.post(newEvent);
 						
-						log.debug ("Thread "+thread.getId()+" is finish remove of pile.");
+						logger.debug ("Thread "+thread.getId()+" is finish remove of pile.");
 						continue;
 					}
 					

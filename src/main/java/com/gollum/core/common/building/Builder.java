@@ -1,6 +1,6 @@
 package com.gollum.core.common.building;
 
-import static com.gollum.core.ModGollumCoreLib.log;
+import static com.gollum.core.ModGollumCoreLib.logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +32,18 @@ import net.minecraft.world.WorldServer;
 public class Builder {
 	
 	public static ArrayList<BuilderRunnable> currentBuilds = new ArrayList<BuilderRunnable>();
+	
+	private static Builder _instance = null;
+	
+	public static Builder instance() {
+		if (_instance == null) {
+			_instance = new Builder();
+		}
+		return _instance;
+	}
+	
+	protected Builder() {
+	}
 	
 	public void build(World world, SubBuilding subBuilding, boolean isStaff) {
 		this.build(world, subBuilding.building, EnumRotate.getByIndex((subBuilding.facing.getHorizontalIndex()+2) % 4), new BlockPos (subBuilding.x, subBuilding.y, subBuilding.z), isStaff);
@@ -151,30 +163,35 @@ public class Builder {
 		public void run() {
 			this.run(true);
 		}
-		public void run(boolean reTop) {
+		protected void run(boolean reTop) {
 			
 			try {
 				
-				log.info("Create building width matrix : "+building.name+" "+initPos);
+				logger.info("Create building width matrix : "+building.name+" "+initPos);
 				
 				initPos= initPos.add(0, building.height, 0);
 				if (reTop) {
 					initPos = (initPos.getY() < 3) ? new BlockPos(initPos.getX(), 3, initPos.getZ()) : initPos;
 				}
-				
+
+				logger.debug ("Building placeBlocksStone : "+building.name+" "+initPos+"...");
 				this.placeBlockStone();
-				log.debug ("Building placeBlocks : "+building.name+" "+initPos);
+				logger.debug ("Building placeBlocksStone : "+building.name+" "+initPos+" OK");
+				logger.debug ("Building placeBlocks : "+building.name+" "+initPos+"...");
 				this.placeBlocks();
-				log.debug ("Building placeAfterBlocks : "+building.name+initPos);
+				logger.debug ("Building placeBlocks : "+building.name+" "+initPos+" OK");
+				logger.debug ("Building placeAfterBlocks : "+building.name+initPos+"...");
 				this.placeAfterBlock();
-				log.debug ("Building placeBlockRandom : "+building.name+initPos);
+				logger.debug ("Building placeAfterBlocks : "+building.name+" "+initPos+" OK");
+				logger.debug ("Building placeBlockRandom : "+building.name+initPos);
 				this.placeBlockRandom();
+				logger.debug ("Building placeBlockRandom : "+building.name+" "+initPos+" OK");
 				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			
-			log.info("End create building width matrix : "+building.name+initPos);
+			logger.info("End create building width matrix : "+building.name+initPos);
 			
 			this.unlockWorld();
 		}
@@ -196,7 +213,7 @@ public class Builder {
 					long lantency = System.currentTimeMillis() - this.time;
 					if (lantency > 200) {
 						if (lantency >  500 && this.time != 0) {
-							log.warning("Latency of builder is gretter that 300 milliseconds. lantency = "+lantency);
+							logger.warning("Latency of builder is gretter that 300 milliseconds. lantency = "+lantency);
 						}
 						this.unlockWorld();
 //						log.debug ("Thread wait server");
@@ -230,7 +247,10 @@ public class Builder {
 				return false;
 			}
 			try {
-				return world.setBlockState(pos, state, 0);
+//				this.lock();
+				boolean result = world.setBlockState(pos, state, 0);
+//				this.unlock();
+				return result;
 			} catch (Exception e) {
 				e.printStackTrace();
 				return false;
@@ -244,9 +264,10 @@ public class Builder {
 				// Position réél dans le monde du block
 				BlockPos finalPos = initPos.add(unity3D.x(rotate)*rotate.dx, unity3D.y(rotate), unity3D.z(rotate)*rotate.dz);
 				
-				this.lock();
-				this.setBlock (finalPos, Blocks.STONE.getDefaultState());
-				
+				this.setBlock(finalPos, Blocks.STONE.getDefaultState());
+
+				BlockPos min = null;
+				BlockPos max = null;
 			}
 		}
 		
@@ -258,8 +279,6 @@ public class Builder {
 			
 			Iterator<Unity3D> i = building.unities.iterator();
 			while (i.hasNext()) {
-				
-				this.lock();
 				
 				Unity3D unity3D = i.next();
 				Unity unity = unity3D.unity;
@@ -275,18 +294,17 @@ public class Builder {
 					this.setBlock (finalPos, Blocks.AIR.getDefaultState());
 				} else 
 				if (unity.state != null) {
-//					log.debug("Place after block : "+RegisteredObjects.instance().getRegisterName(unity.state.getBlock()));
-					isPlaced = this.setBlock (finalPos, this.getBlockState(finalPos, unity));
+					this.setBlock (finalPos, this.getBlockState(finalPos, unity));
 				} else {
 					this.setBlock (finalPos, Blocks.AIR.getDefaultState());
 				}
+				placed.add(unity3D);
 				
 				if (isPlaced) {
 					try {
 						this.setContents    (finalPos, unity.contents);
 						this.setExtra       (finalPos, unity, building.maxX(rotate), building.maxZ(rotate));
 						
-						placed.add(unity3D);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -294,10 +312,10 @@ public class Builder {
 				
 				if (System.currentTimeMillis() - this.timeDisplayProgress > 5000) {
 					this.timeDisplayProgress = System.currentTimeMillis();
-					log.message("Building step 1 progress "+building.name+" : " + ( (float)this.placeBlockCount / (float)building.unities.size() * 100.0F  ) + "%");
+					logger.message("Building step 1 progress "+building.name+" : " + ( (float)this.placeBlockCount / (float)building.unities.size() * 100.0F  ) + "%");
 				}
 			}
-			
+
 			for (Unity3D unity3D : placed) {
 				
 				this.lock();
@@ -308,12 +326,19 @@ public class Builder {
 				
 				// Position réél dans le monde du block
 				BlockPos finalPos = initPos.add(unity3D.x(rotate)*rotate.dx, unity3D.y(rotate), unity3D.z(rotate)*rotate.dz);
-				
+
 				this.lock();
+				
 				world.notifyNeighborsOfStateChange(finalPos, unity.state != null ? unity.state.getBlock() : Blocks.AIR, this.isStaff);
-//				if (this.isStaff) {
-//					world.notifyLightSet(finalPos);
-//				}
+				if (this.isStaff) {
+					world.markAndNotifyBlock(
+						finalPos,
+						world.getChunkFromBlockCoords(finalPos),
+						world.getBlockState(finalPos),
+						world.getBlockState(finalPos),
+						3
+					);
+				}
 			}
 		}
 		
@@ -323,6 +348,8 @@ public class Builder {
 			ArrayList<Unity3D> placed = new ArrayList<Unity3D>();
 			
 			for (Unity3D unity3D : building.unities) {
+
+				this.lock();
 				
 				Unity unity = unity3D.unity;
 				
@@ -336,33 +363,30 @@ public class Builder {
 				BlockPos finalPos = initPos.add(unity3D.x(rotate)*rotate.dx, unity3D.y(rotate), unity3D.z(rotate)*rotate.dz);
 				
 				if (unity.state != null) {
-//					log.debug("Place after block : "+RegisteredObjects.instance().getRegisterName(unity.state.getBlock()));
 					isPlaced = this.setBlock (finalPos, this.getBlockState(finalPos, unity));
 				} else {
 					this.setBlock (finalPos, Blocks.AIR.getDefaultState());
 				}
+				placed.add(unity3D);
 				
 				if (isPlaced) {
 					try {
 						this.setContents    (finalPos, unity.contents);
 						this.setExtra       (finalPos, unity, building.maxX(rotate), building.maxZ(rotate));
 						
-						placed.add(unity3D);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
 				}
 				
-				if (System.currentTimeMillis() - this.timeDisplayProgress > 5000) {
+				if (System.currentTimeMillis() - this.timeDisplayProgress > 1000) {
 					this.timeDisplayProgress = System.currentTimeMillis();
-					log.message("Building step 2 progress "+building.name+" : " + ( (float)this.placeBlockCount / (float)building.unities.size() * 100.0F  ) + "%");
+					logger.message("Building step 2 progress "+building.name+" : " + ( (float)this.placeBlockCount / (float)building.unities.size() * 100.0F  ) + "%");
 				}
 			}
 			
 			for (Unity3D unity3D : placed) {
 				
-				this.lock();
-					
 				boolean isPlaced = false;
 				
 				Unity unity = unity3D.unity;
@@ -372,6 +396,15 @@ public class Builder {
 				
 				this.lock();
 				world.notifyNeighborsOfStateChange(finalPos, unity.state != null ? unity.state.getBlock() : Blocks.AIR, this.isStaff);
+				if (this.isStaff) {
+					world.markAndNotifyBlock(
+						finalPos,
+						world.getChunkFromBlockCoords(finalPos),
+						world.getBlockState(finalPos),
+						world.getBlockState(finalPos),
+						3
+					);
+				}
 			}
 		}
 		
@@ -411,6 +444,7 @@ public class Builder {
 		 * @param contents
 		 */
 		private void setContents(BlockPos pos, ArrayList<ArrayList<Content>> contents) {
+			
 			IBlockState state  = world.getBlockState(pos);
 			
 			if (state != null && state.getBlock() instanceof BlockContainer) {

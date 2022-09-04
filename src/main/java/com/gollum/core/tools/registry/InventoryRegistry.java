@@ -52,14 +52,14 @@ public class InventoryRegistry {
 	public static void registerContainer(int guiId, Class<? extends Container> classContainer, int numColumns) {
 		GuiContainerInventoryClass guiContainerInventory = new GuiContainerInventoryClass (classContainer, numColumns);
 		if (instance().guiInventoryList.containsKey(guiId)) {
-			ModGollumCoreLib.log.warning("Override registry Container in id : "+guiId);
+			ModGollumCoreLib.logger.warning("Override registry Container in id : "+guiId);
 		}
 		instance().guiInventoryList.put(guiId, guiContainerInventory);
 	}
 
 	public static void registerGui(int guiId, Class<? extends GuiContainer> classGuiContainer) {
 		if (!instance().guiInventoryList.containsKey(guiId)) {
-			ModGollumCoreLib.log.severe ("Not foud register Container in id : "+guiId);
+			ModGollumCoreLib.logger.severe ("Not foud register Container in id : "+guiId);
 			return;
 		}
 		instance().guiInventoryList.get(guiId).classGuiContainer = classGuiContainer;

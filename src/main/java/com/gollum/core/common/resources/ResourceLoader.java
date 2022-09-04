@@ -46,7 +46,7 @@ public class ResourceLoader {
 			
 			if (modSource.isDirectory()) {
 				
-				ModGollumCoreLib.log.debug ("Read in directory 'assets/"+modId.toLowerCase()+"/"+path + "'.");
+				ModGollumCoreLib.logger.debug ("Read in directory 'assets/"+modId.toLowerCase()+"/"+path + "'.");
 				
 				File file = new File (modSource, "assets/"+modId.toLowerCase()+"/"+path);
 				if (file.exists()) {
@@ -54,8 +54,8 @@ public class ResourceLoader {
 				}
 			} else if (modContainer.getMod() != null) {
 				
-				ModGollumCoreLib.log.debug ("Read in jar file '" + path + "'.");
-				ModGollumCoreLib.log.debug ("Read in jar file '" + modId.toLowerCase()+":"+path + "'.");
+				ModGollumCoreLib.logger.debug ("Read in jar file '" + path + "'.");
+				ModGollumCoreLib.logger.debug ("Read in jar file '" + modId.toLowerCase()+":"+path + "'.");
 				ResourceLocation location = new ResourceLocation(modId.toLowerCase()+":"+path);
 				
 				is = this.getResourcePack(modSource).getInputStream(location);
@@ -93,12 +93,12 @@ public class ResourceLoader {
 				File modSource = modContainer.getSource();
 				
 				if (modSource.isDirectory()) {
-					ModGollumCoreLib.log.debug ("Test in directory '" + "assets/"+modId.toLowerCase()+"/"+path + "'.");
+					ModGollumCoreLib.logger.debug ("Test in directory '" + "assets/"+modId.toLowerCase()+"/"+path + "'.");
 					rtn = new File(modSource, "assets/"+modId.toLowerCase()+"/"+path).exists();
 				} else if (modContainer.getMod() != null) {
 					try {
 						
-						ModGollumCoreLib.log.debug ("Test in jar file '" + modId.toLowerCase()+":"+path + "'.");
+						ModGollumCoreLib.logger.debug ("Test in jar file '" + modId.toLowerCase()+":"+path + "'.");
 						ResourceLocation location = new ResourceLocation(modId.toLowerCase()+":"+path);
 						
 						rtn = this.getResourcePack(modSource).getInputStream(location) != null;

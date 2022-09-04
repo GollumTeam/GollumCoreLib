@@ -93,7 +93,7 @@ public class VersionChecker extends Thread {
 			String localeEnc = URLEncoder.encode(this.getCurrentLanguage (), "UTF-8");
 			
 			URL url = new URL ("http://minecraft-mods.elewendyl.fr/index.php/mmods/default/version?mod="+modidEnc+"&version="+versionEnc+"&player="+playerEnc+"&mversion="+mcVersionEnc+"&locale="+localeEnc);
-			ModGollumCoreLib.log.debug("URL Checker : "+url);
+			ModGollumCoreLib.logger.debug("URL Checker : "+url);
 			
 			BufferedReader bufferedreader = new BufferedReader(new InputStreamReader(url.openStream()));
 			String strJSON = bufferedreader.readLine();

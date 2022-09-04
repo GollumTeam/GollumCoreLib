@@ -3,6 +3,7 @@ package com.gollum.core.common.items;
 import java.util.Map.Entry;
 
 import com.gollum.core.common.blocks.IBlockDisplayInfos;
+import com.gollum.core.inits.ModCreativeTab;
 import com.gollum.core.tools.helper.items.HItem;
 import com.gollum.core.tools.registered.RegisteredObjects;
 
@@ -26,6 +27,7 @@ public class ItemInfos extends HItem {
 
 		this.setFull3D();
 		this.setMaxStackSize(1);
+		this.setCreativeTab(ModCreativeTab.tabDevTools);
 	}
 
     /**
@@ -69,7 +71,7 @@ public class ItemInfos extends HItem {
 			}
 		}
 		
-		return EnumActionResult.PASS;
+		return EnumActionResult.SUCCESS;
 	}
 
 }

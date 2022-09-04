@@ -1,6 +1,6 @@
 package com.gollum.core.tools.registry;
 
-import static com.gollum.core.ModGollumCoreLib.log;
+import static com.gollum.core.ModGollumCoreLib.logger;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -103,7 +103,7 @@ public class ItemRegistry {
 	public void overrideItemsClassField (String fieldName, Item item) {
 		try {
 			Reflection.setFinalStatic(Items.class.getDeclaredField(fieldName), item);
-			log.message("Override Items field fieldName=\""+fieldName+"\" by "+item.getClass().getSimpleName());
+			logger.message("Override Items field fieldName=\""+fieldName+"\" by "+item.getClass().getSimpleName());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -53,7 +53,7 @@ public class ModGollumCoreLib extends GollumMod {
 	/**
 	 * Gestion des logs
 	 */
-	public static Logger log;
+	public static Logger logger;
 	
 	/**
 	 * Gestion de l'i18n
@@ -64,51 +64,52 @@ public class ModGollumCoreLib extends GollumMod {
 	 * La configuration
 	 */
 	public static ConfigGollumCoreLib config;
+
+	@EventHandler @Override public void handler(FMLPreInitializationEvent event)  { super.handler (event); }
+	@EventHandler @Override public void handler(FMLInitializationEvent event)     { super.handler (event); }
+	@EventHandler @Override public void handler(FMLPostInitializationEvent event) { super.handler (event); }
 	
-	@EventHandler public void handler(FMLInitializationEvent event)     { super.handler (event); }
-	@EventHandler public void handler(FMLPostInitializationEvent event) { super.handler (event); }
-	
-	@EventHandler
+//	@EventHandler
 	@Override
 	public void preInit(FMLPreInitializationEvent event) {
 		
 		ModContext.instance ().setCurrent(this);
 		
-		// On charge la config avant le logger mais après 
-		// le push du context
-		// Le logger à besoin de la config
-		// Tandis que le loader de config est indépendant
-		
-		// Charge la configuration
-		config = (ConfigGollumCoreLib) new ConfigGollumCoreLib().loadConfig();
-		
-		// Creation du logger
-		log = new Logger();
+//		// On charge la config avant le logger mais après 
+//		// le push du context
+//		// Le logger à besoin de la config
+//		// Tandis que le loader de config est indépendant
+//		
+//		// Charge la configuration
+//		config = (ConfigGollumCoreLib) new ConfigGollumCoreLib().loadConfig();
+//		
+//		// Creation du logger
+//		this.initLog();
 		
 		// Gestion de la nivaeu de log
 		Logger.setLevelDisplay(config.level);
-		
-		// Creation du logger
-		i18n = new I18n();
-
-		// Create tab creative
-		ModCreativeTab.create();
-		
-		// Set gollum gui config
-		initGuiConfig();
-		
+//		
+//		// Creation du logger
+//		this.initI18n();
+//		
+//		 Set gollum gui config
+//		this.initGuiConfig();
+//		
 		// Affecte la config
 		VersionChecker.setDisplay(config.versionChecker);
 		
 		// Creation du checker de version
 		new VersionChecker();
-//		
+
+		// Create tab creative
+		ModCreativeTab.create();
+		
 		// Initialisation des blocks
-//		ModBlocks.init ();
-//		
-//		// Initialisation des items
-//		ModItems.init ();
-//		
+		ModBlocks.init ();
+		
+		// Initialisation des items
+		ModItems.init ();
+		
 //		BlockRegistry.instance().registerAll();
 //		ItemRegistry.instance().registerAll();
 		

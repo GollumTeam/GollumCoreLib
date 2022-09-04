@@ -1,8 +1,8 @@
 itemGroup.BuildingStaff=Building Staff
 itemGroup.GollumDevTools=Developer tools
 
-item.Infos.name=Magnifying glass infos
-item.Wrench.name=Wrench
+item.infos.name=Magnifying glass infos
+item.wrench.name=Wrench
 
 gollumcorelib.Building staff=Building staff
 

@@ -44,7 +44,7 @@ public class HBlockPistonBase extends BlockPistonBase implements IBlockHelper {
 	
 	public HBlockPistonBase(String registerName, boolean isSticky)  {
 		super(isSticky);
-		ModGollumCoreLib.log.info ("Create block registerName : " + registerName);
+		ModGollumCoreLib.logger.info ("Create block registerName : " + registerName);
 		this.helper = new BlockHelper(this, registerName);
 		
 		this.isStickyPiston = isSticky;

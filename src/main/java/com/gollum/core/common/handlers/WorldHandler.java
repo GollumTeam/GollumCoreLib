@@ -1,6 +1,6 @@
 package com.gollum.core.common.handlers;
 
-import static com.gollum.core.ModGollumCoreLib.log;
+import static com.gollum.core.ModGollumCoreLib.logger;
 
 import com.gollum.core.common.building.Builder;
 import com.gollum.core.common.building.Builder.BuilderRunnable;
@@ -38,7 +38,7 @@ public class WorldHandler {
 			for (BuilderRunnable thread : Builder.currentBuilds) {
 				if (thread.isAlive()) {
 					try {
-						log.message("Wait finish building");
+						logger.message("Wait finish building");
 						
 						while (thread.isAlive()) {
 							thread.dontWaitWorld();
@@ -57,10 +57,10 @@ public class WorldHandler {
 				this.mustBeSave = true;
 			}
 			if (this.mustBeSave) {
-				log.message("Resave after building...");
+				logger.message("Resave after building...");
 				try {
 					((WorldServer) event.getWorld()).saveAllChunks(true, (IProgressUpdate)null);
-					log.message("Resave after building : DONE");
+					logger.message("Resave after building : DONE");
 				} catch (Exception e) {
 				}
 			}
@@ -68,7 +68,7 @@ public class WorldHandler {
 
 			this.mustBeSave = false;
 			
-			log.debug("=========== UnloadEvent ===========");
+			logger.debug("=========== UnloadEvent ===========");
 		}
 	}
 	

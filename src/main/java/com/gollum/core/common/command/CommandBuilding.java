@@ -55,11 +55,11 @@ public class CommandBuilding extends CommandBase {
 					last = Integer.parseInt(arguments[1]);
 				}
 				
-				SubBuilding subBuilding = ModItems.itemBuilding.getLastBuild (last);
+				SubBuilding subBuilding = ModItems.BUILDING.getLastBuild (last);
 				sender.sendMessage(new TextComponentString("Rebuild last building "+subBuilding.building.modId+":"+subBuilding.building.name));
 				
 				subBuilding.building = new BuildingParser().parse(subBuilding.building.name, subBuilding.building.modId);
-				new Builder().build(sender.getEntityWorld(), subBuilding, true);
+				Builder.instance().build(sender.getEntityWorld(), subBuilding, true);
 				
 			} catch (Exception e) {
 				e.printStackTrace();

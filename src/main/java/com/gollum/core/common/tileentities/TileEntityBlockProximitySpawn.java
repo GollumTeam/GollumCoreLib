@@ -1,6 +1,6 @@
 package com.gollum.core.common.tileentities;
 
-import static com.gollum.core.ModGollumCoreLib.log;
+import static com.gollum.core.ModGollumCoreLib.logger;
 
 import com.gollum.core.tools.registered.RegisteredObjects;
 
@@ -43,7 +43,7 @@ public class TileEntityBlockProximitySpawn extends TileEntity implements ITickab
 			
 			// L'entity n'existe pas
 			if (entity == null) {
-				log.warning("This mob "+this.mobID+" isn't  register");
+				logger.warning("This mob "+this.mobID+" isn't  register");
 				this.world.setBlockToAir(this.pos);
 				return;
 			}

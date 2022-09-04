@@ -1,6 +1,6 @@
 package com.gollum.core.client.renderer;
 
-import static com.gollum.core.ModGollumCoreLib.log;
+import static com.gollum.core.ModGollumCoreLib.logger;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -35,7 +35,7 @@ public class GCLRenderItem extends RenderItem {
 	
 	public static void override () {
 		if (instance == null) {
-			log.message("Override RenderItem...");
+			logger.message("Override RenderItem...");
 			instance = new GCLRenderItem(Minecraft.getMinecraft().getRenderItem());
 			
 			try {
@@ -43,11 +43,11 @@ public class GCLRenderItem extends RenderItem {
 					f.setAccessible(true);
 					if (f.getType() == RenderItem.class) {
 						f.set(Minecraft.getMinecraft(), instance);
-						log.message("Override RenderItem OK");
+						logger.message("Override RenderItem OK");
 						return;
 					}
 				}
-				log.severe("Override RenderItem KO: "+RenderItem.class.getCanonicalName()+" not found in "+Minecraft.class.getCanonicalName());
+				logger.severe("Override RenderItem KO: "+RenderItem.class.getCanonicalName()+" not found in "+Minecraft.class.getCanonicalName());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

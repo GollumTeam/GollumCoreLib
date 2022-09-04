@@ -1,6 +1,6 @@
 package com.gollum.core.common.worldgenerator;
 
-import static com.gollum.core.ModGollumCoreLib.log;
+import static com.gollum.core.ModGollumCoreLib.logger;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,8 +30,6 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 	
 	private final static int ARROUND_CHUNK_NOBUILDING = 6;
 	private HashMap<Integer, ArrayList<String>> chunkHasABuilding = new HashMap<Integer, ArrayList<String>>();
-	
-	private Builder builder = new Builder();
 	
 	/**
 	 * Spawn global de tous les batiment de cette instance de worldGenerator
@@ -259,13 +257,13 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 									if (event.isCanceled()) {
 										return false;
 									}
-									builder.build(event.world, event.building, event.rotate, event.position);
+									Builder.instance().build(event.world, event.building, event.rotate, event.position);
 									
 									return true;
 								}
 							}
 							if (initY > dimentionsInfos.spawnMin) {
-								log.debug ("No block found for building "+building.name);
+								logger.debug ("No block found for building "+building.name);
 							}
 						}
 					}

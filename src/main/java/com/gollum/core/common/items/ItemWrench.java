@@ -1,5 +1,6 @@
 package com.gollum.core.common.items;
 
+import com.gollum.core.inits.ModCreativeTab;
 import com.gollum.core.tools.helper.items.HItem;
 
 import net.minecraft.block.Block;
@@ -20,6 +21,7 @@ public class ItemWrench extends HItem {
 		this.setFull3D();
 		this.setMaxStackSize(1);
 		this.setHarvestLevel("wrench", 0);
+		this.setCreativeTab(ModCreativeTab.tabDevTools);
 	}
 
 	/**

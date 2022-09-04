@@ -114,10 +114,10 @@ public class BuildingConfigType extends ConfigJsonType implements IConfigMerge {
 					if (b != null) {
 						dimention.blocksSpawn.add(b);
 					} else {
-						ModGollumCoreLib.log.severe("Error block not found : "+key);
+						ModGollumCoreLib.logger.severe("Error block not found : "+key);
 					}
 				} catch (Exception e) {
-					ModGollumCoreLib.log.severe("Error block not found : "+key);
+					ModGollumCoreLib.logger.severe("Error block not found : "+key);
 				}
 			}
 			
@@ -129,10 +129,10 @@ public class BuildingConfigType extends ConfigJsonType implements IConfigMerge {
 					if (b != null) {
 						dimention.biomes.add(b);
 					} else {
-						ModGollumCoreLib.log.severe("Error biome not found : "+key);
+						ModGollumCoreLib.logger.severe("Error biome not found : "+key);
 					}
 				} catch (Exception e) {
-					ModGollumCoreLib.log.severe("Error biome not found : "+key);
+					ModGollumCoreLib.logger.severe("Error biome not found : "+key);
 				}
 			}
 			

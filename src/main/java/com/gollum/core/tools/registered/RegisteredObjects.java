@@ -83,7 +83,7 @@ public class RegisteredObjects {
 		} catch (Exception e) {
 		}
 		
-		ModGollumCoreLib.log.warning("Block not found : "+registerName);
+		ModGollumCoreLib.logger.warning("Block not found : "+registerName);
 		
 		return null;
 	}
@@ -102,7 +102,7 @@ public class RegisteredObjects {
 		} catch (Exception e) {
 		}
 		
-		ModGollumCoreLib.log.warning("Item not found : "+registerName);
+		ModGollumCoreLib.logger.warning("Item not found : "+registerName);
 		
 		return null;
 	}
@@ -120,7 +120,7 @@ public class RegisteredObjects {
 		} catch (Exception e) {
 		}
 		
-		ModGollumCoreLib.log.warning("Biome not found : "+registerName);
+		ModGollumCoreLib.logger.warning("Biome not found : "+registerName);
 		
 		return null;
 	}
@@ -174,7 +174,7 @@ public class RegisteredObjects {
 			}
 		} catch (Exception e) {
 		}
-		ModGollumCoreLib.log.warning("Sound not found : "+sound);
+		ModGollumCoreLib.logger.warning("Sound not found : "+sound);
 		
 		return null;
 	}
@@ -191,7 +191,7 @@ public class RegisteredObjects {
 			}
 		}
 		
-		ModGollumCoreLib.log.warning("Sound not found : "+sound);
+		ModGollumCoreLib.logger.warning("Sound not found : "+sound);
 		return null;
 	}
 	

@@ -1,6 +1,6 @@
 package com.gollum.core.common.config;
 
-import static com.gollum.core.ModGollumCoreLib.log;
+import static com.gollum.core.ModGollumCoreLib.logger;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -95,7 +95,7 @@ public class ConfigLoader {
 					Object value = values.get(name);
 					try {
 						f.set(this.config, value);
-						log.info("Save config \""+name+"\""+value.toString());
+						logger.info("Save config \""+name+"\""+value.toString());
 					} catch (Exception e) {
 						e.printStackTrace();
 					}

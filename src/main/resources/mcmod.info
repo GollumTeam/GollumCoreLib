@@ -5,7 +5,7 @@
     "description": "Framework for Minecraft development mod.",
     "version": "${version}",
     "mcversion": "${mcversion}",
-    "url": "",
+    "url": "http://www.smeagol-mods.com",
     "authorList": [ "SmeagolWorms4" ]
 }
 ]

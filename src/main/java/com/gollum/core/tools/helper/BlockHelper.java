@@ -306,7 +306,7 @@ public class BlockHelper implements IBlockHelper {
 	}
 	
 	public void registerRender (int metadata, String renderKey, boolean trace) {
-		if (trace) ModGollumCoreLib.log.message("Auto register render: "+this.getRegisterName()+":"+metadata+":"+":"+renderKey);
+		if (trace) ModGollumCoreLib.logger.message("Auto register render: "+this.getRegisterName()+":"+metadata+":"+":"+renderKey);
 		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(this.getBlockItem(), metadata, this.getModelResourceLocation(renderKey));
 	}
 	
@@ -381,9 +381,10 @@ public class BlockHelper implements IBlockHelper {
 
 	@Override
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-		IItemHelper item = (IItemHelper)((IBlockHelper)this.parent).getBlockItem();
-		int matadata = item.getEnabledMetadata(this.parent.getMetaFromState(world.getBlockState(pos)));
-		return new ItemStack(this.parent, 1, matadata);
+		return null;
+//		IItemHelper item = (IItemHelper)((IBlockHelper)this.parent).getBlockItem();
+//		int matadata = item.getEnabledMetadata(this.parent.getMetaFromState(world.getBlockState(pos)));
+//		return new ItemStack(this.parent, 1, matadata);
 	}
 	
 	////////////

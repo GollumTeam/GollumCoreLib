@@ -7,19 +7,15 @@ import com.gollum.core.common.items.ItemWrench;
 
 public class ModItems {
 
-	public static ItemBuilding itemBuilding;
-	public static ItemWrench   itemWrench;
-	public static ItemInfos    itemInfos;
+	public static ItemBuilding BUILDING;
+	public static ItemWrench   WRENCH;
+	public static ItemInfos    INFOS;
 	
 	public static void init() {
-		ModItems.itemBuilding = new ItemBuilding("Building");
-		ModItems.itemWrench   = new ItemWrench  ("Wrench");
-		ModItems.itemInfos    = new ItemInfos   ("Infos");
-		
 		if (ModGollumCoreLib.config.devTools) {
-			ModItems.itemBuilding.setCreativeTab(ModCreativeTab.tabBuildingStaff);
-			ModItems.itemWrench  .setCreativeTab(ModCreativeTab.tabDevTools);
-			ModItems.itemInfos   .setCreativeTab(ModCreativeTab.tabDevTools);
+			ModItems.BUILDING = new ItemBuilding("building");
+			ModItems.WRENCH   = new ItemWrench  ("wrench");
+			ModItems.INFOS    = new ItemInfos   ("infos");
 		}
 	}
 }

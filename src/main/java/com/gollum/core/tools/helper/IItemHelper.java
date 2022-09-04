@@ -18,6 +18,7 @@ public interface IItemHelper {
 	 * Enregistrement du item. Appelé a la fin du postInit
 	 */
 	public void register ();
+
 	
 	/**
 	 * Enregistrement du rendu de l'item. Appelé a la fin de l'Init
@@ -25,16 +26,11 @@ public interface IItemHelper {
 	@SideOnly(Side.CLIENT)
 	public void registerRender ();
 	
-	/**
-	 * Nom d'enregistrement du mod
-	 */
-	public String getRegisterName();
-	
 	public void getSubNames(Map<Integer, String> list);
 	
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items);
 
-	int getEnabledMetadata(int dammage);
-	
-	public String getUnlocalizedName(ItemStack stack);
+//	int getEnabledMetadata(int dammage);
+//	
+//	public String getUnlocalizedName(ItemStack stack);
 }

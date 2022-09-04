@@ -32,45 +32,40 @@ public class HItemBlock extends ItemBlock implements IItemHelper {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerRender() {
-		// Register by block
-	}
-
-	@Override
-	public String getUnlocalizedName(ItemStack stack) {
-		return helper.getUnlocalizedName(stack);
-	}
-
-	@Override
-	public int getEnabledMetadata (int dammage) {
-		return helper.getEnabledMetadata(dammage);
-	}
-
-	@Override
 	public ItemHelper getGollumHelper() {
 		return this.helper;
 	}
 
 	@Override
-	public String getRegisterName() {
-		return helper.getRegisterName();
+	@SideOnly(Side.CLIENT)
+	public void registerRender() {
+		// Register by block
 	}
+//
+//	@Override
+//	public String getUnlocalizedName(ItemStack stack) {
+//		return helper.getUnlocalizedName(stack);
+//	}
+//
+//	@Override
+//	public int getEnabledMetadata (int dammage) {
+//		return helper.getEnabledMetadata(dammage);
+//	}
 
 	@Override
 	public void getSubNames(Map<Integer, String> list) {
 		((IBlockHelper)block).getSubNames(list);
 	}
 
-	@Override
-	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-		super.getSubItems(tab, items);
-	}
-	
-	/**
-	 * Returns the metadata of the block which this Item (ItemBlock) can place
-	 */
-	public int getMetadata(int metadata) {
-		return metadata;
-	}
+//	@Override
+//	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+//		super.getSubItems(tab, items);
+//	}
+//	
+//	/**
+//	 * Returns the metadata of the block which this Item (ItemBlock) can place
+//	 */
+//	public int getMetadata(int metadata) {
+//		return metadata;
+//	}
 }

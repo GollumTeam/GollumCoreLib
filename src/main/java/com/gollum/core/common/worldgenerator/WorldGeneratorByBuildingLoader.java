@@ -30,7 +30,7 @@ public class WorldGeneratorByBuildingLoader {
 		ModBuildingParser parser = new ModBuildingParser ();
 		
 		for (String modId : Loader.instance().getIndexedModList().keySet()) {
-			ModGollumCoreLib.log.info("Search buildings in mod : "+modId);
+			ModGollumCoreLib.logger.info("Search buildings in mod : "+modId);
 			
 			BuildingConfigType config = parser.parse (modId);
 			if (config != null) {
@@ -66,12 +66,12 @@ public class WorldGeneratorByBuildingLoader {
 							Integer                                     dimentionId     = entryDimentions.getKey();
 							BuildingConfigType.Group.Building.Dimention configDimention = entryDimentions.getValue();
 							
-							ModGollumCoreLib.log.info("Register building : modId="+modId+", idGroup="+idGroup+", buildingName="+buildingName);
+							ModGollumCoreLib.logger.info("Register building : modId="+modId+", idGroup="+idGroup+", buildingName="+buildingName);
 							
-							ModGollumCoreLib.log.info(" - For dimention : "+dimentionId);
-							ModGollumCoreLib.log.info(" -     spawnRate : "+configDimention.spawnRate);
-							ModGollumCoreLib.log.info(" -     spawnMin  : "+configDimention.spawnMin);
-							ModGollumCoreLib.log.info(" -     spawnMax  : "+configDimention.spawnMax);
+							ModGollumCoreLib.logger.info(" - For dimention : "+dimentionId);
+							ModGollumCoreLib.logger.info(" -     spawnRate : "+configDimention.spawnRate);
+							ModGollumCoreLib.logger.info(" -     spawnMin  : "+configDimention.spawnMin);
+							ModGollumCoreLib.logger.info(" -     spawnMax  : "+configDimention.spawnMax);
 							
 							building.dimentionsInfos.put (dimentionId, new Building.DimentionSpawnInfos(configDimention.spawnRate, configDimention.spawnMin, configDimention.spawnMax, configDimention.blocksSpawn, configDimention.biomes));
 							

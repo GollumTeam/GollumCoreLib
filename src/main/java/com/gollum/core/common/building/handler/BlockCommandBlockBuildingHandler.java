@@ -42,7 +42,7 @@ public class BlockCommandBlockBuildingHandler extends BuildingBlockHandler {
 			command = command.replace("{$x}", ""+(Builder.getRotatedX(varX, varZ, rotate, maxX, maxZ)*rotate.dx + initPos.getX()));
 			command = command.replace("{$y}", ""+ (varY + initPos.getY()));
 			command = command.replace("{$z}", ""+(Builder.getRotatedZ(varX, varZ, rotate, maxX, maxZ)*rotate.dz + initPos.getZ()));
-			ModGollumCoreLib.log.info("command : "+command);
+			ModGollumCoreLib.logger.info("command : "+command);
 			
 			((TileEntityCommandBlock) te).getCommandBlockLogic().setCommand(command);
 				

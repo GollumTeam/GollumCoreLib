@@ -77,7 +77,7 @@ public class BuildingParser {
 		
 		this.modID = modId;
 		
-		ModGollumCoreLib.log.info ("Parse '"+name+"' building in "+modId);
+		ModGollumCoreLib.logger.info ("Parse '"+name+"' building in "+modId);
 		Building building = new Building (name, modId);
 		
 		// Liste de la correspondance couleur block
@@ -104,7 +104,7 @@ public class BuildingParser {
 			} catch (Exception e) {
 			}
 
-			ModGollumCoreLib.log.debug ("Color index  building '"+name+"' load...");
+			ModGollumCoreLib.logger.debug ("Color index  building '"+name+"' load...");
 			
 			//////////////////////////////////////////////////////////////
 			//                                                          //
@@ -132,7 +132,7 @@ public class BuildingParser {
 				colorBlockIndex.put(color, unity);
 			}
 			
-			ModGollumCoreLib.log.info ("Color index  building '"+name+"' loaded");
+			ModGollumCoreLib.logger.info ("Color index  building '"+name+"' loaded");
 			
 			
 			
@@ -287,14 +287,14 @@ public class BuildingParser {
 			} catch (Exception e) {
 			}
 			
-			ModGollumCoreLib.log.info ("Matrice building '"+name+"' loaded");
+			ModGollumCoreLib.logger.info ("Matrice building '"+name+"' loaded");
 			
 			
 		} catch (IOException e) {
-			ModGollumCoreLib.log.severe ("Error to read resource in jar for building :'"+name+"'");
+			ModGollumCoreLib.logger.severe ("Error to read resource in jar for building :'"+name+"'");
 			return null;
 		} catch (InvalidSyntaxException e) {
-			ModGollumCoreLib.log.severe ("Invalid json in jar for building :'"+name+"'");
+			ModGollumCoreLib.logger.severe ("Invalid json in jar for building :'"+name+"'");
 			return null;
 		}
 		

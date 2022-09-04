@@ -150,9 +150,9 @@ public abstract class GollumMod {
 		}
 	}
 	
-	protected void initLog() {
+	protected void initLogguer() {
 		try {
-			Field fieldLog = this.getClass().getDeclaredField("log");
+			Field fieldLog = this.getClass().getDeclaredField("logger");
 			if (fieldLog != null) {
 				fieldLog.set(null, new Logger());
 			}
@@ -207,7 +207,7 @@ public abstract class GollumMod {
 		ModContext.instance ().setCurrent(this);
 		
 		// Creation du logger
-		this.initLog();
+		this.initLogguer();
 
 		// Creation de l'i18n
 		this.initI18n();
@@ -219,9 +219,13 @@ public abstract class GollumMod {
 		this.initConfig();
 		
 		this.preInit(event);
-		
+
+		// Enregistre les block et item
 		BlockRegistry.instance().registerAll();
 		ItemRegistry .instance().registerAll();
+		
+		// Enregistre les rendus
+		ModGollumCoreLib.proxy.registerObjectRenders();
 		
 		ModContext.instance ().pop();
 	}
@@ -231,9 +235,6 @@ public abstract class GollumMod {
 		ModContext.instance ().setCurrent(this);
 		
 		this.init(event);
-		
-		// Enregistre les rendus
-		ModGollumCoreLib.proxy.registerObjectRenders();
 		
 		this.initGuiCommon ();
 		if (ModGollumCoreLib.proxy.isRemote()) {

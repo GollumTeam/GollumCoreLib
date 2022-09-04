@@ -1,8 +1,8 @@
 itemGroup.BuildingStaff=Baguettes de construction
 itemGroup.GollumDevTools=Outils de développement
 
-item.Infos.name=Loupe d'infos
-item.Wrench.name=Clef anglaise
+item.infos.name=Loupe d'infos
+item.wrench.name=Clef anglaise
 
 gollumcorelib.Building staff=Baguette de construction
 
