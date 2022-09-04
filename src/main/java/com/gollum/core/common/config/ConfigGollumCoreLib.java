@@ -127,15 +127,9 @@ public class ConfigGollumCoreLib extends Config {
 	public String mod = ModGollumCoreLib.MODID;
 	
 	@ConfigProp(group="Test", dev=true, type=Type.BIOME)
-	public int biomeId = 0;
+	public String biomeName = Biomes.DESERT.getRegistryName().toString();
 	
-	@ConfigProp(group="Test", dev=true, type=Type.BIOME, newValue="5")
-	public int arBiomeId[] = new int[] { 0, 2 , 3 };
-	
-	@ConfigProp(group="Test", dev=true, type=Type.BIOME)
-	public String biomeName = Biomes.DESERT.getBiomeName().toString();
-	
-	@ConfigProp(group="Test", dev=true, type=Type.BIOME, newValue="Birch Forest")
+	@ConfigProp(group="Test", dev=true, type=Type.BIOME, newValue="minecraft:desert_hills")
 	public String arBiomeName[] = new String[] { Biomes.JUNGLE_HILLS.getRegistryName().toString(), Biomes.DESERT.getRegistryName().toString() };
 	
 	@ConfigProp(group="Test", dev=true, type=Type.MOD, newValue=ModGollumCoreLib.MODID)

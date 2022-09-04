@@ -5,7 +5,7 @@ import java.lang.reflect.Field;
 import java.util.Map;
 
 import com.gollum.core.ModGollumCoreLib;
-//import com.gollum.core.client.gui.config.ConfigModGuiFactory;
+import com.gollum.core.client.gui.config.ConfigModGuiFactory;
 import com.gollum.core.common.config.Config;
 import com.gollum.core.common.context.ModContext;
 import com.gollum.core.common.i18n.I18n;
@@ -135,17 +135,17 @@ public abstract class GollumMod {
 		if (container instanceof FMLModContainer) {
 			
 			// Set gollum gui config
-//			try {
-//				Field f = (container.getClass().getDeclaredField("descriptor"));
-//				f.setAccessible(true);
-//				Map<String, Object> descriptor = (Map<String, Object>)f.get(container);
-//				if (!descriptor.containsKey("guiFactory")) {
-//					descriptor.put ("guiFactory", ConfigModGuiFactory.class.getName());
-//				}
-//				
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
+			try {
+				Field f = (container.getClass().getDeclaredField("descriptor"));
+				f.setAccessible(true);
+				Map<String, Object> descriptor = (Map<String, Object>)f.get(container);
+				if (!descriptor.containsKey("guiFactory")) {
+					descriptor.put ("guiFactory", ConfigModGuiFactory.class.getName());
+				}
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			
 		}
 	}

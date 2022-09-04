@@ -60,13 +60,21 @@ public class RegisteredObjects {
 		
 		return list;
 	}
-	
+
 	public TreeMap<String, Biome> getBiomesList() {
 		TreeMap<String, Biome> biomes = new TreeMap<String, Biome>();
 		for (Biome biome: Biome.REGISTRY) {
 			biomes.put(biome.getRegistryName().toString(), biome);
 		}
 		return biomes;
+	}
+
+	public TreeMap<String, SoundEvent> getSoundEventsList() {
+		TreeMap<String, SoundEvent> sounds = new TreeMap<String, SoundEvent>();
+		for (SoundEvent sound: SoundEvent.REGISTRY) {
+			sounds.put(sound.getRegistryName().toString(), sound);
+		}
+		return sounds;
 	}
 	
 	public Block getBlock (String registerName) {
@@ -106,7 +114,7 @@ public class RegisteredObjects {
 		
 		return null;
 	}
-	
+
 	public Biome getBiome(String registerName) {
 		try {
 			if (!registerName.contains(":")) {
@@ -121,6 +129,24 @@ public class RegisteredObjects {
 		}
 		
 		ModGollumCoreLib.logger.warning("Biome not found : "+registerName);
+		
+		return null;
+	}
+
+	public SoundEvent getSoundEvent(String registerName) {
+		try {
+			if (!registerName.contains(":")) {
+				registerName = "minecraft:" + registerName;
+			}
+			for (ResourceLocation key: SoundEvent.REGISTRY.getKeys()) {
+				if (key.toString().equals(registerName)) {
+					return SoundEvent.REGISTRY.getObject(key);
+				}
+			}
+		} catch (Exception e) {
+		}
+		
+		ModGollumCoreLib.logger.warning("SoundEvent not found : "+registerName);
 		
 		return null;
 	}
@@ -141,58 +167,4 @@ public class RegisteredObjects {
 		return sound.getRegistryName().toString();
 	}
 
-	
-	public TreeSet<String> getAllSound() {
-		TreeSet<String> sounds = new TreeSet<String>();
-		
-		for (ResourceLocation key: SoundEvent.REGISTRY.getKeys()) {
-			SoundEvent soundEvent = SoundEvent.REGISTRY.getObject(key);
-			sounds.add(key.toString());
-		}
-		return sounds;
-	}
-	
-	public TreeMap<SoundCategory, TreeSet<String>> getAllSoundByCategories() {
-		TreeMap<SoundCategory, TreeSet<String>> sounds = new TreeMap<SoundCategory, TreeSet<String>>();
-		
-		for (ResourceLocation key: SoundEvent.REGISTRY.getKeys()) {
-			SoundEvent soundEvent = SoundEvent.REGISTRY.getObject(key);
-			SoundCategory category = SoundCategory.getByName(key.toString());
-			if (!sounds.containsKey(category)) {
-				sounds.put(category, new TreeSet<String>());
-			}
-			sounds.get(category).add(key.toString());
-		}
-		return sounds;
-	}
-	
-	public SoundCategory getSoundCategoryBySound(String sound) {
-		try {
-			SoundCategory category = SoundCategory.getByName(sound);
-			if (category != null) {
-				return category;
-			}
-		} catch (Exception e) {
-		}
-		ModGollumCoreLib.logger.warning("Sound not found : "+sound);
-		
-		return null;
-	}
-	
-	public SoundCategory getSoundCategoryBySound(SoundEvent sound) {
-		return this.getSoundCategoryBySound(sound.getRegistryName().toString());
-	}
-	
-	public SoundEvent getSoundEvent(String sound) {
-
-		for (ResourceLocation key: SoundEvent.REGISTRY.getKeys()) {
-			if (key.toString().equals(sound)) {
-				return SoundEvent.REGISTRY.getObject(key);
-			}
-		}
-		
-		ModGollumCoreLib.logger.warning("Sound not found : "+sound);
-		return null;
-	}
-	
 }

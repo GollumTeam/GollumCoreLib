@@ -75,26 +75,9 @@ public class ModGollumCoreLib extends GollumMod {
 		
 		ModContext.instance ().setCurrent(this);
 		
-//		// On charge la config avant le logger mais après 
-//		// le push du context
-//		// Le logger à besoin de la config
-//		// Tandis que le loader de config est indépendant
-//		
-//		// Charge la configuration
-//		config = (ConfigGollumCoreLib) new ConfigGollumCoreLib().loadConfig();
-//		
-//		// Creation du logger
-//		this.initLog();
-		
 		// Gestion de la nivaeu de log
 		Logger.setLevelDisplay(config.level);
-//		
-//		// Creation du logger
-//		this.initI18n();
-//		
-//		 Set gollum gui config
-//		this.initGuiConfig();
-//		
+		
 		// Affecte la config
 		VersionChecker.setDisplay(config.versionChecker);
 		
@@ -109,9 +92,6 @@ public class ModGollumCoreLib extends GollumMod {
 		
 		// Initialisation des items
 		ModItems.init ();
-		
-//		BlockRegistry.instance().registerAll();
-//		ItemRegistry.instance().registerAll();
 		
 	}
 	

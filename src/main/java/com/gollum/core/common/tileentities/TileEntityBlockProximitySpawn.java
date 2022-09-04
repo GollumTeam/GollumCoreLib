@@ -11,6 +11,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 
 public class TileEntityBlockProximitySpawn extends TileEntity implements ITickable {
 	
@@ -60,14 +61,14 @@ public class TileEntityBlockProximitySpawn extends TileEntity implements ITickab
 			if (entityLiving == null || entityLiving.getCanSpawnHere()) {
 				
 				this.world.playSound(
-					this.pos.getX()+0.5f,                                              // x           
-					this.pos.getY()+0.5f,                                              // y           
-					this.pos.getZ()+0.5f,                                              // z           
-					RegisteredObjects.instance().getSoundEvent("dig.stone"),           // sound       
-					RegisteredObjects.instance().getSoundCategoryBySound("dig.stone"), // category    
-					0.5F,                                                              // volume             
-					this.world.rand.nextFloat() * 0.25F + 0.6F,                        // pitch
-					false                                                              // distance delay
+					this.pos.getX()+0.5f,                                    // x           
+					this.pos.getY()+0.5f,                                    // y           
+					this.pos.getZ()+0.5f,                                    // z           
+					RegisteredObjects.instance().getSoundEvent("dig.stone"), // sound       
+					SoundCategory.BLOCKS,                                    // category    
+					0.5F,                                                    // volume             
+					this.world.rand.nextFloat() * 0.25F + 0.6F,              // pitch
+					false                                                    // distance delay
 				);
 				
 				if (entityLiving != null) {
