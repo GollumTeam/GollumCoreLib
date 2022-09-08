@@ -438,9 +438,10 @@ public class BuildingParser {
 				Content content = new Content ();
 
 				content.item     = item;
-				content.min      = 1;  try { content.min      = Integer.parseInt (el.getNumberValue ("min"));      } catch (Exception e) { }
-				content.max      = 1;  try { content.max      = Integer.parseInt (el.getNumberValue ("max"));      } catch (Exception e) { }
-				content.metadata = -1; try { content.metadata = Integer.parseInt (el.getNumberValue ("metadata")); } catch (Exception e) { }
+				content.min      = 1;    try { content.min      = Integer.parseInt (el.getNumberValue ("min"));      } catch (Exception e) { }
+				content.max      = 1;    try { content.max      = Integer.parseInt (el.getNumberValue ("max"));      } catch (Exception e) { }
+				content.metadata = -1;   try { content.metadata = Integer.parseInt (el.getNumberValue ("metadata")); } catch (Exception e) { }
+				content.type     = null; try { content.type     = el.getStringValue ("type");                        } catch (Exception e) { }
 				
 				contentsGroup.add(content);
 			

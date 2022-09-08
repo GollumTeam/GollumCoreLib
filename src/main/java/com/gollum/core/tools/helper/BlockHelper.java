@@ -391,10 +391,9 @@ public class BlockHelper implements IBlockHelper {
 
 	@Override
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-		return null;
-//		IItemHelper item = (IItemHelper)((IBlockHelper)this.parent).getBlockItem();
-//		int matadata = item.getEnabledMetadata(this.parent.getMetaFromState(world.getBlockState(pos)));
-//		return new ItemStack(this.parent, 1, matadata);
+		IItemHelper item = (IItemHelper)((IBlockHelper)this.parent).getBlockItem();
+		int matadata = item.getEnabledMetadata(this.parent.getMetaFromState(world.getBlockState(pos)));
+		return new ItemStack(this.parent, 1, matadata);
 	}
 	
 	////////////

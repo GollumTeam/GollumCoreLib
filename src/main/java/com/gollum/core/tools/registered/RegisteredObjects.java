@@ -16,6 +16,7 @@ import net.minecraft.client.audio.SoundHandler;
 //import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.audio.SoundRegistry;
 import net.minecraft.item.Item;
+import net.minecraft.potion.PotionType;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -75,6 +76,14 @@ public class RegisteredObjects {
 			sounds.put(sound.getRegistryName().toString(), sound);
 		}
 		return sounds;
+	}
+
+	public TreeMap<String, PotionType> getPotionTypeList() {
+		TreeMap<String, PotionType> potions = new TreeMap<String, PotionType>();
+		for (PotionType potion: PotionType.REGISTRY) {
+			potions.put(potion.getRegistryName().toString(), potion);
+		}
+		return potions;
 	}
 	
 	public Block getBlock (String registerName) {
@@ -150,6 +159,24 @@ public class RegisteredObjects {
 		
 		return null;
 	}
+
+	public PotionType getPotionType(String registerName) {
+		try {
+			if (!registerName.contains(":")) {
+				registerName = "minecraft:" + registerName;
+			}
+			for (ResourceLocation key: PotionType.REGISTRY.getKeys()) {
+				if (key.toString().equals(registerName)) {
+					return PotionType.REGISTRY.getObject(key);
+				}
+			}
+		} catch (Exception e) {
+		}
+		
+		ModGollumCoreLib.logger.warning("PotionType not found : "+registerName);
+		
+		return null;
+	}
 	
 	public String getRegisterName (Block block) {
 		return block.getRegistryName().toString();
@@ -165,6 +192,10 @@ public class RegisteredObjects {
 	
 	public String getRegisterName (SoundEvent sound) {
 		return sound.getRegistryName().toString();
+	}
+	
+	public String getRegisterName (PotionType potion) {
+		return potion.getRegistryName().toString();
 	}
 
 }

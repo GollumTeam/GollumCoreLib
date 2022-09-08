@@ -1,6 +1,0 @@
-{
-   "variants": {
-       "inventory": { "model": "gollumcorelib:blockproximityspawn" },
-       "normal": { "model": "gollumcorelib:blockproximityspawn" }
-   }
-}

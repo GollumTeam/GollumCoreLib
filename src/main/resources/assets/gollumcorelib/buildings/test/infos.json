@@ -217,7 +217,7 @@
 		"28x4x10": { "block": "minecraft:cobblestone" },
 		"29x4x9" : { "block": "minecraft:cobblestone" },
 		
-		"30x4x9" : { "block": "gollumcorelib:blockproximityspawn", "extra": {"entity": "Chicken"} }
+		"30x4x9" : { "block": "gollumcorelib:proximityspawn", "extra": {"entity": "Chicken"} }
 		
 	},
 	

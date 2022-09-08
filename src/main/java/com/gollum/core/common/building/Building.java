@@ -95,9 +95,10 @@ public class Building {
 		static public class Content {
 			
 			public Item item = null;
-			public int  min = 1;
-			public int  max = 1;
-			public int  metadata = -1;
+			public int min = 1;
+			public int max = 1;
+			public int metadata = -1;
+			public String type = null;
 			
 		}
 		
