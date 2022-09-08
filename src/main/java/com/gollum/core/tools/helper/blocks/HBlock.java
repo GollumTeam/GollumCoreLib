@@ -7,6 +7,7 @@ import com.gollum.core.ModGollumCoreLib;
 import com.gollum.core.tools.helper.BlockHelper;
 import com.gollum.core.tools.helper.BlockHelper.PropertySubBlock;
 import com.gollum.core.tools.helper.IBlockHelper;
+import com.gollum.core.tools.helper.items.HItemBlock;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -34,7 +35,6 @@ public class HBlock extends Block implements IBlockHelper {
 	
 	public HBlock (String registerName, Material material)  {
 		super(material);
-		ModGollumCoreLib.logger.info ("Create block registerName : " + registerName);
 		this.helper = new BlockHelper(this, registerName);
 	}
 
@@ -76,6 +76,11 @@ public class HBlock extends Block implements IBlockHelper {
 	// Register //
 	//////////////
 	
+	@Override
+	public Block setItemBlockClass (Class<? extends ItemBlock> itemClass) {
+		return helper.setItemBlockClass(itemClass);
+	}
+	
 	/**
 	 * Enregistrement du block. Appelé a la fin du postInit
 	 */
@@ -91,14 +96,6 @@ public class HBlock extends Block implements IBlockHelper {
 	@Override
 	public void registerRender () {
 		helper.registerRender();
-	}
-	
-	/**
-	 * Nom d'enregistrement du mod
-	 */
-	@Override
-	public String getRegisterName() {
-		return helper.getRegisterName();
 	}
 	
 	////////////

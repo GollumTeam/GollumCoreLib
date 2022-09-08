@@ -45,24 +45,25 @@ public interface IBlockHelper {
 	//////////////
 	// Register //
 	//////////////
+
+	/**
+	 * Affect la class de l'objet qui servira item pour le block
+	 * par default ItemBlock
+	 * @param itemClass
+	 */
+	public Block setItemBlockClass(Class<? extends ItemBlock> itemClass);
 	
 	/**
 	 * Enregistrement du block. Appelé a la fin du postInit
 	 */
-	public void register ();
-	
-	/**
-	 * Nom d'enregistrement du mod
-	 */
-	public String getRegisterName();
+	public void register();
 	
 	/**
 	 * Enregistrement du rendu du bloc. Appelé a la fin de l'Init
 	 */
 	@SideOnly(Side.CLIENT)
 	public void registerRender();
-	
-	
+
 	////////////
 	// Events //
 	////////////

@@ -36,7 +36,6 @@ public class HBlockPistonExtension extends BlockPistonExtension implements IBloc
 	
 	public HBlockPistonExtension (String registerName)  {
 		super();
-		ModGollumCoreLib.logger.info ("Create block registerName : " + registerName);
 		this.helper = new BlockHelper(this, registerName);
 	}
 	
@@ -77,14 +76,16 @@ public class HBlockPistonExtension extends BlockPistonExtension implements IBloc
 	// Register //
 	//////////////
 	
-	/**
-	 * Enregistrement du block. Appelé a la fin du postInit
-	 */
+	@Override
+	public Block setItemBlockClass (Class<? extends ItemBlock> itemClass) {
+		return helper.setItemBlockClass(itemClass);
+	}
+	
 	@Override
 	public void register () {
 		helper.register();
 	}
-	
+
 	/**
 	 * Enregistrement du rendu du bloc. Appelé a la fin de l'Init
 	 */
@@ -93,15 +94,6 @@ public class HBlockPistonExtension extends BlockPistonExtension implements IBloc
 	public void registerRender () {
 		helper.registerRender();
 	}
-	
-	/**
-	 * Nom d'enregistrement du mod
-	 */
-	@Override
-	public String getRegisterName() {
-		return helper.getRegisterName();
-	}
-	
 	
 	////////////
 	// Events //

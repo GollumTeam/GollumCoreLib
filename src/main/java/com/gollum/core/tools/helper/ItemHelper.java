@@ -33,10 +33,6 @@ public class ItemHelper implements IItemHelper {
 	protected Item parent;
 
 	public ItemHelper (Item item, String registerName) {
-		
-		GollumMod mod = ModContext.instance().getCurrent(); 
-		ModGollumCoreLib.logger.info ("Create item registerName : " + mod + ':' +registerName);
-		
 		this.parent = item;
 		this.mod    = ModContext.instance().getCurrent();
 		
@@ -44,6 +40,7 @@ public class ItemHelper implements IItemHelper {
 		this.parent.setUnlocalizedName(registerName);
 		
 		ItemRegistry.instance().add((IItemHelper) this.parent);
+		ModGollumCoreLib.logger.info ("Create item registerName : " + this.mod.getModId() + ':' +registerName);
 	}
 
 	@Override
@@ -88,7 +85,6 @@ public class ItemHelper implements IItemHelper {
 	}
 	
 	public void registerRender (int metadata) {
-		GollumMod mod = ModContext.instance().getCurrent(); 
 	    ModelLoader.setCustomModelResourceLocation(this.parent, metadata, new ModelResourceLocation(this.parent.getRegistryName(), "inventory"));
 	}
 	

@@ -21,15 +21,7 @@ public class ClientProxyGolumCoreLib extends CommonProxyGolumCoreLib {
 		
 		GollumMod mod = ModContext.instance().getCurrent();
 
-//	    ModelLoader.setCustomModelResourceLocation(ModItems.INFOS, 0, new ModelResourceLocation(mod.getModId()+":infos", "inventory"));
-//	    ModelLoader.setCustomModelResourceLocation(ModItems.BUILDING, 0, new ModelResourceLocation(mod.getModId()+":building", "inventory"));
-//	    ModelLoader.setCustomModelResourceLocation(ModItems.BUILDING, 1, new ModelResourceLocation(mod.getModId()+":building", "inventory"));
-//	    ModelLoader.setCustomModelResourceLocation(ModItems.BUILDING, 2, new ModelResourceLocation(mod.getModId()+":building", "inventory"));
-//	    ModelLoader.setCustomModelResourceLocation(ModItems.BUILDING, 3, new ModelResourceLocation(mod.getModId()+":building", "inventory"));
-//	    ModelLoader.setCustomModelResourceLocation(ModItems.BUILDING, 4, new ModelResourceLocation(mod.getModId()+":building", "inventory"));
-//	    ModelLoader.setCustomModelResourceLocation(ModItems.WRENCH, 0, new ModelResourceLocation(mod.getModId()+":wrench", "inventory"));
-	    
-//		BlockRegistry.instance().registerRenders();
+		BlockRegistry.instance().registerRenders();
 		ItemRegistry .instance().registerRenders();
 	}
 	

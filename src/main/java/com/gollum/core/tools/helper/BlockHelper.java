@@ -1,16 +1,14 @@
 package com.gollum.core.tools.helper;
 
-import static net.minecraft.block.BlockPistonBase.EXTENDED;
-import static net.minecraft.block.BlockPistonBase.FACING;
+import static com.gollum.core.ModGollumCoreLib.logger;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
-import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -24,13 +22,10 @@ import com.gollum.core.tools.registry.BlockRegistry;
 import com.google.common.collect.Lists;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockTorch;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -46,14 +41,12 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -128,16 +121,18 @@ public class BlockHelper implements IBlockHelper {
 	
 	protected GollumMod mod;
 	protected Block parent;
-	protected String registerName;
+	protected ItemBlock itemBlock;
 	protected Class<? extends ItemBlock> itemBlockClass = HItemBlock.class;
 	
 	public BlockHelper (Block parent, String registerName) {
 		this.parent       = parent;
-		this.registerName = registerName;
 		this.mod          = ModContext.instance().getCurrent();
 		
+		this.parent.setUnlocalizedName(registerName);
+		this.parent.setRegistryName(registerName);
+		
 		BlockRegistry.instance().add((IBlockHelper) this.parent);
-		this.parent.setUnlocalizedName(this.registerName);
+		ModGollumCoreLib.logger.info ("Create block registerName : " + this.mod.getModId() + ':' +registerName);
 		
 	}
 	
@@ -260,15 +255,33 @@ public class BlockHelper implements IBlockHelper {
 	//////////////
 	
 	/**
-	 * Enregistrement du block. Appelé a la fin du postInit
+	 * Affect la class de l'objet qui servira item pour le block
+	 * par default ItemBlock
+	 * @param itemClass
 	 */
-	public void register () {
-		if(vanillaRegister) return;
-		this.parent.setUnlocalizedName(this.getRegisterName());
-		this.parent.setRegistryName(this.getRegisterName());
-		ForgeRegistries.BLOCKS.register(this.parent);
+	@Override
+	public Block setItemBlockClass (Class<? extends ItemBlock> itemClass) {
+		this.itemBlockClass = itemClass;
+		return this.parent;
 	}
 	
+	/**
+	 * Enregistrement du block. Appelé a la fin du postInit
+	 */
+	@Override
+	public void register () {
+		if(vanillaRegister) return;
+		try {
+			Constructor<?> ctor = this.itemBlockClass.getConstructor(Block.class);
+			ForgeRegistries.BLOCKS.register(this.parent);
+			
+			this.itemBlock = (ItemBlock) ctor.newInstance(new Object[] { this.parent });
+		    ForgeRegistries.ITEMS.register(itemBlock);
+		} catch (Exception e) {
+			logger.severe(e);
+		}
+	}
+
 	/**
 	 * Enregistrement du rendu de l'item. Appelé a la fin de l'Init
 	 */
@@ -290,7 +303,7 @@ public class BlockHelper implements IBlockHelper {
 //			for (Entry<Integer, String> entry :map.entrySet()) {
 //				if (!registered.contains(entry.getKey())) {
 //					ModelResourceLocation model = this.getModelResourceLocation(entry.getValue());
-//					ModelBakery.registerItemVariants(this.getBlockItem(), model);
+//					ModelBakery.registerItemVariants(((IBlockHelper)this.parent).getBlockItem(), model);
 //				}
 //			}
 //			for (Entry<Integer, String> entry :map.entrySet()) {
@@ -303,8 +316,7 @@ public class BlockHelper implements IBlockHelper {
 	
 	public void registerRender (int metadata) {
 		ModGollumCoreLib.logger.message("Auto register render: "+this.parent.getRegistryName());
-		GollumMod mod = ModContext.instance().getCurrent(); 
-	    ModelLoader.setCustomModelResourceLocation(this.getBlockItem(), metadata, new ModelResourceLocation(this.parent.getRegistryName(), "inventory"));
+	    ModelLoader.setCustomModelResourceLocation(((IBlockHelper)this.parent).getBlockItem(), metadata, new ModelResourceLocation(this.parent.getRegistryName(), "inventory"));
 	}
 	
 //	public void registerRender (int metadata, String renderKey) {
@@ -318,14 +330,6 @@ public class BlockHelper implements IBlockHelper {
 	
 	protected ModelResourceLocation getModelResourceLocation (String renderKey) {
 		return new ModelResourceLocation(this.mod.getModId()+":"+renderKey, "inventory");
-	}
-	
-	/**
-	 * Nom d'enregistrement du mod
-	 */
-	@Override
-	public String getRegisterName() {
-		return registerName;
 	}
 	
 	////////////
@@ -411,12 +415,12 @@ public class BlockHelper implements IBlockHelper {
 		((IBlockHelper)this.parent).getSubNames(map);
 		
 		if (map.isEmpty()) {
-			items.add(new ItemStack(this.getBlockItem(), 1, 0));
+			items.add(new ItemStack(((IBlockHelper)this.parent).getBlockItem(), 1, 0));
 			return;
 		}
 		
 		for (Entry<Integer, String> entry: map.entrySet()) {
-			items.add(new ItemStack(this.getBlockItem(), 1, entry.getKey()));
+			items.add(new ItemStack(((IBlockHelper)this.parent).getBlockItem(), 1, entry.getKey()));
 		}
 	}
 	

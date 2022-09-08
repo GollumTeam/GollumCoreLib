@@ -44,16 +44,14 @@ public class HBlockPistonBase extends BlockPistonBase implements IBlockHelper {
 	
 	public HBlockPistonBase(String registerName, boolean isSticky)  {
 		super(isSticky);
-		ModGollumCoreLib.logger.info ("Create block registerName : " + registerName);
 		this.helper = new BlockHelper(this, registerName);
-		
 		this.isStickyPiston = isSticky;
 	}
 	
 	public BlockHelper getGollumHelper () {
 		return helper;
 	}
-	
+
 	////////////
 	// States //
 	////////////
@@ -87,6 +85,11 @@ public class HBlockPistonBase extends BlockPistonBase implements IBlockHelper {
 	// Register //
 	//////////////
 	
+	@Override
+	public Block setItemBlockClass (Class<? extends ItemBlock> itemClass) {
+		return helper.setItemBlockClass(itemClass);
+	}
+	
 	/**
 	 * Enregistrement du block. Appelé a la fin du postInit
 	 */
@@ -102,14 +105,6 @@ public class HBlockPistonBase extends BlockPistonBase implements IBlockHelper {
 	@Override
 	public void registerRender () {
 		helper.registerRender();
-	}
-	
-	/**
-	 * Nom d'enregistrement du mod
-	 */
-	@Override
-	public String getRegisterName() {
-		return helper.getRegisterName();
 	}
 	
 	////////////
