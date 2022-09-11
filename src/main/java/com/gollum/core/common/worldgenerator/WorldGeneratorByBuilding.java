@@ -159,7 +159,7 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 		
 		for (Building building: buildings) {
 			DimentionSpawnInfos dim = buildings.get(dimention).dimentionsInfos.get(dimention);
-			if (dim.biomes.size() == 0 && dim.biomes.contains(biome)) {
+			if (dim.biomes.size() == 0 || dim.biomes.contains(biome)) {
 				rtn.add(building);
 			}
 		}

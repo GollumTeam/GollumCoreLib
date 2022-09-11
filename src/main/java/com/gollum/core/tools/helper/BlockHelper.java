@@ -319,15 +319,6 @@ public class BlockHelper implements IBlockHelper {
 	    ModelLoader.setCustomModelResourceLocation(((IBlockHelper)this.parent).getBlockItem(), metadata, new ModelResourceLocation(this.parent.getRegistryName(), "inventory"));
 	}
 	
-//	public void registerRender (int metadata, String renderKey) {
-//		this.registerRender(metadata, renderKey, true);
-//	}
-//	
-//	public void registerRender (int metadata, String renderKey, boolean trace) {
-//		if (trace) ModGollumCoreLib.logger.message("Auto register render: "+this.getRegisterName()+":"+metadata+":"+":"+renderKey);
-//		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(this.getBlockItem(), metadata, this.getModelResourceLocation(renderKey));
-//	}
-	
 	protected ModelResourceLocation getModelResourceLocation (String renderKey) {
 		return new ModelResourceLocation(this.mod.getModId()+":"+renderKey, "inventory");
 	}

@@ -46,7 +46,7 @@ public class ItemBuilding extends HItem {
 		
 		this.setMaxStackSize(1);
 		this.setHasSubtypes(true);
-		this.setCreativeTab(ModCreativeTab.tabBuildingStaff);
+		this.setCreativeTab(ModCreativeTab.BUILDING_STAFF);
 		
 	}
 	

@@ -1,5 +1,6 @@
 package com.gollum.core;
 
+import net.minecraft.client.model.ModelWolf;
 import net.minecraft.init.Blocks;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -11,6 +12,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
+import com.gollum.castledefenders.inits.ModEntities;
 import com.gollum.core.common.CommonProxyGolumCoreLib;
 import com.gollum.core.common.command.CommandBuilding;
 import com.gollum.core.common.config.ConfigGollumCoreLib;
@@ -93,6 +95,9 @@ public class ModGollumCoreLib extends GollumMod {
 		// Initialisation des items
 		ModItems.init ();
 		
+		// Initialisation des entities
+		ModEntities.init ();
+		
 	}
 	
 	/** 2 **/
@@ -128,6 +133,6 @@ public class ModGollumCoreLib extends GollumMod {
 		WorldGeneratorByBuilding worldGeneratorByBuilding = new WorldGeneratorByBuildingLoader().load ();
 		
 		// Enregistrement du worldgenerator mercenary
-		GameRegistry.registerWorldGenerator (worldGeneratorByBuilding, 0);
+		GameRegistry.registerWorldGenerator (worldGeneratorByBuilding, 255);
 	}
 }

@@ -21,7 +21,7 @@ public class ItemWrench extends HItem {
 		this.setFull3D();
 		this.setMaxStackSize(1);
 		this.setHarvestLevel("wrench", 0);
-		this.setCreativeTab(ModCreativeTab.tabDevTools);
+		this.setCreativeTab(ModCreativeTab.DEV_TOOLS);
 	}
 
 	/**

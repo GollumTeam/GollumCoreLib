@@ -27,7 +27,7 @@ public class ItemInfos extends HItem {
 
 		this.setFull3D();
 		this.setMaxStackSize(1);
-		this.setCreativeTab(ModCreativeTab.tabDevTools);
+		this.setCreativeTab(ModCreativeTab.DEV_TOOLS);
 	}
 
     /**

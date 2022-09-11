@@ -17,6 +17,7 @@ import com.gollum.core.tools.registry.GCLNetworkRegistry;
 import com.gollum.core.tools.registry.InventoryRegistry;
 import com.gollum.core.tools.registry.ItemRegistry;
 
+import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fml.common.FMLModContainer;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
@@ -240,6 +241,9 @@ public abstract class GollumMod {
 		if (ModGollumCoreLib.proxy.isRemote()) {
 			this.initGuiClient();
 		}
+		
+		// Init recipe from JSON
+		CraftingHelper.loadRecipes(true);
 		
 		// Enregistrement du handler de gui d'inventaire simplifié
 		GCLNetworkRegistry.instance().registerGuiHandler(new GCLGuiHandler(InventoryRegistry.instance().getGuiInventoryList()));

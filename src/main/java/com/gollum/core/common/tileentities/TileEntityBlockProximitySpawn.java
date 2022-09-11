@@ -7,6 +7,8 @@ import com.gollum.core.tools.registered.RegisteredObjects;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
@@ -61,14 +63,14 @@ public class TileEntityBlockProximitySpawn extends TileEntity implements ITickab
 			if (entityLiving == null || entityLiving.getCanSpawnHere()) {
 				
 				this.world.playSound(
-					this.pos.getX()+0.5f,                                    // x           
-					this.pos.getY()+0.5f,                                    // y           
-					this.pos.getZ()+0.5f,                                    // z           
-					RegisteredObjects.instance().getSoundEvent("dig.stone"), // sound       
-					SoundCategory.BLOCKS,                                    // category    
-					0.5F,                                                    // volume             
-					this.world.rand.nextFloat() * 0.25F + 0.6F,              // pitch
-					false                                                    // distance delay
+					(EntityPlayer)null,
+					this.pos.getX()+0.5f,                      // x           
+					this.pos.getY()+0.5f,                      // y           
+					this.pos.getZ()+0.5f,                      // z           
+					SoundEvents.BLOCK_STONE_PLACE,             // sound       
+					SoundCategory.BLOCKS,                      // category    
+					0.5F,                                      // volume             
+					this.world.rand.nextFloat() * 0.25F + 0.6F // pitch
 				);
 				
 				if (entityLiving != null) {

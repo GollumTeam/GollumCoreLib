@@ -4,6 +4,8 @@ itemGroup.GollumDevTools=Developer tools
 item.infos.name=Magnifying glass infos
 item.wrench.name=Wrench
 
+tile.proximityspawn.name=Proximity spawn block
+
 gollumcorelib.Building staff=Building staff
 
 gollumcorelib.config.level=Log message level
