@@ -1,5 +1,7 @@
 package com.gollum.core.common.building.handler;
 
+import java.util.Collection;
+
 import com.gollum.core.common.building.Building.EnumRotate;
 import com.gollum.core.common.building.Building.Unity;
 
@@ -10,6 +12,7 @@ import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.BlockFurnace;
+import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.BlockLadder;
 import net.minecraft.block.BlockPistonBase;
 import net.minecraft.block.BlockSign;
@@ -29,6 +32,7 @@ public class BlockDirectionalBuildingHandler extends BuildingBlockHandler {
 	protected boolean mustApply (World world, BlockPos pos, Unity unity) {
 		Block block = (unity.state != null) ? unity.state.getBlock() : null;
 		return
+			block instanceof BlockHorizontal   || 
 			block instanceof BlockDirectional  || 
 			block instanceof BlockLadder       ||
 			block instanceof BlockFurnace      ||

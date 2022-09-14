@@ -13,11 +13,14 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = "3.0.0-1.12.2"
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+
+
+def modversion = "3.0.0"
+def forgeversion = "1.12.2"
+version = modversion+"-"+forgeversion
 group= "com.gollum.core" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "GollumCoreLib"
-
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
 minecraft {
     // The mappings can be changed at any time, and must be in the following format.
@@ -96,9 +99,19 @@ jar {
     }
 }
 
+
+task unobfuscateJar (type: Copy, dependsOn: ':jar') {
+//    from 'build/libs/'+archivesBaseName+version+'.jar'
+    from 'build/libs/'+archivesBaseName+'-'+version+'.jar'
+    into 'build/libs/'
+    rename { String fileName ->
+        fileName.replace(".jar", "-unobfuscate.jar")
+    }
+}
+
 // Example configuration to allow publishing using the maven-publish task
 // This is the preferred method to reobfuscate your jar file
-jar.finalizedBy('reobfJar') 
+jar.finalizedBy('unobfuscateJar', 'reobfJar')
 // However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing
 //publish.dependsOn('reobfJar')
 

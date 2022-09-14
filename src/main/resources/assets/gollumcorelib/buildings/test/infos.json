@@ -217,7 +217,17 @@
 		"28x4x10": { "block": "minecraft:cobblestone" },
 		"29x4x9" : { "block": "minecraft:cobblestone" },
 		
-		"30x4x9" : { "block": "gollumcorelib:proximityspawn", "extra": {"entity": "Chicken"} }
+		"45x1x3":  { "block": "minecraft:bed", "states": { "facing": "north" , "part": "foot" } },
+		"45x1x2":  { "block": "minecraft:bed", "states": { "facing": "north" , "part": "head" } },
+		
+		"45x1x5":  { "block": "minecraft:bed", "states": { "facing": "south" , "part": "foot" } },
+		"45x1x6":  { "block": "minecraft:bed", "states": { "facing": "south" , "part": "head" } },
+		
+		"46x1x4":  { "block": "minecraft:bed", "states": { "facing": "west" , "part": "foot" } },
+		"47x1x4":  { "block": "minecraft:bed", "states": { "facing": "west" , "part": "head" } },
+		
+		"44x1x4":  { "block": "minecraft:bed", "states": { "facing": "east" , "part": "foot" } },
+		"43x1x4":  { "block": "minecraft:bed", "states": { "facing": "east" , "part": "head" } }
 		
 	},
 	
