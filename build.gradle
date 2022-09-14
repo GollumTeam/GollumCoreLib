@@ -15,10 +15,9 @@ apply plugin: 'maven-publish'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
-
 def modversion = "3.0.0"
-def forgeversion = "1.12.2"
-version = modversion+"-"+forgeversion
+def mcversion = "1.12.2"
+version = modversion+"-"+mcversion
 group= "com.gollum.core" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "GollumCoreLib"
 
@@ -99,9 +98,7 @@ jar {
     }
 }
 
-
 task unobfuscateJar (type: Copy, dependsOn: ':jar') {
-//    from 'build/libs/'+archivesBaseName+version+'.jar'
     from 'build/libs/'+archivesBaseName+'-'+version+'.jar'
     into 'build/libs/'
     rename { String fileName ->
