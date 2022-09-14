@@ -23,7 +23,7 @@ public class HItemBlock extends ItemBlock implements IItemHelper {
 	public HItemBlock(Block block) {
 		super(block);
 		this.setHasSubtypes(true);
-		this.helper = new ItemHelper(this, block.getRegistryName().toString());
+		this.helper = new ItemHelper(this, block.getRegistryName().getResourcePath());
 	}
 
 	@Override

@@ -114,7 +114,7 @@ public abstract class GollumMod {
 		}
 		return i18n;
 	}
-//
+
 	public Logger log() {
 		Logger log = null;
 		

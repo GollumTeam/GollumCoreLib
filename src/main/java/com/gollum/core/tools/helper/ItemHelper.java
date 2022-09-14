@@ -34,13 +34,12 @@ public class ItemHelper implements IItemHelper {
 
 	public ItemHelper (Item item, String registerName) {
 		this.parent = item;
-		this.mod    = ModContext.instance().getCurrent();
 		
 		this.parent.setRegistryName(registerName);
 		this.parent.setUnlocalizedName(registerName);
 		
 		ItemRegistry.instance().add((IItemHelper) this.parent);
-		ModGollumCoreLib.logger.info ("Create item registerName : " + this.mod.getModId() + ':' +registerName);
+		ModGollumCoreLib.logger.info ("Create item registerName : " + this.parent.getRegistryName());
 	}
 
 	@Override

@@ -39,15 +39,7 @@ public class WorldTickHandler {
 					}
 					
 					try {
-	//					log.debug ("WorldServer notify Builder");
-						synchronized  (thread.waiter) {
-							thread.waiter.notify();
-						}
-						Thread.sleep(10);
-	//					log.debug ("WorldServer lock for builder");
-						thread.lockWorld.lock();
-	//					log.debug ("WorldServer is unlock");
-						thread.unlockWorld();
+						thread.pauseMainThread();
 					} catch (Exception e) {
 						e.printStackTrace();
 						continue;

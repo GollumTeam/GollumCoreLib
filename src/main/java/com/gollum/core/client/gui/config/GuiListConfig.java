@@ -49,7 +49,7 @@ public class GuiListConfig extends GuiConfig {
 		
 		@Override
 		protected int getSize() {
-			return this.values.size();
+			return this.buttons.size();
 		}
 
 		@Override

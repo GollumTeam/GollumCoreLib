@@ -126,13 +126,12 @@ public class BlockHelper implements IBlockHelper {
 	
 	public BlockHelper (Block parent, String registerName) {
 		this.parent       = parent;
-		this.mod          = ModContext.instance().getCurrent();
 		
 		this.parent.setUnlocalizedName(registerName);
 		this.parent.setRegistryName(registerName);
 		
 		BlockRegistry.instance().add((IBlockHelper) this.parent);
-		ModGollumCoreLib.logger.info ("Create block registerName : " + this.mod.getModId() + ':' +registerName);
+		ModGollumCoreLib.logger.info ("Create block registerName : " + this.parent.getRegistryName());
 		
 	}
 	

@@ -29,7 +29,7 @@ public class GuiSoundConfig extends GuiListConfig {
 			String name = entry.getKey();
 			SoundEvent sound = entry.getValue();
 			String domain = sound.getRegistryName().getResourceDomain();
-			this.configElements.add(new ListElement(name, name, sound.getRegistryName().getResourceDomain()));
+			this.configElements.add(new ListElement(name, name, domain));
 		}
 		this.filter();
  	}

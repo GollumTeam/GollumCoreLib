@@ -2,6 +2,8 @@ package com.gollum.core.common.command;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import com.gollum.core.common.building.Builder;
 import com.gollum.core.common.building.Building.SubBuilding;
 import com.gollum.core.common.building.BuildingParser;
@@ -12,6 +14,7 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 
 public class CommandBuilding extends CommandBase {
@@ -70,6 +73,16 @@ public class CommandBuilding extends CommandBase {
 			throw new WrongUsageException(this.getUsage(sender));
 		}
 	}
+	
+	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos)
+    {
+        if (args.length == 1)
+        {
+            return getListOfStringsMatchingLastWord(args, new String[] {"reload", "rebuild"});
+        }
+        
+        return super.getTabCompletions(server, sender, args, targetPos);
+    }
 	
 	public List addTabCompletionOptions(ICommandSender sender, String[] arguments) {
 		

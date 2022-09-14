@@ -4,7 +4,6 @@ import static com.gollum.core.ModGollumCoreLib.logger;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.concurrent.locks.ReentrantLock;
 
 import com.gollum.core.common.building.Building.EnumRotate;
 import com.gollum.core.common.building.Building.GroupSubBuildings;
@@ -58,7 +57,7 @@ public class Builder {
 		
 		BuilderRunnable thread = new BuilderRunnable(world, building, rotate, initPos, isStaff);
 		thread.start();
-		this.currentBuilds.add(thread);
+		Builder.currentBuilds.add(thread);
 	}
 	
 	/**
@@ -121,16 +120,63 @@ public class Builder {
 	
 	public static class BuilderRunnable extends Thread {
 		
+		class Waiter {
+			public boolean       isBuilderThreadWait = false;
+			public boolean       isMainThreadWait    = false;
+			private Object       waiterBuilderThread = new Object();;
+			private Object       waiterMainThread    = new Object();
+			
+			public void waitMainThread() {
+				try {
+					synchronized (this.waiterMainThread) {
+						this.isMainThreadWait = true;
+						this.waiterMainThread.wait();
+					}
+				} catch (Exception e) {
+					logger.severe("Error on wait main thread", e);
+				}
+			}
+			public void notiyMainThread() {
+				try {
+					synchronized (this.waiterMainThread) {
+						this.isMainThreadWait = false;
+						this.waiterMainThread.notify();
+					}
+				} catch (Exception e) {
+					logger.severe("Error on notify main thread", e);
+				}
+			}
+			
+			public void waitBuilderThread() {
+				try {
+					synchronized (this.waiterBuilderThread) {
+						this.isBuilderThreadWait = true;
+						this.waiterBuilderThread.wait();
+					}
+				} catch (Exception e) {
+					logger.severe("Error on wait builder thread", e);
+				}
+			}
+			public void notiyBuilderThread() {
+				try {
+					synchronized (this.waiterBuilderThread) {
+						this.isBuilderThreadWait = false;
+						this.waiterBuilderThread.notify();
+					}
+				} catch (Exception e) {
+					logger.severe("Error on notify builder thread", e);
+				}
+			}
+		}
+		
 		WorldServer world;
 		Building building;
 		EnumRotate rotate;
 		BlockPos initPos;
 		
-		public ReentrantLock lockWorld = new ReentrantLock();
-		public Object        waiter    = new Object();
 		
+		private Waiter waiter = new Waiter();
 		
-		private Boolean waitForWorld = true;
 		private long time = 0;
 		private boolean isStaff = false;
 		private int placeBlockCount = 0;
@@ -165,6 +211,10 @@ public class Builder {
 			this.run(true);
 		}
 		protected void run(boolean reTop) {
+
+			if (reTop) {
+				this.waiter.waitBuilderThread();
+			}
 			
 			try {
 				
@@ -193,39 +243,24 @@ public class Builder {
 			}
 			
 			logger.info("End create building width matrix : "+building.name+initPos);
-			
-			this.unlockWorld();
-		}
-		
-		public void dontWaitWorld () {
-			synchronized (this.waitForWorld) {
-				this.waitForWorld = false;
+
+			if (reTop) {
+	        	this.waiter.notiyMainThread();
 			}
 		}
+		
 		
 		private void lock () {
 			
-			boolean waitForWorld = true;
-			synchronized (this.waitForWorld) {
-				waitForWorld = this.waitForWorld;
-			}
 			try  {
-				if (waitForWorld) {
-					long lantency = System.currentTimeMillis() - this.time;
-					if (lantency > 200) {
-						if (lantency >  500 && this.time != 0) {
-							logger.warning("Latency of builder is gretter that 300 milliseconds. lantency = "+lantency);
-						}
-						this.unlockWorld();
-//						log.debug ("Thread wait server");
-
-						synchronized  (this.waiter) {
-							this.waiter.wait();
-						}
-						this.lockWorld.lock();
-						this.time = System.currentTimeMillis();
-//						log.debug ("Thread is free lock world for 200ms");
+				long lantency = System.currentTimeMillis() - this.time;
+				if (lantency > 200) {
+					if (lantency >  500 && this.time != 0) {
+						logger.warning("Latency of builder is gretter that 300 milliseconds. lantency = "+lantency);
 					}
+					
+					this.pauseBuilderThread();
+					this.time = System.currentTimeMillis();
 				}
 				
 			} catch (Exception e) {
@@ -233,13 +268,31 @@ public class Builder {
 			}
 		}
 		
-		synchronized public void unlockWorld () {
+		public void pauseMainThread() {
+			if (!this.waiter.isBuilderThreadWait) {
+				logger.debug ("Dont pause main thread, thread builder not wait");
+				return;
+			}
 			try {
-				if (this.lockWorld.isLocked()) {
-					this.lockWorld.unlock();
-				}
-			} catch(Exception e) {
-				e.printStackTrace();
+//				synchronized (this.waiter) {
+					logger.debug ("Notify builder thread and pause main thread");
+					this.waiter.notiyBuilderThread();
+					this.waiter.waitMainThread();
+//				}
+			} catch (Exception e) {
+				logger.severe("Error on pauseMainThread", e);
+			}
+		}
+		
+		protected void pauseBuilderThread() {
+			try {
+				logger.debug ("Notify main thread and pause builder thread");
+//				synchronized (this.waiter) {
+					this.waiter.notiyMainThread();
+					this.waiter.waitBuilderThread();
+//				}
+			} catch (Exception e) {
+				logger.severe("Error on pauseBuilderThread", e);
 			}
 		}
 		
@@ -248,10 +301,7 @@ public class Builder {
 				return false;
 			}
 			try {
-//				this.lock();
-				boolean result = world.setBlockState(pos, state, 0);
-//				this.unlock();
-				return result;
+				return world.setBlockState(pos, state, 0);
 			} catch (Exception e) {
 				e.printStackTrace();
 				return false;
@@ -266,9 +316,6 @@ public class Builder {
 				BlockPos finalPos = initPos.add(unity3D.x(rotate)*rotate.dx, unity3D.y(rotate), unity3D.z(rotate)*rotate.dz);
 				
 				this.setBlock(finalPos, Blocks.STONE.getDefaultState());
-
-				BlockPos min = null;
-				BlockPos max = null;
 			}
 		}
 		
@@ -276,10 +323,10 @@ public class Builder {
 			
 			ArrayList<Unity3D> placed = new ArrayList<Unity3D>();
 			
-//			ArrayList<BlockPlacer> threadsBlockSetter = new ArrayList<BlockPlacer>();
-			
 			Iterator<Unity3D> i = building.unities.iterator();
 			while (i.hasNext()) {
+				
+				this.lock();
 				
 				Unity3D unity3D = i.next();
 				Unity unity = unity3D.unity;
@@ -318,17 +365,13 @@ public class Builder {
 			}
 
 			for (Unity3D unity3D : placed) {
-				
+
 				this.lock();
-					
-				boolean isPlaced = false;
 				
 				Unity unity = unity3D.unity;
 				
 				// Position réél dans le monde du block
 				BlockPos finalPos = initPos.add(unity3D.x(rotate)*rotate.dx, unity3D.y(rotate), unity3D.z(rotate)*rotate.dz);
-
-				this.lock();
 				
 				world.notifyNeighborsOfStateChange(finalPos, unity.state != null ? unity.state.getBlock() : Blocks.AIR, this.isStaff);
 				if (this.isStaff) {
@@ -387,15 +430,14 @@ public class Builder {
 			}
 			
 			for (Unity3D unity3D : placed) {
-				
-				boolean isPlaced = false;
+
+				this.lock();
 				
 				Unity unity = unity3D.unity;
 				
 				// Position réél dans le monde du block
 				BlockPos finalPos = initPos.add(unity3D.x(rotate)*rotate.dx, unity3D.y(rotate), unity3D.z(rotate)*rotate.dz);
 				
-				this.lock();
 				world.notifyNeighborsOfStateChange(finalPos, unity.state != null ? unity.state.getBlock() : Blocks.AIR, this.isStaff);
 				if (this.isStaff) {
 					world.markAndNotifyBlock(
@@ -428,8 +470,7 @@ public class Builder {
 						),
 						this.isStaff
 					);
-					thread.waiter    = this.waiter;
-					thread.lockWorld = this.lockWorld;
+					thread.waiter = this.waiter;
 					thread.run(false);
 				}
 			}

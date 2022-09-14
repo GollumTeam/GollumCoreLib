@@ -12,7 +12,6 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-import com.gollum.castledefenders.inits.ModEntities;
 import com.gollum.core.common.CommonProxyGolumCoreLib;
 import com.gollum.core.common.command.CommandBuilding;
 import com.gollum.core.common.config.ConfigGollumCoreLib;
@@ -94,9 +93,6 @@ public class ModGollumCoreLib extends GollumMod {
 		
 		// Initialisation des items
 		ModItems.init ();
-		
-		// Initialisation des entities
-		ModEntities.init ();
 		
 	}
 	

@@ -217,7 +217,7 @@ public class WorldGeneratorByBuilding implements IWorldGenerator {
 							int initY = dimentionsInfos.spawnMax;
 							for (; initY >= dimentionsInfos.spawnMin;initY--) {
 								
-								if (initY > 255) {
+								if (initY > 250) {
 									continue;
 								}
 								if (initY < 3) {

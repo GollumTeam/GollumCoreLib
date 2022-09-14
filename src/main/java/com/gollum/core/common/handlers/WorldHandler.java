@@ -37,19 +37,10 @@ public class WorldHandler {
 			
 			for (BuilderRunnable thread : Builder.currentBuilds) {
 				if (thread.isAlive()) {
-					try {
-						logger.message("Wait finish building");
-						
-						while (thread.isAlive()) {
-							thread.dontWaitWorld();
-							synchronized (thread.waiter) {
-								thread.waiter.notify();
-							}
-							Thread.sleep(500);
-						}
-						
-					} catch (InterruptedException e) {
-						e.printStackTrace();
+					logger.message("Wait finish building");
+					
+					while (thread.isAlive()) {
+						thread.pauseMainThread();
 					}
 				}
 				BuildingGenerateEvent newEvent = new BuildingGenerateEvent.Post(event.getWorld(), thread.getBuilding(), thread.getRotate(), thread.getInitPos());
