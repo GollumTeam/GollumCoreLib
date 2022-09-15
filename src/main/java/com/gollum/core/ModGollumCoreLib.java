@@ -39,7 +39,7 @@ public class ModGollumCoreLib extends GollumMod {
 
 	public final static String MODID = "gollumcorelib";
 	public final static String MODNAME = "Gollum Core Lib";
-	public final static String VERSION = "3.0.0DEV";
+	public final static String VERSION = "3.X.XDEV";
 	public final static String MINECRAFT_VERSION = "1.12.2";
 
 	@Instance(ModGollumCoreLib.MODID)

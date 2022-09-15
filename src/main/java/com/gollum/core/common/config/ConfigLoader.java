@@ -355,6 +355,7 @@ public class ConfigLoader {
 		return value;
 	}
 	
+	
 	/**
 	 * Lit le fichier de config
 	 * @param file
@@ -367,120 +368,47 @@ public class ConfigLoader {
 		HashMap config = new HashMap();
 		BufferedReader reader = new BufferedReader(new FileReader(file));
 		String strLine;
+		String name = null;
+		String valueStr = "";
 		
 		while ((strLine = reader.readLine()) != null) {
-			
-			if ((!strLine.startsWith("#")) && (strLine.length() != 0)) {
-				
+			if (strLine.length() == 0) {
+				continue;
+			}
+			if (strLine.startsWith(" ") || strLine.startsWith("\t")) {
+				valueStr += '\n'+strLine.toString();
+				continue;
+			}
+			if (!strLine.startsWith("#")) {
 				int index = strLine.indexOf("=");
-				
-				if ((index <= 0) || (index == strLine.length())) {
-					
+				if (index <= 0) {
 					this.updateFile = true;
-					
-				} else {
-					
-					String name = strLine.substring(0, index).trim();
-					String prop = this.readValue(strLine.substring(index + 1), reader);
-					
-					Logger.log(ModGollumCoreLib.MODID, Logger.LEVEL_DEBUG, "Read prop "+" : "+name+":"+prop);
-					
-					if (!types.containsKey(name)) {
-						this.updateFile = true;
-						
-					} else {
-						Class classType = ((Field) types.get(name)).getType();
-						Object value = this.parseConvert(classType, prop);
-						
-						if (value != null) {
-							Logger.log(ModGollumCoreLib.MODID, Logger.LEVEL_DEBUG, "Read "+this.fileName+" : "+name+":"+value);
-							config.put(name, value);
-						}
-					}
 				}
+				if (name != null) {
+					saveConfigField(types, config, name, valueStr);
+				}
+
+				name = strLine.substring(0, index).trim();
+				valueStr = strLine.substring(index + 1);
 			}
 		}
+		saveConfigField(types, config, name, valueStr);
 		
 		reader.close();
 		return config;
 	}
-	
-	private String readValue(String line, BufferedReader reader) throws Exception {
-		return this.readValue(line, 0, reader); 
-	}
 
-	private String readValue(String line, int i, BufferedReader reader) throws Exception {
-		if (line.length() <= i) {
-			i = 0;
-			if ((line = reader.readLine()) != null) {
-				return "";
-			}
-			return readValue(line, i, reader);
-		}
-		
-		char c = line.charAt(i);
-		
-		if (Character.isWhitespace (c)) {
-			return readValue(line, i + 1, reader);
-		}
-
-		if (c == '{') {
-			return c+readAccoladeValue(line, i+1, 1, reader);
-		}
-
-		if (c == '[') {
-			return c+readCrochetValue(line, i+1, 1, reader);
-		}
-		
-		return c + ((i+1 != line.length()) ? line.substring(i+1) : "");
-	}
-
-	private String readAccoladeValue(String line, int i, int niveau, BufferedReader reader) throws Exception {
-		if (line.length() <= i) {
-			i = 0;
-			if ((line = reader.readLine()) == null) {
-				return "";
-			}
-			return readAccoladeValue(line, i, niveau, reader);
-		}
-		char c = line.charAt(i);
-		
-		if (c == '{') {
-			return c+readAccoladeValue(line, i+1, niveau+1, reader);
-		}
-		if (c == '}') {
-			if (niveau == 1) {
-				return c + ((i+1 != line.length()) ? line.substring(i+1) : "");
-			}
+	private void saveConfigField(HashMap types, HashMap config, String name, String valueStr) {
+		if (!types.containsKey(name)) {
+			this.updateFile = true;
+		} else {
+			Class classType = ((Field) types.get(name)).getType();
+			Object value = this.parseConvert(classType, valueStr);
 			
-			return c+readAccoladeValue(line, i+1, niveau-1, reader);
-		}
-		
-		return c+readAccoladeValue(line, i+1, niveau, reader);
-	}
-
-	private String readCrochetValue(String line, int i, int niveau, BufferedReader reader) throws Exception {
-		if (line.length() <= i) {
-			i = 0;
-			if ((line = reader.readLine()) == null) {
-				return "";
+			if (value != null) {
+				config.put(name, value);
 			}
-			return readCrochetValue(line, i, niveau, reader);
 		}
-		char c = line.charAt(i);
-		
-		if (c == '[') {
-			return c+readCrochetValue(line, i+1, niveau+1, reader);
-		}
-		if (c == ']') {
-			if (niveau == 1) {
-				return c + ((i+1 != line.length()) ? line.substring(i+1) : "");
-			}
-			
-			return c+readCrochetValue(line, i+1, niveau-1, reader);
-		}
-		
-		return c+readCrochetValue(line, i+1, niveau, reader);
 	}
 	
 	private String toJsonValue (Field field) throws Exception {

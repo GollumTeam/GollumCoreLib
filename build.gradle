@@ -15,7 +15,7 @@ apply plugin: 'maven-publish'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
-def modversion = "3.0.0"
+def modversion = "3.X.XDEV"
 def mcversion = "1.12.2"
 version = modversion+"-"+mcversion
 group= "com.gollum.core" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
