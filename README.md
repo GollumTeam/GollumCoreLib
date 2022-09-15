@@ -1,6 +1,7 @@
 GollumCoreLib
 =============
 
+[![3.X.X-1.12.2DEV](https://github.com/GollumTeam/GollumCoreLib/actions/workflows/build.yml/badge.svg?branch=3.X.X-1.12.2DEV)](https://github.com/GollumTeam/GollumCoreLib/actions/workflows/build.yml)
 
 It's library for Minecraft Mod. Add functionalities :
 
