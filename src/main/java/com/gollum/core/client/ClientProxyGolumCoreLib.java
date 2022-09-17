@@ -3,9 +3,7 @@ package com.gollum.core.client;
 import com.gollum.core.common.CommonProxyGolumCoreLib;
 import com.gollum.core.common.context.ModContext;
 import com.gollum.core.common.mod.GollumMod;
-//import com.gollum.core.common.handlers.GuiScreenHandler;
-//import com.gollum.core.tools.registry.BlockRegistry;
-//import com.gollum.core.tools.registry.ItemRegistry;
+import com.gollum.core.common.handlers.GuiScreenHandler;
 import com.gollum.core.inits.ModItems;
 import com.gollum.core.tools.registry.BlockRegistry;
 import com.gollum.core.tools.registry.ItemRegistry;
@@ -28,7 +26,7 @@ public class ClientProxyGolumCoreLib extends CommonProxyGolumCoreLib {
 	@Override
 	public void registerEvents () {
 		super.registerEvents ();
-//		MinecraftForge.EVENT_BUS.register(new GuiScreenHandler());
+		MinecraftForge.EVENT_BUS.register(new GuiScreenHandler());
 	}
 	
 	@Override

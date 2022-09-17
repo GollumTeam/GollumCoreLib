@@ -2,8 +2,6 @@ name: Build
 
 on:
   push:
-  create:
-    tags:
 
 jobs:
   build:
@@ -19,9 +17,62 @@ jobs:
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '8'
+          cache: gradle
+
       - name: Setup gradlew
-        run:
-          ./gradlew genEclipseRuns
+        run: |
+          ./gradlew genEclipseRuns;
+
+      - name: Write version
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          export MOD_VERSION=$(echo $CI_COMMIT_TAG|cut -d- -f1);
+          export MC_VERSION=$(echo $CI_COMMIT_TAG|cut -d- -f2);
+          echo "Build = $MOD_VERSION-$MC_VERSION";
+          sed -i s/\"version\":\ \"[0-9]\.X\.XDEV/\"version\":\ \"$MOD_VERSION/ src/main/resources/mcmod.info;
+          sed -i s/modversion\ =\ \"[0-9]\.X\.XDEV/modversion\ =\ \"$MOD_VERSION/ build.gradle;
+          sed -i s/VERSION\ =\ \"[0-9]\.X\.XDEV/VERSION\ =\ \"$MOD_VERSION/ src/main/java/com/gollum/core/ModGollumCoreLib.java;
+          
       - name: Build
-        run:
-          ./gradlew genEclipseRuns
+        run: |
+          ./gradlew build;
+      
+      - name: Publish DEV
+        if: startsWith(github.ref, 'refs/heads/')
+        uses: nogsantos/scp-deploy@master
+        with:
+          src: ./build/libs/*
+          host: ${{ secrets.SSH_HOST }}
+          remote: ${{ secrets.SSH_DIR_DEV }}
+          port: ${{ secrets.SSH_PORT }}
+          user: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+      
+      - name: Publish PROD
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: nogsantos/scp-deploy@master
+        with:
+          src: ./build/libs/*
+          host: ${{ secrets.SSH_HOST }}
+          remote: ${{ secrets.SSH_DIR_PROD }}
+          port: ${{ secrets.SSH_PORT }}
+          user: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+      
+      - name: Notify discord success
+        uses: th0th/notify-discord@v0.4.1
+        if: ${{ success() }}
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK }}
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_JOB_NAME: "Build and deploy"
+          GITHUB_JOB_STATUS: 'success'
+
+      - name: Notify discord failure
+        uses: th0th/notify-discord@v0.4.1
+        if: ${{ failure() }}
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK }}
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_JOB_NAME: "Build and deploy"
+          GITHUB_JOB_STATUS: 'failure'

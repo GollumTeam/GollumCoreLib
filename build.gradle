@@ -98,17 +98,17 @@ jar {
     }
 }
 
-task unobfuscateJar (type: Copy, dependsOn: ':jar') {
+task deobfJar (type: Copy, dependsOn: ':jar') {
     from 'build/libs/'+archivesBaseName+'-'+version+'.jar'
     into 'build/libs/'
     rename { String fileName ->
-        fileName.replace(".jar", "-unobfuscate.jar")
+        fileName.replace(".jar", "-deobf.jar")
     }
 }
 
 // Example configuration to allow publishing using the maven-publish task
 // This is the preferred method to reobfuscate your jar file
-jar.finalizedBy('unobfuscateJar', 'reobfJar')
+jar.finalizedBy('deobfJar', 'deobfJar')
 // However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing
 //publish.dependsOn('reobfJar')
 
